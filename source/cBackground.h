@@ -1,0 +1,108 @@
+/////////////////////////////////////////////////////
+//*-----------------------------------------------*//
+//| Part of Disco Rock (http://www.maus-games.at) |//
+//*-----------------------------------------------*//
+//| Released under the zlib License               |//
+//| More information available in the readme file |//
+//*-----------------------------------------------*//
+/////////////////////////////////////////////////////
+#pragma once
+#ifndef _DR_GUARD_BACKGROUND_H_
+#define _DR_GUARD_BACKGROUND_H_
+
+
+// ****************************************************************
+#define BACK_WIDTH  9                                                // vertices per row
+#define BACK_HEIGHT 65                                               // vertices per column
+                                                                     
+#define BACK_BLOCKS_X (BACK_WIDTH-1)                                 // blocks per row
+#define BACK_BLOCKS_Y (BACK_HEIGHT-1)                                // blocks per column
+#define BACK_BLOCKS   (BACK_BLOCKS_X*BACK_BLOCKS_Y)                  // number of all blocks
+                                                                     
+#define BACK_PER_VERTICES    4                                       // vertices per block
+#define BACK_PER_INDICES     6                                       // indices per block
+#define BACK_TOTAL_VERTICES (BACK_PER_VERTICES*BACK_BLOCKS)          // total number of vertices
+#define BACK_TOTAL_INDICES  (BACK_PER_INDICES*BACK_BLOCKS)           // total number of indices
+                                                                     
+#define BACK_DETAIL_X (24.0f*0.91f)                                  // X size of a block
+#define BACK_DETAIL_Y  24.0f                                         // Y size of a block
+#define BACK_OFFSET_Y  2.0f                                          // X position offset
+                                                                     
+#define BACK_VIEW    21                                              // visible rows
+#define BACK_REPEAT  40                                              // rows when to repeat
+#define BACK_RANGE  (BACK_BLOCKS_X * BACK_PER_INDICES * BACK_VIEW)   // vertices to draw at once
+
+#define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (float(i) - (float(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
+#define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))             // Y position at where to spawn objects on the horizon
+
+
+// ****************************************************************
+class cBackground final : public coreObject3D
+{
+private:
+    struct sVertex
+    {
+        coreVector2 vPosition;   // vertex position
+        coreVector2 vTexture;    // texture coordinate
+        coreVector4 vColor;      // RGBA color-value
+
+        constexpr_func sVertex()noexcept;
+    };
+
+
+private:
+    coreObject2D m_Fill;        // filling background with funky disco lights
+
+    coreFlow m_fPositionTime;   // timer for the current dance floor position
+    coreFlow m_fFloorTime;      // timer for the light animation on the dance floor
+    coreFlow m_fFillTime;       // timer for the light animation in the background
+    
+    float* m_pfHeight;          // height data for height calculations
+    coreUint m_iOffset;         // current drawing offset
+
+    float m_fLightStrength;     // light strength (from the imaginary disco ball)
+    int m_iLightTick;           // tick count
+    float m_fLightTime;         // time compared with tick count to create regular light flashs
+
+
+public:
+    cBackground()noexcept;
+    ~cBackground();
+
+    // render and move the background
+    void Render()override;
+    void Move()override;
+
+    // make or remove holes, get current horizon line, do other fancy stuff
+    void UpdateHoles(const coreUint& iLine, const bool* pbIndex);
+    inline int GetCurLine()const {return (int)std::floor(m_fPositionTime);}
+    inline float GetFlash(const float& fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
+
+    // get height value at specific position
+    float GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const;
+    inline float GetHeight(const coreVector2& vPos)const {return this->GetHeight(vPos, this->GetPosition().xy());}
+
+    // get object properties
+    inline const float& GetPositionTime()const {return m_fPositionTime;}
+    inline const float& GetFloorTime()const    {return m_fFloorTime;}
+    inline coreObject2D* GetFill()             {return &m_Fill;}
+
+
+private:
+    DISABLE_COPY(cBackground)
+
+    // load dance floor geometry
+    void __LoadGeometry();
+};
+
+
+// ****************************************************************
+constexpr_func cBackground::sVertex::sVertex()noexcept
+: vPosition (coreVector2(0.0f,0.0f))
+, vTexture  (coreVector2(0.0f,0.0f))
+, vColor    (coreVector4(0.0f,0.0f,0.0f,0.0f))
+{
+}
+
+
+#endif // _DR_GUARD_BACKGROUND_H_
