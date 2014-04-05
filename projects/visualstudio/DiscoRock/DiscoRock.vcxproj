@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\Base64.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjAPI.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjDataItem.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjNetwork.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjScore.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjTrophy.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjUser.cpp" />
+    <ClCompile Include="..\..\..\..\GameJoltAPI\source\MD5.cpp" />
+    <ClCompile Include="..\..\..\source\cBackground.cpp" />
+    <ClCompile Include="..\..\..\source\cBeverage.cpp" />
+    <ClCompile Include="..\..\..\source\cCombatText.cpp" />
+    <ClCompile Include="..\..\..\source\cGame.cpp" />
+    <ClCompile Include="..\..\..\source\cInterface.cpp" />
+    <ClCompile Include="..\..\..\source\cMenu.cpp" />
+    <ClCompile Include="..\..\..\source\cPlate.cpp" />
+    <ClCompile Include="..\..\..\source\cRay.cpp" />
+    <ClCompile Include="..\..\..\source\cRock.cpp" />
+    <ClCompile Include="..\..\..\source\cTrap.cpp" />
+    <ClCompile Include="..\..\..\source\main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\Base64.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjAPI.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjDataItem.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjInline.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjLookup.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.hpp" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjScore.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjTrophy.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjUser.h" />
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\MD5.h" />
+    <ClInclude Include="..\..\..\source\cBackground.h" />
+    <ClInclude Include="..\..\..\source\cBeverage.h" />
+    <ClInclude Include="..\..\..\source\cCombatText.h" />
+    <ClInclude Include="..\..\..\source\cGame.h" />
+    <ClInclude Include="..\..\..\source\cInterface.h" />
+    <ClInclude Include="..\..\..\source\cMenu.h" />
+    <ClInclude Include="..\..\..\source\cPlate.h" />
+    <ClInclude Include="..\..\..\source\cRay.h" />
+    <ClInclude Include="..\..\..\source\cRock.h" />
+    <ClInclude Include="..\..\..\source\cTrap.h" />
+    <ClInclude Include="..\..\..\source\gjKey.h" />
+    <ClInclude Include="..\..\..\source\main.h" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{323E13E4-2099-4F61-B4D4-BC1612D1B6B0}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>CoreEngine</RootNamespace>
+    <ProjectName>DiscoRock</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\windows;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\windows\msvc;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\projects;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\windows;$(LibraryPath)</LibraryPath>
+    <OutDir>..\..\..\executable\bin\windows\</OutDir>
+    <TargetName>$(ProjectName)_msvc_debug</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\windows;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\windows\msvc;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\projects;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\windows;$(LibraryPath)</LibraryPath>
+    <OutDir>..\..\..\executable\bin\windows\</OutDir>
+    <TargetName>$(ProjectName)_msvc</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ExceptionHandling>false</ExceptionHandling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MinimalRebuild>false</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <AdditionalOptions>SDL2main.lib CoreEngine_msvc_debug.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.a %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalLibraryDirectories>
+      </AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <ExceptionHandling>false</ExceptionHandling>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalOptions>SDL2main.lib CoreEngine_msvc.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.a %(AdditionalOptions)</AdditionalOptions>
+      <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
