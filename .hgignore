@@ -27,5 +27,3 @@ projects/android/project/obj/
 executable/logfile.html
 executable/bin/windows/*.pdb
 executable/bin/windows/*.ilk
-executable/bin/windows/*_debug.exe
-executable/bin/linux/*_debug
