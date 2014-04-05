@@ -18,7 +18,7 @@ cRay::cRay(const coreVector3& vStart)noexcept
 , m_fAnimation (Core::Rand->Float(0.0f, 2.0f*PI))
 {
     // load object resources
-    this->DefineModelFile("data/models/tube.md5mesh");
+    this->DefineModelFile("data/models/ray.md5mesh");
     this->DefineProgramShare("shader_ray")
           ->AttachShaderFile("data/shaders/ray.vs")
           ->AttachShaderFile("data/shaders/ray.fs")
