@@ -21,9 +21,9 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
     this->DefineModelFile("data/models/standard_square.md5mesh");
     this->DefineTextureFile(0, "data/textures/background.png");
     this->DefineTextureFile(1, "data/textures/background_norm.png");
-    this->DefineProgramShare("shader_floor_plate")
-          ->AttachShaderFile("data/shaders/deep_floor_plate.vs")
-          ->AttachShaderFile("data/shaders/deep_floor_plate.fs")
+    this->DefineProgramShare("floor_plate_shader")
+          ->AttachShaderFile("data/shaders/floor_plate.vs")
+          ->AttachShaderFile("data/shaders/floor_plate.fs")
           ->Finish();
 
     // set object properties
@@ -33,7 +33,7 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
 
     // set random plate color
     const coreVector4& vColor = g_avColor[Core::Rand->Int(0, COLOR_NUM-1)];
-    this->SetColor4(coreVector4(vColor.xyz(), Core::Rand->Float(0.9f,1.0f)));
+    this->SetColor4(coreVector4(vColor.xyz(), Core::Rand->Float(0.9f, 1.0f)));
 }
 
 // ****************************************************************
@@ -64,7 +64,7 @@ void cPlate::Move()
     }
 
     // calculate the texture-offset for the disco-lights
-    this->SetTexOffset(g_pBackground->GetTexOffset()+m_vFixedOffset);
+    this->SetTexOffset(g_pBackground->GetTexOffset() + m_vFixedOffset);
 
     // move the object
     coreObject3D::Move();

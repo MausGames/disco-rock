@@ -62,10 +62,7 @@ extern coreParticleSystem* g_pParticleSystem;
 
 extern float               g_fTargetSpeed;
 extern float               g_fCurSpeed;
-
 extern bool                g_bPause;
-extern bool                g_bHighscore;
-extern bool                g_bDiscoButton;
 
 extern int                 g_iNumFails;
 

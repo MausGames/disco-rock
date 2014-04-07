@@ -23,16 +23,16 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolu
 {
     // load drink shader
     this->DefineProgramShare("drink_shader")
-          ->AttachShaderFile("data/shaders/deep_drink.vs")
-          ->AttachShaderFile("data/shaders/deep.fs")
+          ->AttachShaderFile("data/shaders/drink.vs")
+          ->AttachShaderFile("data/shaders/drink.fs")
           ->Finish();
 
     // create shadow
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
-    m_Shadow.DefineProgramShare("3d_shader")
+    m_Shadow.DefineProgramShare("shadow_shader")
              ->AttachShaderFile("data/shaders/default_3d.vs")
-             ->AttachShaderFile("data/shaders/default.fs")
+             ->AttachShaderFile("data/shaders/shadow.fs")
              ->Finish();
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
@@ -133,10 +133,7 @@ cSunrise::cSunrise()noexcept
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModelFile("data/models/drink_sunrise_straw.md5mesh");
     m_pStraw->DefineTextureFile(0, "data/textures/standard_black.png");
-    m_pStraw->DefineProgramShare("straw_black")
-              ->AttachShaderFile("data/shaders/deep.vs")
-              ->AttachShaderFile("data/shaders/deep.fs")
-              ->Finish();
+    m_pStraw->DefineProgramShare("drink_shader");
 }
 
 
@@ -164,10 +161,7 @@ cMojito::cMojito()noexcept
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModelFile("data/models/drink_mojito_straw.md5mesh");
     m_pStraw->DefineTextureFile(0, "data/textures/standard_black.png");
-    m_pStraw->DefineProgramShare("straw_black")
-              ->AttachShaderFile("data/shaders/deep.vs")
-              ->AttachShaderFile("data/shaders/deep.fs")
-              ->Finish();
+    m_pStraw->DefineProgramShare("drink_shader");
 }
 
 

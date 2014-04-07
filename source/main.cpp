@@ -19,15 +19,18 @@ coreMusicPlayer*    g_pMusicPlayer    = NULL;
 coreParticleSystem* g_pParticleSystem = NULL;
 
 float               g_fTargetSpeed    = 0.0f;
-float               g_fCurSpeed       = 0.0f;
-                                      
+float               g_fCurSpeed       = 0.0f;                 
 bool                g_bPause          = false;
-bool                g_bHighscore      = true;
-bool                g_bDiscoButton    = false;
 
 int                 g_iNumFails       = 0;
 
 coreObject3D* m_apSave[8];   // pre-allocation of required ressources, still need to implement a more efficient way
+
+// simple FPS display
+#define _FPS_
+#if defined(_FPS_)
+    coreLabel* m_pFPS = NULL;
+#endif
 
 
 // ****************************************************************
@@ -111,7 +114,7 @@ void CoreApp::Init()
 
     // override audio configuration
     Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_SOUND, 4.0f);
-    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, 0.0f);
+    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, 0.7f);
 
     // create main components
     g_pBackground = new cBackground();
@@ -148,6 +151,12 @@ void CoreApp::Init()
     m_apSave[5] = new cPlate(0.0f, coreVector2());
     m_apSave[6] = new cRay(coreVector3());
     m_apSave[7] = new cTrap();
+
+#if defined(_FPS_)
+    m_pFPS = new coreLabel(FONT_ROCKS, 30, 8);
+    m_pFPS->SetCenter(coreVector2(-0.5f,0.5f));
+    m_pFPS->SetAlignment(coreVector2(1.0f,-1.0f));
+#endif
 }
 
 
@@ -168,6 +177,10 @@ void CoreApp::Exit()
     SAFE_DELETE(g_pGJ)
     SAFE_DELETE(g_pMusicPlayer)
     SAFE_DELETE(g_pParticleSystem)
+
+#if defined(_FPS_)
+    SAFE_DELETE(m_pFPS)
+#endif
 }
 
 
@@ -183,6 +196,10 @@ void CoreApp::Render()
     // render combat text and menu
     g_pCombatText->Render();
     g_pMenu->Render();
+
+#if defined(_FPS_)
+    m_pFPS->Render();
+#endif
 
     glEnable(GL_DEPTH_TEST);
 }
@@ -245,4 +262,9 @@ void CoreApp::Move()
     // adjust music speed/pitch and update the streaming
     g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
     g_pMusicPlayer->Update();
+
+#if defined(_FPS_)
+    m_pFPS->SetText(coreData::Print("%.1f", 1.0f / Core::System->GetTime()));
+    m_pFPS->Move();
+#endif
 }
