@@ -75,23 +75,17 @@ cGame::cGame(const bool& bChallenge)noexcept
 , m_bFirstLine     (true)
 , m_bFirstMsg      (true)
 , m_bTrapSpawn     (false)
+, m_bTrapJump      (false)
 , m_bChallenge     (bChallenge)
 , m_iNarrow        (0)
-, m_Message        (FONT_ROCKS, 34, 0)
+, m_Message        (FONT_ROCKS, 45, 0)
 , m_ShowMessage    (coreTimer(1.0f, 0.333f, 1))
 {
-    // reserve object memory
-    m_apBeverage.reserve(64);
-    m_apDestroyed.reserve(16);
-    m_apTrap.reserve(16);
-    m_apPlate.reserve(64);
-    m_apRay.reserve(16);
-
     // create beginning message
     m_ShowMessage.Play(false);
     m_ShowMessage.SetCurrent(-0.333f);
 
-    m_Message.SetPosition(coreVector2(0.0f,0.15f));
+    m_Message.SetPosition(coreVector2(0.0f,0.2f));
     m_Message.SetText(g_MsgIntro.Get());
     
     // reset statistics and trophy cache
@@ -198,7 +192,7 @@ void cGame::Move()
     // show message on first jump (over the first line)
     if(m_bFirstMsg)
     {
-        if(m_fTime >= 5.1f && m_Rock.GetJumped())
+        if((m_fTime >= 5.1f && m_Rock.GetJumped()) || m_fTime >= 5.6f)
         {
             m_bFirstMsg = false;
             g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
@@ -232,7 +226,7 @@ void cGame::Move()
             const int iBorder = int(std::floor(1.0f + 2.2f*g_fCurSpeed));
 
             // update canyon counter, prevent uncontrolled holes from spawning before and after a canyon
-            if(!m_iNarrow) if(++m_iCanyonCounter >= 0) m_bLastHole = true;
+            if(!m_iNarrow || m_iCanyonCounter >= 0) if(++m_iCanyonCounter >= 0) m_bLastHole = true;
 
             if(m_iCanyonCounter < 0 || m_iCanyonCounter > iBorder)
             { 
@@ -327,15 +321,17 @@ void cGame::Move()
                     // reset counter and enable trap generation
                     m_iCanyonCounter = -CANYON_DISTANCE;
                     m_bTrapSpawn = true;
-
-                    // activate narrow stage later
-                    if(m_fTime >= 90.0f) m_iNarrow = 1;
                 }
-                else m_bTrapSpawn = false;
+                else 
+                {
+                    // activate narrow stage later
+                    if(m_fTime >= 98.0f) m_iNarrow = 1;
+                    m_bTrapSpawn = false;
+                }
 
                 // create the canyon, always prevent holes before and after the canyon
-                if((m_iCanyonCounter <= CANYON_BEFORE || m_iCanyonCounter > iBorder) && !m_iNarrow) {for(int i = 0; i < BACK_BLOCKS_X; ++i) abHole[i] = false;}
-                                                                                               else {for(int i = 0; i < BACK_BLOCKS_X; ++i) abHole[i] = true;}
+                if((m_iCanyonCounter <= CANYON_BEFORE || m_iCanyonCounter > iBorder)) {for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = false;}
+                                                                                 else {for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = true;}
 
                 // always add trap at the canyon edge to jump across
                 if(m_iCanyonCounter == CANYON_BEFORE) this->AddTrap(CLAMP(m_iCurSpawn + Core::Rand->Int(-1, 1), 1, BACK_BLOCKS_X-4), fSpawn);     
@@ -458,6 +454,8 @@ void cGame::Move()
         {
             if(m_Rock.Jump(10.0f))
             {
+                m_bTrapJump = true;
+
                 // play trap sound effect and show message
                 m_pTrapSound->PlayPosition(NULL, 0.4f, 1.1f, 0.05f, false, m_Rock.GetPosition());
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
@@ -467,6 +465,7 @@ void cGame::Move()
             }
         }
     }
+    if(!m_Rock.GetJumped()) m_bTrapJump = false;
 
     // update combo
     m_fComboDelay -= Core::System->GetTime();
@@ -509,6 +508,8 @@ void cGame::Move()
     if(!m_bTrophyHelper[4] && m_dScore >= 200000.0 && m_bChallenge)   {m_bTrophyHelper[4] = true; this->AchieveTrophy(4671);}
     if(!m_bTrophyHelper[5] && m_Rock.GetFallen() && m_fTime < 10.0f)  {m_bTrophyHelper[5] = true; this->AchieveTrophy(4635); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
     if(!m_bTrophyHelper[6] && m_aiCollected[4] == 2 && !m_bChallenge) {m_bTrophyHelper[6] = true; this->AchieveTrophy(4637);}
+    if(!m_bTrophyHelper[7] && m_Rock.GetFallen() && m_bTrapJump)      {m_bTrophyHelper[7] = true; this->AchieveTrophy(4666);}
+
 }
 
 

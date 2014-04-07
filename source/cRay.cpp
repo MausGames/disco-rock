@@ -19,7 +19,7 @@ cRay::cRay(const coreVector3& vStart)noexcept
 {
     // load object resources
     this->DefineModelFile("data/models/ray.md5mesh");
-    this->DefineProgramShare("shader_ray")
+    this->DefineProgramShare("ray_shader")
           ->AttachShaderFile("data/shaders/ray.vs")
           ->AttachShaderFile("data/shaders/ray.fs")
           ->Finish();

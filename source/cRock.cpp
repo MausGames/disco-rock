@@ -27,7 +27,7 @@ cRock::cRock()noexcept
     this->DefineModelFile("data/models/rock.md5mesh");
     this->DefineTextureFile(0, "data/textures/rock.png");
     this->DefineTextureFile(1, "data/textures/rock_norm.png");
-    this->DefineProgramShare("deep_shader")
+    this->DefineProgramShare("rock_shader")
           ->AttachShaderFile("data/shaders/rock.vs")
           ->AttachShaderFile("data/shaders/rock.fs")
           ->Finish();
@@ -39,16 +39,16 @@ cRock::cRock()noexcept
     // create shadow
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
-    m_Shadow.DefineProgramShare("3d_shader")
+    m_Shadow.DefineProgramShare("shadow_shader")
              ->AttachShaderFile("data/shaders/default_3d.vs")
-             ->AttachShaderFile("data/shaders/default.fs")
+             ->AttachShaderFile("data/shaders/shadow.fs")
              ->Finish();
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // create big wave
     m_Wave.DefineModelFile("data/models/standard_square.md5mesh");
     m_Wave.DefineTextureFile(0, "data/textures/effect_wave.png");
-    m_Wave.DefineProgramShare("3d_shader_wave")
+    m_Wave.DefineProgramShare("wave_shader")
            ->AttachShaderFile("data/shaders/default_3d.vs")
            ->AttachShaderFile("data/shaders/wave.fs")
            ->Finish();
@@ -57,7 +57,7 @@ cRock::cRock()noexcept
     // create small wave
     m_WaveSmall.DefineModelFile("data/models/standard_square.md5mesh");
     m_WaveSmall.DefineTextureFile(0, "data/textures/effect_wave.png");
-    m_WaveSmall.DefineProgramShare("3d_shader_wave");
+    m_WaveSmall.DefineProgramShare("wave_shader");
     m_WaveSmall.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // load sound-effects
@@ -130,7 +130,7 @@ void cRock::Move()
         g_pCombatText->AddTextTransformed(g_MsgFallen.Get(), this->GetPosition(), COLOR_WHITE_F);
     }
     
-    if(this->GetPosition().z > fGround || m_bFallen)
+    if(this->GetPosition().z >= fGround || m_bFallen)
         m_fForce -= Core::System->GetTime()*20.0f;   // fall down
     else if(m_fForce < 0.0f)
     {
