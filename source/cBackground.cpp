@@ -27,9 +27,9 @@ cBackground::cBackground()noexcept
     // load object resources
     this->DefineTextureFile(0, "data/textures/background.png");
     this->DefineTextureFile(1, "data/textures/background_norm.png");
-    this->DefineProgramShare("shader_floor")
-          ->AttachShaderFile("data/shaders/deep_floor.vs")
-          ->AttachShaderFile("data/shaders/deep_floor.fs")
+    this->DefineProgramShare("floor_shader")
+          ->AttachShaderFile("data/shaders/floor.vs")
+          ->AttachShaderFile("data/shaders/floor.fs")
           ->BindAttribute("a_v2Position", 0)
           ->BindAttribute("a_v4Color",    2)
           ->BindAttribute("a_fHeight",    3)
@@ -41,7 +41,8 @@ cBackground::cBackground()noexcept
            ->AttachShaderFile("data/shaders/fill.vs")
            ->AttachShaderFile("data/shaders/fill.fs")
            ->Finish();
-    m_Fill.SetTexSize(coreVector2(9.0,9.0f));
+    m_Fill.FitToScreen();
+    m_Fill.SetTexSize(m_Fill.GetSize()*7.2f);
 }
 
 
@@ -67,9 +68,9 @@ void cBackground::Render()
     {
         // get music speed (yes this is currently hardcoded, needs to be improved)
         float fSpeed = 0.0f;
-             if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0)) fSpeed = 1.930f;
-        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1)) fSpeed = 1.995f;
-        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2)) fSpeed = 1.965f;
+             if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0)) fSpeed = 1.9166667f;
+        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1)) fSpeed = 2.00f;
+        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2)) fSpeed = 1.95f;
 
         // update light time
         m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
@@ -92,8 +93,8 @@ void cBackground::Render()
             const float fPower = MAX(g_fCurSpeed-1.0f, 0.0f) * 1.5f * m_fLightStrength;
 
             // set alpha values used as light power in the shader
-            g_pBackground->GetFill()->SetAlpha(1.0f + 2.0f*fPower);
-            g_pBackground->SetAlpha(1.0f + fPower);
+            m_Fill.SetAlpha(1.0f + 2.0f*fPower);
+            this->SetAlpha(1.0f + fPower);
         }
     }
 
@@ -140,7 +141,6 @@ void cBackground::Move()
     // update and move the filling background
     m_fFillTime.Update(10.0f, 0);
     m_Fill.SetTexOffset(coreVector2(-0.075f * m_fFillTime, 0.0f));
-    m_Fill.SetColor3(coreVector3(1.0f,1.0f,1.0f) * (0.4f + 0.08f*coreMath::Sin(m_fFillTime*PI*0.1f)));
     m_Fill.Move();
 
     // move the object
@@ -241,7 +241,7 @@ void cBackground::__LoadGeometry()
         avColor.push_back(g_avColor[iCurColor]);
 
         // add additional random parameter for the shader
-        avColor.back().a = Core::Rand->Float(0.9f,1.0f);
+        avColor.back().a = Core::Rand->Float(0.9f, 1.0f);
     }
 
     // sync beginning and ending colors to create an infinit looking grid when resetting the position

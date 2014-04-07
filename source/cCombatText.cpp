@@ -40,7 +40,7 @@ cCombatText::cCombatText()
     for(int i = 0; i < COMBAT_TEXT_NUM; ++i)
     {
         // create labels and reset all missing properties
-        m_apText [i] = new coreLabel(FONT_ROCKS, 28, 32);
+        m_apText [i] = new coreLabel(FONT_ROCKS, 37, 32);
         m_aFloat [i].Set(1.0f, 1.0f, 1);
         m_afAlpha[i] = 0.0f;
     }
@@ -112,7 +112,7 @@ void cCombatText::Move()
             else
             {
                 // update the combat text
-                m_apText[i]->SetPosition(coreVector2(m_apText[i]->GetCenter().x*1.5f, -1.0f) * -0.1f * m_aFloat[i].GetCurrent(false));
+                m_apText[i]->SetPosition(coreVector2(m_apText[i]->GetCenter().x*1.5f, -1.0f) * -0.13333f * m_aFloat[i].GetCurrent(false));
                 m_apText[i]->SetScale(g_pBackground->GetFlash(0.3f));
                 m_apText[i]->SetAlpha(m_aFloat[i].GetCurrent(true) * m_afAlpha[i]);
                 m_apText[i]->Move();

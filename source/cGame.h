@@ -12,7 +12,7 @@
 
 
 // ****************************************************************
-#define GAME_TROPHIES 7
+#define GAME_TROPHIES 8
 #define GAME_HEIGHT   -20.0f
 
 #define CANYON_DISTANCE 138
@@ -26,13 +26,13 @@ class cGame final
 private:
     cRock m_Rock;                            // rock object
 
-    std::vector<cBeverage*> m_apBeverage;    // list with active beverages
-    std::vector<cBeverage*> m_apDestroyed;   // list with inactive beverages
+    std::deque<cBeverage*> m_apBeverage;     // list with active beverages
+    std::deque<cBeverage*> m_apDestroyed;    // list with inactive beverages
 
-    std::vector<cTrap*> m_apTrap;            // list with trap plates
+    std::deque<cTrap*> m_apTrap;             // list with trap plates
 
-    std::vector<cPlate*> m_apPlate;          // list with plate objects
-    std::vector<cRay*> m_apRay;              // list with ray objects
+    std::deque<cPlate*> m_apPlate;           // list with plate objects
+    std::deque<cRay*> m_apRay;               // list with ray objects
 
     int m_iCurLine;                          // current processing line/row
     int m_iCurSpawn;                         // current spawn column (beverages, triple-holes)
@@ -56,6 +56,7 @@ private:
     bool m_bFirstLine;                       // process first row differently
     bool m_bFirstMsg;                        // show message on the first jump
     bool m_bTrapSpawn;                       // enable trap spawn
+    bool m_bTrapJump;                        // current jump was triggered by a trap
     bool m_bChallenge;                       // coola challenge mode
 
     int m_iNarrow;                           // number of rows to remove from the dance floor (6 - m_iNarrow*2)
