@@ -27,7 +27,7 @@ int                 g_iNumFails       = 0;
 coreObject3D* m_apSave[8];   // pre-allocation of required ressources, still need to implement a more efficient way
 
 // simple FPS display
-#define _FPS_
+//#define _FPS_
 #if defined(_FPS_)
     coreLabel* m_pFPS = NULL;
 #endif
@@ -164,7 +164,7 @@ void CoreApp::Init()
 void CoreApp::Exit()
 {
     // delete all allocation objects
-    for(int i = 0; i < ARRAY_SIZE(m_apSave); ++i)
+    for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
         SAFE_DELETE(m_apSave[i])
 
     // delete all main components

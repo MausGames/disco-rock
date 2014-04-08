@@ -90,7 +90,7 @@ void cBackground::Render()
         if(!g_bPause)
         {
             // calculate final light power
-            const float fPower = MAX(g_fCurSpeed-1.0f, 0.0f) * 1.5f * m_fLightStrength;
+            const float fPower = MAX(g_fCurSpeed-1.0f, 0.5f) * 1.5f * m_fLightStrength;
 
             // set alpha values used as light power in the shader
             m_Fill.SetAlpha(1.0f + 2.0f*fPower);
@@ -161,7 +161,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
         SDL_assert((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
 
         // set height values of the selected line
-        for(int i = 0; i < iNum; ++i)
+        for(coreUint i = 0; i < iNum; ++i)
         {
             pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : GAME_HEIGHT;
         }
