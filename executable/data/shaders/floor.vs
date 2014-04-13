@@ -27,7 +27,7 @@ void main()
         v_v3Relative    = (u_m4ModelView * v4Position).xyz;
 
         gl_Position      = u_m4ModelViewProj * v4Position;
-        v_av2TexCoord[0] = a_v2Texture * u_v2TexSize;   // mul
+        v_av2TexCoord[0] = a_v2Texture;
         
         v_v4Color = a_v4Color;
         
@@ -37,7 +37,7 @@ void main()
         
 #else
 
-        v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * u_v2TexSize * 0.55;
+        v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
 
         const vec3 n = vec3( 0.0, 0.0, -1.0);
         const vec3 t = vec3(-1.0, 0.0,  0.0);

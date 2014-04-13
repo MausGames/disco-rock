@@ -40,7 +40,7 @@ cRock::cRock()noexcept
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
     m_Shadow.DefineProgramShare("shadow_shader")
-             ->AttachShaderFile("data/shaders/default_3d.vs")
+             ->AttachShaderFile("data/shaders/default_3d_simple.vs")
              ->AttachShaderFile("data/shaders/shadow.fs")
              ->Finish();
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
@@ -49,7 +49,7 @@ cRock::cRock()noexcept
     m_Wave.DefineModelFile("data/models/standard_square.md5mesh");
     m_Wave.DefineTextureFile(0, "data/textures/effect_wave.png");
     m_Wave.DefineProgramShare("wave_shader")
-           ->AttachShaderFile("data/shaders/default_3d.vs")
+           ->AttachShaderFile("data/shaders/default_3d_simple.vs")
            ->AttachShaderFile("data/shaders/wave.fs")
            ->Finish();
     m_Wave.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
@@ -103,8 +103,8 @@ void cRock::Move()
 
 #if defined(_CORE_ANDROID_)
 
-    // jump with finger input
-    if(Core::Input->GetMouseButton(CORE_INPUT_LEFT, CORE_INPUT_PRESS) && Core::Input->GetMousePosition().x > 0.0f)
+    // jump with right touch button
+    if(g_pGame->GetInterface()->GetTouchJump()->IsClicked())
 
 #else
 
@@ -158,8 +158,41 @@ void cRock::Move()
 
 #if defined(_CORE_ANDROID_)
 
-    // move with finger input
-    const float fNewPos = (Core::Input->GetMousePosition().x < 0.0f) ? (this->GetPosition().x + 120.0f * Core::System->GetTime() * CLAMP((Core::Input->GetMousePosition().x + 0.47f) / 0.10f - 0.5f, -0.5f, 0.5f)) : this->GetPosition().x;
+    float fNewPos = this->GetPosition().x;
+
+    // move with left touch buttons
+    const float fMove = 100.0f * Core::System->GetTime() * m_fSensitivity;
+         if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
+    else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
+
+    //if(true)
+    //{
+    //    float fMoveDir = 0.0f;
+    //    if(Core::Input->GetTouchButton(0, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(0).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(0).x;
+    //    if(Core::Input->GetTouchButton(1, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(1).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(1).x;
+    //    if(Core::Input->GetTouchButton(2, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(2).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(2).x;
+
+    //    // move with finger input
+    //    if(fMoveDir < 0.0f)
+    //    {
+    //        const float fMoveStr = CLAMP((fMoveDir + 0.46f) / 0.10f - 0.5f, -0.5f, 0.5f);
+    //        if(ABS(fMoveStr) >= 0.035f) fNewPos += Core::System->GetTime() * 170.0f * (fMoveStr - SIGN(fMoveStr)*0.035f);
+    //    }
+    //}
+    //else
+    //{
+    //    float fMoveDir = 0.0f;
+    //    if(Core::Input->GetTouchButton(0, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(0).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(0).x;
+    //    if(Core::Input->GetTouchButton(1, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(1).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(1).x;
+    //    if(Core::Input->GetTouchButton(2, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(2).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(2).x;
+
+    //    // move with finger input
+    //    if(fMoveDir != 0.0f)
+    //    {
+    //        const float fMoveStr = CLAMP((fMoveDir + 0.39f) * 9.091f * 0.5f + 0.02f, -0.5f, 0.5f);
+    //        fNewPos = 120.0f * fMoveStr;
+    //    }
+    //}
 
 #else
 

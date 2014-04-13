@@ -106,7 +106,6 @@ void cBackground::Render()
     m_pProgram->SendUniform(CORE_SHADER_UNIFORM_3D_MODELVIEW,     mModelView,     false);
     m_pProgram->SendUniform(CORE_SHADER_UNIFORM_3D_MODELVIEWPROJ, mModelViewProj, false);
     m_pProgram->SendUniform(CORE_SHADER_UNIFORM_COLOR,            m_vColor);
-    m_pProgram->SendUniform(CORE_SHADER_UNIFORM_TEXSIZE,          m_vTexSize);
     m_pProgram->SendUniform(CORE_SHADER_UNIFORM_TEXOFFSET,        m_vTexOffset);
 
     // enable all active textures

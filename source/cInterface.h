@@ -25,6 +25,13 @@ private:
     coreLabel m_Combo;          // combo name text
     coreLabel m_ComboValue;     // combo value text
 
+#if defined(_CORE_ANDROID_)
+    coreButton m_MoveLeft;      // touch move left button
+    coreButton m_MoveRight;     // touch move right button
+    coreButton m_Jump;          // touch jump button
+    coreButton m_Pause;         // touch pause button
+#endif
+
     coreTimer m_Show;           // timer to fade in (on game-start)
     coreTimer m_Hide;           // timer to fade out (on game-end)
 
@@ -42,6 +49,16 @@ public:
 
     // smoothly fade out the interface
     inline void Hide() {if(m_Hide.GetCurrent(false) == 0.0f) m_Hide.Play(false);}
+
+    // access touch objects
+#if defined(_CORE_ANDROID_)
+    inline coreObject2D* GetTouchMoveLeft()  {return &m_MoveLeft;}
+    inline coreObject2D* GetTouchMoveRight() {return &m_MoveRight;}
+    inline coreObject2D* GetTouchJump()      {return &m_Jump;}
+    inline coreObject2D* GetTouchPause()     {return &m_Pause;}
+#endif
+    void InteractControl();
+    void InteractPause();
 };
 
 

@@ -114,7 +114,7 @@ void CoreApp::Init()
 
     // override audio configuration
     Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_SOUND, 4.0f);
-    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, 0.7f);
+    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, g_bCoreDebug ? 0.0f : 0.7f);
 
     // create main components
     g_pBackground = new cBackground();
@@ -138,7 +138,7 @@ void CoreApp::Init()
     g_pParticleSystem = new coreParticleSystem(128);
     g_pParticleSystem->DefineTextureFile(0, "data/textures/effect_particle.png");
     g_pParticleSystem->DefineProgramShare("particle_shader")
-                       ->AttachShaderFile("data/shaders/default_particle.vs")
+                       ->AttachShaderFile("data/shaders/particle.vs")
                        ->AttachShaderFile("data/shaders/particle.fs")
                        ->Finish();
 
