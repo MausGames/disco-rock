@@ -31,7 +31,7 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolu
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
     m_Shadow.DefineProgramShare("shadow_shader")
-             ->AttachShaderFile("data/shaders/default_3d.vs")
+             ->AttachShaderFile("data/shaders/default_3d_simple.vs")
              ->AttachShaderFile("data/shaders/shadow.fs")
              ->Finish();
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));

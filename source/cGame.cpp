@@ -201,6 +201,7 @@ void cGame::Move()
 
     // calculate movement value
     const float fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;
+    const float fMove30 = Core::System->GetTime()  * 3.0f * BACK_DETAIL_Y;
 
     // check for the next line on the horizon
     const int iNewCurLine = g_pBackground->GetCurLine();
@@ -234,7 +235,7 @@ void cGame::Move()
                 if(Core::Rand->Int(0,1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), 0+m_iNarrow, 5-m_iNarrow);
 
                 // add random holes modified by current time
-                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, 1.0f + (30.0f / m_fTime)) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
+                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, 1.0f + (25.0f / m_fTime)) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
 
                 // define the next thing to spawn (-1 = hole)
                 const int iSelection = Core::Rand->Int(m_bLastHole ? 0 : -1, 10);
@@ -297,7 +298,7 @@ void cGame::Move()
                         m_iCoolaCounter = 0;
 
                         // calculate spawn on free plate (not in sync with BACK_BLOCKS_X, assumes 8 real columns)
-                        const int iColaSpawn = CLAMP(m_iCurSpawn + Core::Rand->Int(2, 3) * (m_iCurSpawn <= 2 ? 1 : -1), 0+m_iNarrow, 5-m_iNarrow);
+                        const int iColaSpawn = CLAMP(m_iCurSpawn + Core::Rand->Int(2, 3) * (m_iCurSpawn <= 2 ? 1 : -1), 1+m_iNarrow, 4-m_iNarrow);
 
                         // create new coola and add to list
                         cCoola* pCoola = new cCoola();
@@ -307,10 +308,10 @@ void cGame::Move()
                         // remove hole under coola
                         abHole[iColaSpawn+1] = false;
                     }
-                }
 
-                // always create at least one plate per row
-                abHole[Core::Rand->Int(1, BACK_BLOCKS_X-2)] = false;
+                    // always create at least one plate per row
+                    abHole[Core::Rand->Int(1, BACK_BLOCKS_X-2)] = false;
+                }
             }
 
             if(m_iCanyonCounter >= 0)
@@ -341,7 +342,7 @@ void cGame::Move()
                 // randomly create moving plates inside of holes
                 for(int i = 1+m_iNarrow; i < BACK_BLOCKS_X-1-m_iNarrow; ++i)
                 {
-                    if(abHole[i] && (Core::Rand->Float(0.0f,1.0f) < (1.0f - (m_fTime / 100.0f)) || m_fTime < 15.0f))
+                    if(abHole[i] && (m_fTime < 20.0f || Core::Rand->Float(0.0f,1.0f) < (1.0f - ((m_fTime-20.0f) / 80.0f))))
                     {
                         // create plate and add to list
                         cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -std::floor(g_pBackground->GetPositionTime())));
@@ -375,7 +376,11 @@ void cGame::Move()
     }
 
     // move rock
-    if(!this->GetStatus()) m_Rock.Move();
+    if(!this->GetStatus())
+    {
+        m_Interface.InteractControl();
+        m_Rock.Move();
+    }
 
     // update all active beverages
     FOR_EACH_DYN(it, m_apBeverage)
@@ -407,7 +412,7 @@ void cGame::Move()
                 ++m_iCombo;
                 m_fComboDelay = 1.0f;
 
-                const float fTextAlpha = 1.0f - m_fTime * 0.02f * 0.666667f;
+                const float fTextAlpha = 1.0f - m_fTime * 0.008f;
                 if(pBeverage->GetSigID() == 4 || fTextAlpha > 0.2f)
                 {
                     // get and modify beverage color
@@ -440,7 +445,7 @@ void cGame::Move()
     }
 
     // update all inactive beverages, plates and rays
-    PROCESS_OBJECT_ARRAY(m_apDestroyed, Core::System->GetTime() * 3.0f * BACK_DETAIL_Y)
+    PROCESS_OBJECT_ARRAY(m_apDestroyed, fMove30)
     PROCESS_OBJECT_ARRAY(m_apTrap,      fMove10)
     PROCESS_OBJECT_ARRAY(m_apPlate,     fMove10)
     PROCESS_OBJECT_ARRAY(m_apRay,       fMove10)
