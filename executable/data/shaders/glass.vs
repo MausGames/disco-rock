@@ -18,7 +18,7 @@ varying float v_fIntensity;
 void main()
 {
     gl_Position      = u_m4ModelViewProj * vec4(a_v3Position * 1.15, 1.0);
-    v_av2TexCoord[0] = a_v2Texture * u_v2TexSize + u_v2TexOffset;
+    v_av2TexCoord[0] = a_v2Texture;
 
     float fTopDot = dot(a_v3Normal, vec3(0.0, 0.0, 1.0));
     if(fTopDot > 0.95) v_fIntensity = 0.0;

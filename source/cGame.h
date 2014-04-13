@@ -92,6 +92,9 @@ public:
     inline const coreUint& GetMaxCombo()const              {return m_iMaxCombo;}
     inline const coreUint& GetStat(const int& iIndex)const {return m_aiCollected[iIndex];}
 
+    // access sub objects
+    inline cInterface* GetInterface() {return &m_Interface;}
+
     // achive a trophy
     void AchieveTrophy(const int& iID);
 

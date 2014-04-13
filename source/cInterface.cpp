@@ -18,6 +18,12 @@ cInterface::cInterface()noexcept
 , m_TimeValueMil (FONT_ROCKS, 67, 8)
 , m_Combo        (FONT_ROCKS, 53, 8)
 , m_ComboValue   (FONT_ROCKS, 67, 8)
+#if defined(_CORE_ANDROID_)
+, m_MoveLeft     ("data/textures/button_move.png", "data/textures/button_move.png")
+, m_MoveRight    ("data/textures/button_move.png", "data/textures/button_move.png")
+, m_Jump         ("data/textures/button_jump.png", "data/textures/button_jump.png")
+, m_Pause        ("data/textures/button_pause.png", "data/textures/button_pause.png")
+#endif
 , m_Show         (coreTimer(1.0f, 1.0f, 1))
 , m_Hide         (coreTimer(1.0f, 1.0f, 1))
 {
@@ -64,6 +70,32 @@ cInterface::cInterface()noexcept
     m_Combo.SetText(""); 
     m_Combo.SetColor3(coreVector3(0.75f,0.75f,0.75));
 
+#if defined(_CORE_ANDROID_)
+
+    // create touch controls
+    m_MoveLeft.SetPosition(coreVector2(0.03f,-0.2f));
+    m_MoveLeft.SetSize(coreVector2(0.1f,0.15f));
+    m_MoveLeft.SetCenter(coreVector2(-0.5f,0.5f));
+    m_MoveLeft.SetAlignment(coreVector2(1.0f,-1.0f));
+
+    m_MoveRight.SetPosition(coreVector2(0.15f,-0.2f));
+    m_MoveRight.SetSize(coreVector2(0.1f,0.15f));
+    m_MoveRight.SetCenter(coreVector2(-0.5f,0.5f));
+    m_MoveRight.SetAlignment(coreVector2(1.0f,-1.0f));
+    m_MoveRight.SetDirection(coreVector2(0.0f,-1.0f));
+
+    m_Jump.SetPosition(coreVector2(-0.03f,-0.2f));
+    m_Jump.SetSize(coreVector2(0.15f,0.15f));
+    m_Jump.SetCenter(coreVector2(0.5f,0.5f));
+    m_Jump.SetAlignment(coreVector2(-1.0f,-1.0f));
+
+    m_Pause.SetPosition(coreVector2(-0.03f,-0.45f));
+    m_Pause.SetSize(coreVector2(0.075f,0.075f));
+    m_Pause.SetCenter(coreVector2(0.5f,0.5f));
+    m_Pause.SetAlignment(coreVector2(-1.0f,-1.0f));
+
+#endif
+
     // fade in the interface
     m_Show.Play(true);
 }
@@ -88,6 +120,16 @@ void cInterface::Render()
     m_TimeValueMil.Render();
     m_Combo.Render();
     m_ComboValue.Render();
+
+#if defined(_CORE_ANDROID_)
+
+    // move touch controls
+    m_MoveLeft.Render();
+    m_MoveRight.Render();
+    m_Jump.Render();
+    m_Pause.Render();
+
+#endif
 }
 
 
@@ -115,6 +157,21 @@ void cInterface::Move()
         apLabel[i]->SetScale(fScale);
         apLabel[i]->Move();
     }
+
+#if defined(_CORE_ANDROID_)
+
+    // update touch controls
+    m_MoveLeft.SetAlpha(fAlpha  * (m_MoveLeft.IsFocused()  ? 0.9f : 0.5f));
+    m_MoveRight.SetAlpha(fAlpha * (m_MoveRight.IsFocused() ? 0.9f : 0.5f));
+    m_Jump.SetAlpha(fAlpha      * (m_Jump.IsFocused()      ? 0.9f : 0.5f));
+    m_Pause.SetAlpha(fAlpha     * (m_Pause.IsFocused()     ? 0.9f : 0.5f));
+
+    m_MoveLeft.Move();
+    m_MoveRight.Move();
+    m_Jump.Move();
+    m_Pause.Move();
+
+#endif
 }
 
 
@@ -132,4 +189,28 @@ void cInterface::Update(const float& fScore, const float& fTime, const float& fC
     const bool bCombo = (fCombo > 1.0f) ? true : false;
     m_Combo     .SetText(bCombo ? "COMBO"                            : "");
     m_ComboValue.SetText(bCombo ? coreData::Print("x%01.1f", fCombo) : "");
+}
+
+
+// ****************************************************************
+void cInterface::InteractControl()
+{
+#if defined(_CORE_ANDROID_)
+
+    // interact with movement touch buttons
+    m_MoveLeft.Interact();
+    m_MoveRight.Interact();
+    m_Jump.Interact();
+
+#endif
+}
+
+void cInterface::InteractPause()
+{
+#if defined(_CORE_ANDROID_)
+
+    // interact with pause touch button
+    m_Pause.Interact();
+
+#endif
 }
