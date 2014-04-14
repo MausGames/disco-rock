@@ -114,6 +114,7 @@
             <linkerLibLibItem>ogg</linkerLibLibItem>
             <linkerLibLibItem>vorbis</linkerLibLibItem>
             <linkerLibLibItem>vorbisfile</linkerLibLibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
           </linkerLibItems>
           <commandLine>-mwindows</commandLine>
         </linkerTool>
@@ -310,6 +311,7 @@
             <linkerLibLibItem>ogg</linkerLibLibItem>
             <linkerLibLibItem>vorbis</linkerLibLibItem>
             <linkerLibLibItem>vorbisfile</linkerLibLibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
@@ -505,6 +507,7 @@
             <linkerLibLibItem>ogg</linkerLibLibItem>
             <linkerLibLibItem>vorbis</linkerLibLibItem>
             <linkerLibLibItem>vorbisfile</linkerLibLibItem>
+            <linkerLibLibItem>curl</linkerLibLibItem>
           </linkerLibItems>
         </linkerTool>
         <requiredProjects>
