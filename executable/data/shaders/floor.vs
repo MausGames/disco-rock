@@ -31,7 +31,7 @@ void main()
         
         v_v4Color = a_v4Color;
         
-#ifdef GL_ES
+#if (GL_QUALITY) < 1
 
         v_v3Relative.y = 1.0 - v_v3Relative.y * 0.004;
         
@@ -43,7 +43,7 @@ void main()
         const vec3 t = vec3(-1.0, 0.0,  0.0);
         const vec3 b = vec3( 0.0, 1.0,  0.0);
         
-        vec3 v3MathLightDir    = normalize(v_v3Relative);
+        vec3 v3MathLightDir  = normalize(v_v3Relative);
         v_av4LightDir[0].x   = dot(v3MathLightDir, t);
         v_av4LightDir[0].y   = dot(v3MathLightDir, b);
         v_av4LightDir[0].z   = dot(v3MathLightDir, n);

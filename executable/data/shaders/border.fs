@@ -8,20 +8,15 @@
 /////////////////////////////////////////////////////
 
 
-// shader input
-varying vec4 v_v4Color;
-
-
 void main()
 {
-#if (GL_QUALITY) < 1
-
-    vec2 v2Diff  = v_av2TexCoord[0] - vec2(0.5);
-    gl_FragColor = vec4(v_v4Color.rgb, (0.9 - 6.0 * dot(v2Diff, v2Diff)) * v_v4Color.a);
-    
-#else
-
-    gl_FragColor = vec4(v_v4Color.rgb, texture2D(u_as2Texture[0], v_av2TexCoord[0]).a * v_v4Color.a);
-    
-#endif
+    if(v_av2TexCoord[0].x < u_v2TexSize.x || v_av2TexCoord[0].x > 1.0-u_v2TexSize.x ||
+       v_av2TexCoord[0].y < u_v2TexSize.y || v_av2TexCoord[0].y > 1.0-u_v2TexSize.y)
+    {
+        gl_FragColor = vec4(1.0, 1.0, 1.0, u_v4Color.a);
+    }
+    else
+    {
+        gl_FragColor = u_v4Color;
+    }
 }
