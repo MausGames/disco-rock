@@ -20,7 +20,7 @@ void main()
     gl_Position      = u_m4ModelViewProj * v4Position;
     v_av2TexCoord[0] = a_v2Texture + u_v2TexSize;   // add
     
-#ifdef GL_ES
+#if (GL_QUALITY) < 1
 
     v_v3Relative.y = 1.0 - v_v3Relative.y * 0.004;
         
