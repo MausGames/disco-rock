@@ -11,6 +11,7 @@
 // normalized camera vector
 const vec3 c_v3CamDir = vec3(0.0, -0.813731849, 0.581237018);
 
+
 void main()
 {
     gl_Position      = u_m4ModelViewProj * vec4(a_v3Position, 1.0);

@@ -17,7 +17,7 @@ varying vec3 v_v3Relative;
 
 void main()
 {
-#ifdef GL_ES
+#if (GL_QUALITY) < 1
 
     vec2 v2TexCoord = fract(v_av2TexCoord[0]);
     
@@ -29,7 +29,7 @@ void main()
     else
     {
         float fIntensity = v_v3Relative.y;
-        gl_FragColor     = vec4((u_v4Color.rgb * (0.9 * fIntensity)) * min(u_v4Color.a * fIntensity, 1.0), 1.0);
+        gl_FragColor     = vec4(u_v4Color.rgb * (0.9 * fIntensity * min(u_v4Color.a * fIntensity, 1.0)), 1.0);
     }
 
 #else

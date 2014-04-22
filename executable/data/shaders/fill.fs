@@ -10,9 +10,9 @@
 
 void main()
 {
-#ifdef GL_ES
+#if (GL_QUALITY) < 1
 
-    gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
+    gl_FragColor = vec4(0.05, 0.05, 0.05, 1.0);
 
 #else
 

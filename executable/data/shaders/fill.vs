@@ -13,7 +13,7 @@ void main()
     gl_Position   = u_m4ScreenView * vec4(a_v3Position.xy, 1.0, 1.0);
     gl_Position.z = 1.0;
     
-#ifndef GL_ES
+#if (GL_QUALITY) >= 1
 
     vec2 v2TexCoord = a_v2Texture * u_v2TexSize;
     
