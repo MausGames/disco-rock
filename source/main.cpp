@@ -18,19 +18,15 @@ gjAPI*              g_pGJ             = NULL;
 coreMusicPlayer*    g_pMusicPlayer    = NULL;
 coreParticleSystem* g_pParticleSystem = NULL;
 
-float               g_fTargetSpeed    = 0.0f;
-float               g_fCurSpeed       = 0.0f;                 
+float               g_fTargetSpeed    = 1.0f;
+float               g_fCurSpeed       = 1.0f;
+float               g_fTargetCam      = 0.0f;
+float               g_fCurCam         = 0.0f;
 bool                g_bPause          = false;
 
 int                 g_iNumFails       = 0;
 
 coreObject3D* m_apSave[8];   // pre-allocation of required ressources, still need to implement a more efficient way
-
-// simple FPS display
-//#define _FPS_
-#if defined(_FPS_)
-    coreLabel* m_pFPS = NULL;
-#endif
 
 
 // ****************************************************************
@@ -103,7 +99,7 @@ void CoreApp::Init()
     Core::Graphics->ResizeView(Core::System->GetResolution(), TO_RAD(55.0f), 0.1f, 1000.0f);
 
     // set camera
-    coreVector3 vCamPos = coreVector3(0.0f,-70.0f,50.0f);
+    coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
     coreVector3 vCamDir = -vCamPos;
     coreVector3 vCamOri = coreVector3(0.0f,0.0f,1.0f);
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
@@ -151,12 +147,6 @@ void CoreApp::Init()
     m_apSave[5] = new cPlate(0.0f, coreVector2());
     m_apSave[6] = new cRay(coreVector3());
     m_apSave[7] = new cTrap();
-
-#if defined(_FPS_)
-    m_pFPS = new coreLabel(FONT_ROCKS, 30, 8);
-    m_pFPS->SetCenter(coreVector2(-0.5f,0.5f));
-    m_pFPS->SetAlignment(coreVector2(1.0f,-1.0f));
-#endif
 }
 
 
@@ -177,10 +167,6 @@ void CoreApp::Exit()
     SAFE_DELETE(g_pGJ)
     SAFE_DELETE(g_pMusicPlayer)
     SAFE_DELETE(g_pParticleSystem)
-
-#if defined(_FPS_)
-    SAFE_DELETE(m_pFPS)
-#endif
 }
 
 
@@ -196,10 +182,6 @@ void CoreApp::Render()
     // render combat text and menu
     g_pCombatText->Render();
     g_pMenu->Render();
-
-#if defined(_FPS_)
-    m_pFPS->Render();
-#endif
 
     glEnable(GL_DEPTH_TEST);
 }
@@ -221,9 +203,11 @@ void CoreApp::Move()
         // delete/exit the current game
         SAFE_DELETE(g_pGame)
 
-        // reset game speed
+        // reset game speed and camera
         g_fCurSpeed    = 1.0f;
         g_fTargetSpeed = 1.0f;
+        g_fCurCam      = 0.0f;
+        g_fTargetCam   = 0.0f;
 
         // reset all holes in the dance floor
         bool abIndex[BACK_BLOCKS_X];
@@ -234,6 +218,14 @@ void CoreApp::Move()
     // smoothly update the real game speed with an additional target value
     if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
     Core::System->SetTimeSpeed(0, g_bPause ? 0.0f : g_fCurSpeed);
+
+    // smoothly move the camera
+    g_fCurCam += (sinf(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 1.5f;
+
+    const coreVector3 vCamPos = coreVector3(g_fCurCam,-70.0f,51.0f);
+    const coreVector3 vCamDir = -vCamPos;
+    const coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f,0.0f,1.0f);
+    Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
     {
@@ -262,9 +254,4 @@ void CoreApp::Move()
     // adjust music speed/pitch and update the streaming
     g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
     g_pMusicPlayer->Update();
-
-#if defined(_FPS_)
-    m_pFPS->SetText(coreData::Print("%.1f", 1.0f / Core::System->GetTime()));
-    m_pFPS->Move();
-#endif
 }
