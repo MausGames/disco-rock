@@ -56,11 +56,11 @@ void cPlate::Move()
     if(m_Animation.GetStatus())
     {
         // update the lift-animation
-        if(m_Animation.Update(1.0f))
+        if(m_Animation.Update(0.91f))
             m_iStatus = 1;   // mark as finished
 
         // calculate the position
-        this->SetPosition(coreVector3(this->GetPosition().xy(), 100.0f * m_Animation.GetCurrent(false) + GAME_HEIGHT));
+        this->SetPosition(coreVector3(this->GetPosition().xy(), 110.0f * m_Animation.GetCurrent(false) + GAME_HEIGHT));
     }
 
     // calculate the texture-offset for the disco-lights

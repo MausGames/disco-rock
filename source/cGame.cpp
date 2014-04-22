@@ -59,27 +59,28 @@ bool Intersection(const coreObject3D &Object1, const coreObject3D &Object2, core
 
 // ****************************************************************
 cGame::cGame(const bool& bChallenge)noexcept
-: m_iCurLine       (g_pBackground->GetCurLine())
-, m_iCurSpawn      (Core::Rand->Int(2,3))   // not sync
-, m_bLastHole      (true)
-, m_dScore         (0.0)
-, m_fTime          (0.0f)
-, m_iCombo         (0)
-, m_iMaxCombo      (0)
-, m_fComboTime     (0.0f)
-, m_fComboDelay    (0.0f)
-, m_iCoolaCounter  (0)
-, m_iRayCounter    (0)
-, m_iCanyonCounter (-CANYON_DISTANCE)
-, m_iTrapChance    (0)
-, m_bFirstLine     (true)
-, m_bFirstMsg      (true)
-, m_bTrapSpawn     (false)
-, m_bTrapJump      (false)
-, m_bChallenge     (bChallenge)
-, m_iNarrow        (0)
-, m_Message        (FONT_ROCKS, 45, 0)
-, m_ShowMessage    (coreTimer(1.0f, 0.333f, 1))
+: m_iCurLine        (g_pBackground->GetCurLine())
+, m_iCurSpawn       (Core::Rand->Int(2,3))   // not sync
+, m_bLastHole       (true)
+, m_dScore          (0.0)
+, m_fTime           (0.0f)
+, m_iCombo          (0)
+, m_iMaxCombo       (0)
+, m_fComboTime      (0.0f)
+, m_fComboDelay     (0.0f)
+, m_iCollectedTraps (0)
+, m_iCoolaCounter   (0)
+, m_iRayCounter     (0)
+, m_iCanyonCounter  (-CANYON_DISTANCE)
+, m_iTrapChance     (0)
+, m_bFirstLine      (true)
+, m_bFirstMsg       (true)
+, m_bTrapSpawn      (false)
+, m_bTrapJump       (false)
+, m_bChallenge      (bChallenge)
+, m_iNarrow         (0)
+, m_Message         (FONT_ROCKS, 45, 0)
+, m_ShowMessage     (coreTimer(1.0f, 0.333f, 1))
 {
     // create beginning message
     m_ShowMessage.Play(false);
@@ -192,7 +193,7 @@ void cGame::Move()
     // show message on first jump (over the first line)
     if(m_bFirstMsg)
     {
-        if((m_fTime >= 5.1f && m_Rock.GetJumped()) || m_fTime >= 5.6f)
+        if((m_fTime >= 5.6f && m_Rock.GetJumped()) || (m_fTime >= 6.1f && !m_Rock.GetFallen()))
         {
             m_bFirstMsg = false;
             g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
@@ -227,7 +228,7 @@ void cGame::Move()
             const int iBorder = int(std::floor(1.0f + 2.2f*g_fCurSpeed));
 
             // update canyon counter, prevent uncontrolled holes from spawning before and after a canyon
-            if(!m_iNarrow || m_iCanyonCounter >= 0) if(++m_iCanyonCounter >= 0) m_bLastHole = true;
+            if((!m_iNarrow || m_iCanyonCounter >= 0) && !m_bChallenge) if(++m_iCanyonCounter >= 0) m_bLastHole = true;
 
             if(m_iCanyonCounter < 0 || m_iCanyonCounter > iBorder)
             { 
@@ -235,7 +236,7 @@ void cGame::Move()
                 if(Core::Rand->Int(0,1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), 0+m_iNarrow, 5-m_iNarrow);
 
                 // add random holes modified by current time
-                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, 1.0f + (25.0f / m_fTime)) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
+                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, 1.0f + (35.0f / m_fTime)) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
 
                 // define the next thing to spawn (-1 = hole)
                 const int iSelection = Core::Rand->Int(m_bLastHole ? 0 : -1, 10);
@@ -326,7 +327,7 @@ void cGame::Move()
                 else 
                 {
                     // activate narrow stage later
-                    if(m_fTime >= 98.0f) m_iNarrow = 1;
+                    if(m_fTime >= 97.0f) m_iNarrow = 1;
                     m_bTrapSpawn = false;
                 }
 
@@ -424,7 +425,7 @@ void cGame::Move()
                 }
                 
                 // create max combo text (after score text)
-                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAX COMBO", m_Rock.GetPosition(), COLOR_ORANGE_F);
+                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAX", m_Rock.GetPosition(), COLOR_ORANGE_F);
 
                 // send beverage into the air, try not to spill it
                 pBeverage->Destroy(pBeverage->GetPosition() - m_Rock.GetPosition());
@@ -460,7 +461,11 @@ void cGame::Move()
             if(m_Rock.Jump(10.0f))
             {
                 m_bTrapJump = true;
+                ++m_iCollectedTraps;
 
+                // move camera
+                if(m_fTime < 100.0f) g_fTargetCam += g_fTargetCam ? 1.0f : 0.5f;
+                
                 // play trap sound effect and show message
                 m_pTrapSound->PlayPosition(NULL, 0.4f, 1.1f, 0.05f, false, m_Rock.GetPosition());
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
@@ -471,6 +476,9 @@ void cGame::Move()
         }
     }
     if(!m_Rock.GetJumped()) m_bTrapJump = false;
+
+    // move camera
+    if(m_fTime >= 100.0f) g_fTargetCam += Core::System->GetTime() * 0.15f;
 
     // update combo
     m_fComboDelay -= Core::System->GetTime();
@@ -491,7 +499,7 @@ void cGame::Move()
 
     // update the interface object
     if(this->GetStatus()) m_Interface.Hide();
-    m_Interface.Update((float)m_dScore, m_fTime, COMBO_MULTI);
+    m_Interface.Update((float)m_dScore, m_fTime, COMBO_MULTI, MIN((float)m_fComboDelay, 0.7f) * 1.4286f);
     m_Interface.Move();
 
     if(m_ShowMessage.GetStatus())

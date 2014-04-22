@@ -46,7 +46,8 @@ private:
     coreFlow m_fComboTime;                   // time with max combo multiplier
     float m_fComboDelay;                     // remaining time to the combo-reset
                                              
-    coreUint m_aiCollected[5];               // hit statistic values (0 = all | 1-4 single)
+    coreUint m_aiCollected[5];               // beverage statistic values (0 = all | 1-4 single)
+    coreUint m_iCollectedTraps;              // trap statistic value
                                              
     int m_iCoolaCounter;                     // counter for regular coola creation
     int m_iRayCounter;                       // counter for regular ray creation
@@ -71,7 +72,7 @@ private:
 
 
 public:
-    cGame(const bool& bChallenge)noexcept;
+    explicit cGame(const bool& bChallenge)noexcept;
     ~cGame();
 
     // render and move the game
@@ -91,8 +92,10 @@ public:
     inline const coreUint& GetCombo()const                 {return m_iCombo;}
     inline const coreUint& GetMaxCombo()const              {return m_iMaxCombo;}
     inline const coreUint& GetStat(const int& iIndex)const {return m_aiCollected[iIndex];}
+    inline const coreUint& GetTraps()const                 {return m_iCollectedTraps;}
 
     // access sub objects
+    inline cRock* GetRock()           {return &m_Rock;}
     inline cInterface* GetInterface() {return &m_Interface;}
 
     // achive a trophy

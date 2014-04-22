@@ -108,11 +108,10 @@ void cRock::Move()
 
 #else
 
-    // jump with mouse and keyboard (W, UP, SPACE)
-    if((Core::Input->GetMouseButton(CORE_INPUT_LEFT, CORE_INPUT_PRESS)      ||
-        Core::Input->GetKeyboardButton(SDL_SCANCODE_W,     CORE_INPUT_HOLD) ||
-        Core::Input->GetKeyboardButton(SDL_SCANCODE_UP,    CORE_INPUT_HOLD) ||
-        Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE, CORE_INPUT_HOLD)))
+    // jump with keyboard (W, UP, SPACE)
+    if((Core::Input->GetKeyboardButton(SDL_SCANCODE_W,     CORE_INPUT_PRESS) ||
+        Core::Input->GetKeyboardButton(SDL_SCANCODE_UP,    CORE_INPUT_PRESS) ||
+        Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE, CORE_INPUT_PRESS)))
 
 #endif
     {
@@ -156,48 +155,17 @@ void cRock::Move()
         m_bJumped = false;
     }
 
-#if defined(_CORE_ANDROID_)
-
+    // init new X position
     float fNewPos = this->GetPosition().x;
+
+#if defined(_CORE_ANDROID_)
 
     // move with left touch buttons
     const float fMove = 100.0f * Core::System->GetTime() * m_fSensitivity;
          if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
     else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
 
-    //if(true)
-    //{
-    //    float fMoveDir = 0.0f;
-    //    if(Core::Input->GetTouchButton(0, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(0).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(0).x;
-    //    if(Core::Input->GetTouchButton(1, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(1).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(1).x;
-    //    if(Core::Input->GetTouchButton(2, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(2).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(2).x;
-
-    //    // move with finger input
-    //    if(fMoveDir < 0.0f)
-    //    {
-    //        const float fMoveStr = CLAMP((fMoveDir + 0.46f) / 0.10f - 0.5f, -0.5f, 0.5f);
-    //        if(ABS(fMoveStr) >= 0.035f) fNewPos += Core::System->GetTime() * 170.0f * (fMoveStr - SIGN(fMoveStr)*0.035f);
-    //    }
-    //}
-    //else
-    //{
-    //    float fMoveDir = 0.0f;
-    //    if(Core::Input->GetTouchButton(0, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(0).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(0).x;
-    //    if(Core::Input->GetTouchButton(1, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(1).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(1).x;
-    //    if(Core::Input->GetTouchButton(2, CORE_INPUT_HOLD) && Core::Input->GetTouchPosition(2).x < 0.0f) fMoveDir += Core::Input->GetTouchPosition(2).x;
-
-    //    // move with finger input
-    //    if(fMoveDir != 0.0f)
-    //    {
-    //        const float fMoveStr = CLAMP((fMoveDir + 0.39f) * 9.091f * 0.5f + 0.02f, -0.5f, 0.5f);
-    //        fNewPos = 120.0f * fMoveStr;
-    //    }
-    //}
-
 #else
-
-    // move with mouse
-    float fNewPos = this->GetPosition().x + 120.0f * Core::Input->GetMouseRelative().x * m_fSensitivity;
 
     // move with keyboard (A, D, LEFT, RIGHT)
     const float fMove = 100.0f * Core::System->GetTime() * m_fSensitivity;

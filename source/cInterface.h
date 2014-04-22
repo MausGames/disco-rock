@@ -17,21 +17,27 @@ class cInterface final
 private:
     coreLabel m_Score;          // score name text
     coreLabel m_ScoreValue;     // score value text
-
+                                
     coreLabel m_Time;           // time name text
     coreLabel m_TimeValueSec;   // time value text (seperated to remove wobbling)
     coreLabel m_TimeValueMil;   // time value text
-
+                                  
     coreLabel m_Combo;          // combo name text
     coreLabel m_ComboValue;     // combo value text
+    coreObject2D m_ComboBar;    // simple bar to display the current combo delay
+                                  
+    coreObject2D m_ComboBack;   // background for better constrast on lower quality settings
+    bool m_bComboBackState;     // status to display the background
 
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+
     coreButton m_MoveLeft;      // touch move left button
     coreButton m_MoveRight;     // touch move right button
     coreButton m_Jump;          // touch jump button
     coreButton m_Pause;         // touch pause button
-#endif
-
+                                
+#endif                          
+                                
     coreTimer m_Show;           // timer to fade in (on game-start)
     coreTimer m_Hide;           // timer to fade out (on game-end)
 
@@ -45,18 +51,21 @@ public:
     void Move();
 
     // update all interface values
-    void Update(const float& fScore, const float& fTime, const float& fCombo);
+    void Update(const float& fScore, const float& fTime, const float& fCombo, const float& fDelay);
 
     // smoothly fade out the interface
     inline void Hide() {if(m_Hide.GetCurrent(false) == 0.0f) m_Hide.Play(false);}
 
     // access touch objects
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+
     inline coreObject2D* GetTouchMoveLeft()  {return &m_MoveLeft;}
     inline coreObject2D* GetTouchMoveRight() {return &m_MoveRight;}
     inline coreObject2D* GetTouchJump()      {return &m_Jump;}
     inline coreObject2D* GetTouchPause()     {return &m_Pause;}
+
 #endif
+
     void InteractControl();
     void InteractPause();
 };

@@ -8,7 +8,8 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#define RAY_LENGTH 80.0f
+#define RAY_LENGTH 120.0f
+#define RAY_WIDTH  7.5f
 
 
 // ****************************************************************
@@ -26,7 +27,7 @@ cRay::cRay(const coreVector3& vStart)noexcept
 
     // set object properties
     this->SetPosition(vStart);
-    this->SetSize(coreVector3(7.5f,7.5f,RAY_LENGTH));
+    this->SetSize(coreVector3(RAY_WIDTH, RAY_WIDTH, RAY_LENGTH));
     this->SetDirection(vStart * coreVector3(1.0f,0.0f,1.0f));
 
     // set random plate color
@@ -55,11 +56,11 @@ void cRay::Move()
     this->SetDirection(coreVector3(vNewDir.x, 0.0f, -vNewDir.y));
 
     // calculate position
-    const coreVector3 vNewPos = m_vStart + this->GetDirection() * RAY_LENGTH * 0.5f;
+    const coreVector3 vNewPos = m_vStart + this->GetDirection() * RAY_LENGTH * 0.25f;
     this->SetPosition(coreVector3(vNewPos.x, this->GetPosition().y, vNewPos.z));
 
     // mark as finished
-    if(this->GetPosition().y <= -48.0f) m_iStatus = 1;
+    if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
     // align the orientation
     this->SetOrientation(this->GetPosition() - Core::Graphics->GetCamPosition());

@@ -83,7 +83,7 @@ void cBeverage::Move()
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
 
     // mark as finished
-    if(this->GetPosition().y <= -48.0f) m_iStatus = 1;
+    if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));

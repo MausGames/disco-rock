@@ -64,6 +64,8 @@ void cBackground::Render()
     if(!m_pProgram) return;
     if(!m_pProgram->Enable()) return;
 
+    glDisable(GL_BLEND);
+
     // light flash (made in render-function to animate even in pause-mode)
     {
         // get music speed (yes this is currently hardcoded, needs to be improved)
@@ -85,7 +87,7 @@ void cBackground::Render()
         }
 
         // reduce light strength (flash) over time
-        m_fLightStrength = MAX(m_fLightStrength * (1.0f - Core::System->GetTime() * 5.0f), 0.0f);
+        m_fLightStrength = MAX(m_fLightStrength * (1.0f - Core::System->GetTime() * 4.0f), 0.0f);
 
         if(!g_bPause)
         {
@@ -118,6 +120,8 @@ void cBackground::Render()
 
     // render the filling background
     m_Fill.Render();
+
+    glEnable(GL_BLEND);
 }
 
 

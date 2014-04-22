@@ -51,7 +51,7 @@ void cTrap::Move()
     }
 
     // mark as finished
-    if(this->GetPosition().y <= -48.0f) m_iStatus = 1;
+    if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
     // move the object
     coreObject3D::Move();
