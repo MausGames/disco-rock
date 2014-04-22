@@ -62,6 +62,8 @@ extern coreParticleSystem* g_pParticleSystem;
 
 extern float               g_fTargetSpeed;
 extern float               g_fCurSpeed;
+extern float               g_fTargetCam;
+extern float               g_fCurCam;
 extern bool                g_bPause;
 
 extern int                 g_iNumFails;

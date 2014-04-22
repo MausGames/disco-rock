@@ -26,14 +26,15 @@
                                                                      
 #define BACK_DETAIL_X (24.0f*0.91f)                                  // X size of a block
 #define BACK_DETAIL_Y  24.0f                                         // Y size of a block
-#define BACK_OFFSET_Y  2.0f                                          // X position offset
+#define BACK_OFFSET_Y  2.0f                                          // Y position offset
                                                                      
-#define BACK_VIEW    21                                              // visible rows
-#define BACK_REPEAT  40                                              // rows when to repeat
+#define BACK_VIEW    24                                              // visible rows
+#define BACK_REPEAT  40                                              // rows when to repeat (BACK_VIEW + BACK_REPEAT < BACK_HEIGHT)
 #define BACK_RANGE  (BACK_BLOCKS_X * BACK_PER_INDICES * BACK_VIEW)   // vertices to draw at once
 
 #define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (float(i) - (float(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
 #define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))             // Y position at where to spawn objects on the horizon
+#define BACK_REMOVE_Y     -50.0f                                                           // Y position at where to remove objects
 
 
 // ****************************************************************
