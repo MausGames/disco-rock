@@ -14,6 +14,7 @@
 // ****************************************************************
 #include "Core.h"
 #include "gjAPI.h"
+#include <deque>
 
 #define FONT_ROCKS "data/fonts/gomarice_rocks.ttf"
 

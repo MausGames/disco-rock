@@ -174,7 +174,7 @@ void cGame::Render()
     
     // render interface
     m_Interface.Render();
-    if(m_ShowMessage.GetStatus())
+    if(m_ShowMessage.GetStatus() && !g_bPause)
     {
         // render beginning message
         if(m_ShowMessage.GetCurrent(false) >= 0.0f)
@@ -236,7 +236,8 @@ void cGame::Move()
                 if(Core::Rand->Int(0,1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), 0+m_iNarrow, 5-m_iNarrow);
 
                 // add random holes modified by current time
-                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, 1.0f + (35.0f / m_fTime)) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
+                const float fHoleRndMax = 1.0f + (35.0f * RCP(m_fTime));
+                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, fHoleRndMax) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
 
                 // define the next thing to spawn (-1 = hole)
                 const int iSelection = Core::Rand->Int(m_bLastHole ? 0 : -1, 10);
@@ -341,9 +342,10 @@ void cGame::Move()
             else
             {
                 // randomly create moving plates inside of holes
+                const float fPlateCmp = 1.0f - ((m_fTime-20.0f) / 80.0f);
                 for(int i = 1+m_iNarrow; i < BACK_BLOCKS_X-1-m_iNarrow; ++i)
                 {
-                    if(abHole[i] && (m_fTime < 20.0f || Core::Rand->Float(0.0f,1.0f) < (1.0f - ((m_fTime-20.0f) / 80.0f))))
+                    if(abHole[i] && (m_fTime < 20.0f || Core::Rand->Float(0.0f,1.0f) < fPlateCmp))
                     {
                         // create plate and add to list
                         cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -std::floor(g_pBackground->GetPositionTime())));
@@ -467,7 +469,7 @@ void cGame::Move()
                 if(m_fTime < 100.0f) g_fTargetCam += g_fTargetCam ? 1.0f : 0.5f;
                 
                 // play trap sound effect and show message
-                m_pTrapSound->PlayPosition(NULL, 0.4f, 1.1f, 0.05f, false, m_Rock.GetPosition());
+                m_pTrapSound->PlayPosition(NULL, 0.38f, 1.1f, 0.05f, false, m_Rock.GetPosition());
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
 
                 // reset combo timer (a little bit more than a beverage)
@@ -507,22 +509,24 @@ void cGame::Move()
         m_ShowMessage.Update(1.0f);
 
         // update message at the beginning
-        m_Message.SetAlpha(MIN(2.0f * coreMath::Sin(m_ShowMessage.GetCurrent(false) * PI), 1.0f));
-        m_Message.SetDirection(coreVector2::Direction(0.2f * coreMath::Sin(m_ShowMessage.GetCurrent(false) * PI * 4.0f)));
+        m_Message.SetAlpha(MIN(2.0f * SIN(m_ShowMessage.GetCurrent(false) * PI), 1.0f));
+        m_Message.SetDirection(coreVector2::Direction(0.2f * SIN(m_ShowMessage.GetCurrent(false) * PI * 4.0f)));
         m_Message.SetScale(g_pBackground->GetFlash(0.4f));
         m_Message.Move();
     }
 
-    // check for achievements/trophies/whatever you call that unnecessary game enlargement bullshit everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
-    if(!m_bTrophyHelper[0] && m_fComboTime >= 20.0f)                  {m_bTrophyHelper[0] = true; this->AchieveTrophy(4665);}    
-    if(!m_bTrophyHelper[1] && !m_aiCollected[0] && m_fTime >= 70.0f)  {m_bTrophyHelper[1] = true; this->AchieveTrophy(4636);}
-    if(!m_bTrophyHelper[2] && m_fTime >= 100.0f)                      {m_bTrophyHelper[2] = true; this->AchieveTrophy(4638);}
-    if(!m_bTrophyHelper[3] && m_dScore >= 30000.0 && !m_bChallenge)   {m_bTrophyHelper[3] = true; this->AchieveTrophy(4667);}
-    if(!m_bTrophyHelper[4] && m_dScore >= 200000.0 && m_bChallenge)   {m_bTrophyHelper[4] = true; this->AchieveTrophy(4671);}
-    if(!m_bTrophyHelper[5] && m_Rock.GetFallen() && m_fTime < 10.0f)  {m_bTrophyHelper[5] = true; this->AchieveTrophy(4635); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
-    if(!m_bTrophyHelper[6] && m_aiCollected[4] == 2 && !m_bChallenge) {m_bTrophyHelper[6] = true; this->AchieveTrophy(4637);}
-    if(!m_bTrophyHelper[7] && m_Rock.GetFallen() && m_bTrapJump)      {m_bTrophyHelper[7] = true; this->AchieveTrophy(4666);}
-
+    if(!this->GetStatus())
+    {
+        // check for achievements/trophies/whatever you call that unnecessary game enlargement bullshit everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
+        if(!m_bTrophyHelper[0] && m_fComboTime >= 20.0f)                  {m_bTrophyHelper[0] = true; this->AchieveTrophy(4665);}    
+        if(!m_bTrophyHelper[1] && !m_aiCollected[0] && m_fTime >= 70.0f)  {m_bTrophyHelper[1] = true; this->AchieveTrophy(4636);}
+        if(!m_bTrophyHelper[2] && m_fTime >= 100.0f)                      {m_bTrophyHelper[2] = true; this->AchieveTrophy(4638);}
+        if(!m_bTrophyHelper[3] && m_dScore >= 30000.0 && !m_bChallenge)   {m_bTrophyHelper[3] = true; this->AchieveTrophy(4667);}
+        if(!m_bTrophyHelper[4] && m_dScore >= 200000.0 && m_bChallenge)   {m_bTrophyHelper[4] = true; this->AchieveTrophy(4671);}
+        if(!m_bTrophyHelper[5] && m_Rock.GetFallen() && m_fTime < 10.0f)  {m_bTrophyHelper[5] = true; this->AchieveTrophy(4635); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
+        if(!m_bTrophyHelper[6] && m_aiCollected[4] == 2 && !m_bChallenge) {m_bTrophyHelper[6] = true; this->AchieveTrophy(4637);}
+        if(!m_bTrophyHelper[7] && m_Rock.GetFallen() && m_bTrapJump)      {m_bTrophyHelper[7] = true; this->AchieveTrophy(4666);}
+    }
 }
 
 

@@ -139,7 +139,7 @@ void cBackground::Move()
 
     // update dance floor light animation
     m_fFloorTime.Update(0.5f, 0);
-    this->SetTexOffset(coreVector2(1.0f,-1.0f)*m_fFloorTime);
+    this->SetTexOffset(coreVector2(1.0f,-1.0f) * m_fFloorTime);
 
     // update and move the filling background
     m_fFillTime.Update(10.0f, 0);
