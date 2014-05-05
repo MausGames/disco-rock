@@ -17,7 +17,7 @@ void main()
 #if (GL_QUALITY) < 1
 
     vec2 v2Diff  = v_av2TexCoord[0] - vec2(0.5);
-    gl_FragColor = vec4(v_v4Color.rgb, (0.9 - 6.0 * dot(v2Diff, v2Diff)) * v_v4Color.a);
+    gl_FragColor = vec4(v_v4Color.rgb, (0.85 - 6.0 * dot(v2Diff, v2Diff)) * v_v4Color.a);
     
 #else
 

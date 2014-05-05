@@ -26,7 +26,6 @@ cRock::cRock()noexcept
     // load object resources
     this->DefineModelFile("data/models/rock.md5mesh");
     this->DefineTextureFile(0, "data/textures/rock.png");
-    this->DefineTextureFile(1, "data/textures/rock_norm.png");
     this->DefineProgramShare("rock_shader")
           ->AttachShaderFile("data/shaders/rock.vs")
           ->AttachShaderFile("data/shaders/rock.fs")
@@ -134,7 +133,7 @@ void cRock::Move()
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
-        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.03f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f), 0.05f, false, this->GetPosition());
+        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f), 0.05f, false, this->GetPosition());
 
         if(m_fForce < -10.0f)
         {
@@ -189,17 +188,16 @@ void cRock::Move()
         vSmokeColor.a *= CLAMP((g_pGame->GetTime() - 30.0f) * 0.05f, 0.0f, 1.0f);
 
         // create smoke trail
-        coreParticle* pParticle;
-        while((pParticle = m_Effect.CreateParticle(2, 60.0f)))
+        m_Effect.CreateParticle(2, 60.0f, [&](coreParticle* pParticle)
         {
-            coreVector2 vRand = coreVector2::Rand(0.0f, 10.0f);
+            const coreVector2 vRand = coreVector2::Rand(0.0f, 10.0f);
 
-            pParticle->SetPositionRel(this->GetPosition() + coreVector3::Rand(0.0f, 4.0f), coreVector3(vRand.x, -30.0f*g_fCurSpeed, vRand.y));
-            pParticle->SetScaleStc(6.0f);
+            pParticle->SetPositionRel(this->GetPosition() + coreVector3::Rand(0.0f, 3.8f), coreVector3(vRand.x, -30.0f*g_fCurSpeed, vRand.y));
+            pParticle->SetScaleStc(6.2f);
             pParticle->SetAngleStc(0.0f);
             pParticle->SetColor4Stc(vSmokeColor);
             pParticle->SetSpeed(2.0f);
-        }  
+        });
     }
 
     // update shadow
@@ -246,7 +244,7 @@ bool cRock::Jump(const float& fForce)
     m_bJumped       = true;
 
     // play jump sound-effect and start big wave animation
-    m_pUp->PlayPosition(NULL, 0.2f, 1.8f, 0.05f, false, this->GetPosition());
+    m_pUp->PlayPosition(NULL, 0.4f, 1.8f, 0.05f, false, this->GetPosition());
     m_WaveTimer.Play(true);
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 

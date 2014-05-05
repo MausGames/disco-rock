@@ -33,18 +33,18 @@ private:
 
 
 private:
-    coreLabel* m_apText[COMBAT_TEXT_NUM];   // labal objects to display the combat text
-    coreByte m_iCurText;                    // current label object
+    coreLabel m_aText[COMBAT_TEXT_NUM];    // labal objects to display the combat text
+    coreByte m_iCurText;                   // current label object
          
-    coreTimer m_Delay;                      // delay between two created texts to increase visibility
-    coreTimer m_aFloat[COMBAT_TEXT_NUM];    // timer for the float-animation
-    float m_afAlpha[COMBAT_TEXT_NUM];       // saved initial alpha values for more dynamic fading
+    coreTimer m_Delay;                     // delay between two created texts to increase visibility
+    coreTimer m_aFloat[COMBAT_TEXT_NUM];   // timer for the float-animation
+    float m_afAlpha[COMBAT_TEXT_NUM];      // saved initial alpha values for more dynamic fading
                             
-    std::deque<sData> m_aData;              // text data deque
+    std::deque<sData> m_aData;             // text data deque
 
 
 public:
-    cCombatText();
+    cCombatText()noexcept;
     ~cCombatText();
 
     // render and move the combat text

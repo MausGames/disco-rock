@@ -36,7 +36,11 @@ void main()
 
     vec3  v3TextureNorm  = texture2D(u_as2Texture[1], v_av2TexCoord[0]).rgb;
     vec2  v2TextureColor = texture2D(u_as2Texture[0], v_av2TexCoord[0]).rg;
-    float fTextureDisco  = texture2D(u_as2Texture[0], v_av2TexCoord[1]).b;
+    #if (GL_QUALITY) > 1
+    
+        float fTextureDisco  = texture2D(u_as2Texture[0], v_av2TexCoord[1]).b;
+        
+    #endif
     
     float fIntensity = 250.0 * inversesqrt(dot(v_v3Relative, v_v3Relative));
     fIntensity      *= abs(dot(normalize(v_v3Relative), c_v3CamDir));
@@ -48,7 +52,12 @@ void main()
 
     vec4 v4Color = vec4(vec3(v2TextureColor.r), 1.0) * u_v4Color * (fIntensity * (0.9 * fBumpFactor + 0.25 * pow(fBumpFactor, 40.0)));
 
-    gl_FragColor.rgb  = v4Color.rgb * min(v4Color.a, 1.0) + vec3(fTextureDisco * 0.5 * 1.45 * (0.7 - 0.6 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x)));
+    gl_FragColor.rgb = v4Color.rgb * min(v4Color.a, 1.0);
+    #if (GL_QUALITY) > 1
+    
+        gl_FragColor.rgb += vec3(fTextureDisco * 0.5 * 1.45 * (0.7 - 0.6 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x)));
+    
+    #endif
     gl_FragColor.rgb *= v2TextureColor.g;
     gl_FragColor.a    = 1.0;
     

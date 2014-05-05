@@ -23,6 +23,7 @@ protected:
     int m_iScore;                    // score value of the beverage
 
     float m_fHeight;                 // Z position-offset on the dance floor
+    float m_fLiquidAlpha;            // alpha value of the drink
     
     coreTimer m_pDestroy;            // timer for the fly-animation
     coreVector3 m_vFlyRotation;      // rotation-parameter for the fly-animation
@@ -34,7 +35,7 @@ protected:
 
 
 public:
-    cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept;
+    cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept;
     virtual ~cBeverage();
 
     // render and move the beverage
@@ -51,7 +52,7 @@ public:
     inline void Destroy(const coreVector3& vFlyImpact) {m_pDestroy.Play(true); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
 
     // play a completely shitty glass clinking sound effect
-    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch*0.8f, 0.1f, false, this->GetPosition());}
+    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}
 
     // get object properties
     inline const int& GetScore()const {return m_iScore;}

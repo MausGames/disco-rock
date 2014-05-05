@@ -56,9 +56,12 @@ public:
     // smoothly fade out the interface
     inline void Hide() {if(m_Hide.GetCurrent(false) == 0.0f) m_Hide.Play(false);}
 
-    // access touch objects
+    // show combo background
+    inline void SetComboBack(const bool& bStatus) {m_bComboBackState = bStatus;}
+    
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
+    // access touch objects
     inline coreObject2D* GetTouchMoveLeft()  {return &m_MoveLeft;}
     inline coreObject2D* GetTouchMoveRight() {return &m_MoveRight;}
     inline coreObject2D* GetTouchJump()      {return &m_Jump;}
@@ -66,6 +69,7 @@ public:
 
 #endif
 
+    // interact with touch objects
     void InteractControl();
     void InteractPause();
 };

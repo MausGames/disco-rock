@@ -33,14 +33,14 @@ cCombatText::sData::sData(sData&& m)noexcept
 
 
 // ****************************************************************
-cCombatText::cCombatText()
+cCombatText::cCombatText()noexcept
 : m_iCurText (0)
 , m_Delay    (coreTimer(0.01f, 1.0f, 1))
 {
     for(int i = 0; i < COMBAT_TEXT_NUM; ++i)
     {
         // create labels and reset all missing properties
-        m_apText [i] = new coreLabel(FONT_ROCKS, 37, 32);
+        m_aText  [i].Construct(FONT_ROCKS, 37, 32);
         m_aFloat [i].Set(1.0f, 1.0f, 1);
         m_afAlpha[i] = 0.0f;
     }
@@ -52,10 +52,6 @@ cCombatText::~cCombatText()
 {
     // reset all active texts
     this->Reset();
-
-    // delete labels
-    for(int i = 0; i < COMBAT_TEXT_NUM; ++i)
-        SAFE_DELETE(m_apText[i])
 }
 
 
@@ -66,7 +62,7 @@ void cCombatText::Render()
     for(int i = 0; i < COMBAT_TEXT_NUM; ++i)
     {
         if(m_aFloat[i].GetStatus())
-            m_apText[i]->Render();
+            m_aText[i].Render();
     }
 }
 
@@ -87,7 +83,7 @@ void cCombatText::Move()
             const sData& Data = m_aData.front();
             
             // init label object
-            coreLabel* pText = m_apText[m_iCurText];
+            coreLabel* pText = &m_aText[m_iCurText];
             pText->SetText(Data.sText.c_str());
             pText->SetCenter(Data.vPosition);
             pText->SetColor4(Data.vColor);
@@ -108,14 +104,14 @@ void cCombatText::Move()
         if(m_aFloat[i].GetStatus())
         {
             // update the float timer
-            if(m_aFloat[i].Update(1.0f)) m_apText[i]->SetAlpha(0.0f);
+            if(m_aFloat[i].Update(1.0f)) m_aText[i].SetAlpha(0.0f);
             else
             {
                 // update the combat text
-                m_apText[i]->SetPosition(coreVector2(m_apText[i]->GetCenter().x*1.5f, -1.0f) * -0.13333f * m_aFloat[i].GetCurrent(false));
-                m_apText[i]->SetScale(g_pBackground->GetFlash(0.3f));
-                m_apText[i]->SetAlpha(m_aFloat[i].GetCurrent(true) * m_afAlpha[i]);
-                m_apText[i]->Move();
+                m_aText[i].SetPosition(coreVector2(m_aText[i].GetCenter().x*1.5f, -1.0f) * -0.13333f * m_aFloat[i].GetCurrent(false));
+                m_aText[i].SetScale(g_pBackground->GetFlash(0.3f));
+                m_aText[i].SetAlpha(m_aFloat[i].GetCurrent(true) * m_afAlpha[i]);
+                m_aText[i].Move();
             }
         }
     }
