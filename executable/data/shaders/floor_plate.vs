@@ -26,7 +26,11 @@ void main()
         
 #else
 
-    v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
+    #if (GL_QUALITY) > 1
+    
+        v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
+        
+    #endif
     
     const vec3 n = vec3( 0.0, 0.0, -1.0);
     const vec3 t = vec3(-1.0, 0.0,  0.0);

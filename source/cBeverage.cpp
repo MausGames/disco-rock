@@ -10,16 +10,17 @@
 
 
 // ****************************************************************
-cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept
+cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
 , m_iScore       (iScore)
 , m_fHeight      (fHeight)
+, m_fLiquidAlpha (fAlpha)
 , m_pDestroy     (coreTimer(30.0f, 20.0f, 1))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
-, m_fVolume      (fVolume)
-, m_fPitch       (fPitch)
+, m_fVolume      (fVolume*0.6f)
+, m_fPitch       (fPitch*0.65f)
 {
     // load drink shader
     this->DefineProgramShare("drink_shader")
@@ -71,8 +72,8 @@ void cBeverage::Move()
                                  coreMatrix4::RotationY(fTime * m_vFlyRotation.y);
 
         // rotate the object
-        this->SetDirection(this->GetDirection()*mRot);
-        this->SetOrientation(this->GetOrientation()*mRot);
+        this->SetDirection(this->GetDirection() * mRot);
+        this->SetOrientation(this->GetOrientation() * mRot);
 
         // calculate horizontal position
         fSideSet = Core::System->GetTime() * CLAMP(m_vFlyImpact.x, -3.5f, 3.5f) * 30.0f;
@@ -81,6 +82,10 @@ void cBeverage::Move()
     // calculate vertical position above the ground
     const float fGround = m_pModel->GetRadius()*this->GetSize().x + m_pDestroy.GetCurrent(false)*10.0f + m_fHeight + GAME_HEIGHT;
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
+
+    // fade in
+    const float fAlpha = MIN((BACK_SPAWN_Y - this->GetPosition().y) * 0.03f, 1.0f);
+    this->SetAlpha(fAlpha * m_fLiquidAlpha); // affects glass shading
 
     // mark as finished
     if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
@@ -97,6 +102,7 @@ void cBeverage::Move()
         m_pStraw->SetSize(this->GetSize());
         m_pStraw->SetDirection(this->GetDirection());
         m_pStraw->SetOrientation(this->GetOrientation());
+        m_pStraw->SetAlpha(fAlpha);
         m_pStraw->Move();
     }
 
@@ -107,6 +113,7 @@ void cBeverage::Move()
         m_pGlass->SetSize(this->GetSize());
         m_pGlass->SetDirection(this->GetDirection());
         m_pGlass->SetOrientation(this->GetOrientation());
+        m_pGlass->SetAlpha(fAlpha);
         m_pGlass->Move();
     }
 
@@ -117,7 +124,7 @@ void cBeverage::Move()
 
 // ****************************************************************
 cSunrise::cSunrise()noexcept
-: cBeverage (5, 0.0f, 0.2f, 1.0f)
+: cBeverage (5, 0.0f, 0.91f, 0.2f, 1.0f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_sunrise.md5mesh");
@@ -127,7 +134,6 @@ cSunrise::cSunrise()noexcept
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
     this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
-    this->SetAlpha(0.91f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -145,7 +151,7 @@ cSunrise::~cSunrise()
 
 // ****************************************************************
 cMojito::cMojito()noexcept
-: cBeverage (10, 0.0f, 0.4f, 1.2f)
+: cBeverage (10, 0.0f, 0.85f, 0.4f, 1.2f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_mojito.md5mesh");
@@ -155,7 +161,6 @@ cMojito::cMojito()noexcept
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
     this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.125f),0.0f));
-    this->SetAlpha(0.85f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -173,7 +178,7 @@ cMojito::~cMojito()
 
 // ****************************************************************
 cBlue::cBlue()noexcept
-: cBeverage (30, 5.8f, 0.6f, 1.6f)
+: cBeverage (30, 5.8f, 0.87f, 0.6f, 1.6f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_blue.md5mesh");
@@ -183,7 +188,6 @@ cBlue::cBlue()noexcept
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
     this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.375f),0.0f));
-    this->SetAlpha(0.85f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -207,7 +211,7 @@ cBlue::~cBlue()
 
 // ****************************************************************
 cCoola::cCoola()noexcept
-: cBeverage (500, -3.0f, 1.0f, 0.3f)
+: cBeverage (500, -3.0f, 0.8f, 1.0f, 0.3f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_cola.md5mesh");
@@ -217,7 +221,6 @@ cCoola::cCoola()noexcept
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
     this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.0f),0.0f));
-    this->SetAlpha(0.8f);
 
     // create glass
     m_pGlass = new coreObject3D();

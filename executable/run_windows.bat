@@ -11,4 +11,3 @@ start /D "bin\windows" DiscoRock_mingw.exe
 start /D "bin\windows" DiscoRock_msvc.exe
 
 )
-

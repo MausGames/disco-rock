@@ -66,6 +66,7 @@ const std::string g_asTrap[] = {"TO THE SKY",
                                 "YEAH BABY YEAH",
                                 //"360 KICKFLIP",
                                 "THEY SEE ME ROLLIN'",
+                                "ROCK 'N ROLL",
                                 "SHOW ME THE LIGHT"};
 sMsgList g_MsgTrap(g_asTrap, ARRAY_SIZE(g_asTrap));
 
@@ -98,19 +99,11 @@ void CoreApp::Init()
     // set view frustum
     Core::Graphics->ResizeView(Core::System->GetResolution(), TO_RAD(55.0f), 0.1f, 1000.0f);
 
-    // set camera
-    coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
-    coreVector3 vCamDir = -vCamPos;
-    coreVector3 vCamOri = coreVector3(0.0f,0.0f,1.0f);
-    Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
-
     // set audio listener (for 3d sound)
-    vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
+    const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
+    const coreVector3 vCamDir = coreVector3(0.0f,70.0f,-51.0f).Normalize();
+    const coreVector3 vCamOri = coreVector3(0.0f,0.0f,1.0f);
     Core::Audio->SetListener(vCamPos, coreVector3(0.0f,0.0f,0.0f), vCamDir, vCamOri);
-
-    // override audio configuration
-    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_SOUND, 4.0f);
-    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, g_bCoreDebug ? 0.0f : 0.7f);
 
     // create main components
     g_pBackground = new cBackground();
@@ -153,6 +146,9 @@ void CoreApp::Init()
 // ****************************************************************
 void CoreApp::Exit()
 {
+    // delete Game Jolt API access
+    SAFE_DELETE(g_pGJ)
+
     // delete all allocation objects
     for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
         SAFE_DELETE(m_apSave[i])
@@ -164,7 +160,6 @@ void CoreApp::Exit()
     SAFE_DELETE(g_pCombatText)
 
     // delete all sub components
-    SAFE_DELETE(g_pGJ)
     SAFE_DELETE(g_pMusicPlayer)
     SAFE_DELETE(g_pParticleSystem)
 }
@@ -194,9 +189,24 @@ void CoreApp::Move()
     g_pMenu->Move();
     if(g_pMenu->GetStatus() == 1)
     {
+#if defined(_CORE_ANDROID_)
+
+        // check finger positions for Coola challenge
+        bool bChallenge = false;
+        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUint& i)
+        {
+            bChallenge |= (Core::Input->GetTouchPosition(i).x < -0.45f*Core::System->GetResolution().AspectRatio()) &&
+                          (Core::Input->GetTouchPosition(i).y >  0.45f);
+        });
+
+#else
+        // check C key for Coola challenge
+        const bool bChallenge = Core::Input->GetKeyboardButton(SDL_SCANCODE_C, CORE_INPUT_HOLD);
+
+#endif
         // create/start a new game
         SAFE_DELETE(g_pGame)
-        g_pGame = new cGame(Core::Input->GetKeyboardButton(SDL_SCANCODE_C, CORE_INPUT_HOLD));
+        g_pGame = new cGame(bChallenge);
     }
     else if(g_pMenu->GetStatus() == 2)
     {
@@ -220,11 +230,11 @@ void CoreApp::Move()
     Core::System->SetTimeSpeed(0, g_bPause ? 0.0f : g_fCurSpeed);
 
     // smoothly move the camera
-    g_fCurCam += (sinf(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 1.5f;
+    if(!g_bPause) g_fCurCam += (sinf(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 1.5f;
 
-    const coreVector3 vCamPos = coreVector3(g_fCurCam,-70.0f,51.0f);
-    const coreVector3 vCamDir = -vCamPos;
-    const coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f,0.0f,1.0f);
+    constexpr_var coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
+    constexpr_var coreVector3 vCamDir = -vCamPos;
+    const         coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f, 0.0f, 1.0f);
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
@@ -244,7 +254,7 @@ void CoreApp::Move()
     }
 
     // update Game Jolt API access
-    g_pGJ->SetSession(g_pGame ? true : false);
+    g_pGJ->SetSessionActive(g_pGame ? true : false);
     g_pGJ->Update();
 
     // start music delayed

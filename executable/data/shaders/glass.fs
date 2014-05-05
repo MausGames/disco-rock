@@ -17,6 +17,6 @@ void main()
     if(v_fIntensity <= 0.0) gl_FragColor = vec4(0.0); // discard;
     else
     {
-        gl_FragColor = vec4(texture2D(u_as2Texture[0], v_av2TexCoord[0]).rgb * v_fIntensity, 0.5);
+        gl_FragColor = vec4(texture2D(u_as2Texture[0], v_av2TexCoord[0]).rgb * v_fIntensity, u_v4Color.a * 0.5);
     }
 }

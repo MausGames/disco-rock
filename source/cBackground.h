@@ -34,7 +34,7 @@
 
 #define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (float(i) - (float(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
 #define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))             // Y position at where to spawn objects on the horizon
-#define BACK_REMOVE_Y     -50.0f                                                           // Y position at where to remove objects
+#define BACK_REMOVE_Y     -52.0f                                                           // Y position at where to remove objects
 
 
 // ****************************************************************
