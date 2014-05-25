@@ -93,11 +93,11 @@ uniform sampler2D u_as2Texture[CORE_TEXTURE_UNITS];
                                    
 #else
 
-    // unpacking function (without bit operators, red color with double-mod)
-    #define coreUnpackUnorm4x8(x) (vec4(float(mod((x) - 16777216*((x) / 16777216), 256)), \
-                                        float(mod((x) / 256,                       256)), \
-                                        float(mod((x) / 65536,                     256)), \
-                                        float(mod((x) / 16777216,                  256)))*0.003921569);
+    // unpacking function
+    #define coreUnpackUnorm4x8(x) (vec4(float( x        & 0xFF), \
+                                        float((x >>  8) & 0xFF), \
+                                        float((x >> 16) & 0xFF), \
+                                        float((x >> 24) & 0xFF))*0.003921569f);
                                     
 #endif
 
