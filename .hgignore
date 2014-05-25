@@ -1,5 +1,6 @@
 syntax: glob
 *.exe
+backup/
 projects/visualstudio/DiscoRock/Debug/
 projects/visualstudio/DiscoRock/Release/
 projects/visualstudio/*.opensdf

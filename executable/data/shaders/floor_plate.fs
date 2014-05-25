@@ -42,8 +42,9 @@ void main()
         
     #endif
     
-    float fIntensity = 250.0 * inversesqrt(dot(v_v3Relative, v_v3Relative));
-    fIntensity      *= abs(dot(normalize(v_v3Relative), c_v3CamDir));
+    float fRsqrt     = inversesqrt(dot(v_v3Relative, v_v3Relative));
+    float fIntensity = 250.0 * fRsqrt;
+    fIntensity      *= abs(dot(v_v3Relative * fRsqrt, c_v3CamDir));
     fIntensity       = min((fIntensity - 0.25) * 1.3 * 1.25, 1.25);
 
     vec3  v3MathLightDir = normalize(v_av4LightDir[0].xyz);
@@ -55,7 +56,7 @@ void main()
     gl_FragColor.rgb = v4Color.rgb * min(v4Color.a, 1.0);
     #if (GL_QUALITY) > 1
     
-        gl_FragColor.rgb += vec3(fTextureDisco * 0.5 * 1.45 * (0.7 - 0.6 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x)));
+        gl_FragColor.rgb += vec3(fTextureDisco * 1.45 * (0.35 - 0.3 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x)));
     
     #endif
     gl_FragColor.rgb *= v2TextureColor.g;
