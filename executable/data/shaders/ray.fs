@@ -17,6 +17,6 @@ varying float v_fIntensity;
 
 void main()
 {
-    float fAlpha = pow(abs(dot(v_v3ViewDir, c_v3CamDir)), 4.0) * v_fIntensity;
+    float fAlpha = pow(dot(v_v3ViewDir, c_v3CamDir), 4.0) * v_fIntensity;
     gl_FragColor = vec4(u_v4Color.rgb, u_v4Color.a * fAlpha);
 }
