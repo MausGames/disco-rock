@@ -23,6 +23,7 @@ cTrap::cTrap()noexcept
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));
+    this->SetCollisionRange(0.4f); 
 
     // attach sparkles to object
     m_Effect.SetOrigin(this);
@@ -40,7 +41,7 @@ void cTrap::Move()
 {
     // update animation
     m_pGlow.Update(2.5f*PI);
-    this->SetAlpha((std::sin(m_pGlow) * 0.25f + 0.75f) * MIN((BACK_SPAWN_Y - this->GetPosition().y) * 0.03f, 1.0f));
+    this->SetAlpha((SIN(m_pGlow) * 0.25f + 0.75f) * MIN((BACK_SPAWN_Y - this->GetPosition().y) * 0.03f, 1.0f));
 
     // create light sparkles
     m_Effect.CreateParticle(1, 10.0f, [](coreParticle* pParticle)

@@ -60,10 +60,6 @@ cBackground::~cBackground()
 // ****************************************************************
 void cBackground::Render()
 {
-    // enable the shader-program
-    if(!m_pProgram) return;
-    if(!m_pProgram->Enable()) return;
-
     glDisable(GL_BLEND);
 
     // light flash (made in render-function to animate even in pause-mode)
@@ -100,23 +96,14 @@ void cBackground::Render()
         }
     }
 
-    // calculate model-view matrices
-    const coreMatrix4 mModelView     = m_mTransform * Core::Graphics->GetCamera();
-    const coreMatrix4 mModelViewProj = mModelView   * Core::Graphics->GetPerspective();
-
-    // update all object uniforms
-    m_pProgram->SendUniform(CORE_SHADER_UNIFORM_3D_MODELVIEW,     mModelView,     false);
-    m_pProgram->SendUniform(CORE_SHADER_UNIFORM_3D_MODELVIEWPROJ, mModelViewProj, false);
-    m_pProgram->SendUniform(CORE_SHADER_UNIFORM_COLOR,            m_vColor);
-    m_pProgram->SendUniform(CORE_SHADER_UNIFORM_TEXOFFSET,        m_vTexOffset);
-
-    // enable all active textures
-    for(int i = 0; i < CORE_TEXTURE_UNITS; ++i)
-        if(m_apTexture[i].IsActive()) m_apTexture[i]->Enable(i);
-
-    // draw the model
-    m_pModel->Enable();
-    glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
+    // enable all resources
+    if(this->Enable())
+    {
+        // draw the model
+        coreModel::Lock();
+        glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
+        coreModel::Unlock();
+    }
 
     // render the filling background
     m_Fill.Render();
@@ -160,7 +147,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
         const coreUint iSize = iNum * sizeof(float);
 
         // map required area
-        float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize);
+        float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
         SDL_assert((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
 
         // set height values of the selected line
@@ -239,8 +226,13 @@ void cBackground::__LoadGeometry()
     int iCurColor = 0;
     for(int i = 0; i < BACK_BLOCKS; ++i)
     {
-        // get random color, but not the same twice (only X, Y may be twice)
-        iCurColor = (iCurColor + Core::Rand->Int(1, COLOR_NUM-1)) % COLOR_NUM;
+        // get random color, but not the same twice (minor error on the border and with separate plates)
+        do
+        {
+            iCurColor = (iCurColor + Core::Rand->Int(1, COLOR_NUM-1)) % COLOR_NUM;
+        }
+        while(i >= BACK_BLOCKS_X && (g_avColor[iCurColor].xyz() == avColor[i-BACK_BLOCKS_X].xyz() ||
+                                     g_avColor[iCurColor].xyz() == avColor[i-1].xyz()));
         avColor.push_back(g_avColor[iCurColor]);
 
         // add additional random parameter for the shader

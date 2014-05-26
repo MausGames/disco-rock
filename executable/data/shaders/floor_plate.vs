@@ -27,7 +27,8 @@ void main()
                               u_m4ModelView[2][1],
                               u_m4ModelView[3][1]), v4Position);
                               
-    v_v3Relative.y = 1.0 - v_v3Relative.y * 0.004 * fSign;
+    v_v3Relative.y *= 0.0045 * fSign;
+    v_v3Relative.y  = 1.15 - v_v3Relative.y * ((v_v3Relative.y > 0.0) ? 1.0 : -5.0);
         
 #else
 

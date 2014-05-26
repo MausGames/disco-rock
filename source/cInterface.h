@@ -25,9 +25,6 @@ private:
     coreLabel m_Combo;          // combo name text
     coreLabel m_ComboValue;     // combo value text
     coreObject2D m_ComboBar;    // simple bar to display the current combo delay
-                                  
-    coreObject2D m_ComboBack;   // background for better constrast on lower quality settings
-    bool m_bComboBackState;     // status to display the background
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
@@ -56,9 +53,6 @@ public:
     // smoothly fade out the interface
     inline void Hide() {if(m_Hide.GetCurrent(false) == 0.0f) m_Hide.Play(false);}
 
-    // show combo background
-    inline void SetComboBack(const bool& bStatus) {m_bComboBackState = bStatus;}
-    
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
     // access touch objects

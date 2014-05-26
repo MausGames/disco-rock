@@ -10,77 +10,59 @@
 
 
 // ****************************************************************
-bool Intersection(const coreObject3D &Object1, const coreObject3D &Object2, coreVector3* pvPoint, const float& fFactor)
-{
-    // get bounding spheres
-    const float fDistance1   = Object1.GetModel()->GetRadius() * Object1.GetSize().Max();
-    const float fDistance2   = Object2.GetModel()->GetRadius() * Object2.GetSize().Max();
-    const float fMaxDistance = (fDistance1 + fDistance2) * fFactor;
-
-    // calculate distance between both objects
-    const coreVector3 vDiff = Object2.GetPosition() - Object1.GetPosition();
-
-    // check for intersection
-    if(vDiff.LengthSq() > fMaxDistance * fMaxDistance)
-    {
-        if(pvPoint) *pvPoint = coreVector3(0.0f,0.0f,0.0f);
-        return false;
-    }
-
-    // return impact point
-    if(pvPoint) *pvPoint = vDiff.Normalized() * fDistance1 + Object1.GetPosition();
-    return true;
-}
-
 // macro function for calculating the current score multiplier
 #define COMBO_MAX    18
 #define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, (unsigned)COMBO_MAX)))
 
 // macro function for moving and removing game objects
-#define PROCESS_OBJECT_ARRAY(a,m)                           \
-    FOR_EACH_DYN(it, a)                                     \
-    {                                                       \
-        coreObject3D* o = (*it);                            \
-        const coreVector3& p = o->GetPosition();            \
-                                                            \
-        if(o->GetStatus() == 1)                             \
-        {                                                   \
-            SAFE_DELETE(o)                                  \
-            DYN_REMOVE(it, a)                               \
-        }                                                   \
-        else                                                \
-        {                                                   \
-            o->SetPosition(coreVector3(p.x, p.y - m, p.z)); \
-            o->Move();                                      \
-            DYN_KEEP(it)                                    \
-        }                                                   \
+#define PROCESS_OBJECT_ARRAY(a,m)                             \
+    FOR_EACH_DYN(it, a)                                       \
+    {                                                         \
+        coreObject3D* o = (*it);                              \
+                                                              \
+        if(o->GetStatus() == 1)                               \
+        {                                                     \
+            SAFE_DELETE(o)                                    \
+            DYN_REMOVE(it, a)                                 \
+        }                                                     \
+        else                                                  \
+        {                                                     \
+            const coreVector3& p = o->GetPosition();          \
+            o->SetPosition(coreVector3(p.x, p.y - (m), p.z)); \
+            o->Move();                                        \
+            DYN_KEEP(it)                                      \
+        }                                                     \
     }
 
 
 // ****************************************************************
 cGame::cGame(const bool& bChallenge)noexcept
-: m_iCurLine        (g_pBackground->GetCurLine())
-, m_iCurSpawn       (Core::Rand->Int(2,3))   // not sync
-, m_bLastHole       (true)
-, m_dScore          (0.0)
-, m_fTime           (0.0f)
-, m_iCombo          (0)
-, m_iMaxCombo       (0)
-, m_fComboTime      (0.0f)
-, m_fComboDelay     (0.0f)
-, m_iCollectedTraps (0)
-, m_iCoolaCounter   (0)
-, m_iRayCounter     (0)
-, m_iCanyonCounter  (-CANYON_DISTANCE)
-, m_iTrapChance     (0)
-, m_bFirstLine      (true)
-, m_bFirstMsg       (true)
-, m_bTrapSpawn      (false)
-, m_bTrapJump       (false)
-, m_bChallenge      (bChallenge)
-, m_iNarrow         (0)
-, m_Message         (FONT_ROCKS, 45, 0)
-, m_ShowMessage     (coreTimer(1.0f, 0.333f, 1))
+: m_iCurLine         (g_pBackground->GetCurLine())
+, m_iCurSpawn        (Core::Rand->Int(2,3))   // not sync
+, m_dScore           (0.0)
+, m_fTime            (0.0f)
+, m_iCombo           (0)
+, m_iMaxCombo        (0)
+, m_fComboTime       (0.0f)
+, m_fComboDelay      (0.0f)
+, m_iCollectedTraps  (0)
+, m_iCollectedNoBlue (0)
+, m_iCoolaCounter    (0)
+, m_iRayCounter      (0)
+, m_iCanyonCounter   (CANYON_PREVENT)
+, m_iTrapChance      (1)
+, m_iThreeDrinks     (0)
+, m_iFinalHoles      (0)
+, m_iFirstJump       (0)
+, m_bFirstLine       (true)
+, m_bFirstMsg        (true)
+, m_bTrapSpawn       (false)
+, m_bTrapJump        (false)
+, m_bChallenge       (bChallenge)
+, m_iNarrow          (0)
+, m_bSideOrder       (Core::Rand->Int(0,1) ? true : false)
+, m_Message          (FONT_ROCKS, 45, 0)
+, m_ShowMessage      (coreTimer(1.0f, 0.333f, 1))
 {
     // create beginning message
     m_ShowMessage.Play(false);
@@ -90,11 +72,13 @@ cGame::cGame(const bool& bChallenge)noexcept
     m_Message.SetText(g_MsgIntro.Get());
     
     // reset statistics and trophy cache
-    for(int i = 0; i < 5;             ++i) m_aiCollected[i]   = 0;
-    for(int i = 0; i < GAME_TROPHIES; ++i) m_bTrophyHelper[i] = false;
+    for(int i = 0; i < (int)ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected[i]   = 0;
+    for(int i = 0; i < GAME_TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
+    ++g_iNumGames;
 
-    // load trap sound effect
-    m_pTrapSound = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/trap.wav");
+    // load sound-effects
+    m_pTrapSound   = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/trap.wav");
+    m_pTrophySound = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/achieve.wav");
 }
 
 
@@ -227,21 +211,146 @@ void cGame::Move()
             // calculate canyon length, so it can only be crossed by using a trap jump
             const int iBorder = int(std::floor(1.0f + 2.2f*g_fCurSpeed));
 
-            // update canyon counter, prevent uncontrolled holes from spawning before and after a canyon
-            if((!m_iNarrow || m_iCanyonCounter >= 0) && !m_bChallenge) if(++m_iCanyonCounter >= 0) m_bLastHole = true;
+            // activate narrow stage later
+            if(m_fTime >= STAGE_FINAL+0.5f) m_iNarrow = 1;
+            const int iNarrowUp = 5 - m_iNarrow;
+
+            // update canyon counter
+            if((!m_iNarrow || m_iCanyonCounter >= 0) && !m_bChallenge) ++m_iCanyonCounter;
 
             if(m_iCanyonCounter < 0 || m_iCanyonCounter > iBorder)
             { 
-                // calculate next spawn column (not in sync with BACK_BLOCKS_X, assumes 8 real columns)
-                if(Core::Rand->Int(0,1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), 0+m_iNarrow, 5-m_iNarrow);
-
-                // add random holes modified by current time
-                const float fHoleRndMax = 1.0f + (35.0f * RCP(m_fTime));
-                for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = (Core::Rand->Float(0.0f, fHoleRndMax) < (m_fTime / 180.0f) || m_bChallenge) ? true : false;
-
                 // define the next thing to spawn (-1 = hole)
-                const int iSelection = Core::Rand->Int(m_bLastHole ? 0 : -1, 10);
-                if(m_fTime > 10.0f) m_bLastHole = false;
+                int iSelection = Core::Rand->Int(0, 10);
+
+                if(m_bChallenge)
+                {
+                    // calculate next spawn column in challenge mode
+                    if(Core::Rand->Int(0,1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), m_iNarrow, iNarrowUp);
+                    
+                    // remove all unused plates
+                    for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+                        abHole[i] = true;
+
+                    // change beverage to triple-hole
+                    if(!(m_iCurLine % 8) && m_iCanyonCounter < 0) iSelection = -1;
+                }
+                else
+                {
+                    // control spawn column
+                    if(m_fTime >= STAGE_TOGGLE && m_fTime < STAGE_SIDE_1)   // toggle stage
+                    {
+                        // calculate next spawn column
+                        if(m_iCurLine % 2)
+                        {
+                                 if(m_iCurSpawn == m_iNarrow) ++m_iCurSpawn;
+                            else if(m_iCurSpawn == iNarrowUp) --m_iCurSpawn;
+                            else m_iCurSpawn = CLAMP(m_iCurSpawn + (Core::Rand->Int(0, 1) ? 1 : -1), m_iNarrow, iNarrowUp);
+                        }
+
+                        // toggle current side 
+                        if(!(m_iCurLine % 8) && m_iCanyonCounter < 0) m_iCurSpawn = 5 - m_iCurSpawn;
+
+                        // prevent canyon
+                        m_iCanyonCounter = CANYON_PREVENT;
+                    }
+                    else if(m_fTime >= STAGE_SIDE_1 && m_fTime < STAGE_NET)   // side stage
+                    {
+                        const bool bToLeft = m_bSideOrder ? (m_fTime >= STAGE_SIDE_2) : (m_fTime < STAGE_SIDE_2);
+
+                        // calculate next spawn column
+                        if(m_fTime >= STAGE_SIDE_2 || m_iCurLine % 2)
+                        {
+                            if(bToLeft) {if(--m_iCurSpawn < m_iNarrow) m_iCurSpawn = iNarrowUp;}
+                                   else {if(++m_iCurSpawn > iNarrowUp) m_iCurSpawn = m_iNarrow;}
+                        }
+
+                        // move camera to the side
+                        if(bToLeft) g_fTargetCam =  0.5f;
+                               else g_fTargetCam = -0.5f;
+
+                        // prevent canyon
+                        m_iCanyonCounter = CANYON_PREVENT;
+                    }
+                    else
+                    {
+                        if(m_fTime >= STAGE_MASS && m_fTime < STAGE_FINAL)
+                        {
+                            // always change column on the mass-canyon stage (but only once per jump)
+                            if(m_iCanyonCounter == iBorder+1)
+                                m_iCurSpawn = CLAMP(m_iCurSpawn + (Core::Rand->Int((m_iCurSpawn <= 1) ? 1 : 0, (m_iCurSpawn >= BACK_BLOCKS_X-4) ? 0 : 1) ? 1 : -1) * Core::Rand->Int(1,2), m_iNarrow, iNarrowUp);
+                        }
+                        else
+                        {
+                            if(m_iThreeDrinks) --m_iThreeDrinks;
+                            else 
+                            {
+                                // calculate next spawn column
+                                const int iOldSpawn = m_iCurSpawn;
+                                if(Core::Rand->Int(0, (m_fTime < STAGE_NET) ? 2 : 1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), m_iNarrow, iNarrowUp);
+                            
+                                // create at least three drinks in a row after a column change
+                                if(iOldSpawn != m_iCurSpawn)
+                                    m_iThreeDrinks = 2;
+                            }
+                        }
+
+                        // move camera to the center
+                        if(m_fTime < STAGE_MASS) g_fTargetCam = 0.0f;
+                        else m_iCurSpawn = CLAMP(m_iCurSpawn, 1, BACK_BLOCKS_X-4);   // force early narrow
+                    }
+
+                    // control side-holes
+                    if(m_fTime < STAGE_NET)
+                    {
+                        // add holes to create a path around spawn locations
+                        const int iBroad = MAX(5 - int(std::floor(m_fTime * 0.2f)), 2);
+                        for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+                            abHole[i] = !(m_iCurSpawn >= i-iBroad && m_iCurSpawn <= i+(iBroad-2));
+                    }
+                    else
+                    {
+                        if(m_fTime >= STAGE_FINAL)
+                        {
+                            // create broad path in the final stage
+                            for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+                                abHole[i] = !(m_iCurSpawn >= i-3 && m_iCurSpawn <= i+1);
+                        }
+                        else
+                        {
+                            // add holes to create a net pattern
+                            for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+                                abHole[i] = !(m_iCurSpawn % 2 != i % 2);
+                        }
+
+                        // prevent canyon (and force mass-canyon later, by altering PREVENT and BEGIN)
+                        m_iCanyonCounter = CANYON_PREVENT;
+                    }
+
+                    // control triple-holes
+                    if(m_fTime >= STAGE_HOLES && m_fTime < STAGE_SIDE_1)
+                    {
+                        // change beverage to triple-hole
+                        if(!(m_iCurLine % 8) && m_iCanyonCounter < 0) iSelection = -1;
+                    }
+                    else if(m_fTime >= STAGE_FINAL+4.0f)
+                    {
+                        // create triple-holes with increasing rate at the final stage
+                        if(++m_iFinalHoles >= int(2.0f + 6.0f / (1.0f + 0.05f*(m_fTime-(STAGE_FINAL+4.0f)))))
+                        {
+                            m_iFinalHoles =  0;
+                            iSelection    = -1;
+                        }
+                    }
+
+                    // begin regular canyon creation at specific times 
+                    if(m_iCanyonCounter < CANYON_LIMIT)
+                    {
+                        if((m_fTime >= STAGE_CANYON && m_fTime < STAGE_CANYON+10.0f) ||
+                           (m_fTime >= STAGE_MASS   && m_fTime < STAGE_FINAL))
+                            m_iCanyonCounter = CANYON_BEGIN;
+                    }
+                }
 
                 cBeverage* pBeverage = NULL;
                 if(m_bChallenge)
@@ -269,7 +378,6 @@ void cGame::Move()
                 else
                 {
                     // create triple-holes instead of beverage
-                    m_bLastHole           = true;
                     abHole[m_iCurSpawn+1] = true;
                     abHole[CLAMP(m_iCurSpawn,   0, BACK_BLOCKS_X-1)] = true;
                     abHole[CLAMP(m_iCurSpawn+2, 0, BACK_BLOCKS_X-1)] = true;
@@ -278,12 +386,17 @@ void cGame::Move()
                 if(m_bTrapSpawn)
                 {
                     // random trap spawn
-                    if(Core::Rand->Int(0, 70) < m_iTrapChance)
+                    if(Core::Rand->Int(0, 65) < m_iTrapChance && iSelection >= 0)
                     {
                         m_iTrapChance = 0;
 
                         // add trap
-                        const int iTrapSpawn = Core::Rand->Int(0+m_iNarrow, BACK_BLOCKS_X-3-m_iNarrow);
+                        int iTrapSpawn = 0;
+                        do
+                        {
+                            iTrapSpawn = CLAMP(m_iCurSpawn + Core::Rand->Int(-1,2), 1, BACK_BLOCKS_X-3);
+                        }
+                        while(iTrapSpawn == m_iCurSpawn);   // not overlapping with a beverage
                         this->AddTrap(iTrapSpawn, fSpawn);
 
                         // prevent hole
@@ -295,26 +408,49 @@ void cGame::Move()
                 if(!m_bChallenge)
                 {
                     // regularly create coolas
-                    if(++m_iCoolaCounter >= 100)
+                    if(++m_iCoolaCounter >= 100 && iSelection >= 0 && m_iTrapChance > 0)
                     {
                         m_iCoolaCounter = 0;
 
                         // calculate spawn on free plate (not in sync with BACK_BLOCKS_X, assumes 8 real columns)
-                        const int iColaSpawn = CLAMP(m_iCurSpawn + Core::Rand->Int(2, 3) * (m_iCurSpawn <= 2 ? 1 : -1), 1+m_iNarrow, 4-m_iNarrow);
+                        const int iColaSpawn = CLAMP(m_iCurSpawn + ((m_fTime < STAGE_NET) ? 1 : Core::Rand->Int(1, 2)) * (m_iCurSpawn <= 2 ? 1 : -1), m_iNarrow+1, iNarrowUp-1);
 
                         // create new coola and add to list
                         cCoola* pCoola = new cCoola();
                         pCoola->SetPosition(coreVector3(BACK_SPAWN_X(iColaSpawn, 1.5f), fSpawn, 0.0f));
                         m_apBeverage.push_back(pCoola);
 
-                        // remove hole under coola
+                        // prevent hole
                         abHole[iColaSpawn+1] = false;
                     }
 
+                    // create Franka the polar bear
+                    if(g_iNumGames >= 3 && m_fTime >= 10.0f)
+                    {
+                        if(!Core::Rand->Int(0,4))
+                        {
+                            g_iNumGames = 0;
+
+                            // calculate spawn
+                            const int iBearSpawn = (m_iCurSpawn > 3) ? m_iNarrow : iNarrowUp;
+
+                            // create new Franka and add to list
+                            cFranka* pFranka = new cFranka();
+                            pFranka->SetPosition(coreVector3(BACK_SPAWN_X(iBearSpawn, 1.5f), fSpawn, 0.0f));
+                            m_apBeverage.push_back(pFranka);
+
+                            // prevent hole
+                            abHole[iBearSpawn+1] = false;
+                        }
+                    }
+
                     // always create at least one plate per row
-                    abHole[Core::Rand->Int(1, BACK_BLOCKS_X-2)] = false;
+                    // abHole[Core::Rand->Int(1, BACK_BLOCKS_X-2)] = false; #deactivated
                 }
             }
+
+            // remove additional sides when narrow
+            if(m_iNarrow) abHole[m_iNarrow] = abHole[BACK_BLOCKS_X-1-m_iNarrow] = true;
 
             if(m_iCanyonCounter >= 0)
             {
@@ -325,27 +461,22 @@ void cGame::Move()
                     m_iCanyonCounter = -CANYON_DISTANCE;
                     m_bTrapSpawn = true;
                 }
-                else 
-                {
-                    // activate narrow stage later
-                    if(m_fTime >= 97.0f) m_iNarrow = 1;
-                    m_bTrapSpawn = false;
-                }
+                else m_bTrapSpawn = false;
 
                 // create the canyon, always prevent holes before and after the canyon
-                if((m_iCanyonCounter <= CANYON_BEFORE || m_iCanyonCounter > iBorder)) {for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = false;}
+                if((m_iCanyonCounter <= CANYON_BEFORE || m_iCanyonCounter > iBorder)) {for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = !(i >= m_iCurSpawn && i <= m_iCurSpawn+2);}
                                                                                  else {for(int i = 1; i < BACK_BLOCKS_X-1; ++i) abHole[i] = true;}
 
                 // always add trap at the canyon edge to jump across
-                if(m_iCanyonCounter == CANYON_BEFORE) this->AddTrap(CLAMP(m_iCurSpawn + Core::Rand->Int(-1, 1), 1, BACK_BLOCKS_X-4), fSpawn);     
+                if(m_iCanyonCounter == CANYON_BEFORE) this->AddTrap(CLAMP(m_iCurSpawn, 1, BACK_BLOCKS_X-4), fSpawn);     
             }
             else
             {
                 // randomly create moving plates inside of holes
-                const float fPlateCmp = 1.0f - ((m_fTime-20.0f) / 80.0f);
-                for(int i = 1+m_iNarrow; i < BACK_BLOCKS_X-1-m_iNarrow; ++i)
+                const float fPlateCmp = MAX(1.0f - ((m_fTime-0.0f) / 30.0f), 0.1f) * (m_fTime < 77.0f ? 3.0f : 1.0f);
+                for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
                 {
-                    if(abHole[i] && (m_fTime < 20.0f || Core::Rand->Float(0.0f,1.0f) < fPlateCmp))
+                    if(abHole[i] && (m_fTime < 10.0f || (Core::Rand->Float(0.0f,1.0f) < fPlateCmp && (!abHole[MAX(i-1,0)] || !abHole[MIN(i+1,BACK_BLOCKS_X-1)]))))
                     {
                         // create plate and add to list
                         cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -std::floor(g_pBackground->GetPositionTime())));
@@ -371,11 +502,36 @@ void cGame::Move()
 
         // always remove both outer blocks
         abHole[0] = abHole[BACK_BLOCKS_X-1] = true;
-        if(m_iNarrow) abHole[m_iNarrow] = abHole[BACK_BLOCKS_X-1-m_iNarrow] = true;
 
         // update the holes in the dance floor (sometimes twice to sync for the infinit look)
         g_pBackground->UpdateHoles(m_iCurLine + BACK_VIEW, abHole);
         if(m_iCurLine + BACK_VIEW >= BACK_REPEAT) g_pBackground->UpdateHoles((m_iCurLine + BACK_VIEW) % BACK_REPEAT, abHole);
+    }
+
+    // move camera at the final stage
+    if(m_fTime >= STAGE_MASS+4.0f && (g_fTargetCam || !this->GetStatus()))
+        g_fTargetCam += Core::System->GetTime() * 0.15f;
+
+    // shake camera upside-down
+    if(m_fTime < 5.0f && ABS(m_Rock.GetShake()) >= 1.0f && !g_bUpsideDown)
+    {
+        g_bUpsideDown = true;
+        g_fTargetCam  = 0.0f;
+        g_fCurCam     = 0.0f;
+
+        // flash screen
+        g_pMenu->ChangeSurface(5,  0.0f);
+        g_pMenu->ChangeSurface(10, 1.0f);
+
+        // play sound
+        m_pTrapSound->PlayPosition(NULL, 0.38f, 1.5f, 0.05f, false, m_Rock.GetPosition());
+    }
+    if(m_fTime >= 5.0f || g_bUpsideDown) g_fCamSpeed = 1.0f;
+    else
+    {
+        // change camera and increase animation speed
+        g_fTargetCam = m_Rock.GetShake() * 0.55f;
+        g_fCamSpeed  = 1.0f + ABS(m_Rock.GetShake()) * 11.0f;
     }
 
     // move rock
@@ -391,7 +547,7 @@ void cGame::Move()
         cBeverage* pBeverage = (*it);
         const coreVector3& vPos = pBeverage->GetPosition();
 
-        if(vPos.y <= -48.0f)
+        if(vPos.y <= BACK_REMOVE_Y)
         {
             // remove beverage when finished
             SAFE_DELETE(pBeverage)
@@ -399,9 +555,8 @@ void cGame::Move()
         }
         else
         {
-            // check for intersection with beverages
-            coreVector3 vPoint;
-            if(pBeverage->GetPosition().y < 10.0f && Intersection(*pBeverage, m_Rock, &vPoint, 1.0f))
+            // check for collision with beverages
+            if(pBeverage->GetPosition().y < 10.0f && coreObject3D::Collision(*pBeverage, m_Rock))
             {
                 // calculate and increase score
                 const float fValue = float(pBeverage->GetScore()) * COMBO_MULTI;
@@ -410,6 +565,8 @@ void cGame::Move()
                 // increase statistics
                 ++m_aiCollected[0];
                 ++m_aiCollected[pBeverage->GetSigID()];
+                     if(pBeverage->GetSigID() == 3) m_iCollectedNoBlue = 0;
+                else if(pBeverage->GetSigID() <  3) ++m_iCollectedNoBlue;
 
                 // increase combo
                 ++m_iCombo;
@@ -423,11 +580,11 @@ void cGame::Move()
                     if(pBeverage->GetSigID() != 4) vColor.a *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
 
                     // create floating score text
-                    g_pCombatText->AddTextTransformed(coreData::Print("%.0f", fValue), m_Rock.GetPosition(), vColor);
+                    g_pCombatText->AddTextTransformed(fValue ? coreData::Print("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);
                 }
                 
                 // create max combo text (after score text)
-                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAX", m_Rock.GetPosition(), COLOR_ORANGE_F);
+                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), COLOR_ORANGE_F);
 
                 // send beverage into the air, try not to spill it
                 pBeverage->Destroy(pBeverage->GetPosition() - m_Rock.GetPosition());
@@ -457,8 +614,8 @@ void cGame::Move()
     {
         cTrap* pTrap = (*it);
 
-        // check for intersection with traps
-        if(pTrap->GetPosition().y < 10.0f && Intersection(*pTrap, m_Rock, NULL, 0.5f))
+        // check for collision with traps
+        if(pTrap->GetPosition().y < 10.0f && coreObject3D::Collision(*pTrap, m_Rock))
         {
             if(m_Rock.Jump(10.0f))
             {
@@ -466,7 +623,7 @@ void cGame::Move()
                 ++m_iCollectedTraps;
 
                 // move camera
-                if(m_fTime < 100.0f) g_fTargetCam += g_fTargetCam ? 1.0f : 0.5f;
+                // if(m_fTime < 100.0f) g_fTargetCam += g_fTargetCam ? 1.0f : 0.5f; #deactivated
                 
                 // play trap sound effect and show message
                 m_pTrapSound->PlayPosition(NULL, 0.38f, 1.1f, 0.05f, false, m_Rock.GetPosition());
@@ -478,9 +635,6 @@ void cGame::Move()
         }
     }
     if(!m_Rock.GetJumped()) m_bTrapJump = false;
-
-    // move camera
-    if(m_fTime >= 100.0f) g_fTargetCam += Core::System->GetTime() * 0.15f;
 
     // update combo
     m_fComboDelay -= Core::System->GetTime();
@@ -517,15 +671,44 @@ void cGame::Move()
 
     if(!this->GetStatus())
     {
+        // handle first big air-jump
+        if(m_iFirstJump < 2 && m_Rock.GetReflected()) ++m_iFirstJump;
+
         // check for achievements/trophies/whatever you call that unnecessary game enlargement bullshit everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
-        if(!m_bTrophyHelper[0] && m_fComboTime >= 20.0f)                  {m_bTrophyHelper[0] = true; this->AchieveTrophy(4665);}    
-        if(!m_bTrophyHelper[1] && !m_aiCollected[0] && m_fTime >= 70.0f)  {m_bTrophyHelper[1] = true; this->AchieveTrophy(4636);}
-        if(!m_bTrophyHelper[2] && m_fTime >= 100.0f)                      {m_bTrophyHelper[2] = true; this->AchieveTrophy(4638);}
-        if(!m_bTrophyHelper[3] && m_dScore >= 30000.0 && !m_bChallenge)   {m_bTrophyHelper[3] = true; this->AchieveTrophy(4667);}
-        if(!m_bTrophyHelper[4] && m_dScore >= 200000.0 && m_bChallenge)   {m_bTrophyHelper[4] = true; this->AchieveTrophy(4671);}
-        if(!m_bTrophyHelper[5] && m_Rock.GetFallen() && m_fTime < 10.0f)  {m_bTrophyHelper[5] = true; this->AchieveTrophy(4635); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
-        if(!m_bTrophyHelper[6] && m_aiCollected[4] == 2 && !m_bChallenge) {m_bTrophyHelper[6] = true; this->AchieveTrophy(4637);}
-        if(!m_bTrophyHelper[7] && m_Rock.GetFallen() && m_bTrapJump)      {m_bTrophyHelper[7] = true; this->AchieveTrophy(4666);}
+        if(!m_bTrophyHelper[ 0] && m_iFirstJump == 1 && m_Rock.GetJumped())                         {this->AchieveTrophy(4666,  0);}
+        if(!m_bTrophyHelper[ 1] && m_Rock.GetFallen() && m_fTime < 10.0f)                           {this->AchieveTrophy(4635,  1); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
+        if(!m_bTrophyHelper[ 2] && m_Rock.GetFallen() && m_bTrapJump)                               {this->AchieveTrophy(8325,  2);}
+      //if(!m_bTrophyHelper[ 3])                                                                    {this->AchieveTrophy(8326,  3);}
+        if(!m_bTrophyHelper[ 4] && m_aiCollected[5])                                                {this->AchieveTrophy(8327,  4);}
+        if(!m_bTrophyHelper[ 5] && m_fComboTime >= 20.0f)                                           {this->AchieveTrophy(4665,  5);}  
+        if(!m_bTrophyHelper[ 6] && m_aiCollected[4] >= 2 && !m_bChallenge)                          {this->AchieveTrophy(4637,  6);}
+        if(!m_bTrophyHelper[ 7] && m_iCollectedNoBlue >= 80 && !m_bChallenge)                       {this->AchieveTrophy(8328,  7);}
+        if(!m_bTrophyHelper[ 8] && m_Rock.GetNumJumps() >= 69)                                      {this->AchieveTrophy(8329,  8);}
+        if(!m_bTrophyHelper[ 9] && !m_aiCollected[0] && m_bTrapJump)                                {this->AchieveTrophy(4636,  9);}
+        if(!m_bTrophyHelper[10] && m_dScore >= 30000.0 && !m_bChallenge)                            {this->AchieveTrophy(4667, 10);}
+        if(!m_bTrophyHelper[11] && m_dScore >= 15000.0 && !m_bChallenge && g_bUpsideDown)           {this->AchieveTrophy(8330, 11);}
+        if(!m_bTrophyHelper[12] && m_fTime >= 100.0f)                                               {this->AchieveTrophy(4638, 12);}
+        if(!m_bTrophyHelper[13] && m_dScore >= 20000.0 && !m_bChallenge && m_iMaxCombo < COMBO_MAX) {this->AchieveTrophy(8331, 13);}
+        if(!m_bTrophyHelper[14] && m_dScore >= 200000.0 && m_bChallenge)                            {this->AchieveTrophy(4671, 14);}
+        
+        // [ 0] X(Get the Party Started,    s1) Make an air-jump at the beginning.
+        // [ 1]  (I don't like Disco,       s1) Fall down the dance floor in less than 10 seconds.
+        // [ 2] X(Too Much Too Soon,        s1) Fall down the dance floor while on a high-jump.
+        // [ 3] X(Show me your Moves,        1) Submit your score and time online. <in menu, with centered animation>
+
+        // [ 4] X(Party Animal,             s2) Meet Franka the polar bear.
+        // [ 5]  (Binge Drinker,             2) Hold a combo multiplier of x10 for at least 20 seconds.
+        // [ 6]  (Designated Driver,         2) Bump into 2 Coola bottles within one normal run.
+        // [ 7] X(Before there was any Blue, 2) Hit 80 normal beverages in a row, without touching a blue drink.
+
+        // [ 8] X(The Floor is Lava,         3) Jump 69 times in one run. (high-jumps count as one jump)
+        // [ 9] X(Sober in the 70s,          3) Roll to the first high-jumper without touching beverages, not even a Coola bottle.
+        // [10]  (Shagadelic,                3) Get at least 30.000 points in a normal run. (Tip: don't drop your combo and hit Coola bottles)	
+        // [11] X(Boy, You Turn Me,          3) Shake the world upside-down and get 15.000 points in a normal run.
+
+        // [12]  (You Should Be Dancing,     4) Survive at least 100 seconds on the dance floor.
+        // [13]  (Get Up and Boogie,         4) Reach 20.000 points without ever getting a combo multiplier of x10.
+        // [14] X(The Coola Challenge,       4) Hold 'C' (or a screen corner) while starting a game and get at least 200.000 points.
     }
 }
 
@@ -541,9 +724,40 @@ void cGame::AddTrap(const int& iBlock, const float& fSpawn)
 
 
 // ****************************************************************
-void cGame::AchieveTrophy(const int& iID)
+void cGame::AchieveTrophy(const int& iID, const int& iNum)
 {
-    // achieve trophy and show message
-    if(g_pGJ->InterTrophy()->GetTrophy(iID)->AchieveCall() == GJ_OK)
-        g_pCombatText->AddTextTransformed(g_pGJ->InterTrophy()->GetTrophy(iID)->GetTitle().c_str(), m_Rock.GetPosition(), COLOR_WHITE_F);
+    // update helper
+    m_bTrophyHelper[iNum] = true; 
+
+    // achieve trophy
+    gjTrophy* pTrophy = g_pGJ->InterTrophy()->GetTrophy(iID);
+    if(g_pGJ->IsUserConnected()) pTrophy->AchieveCall(this, &cGame::AchieveTrophyCallback, (void*)(long)iNum);
+    else
+    {
+        // handle guest user
+        if(!(g_pMenu->GetTrophyStatus() & (1 << iNum)))
+        {
+            this->AchieveTrophyCallback(pTrophy, (void*)(long)iNum);
+        }
+    }
+}
+
+
+// ****************************************************************
+void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
+{
+    if(pTrophy)
+    {
+        const int iNum = (long)pData;
+        const coreVector3 vPos = this->GetStatus() ? coreVector3(0.0f,0.0f,0.0f) : m_Rock.GetPosition();
+
+        // show achievement title and play sound
+        g_pCombatText->ShowTrophy(coreData::StrUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
+        m_pTrophySound->PlayPosition(NULL, 0.2f, 1.0f, 0.0f, false, vPos);
+
+        // set and save current trophy status
+        g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | (1 << iNum));
+        g_pMenu->SetTrophyCurrent(-1);
+        Core::Config->SetInt("Game Jolt", "Trophy", 0, Core::Config->GetInt("Game Jolt", "Trophy", 0) | (1 << iNum));
+    }
 }
