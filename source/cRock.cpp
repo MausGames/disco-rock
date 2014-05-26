@@ -19,9 +19,11 @@ cRock::cRock()noexcept
 , m_fHeight            (100.0f)
 , m_bFallen            (false)
 , m_bJumped            (true)
+, m_bReflected         (false)
+, m_iNumJumps          (0)
 , m_fRotation          (0.0f)
 , m_Effect             (g_pParticleSystem)
-, m_fSensitivity       (1.0f)
+, m_fShake             (0.0f)
 {
     // load object resources
     this->DefineModelFile("data/models/rock.md5mesh");
@@ -42,6 +44,7 @@ cRock::cRock()noexcept
              ->AttachShaderFile("data/shaders/default_3d_simple.vs")
              ->AttachShaderFile("data/shaders/shadow.fs")
              ->Finish();
+    m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP); // for array drawing
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // create big wave
@@ -62,9 +65,6 @@ cRock::cRock()noexcept
     // load sound-effects
     m_pUp   = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/dust.wav");
     m_pDown = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/bump.wav");
-
-    // load mouse sensitivity
-    m_fSensitivity = Core::Config->GetFloat("Game", "MouseSensitivity", 1.0f);
 }
 
 // ****************************************************************
@@ -78,10 +78,21 @@ void cRock::Render()
 {
     glDisable(GL_DEPTH_TEST);
 
-    // render shadow and waves
-    m_Shadow.Render();
-    if(m_WaveTimer.GetStatus())      m_Wave.Render();
-    if(m_WaveSmallTimer.GetStatus()) m_WaveSmall.Render();
+    // render shadow
+    if(m_Shadow.Enable())
+        m_Shadow.GetModel()->DrawArrays();
+
+    // render waves
+    if(m_WaveTimer.GetStatus())
+    {
+        if(m_Wave.Enable())
+            m_Wave.GetModel()->DrawArrays();
+    }
+    if(m_WaveSmallTimer.GetStatus())
+    {
+        if(m_WaveSmall.Enable())
+            m_WaveSmall.GetModel()->DrawArrays();
+    } 
 
     glEnable(GL_DEPTH_TEST);
 
@@ -107,16 +118,20 @@ void cRock::Move()
 
 #else
 
-    // jump with keyboard (W, UP, SPACE)
-    if((Core::Input->GetKeyboardButton(SDL_SCANCODE_W,     CORE_INPUT_PRESS) ||
-        Core::Input->GetKeyboardButton(SDL_SCANCODE_UP,    CORE_INPUT_PRESS) ||
-        Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE, CORE_INPUT_PRESS)))
+    // jump with keyboard (W, UP, SPACE) and joystick
+    if(Core::Input->GetKeyboardButton(SDL_SCANCODE_W,     CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(SDL_SCANCODE_UP,    CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE, CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(0, 0,               CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(1, 0,               CORE_INPUT_PRESS))
 
 #endif
     {
         // just jump
         this->Jump(6.0f);
     }
+
+#if !defined(_CORE_DEBUG_) || 0
 
     if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-1.2f, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 1.2f, 0.0f)) > 0.0f &&
@@ -127,7 +142,12 @@ void cRock::Move()
         m_bFallen = true;
         g_pCombatText->AddTextTransformed(g_MsgFallen.Get(), this->GetPosition(), COLOR_WHITE_F);
     }
-    
+
+#endif
+
+    // reset reflected status
+    m_bReflected = false;
+
     if(this->GetPosition().z >= fGround || m_bFallen)
         m_fForce -= Core::System->GetTime()*20.0f;   // fall down
     else if(m_fForce < 0.0f)
@@ -150,8 +170,9 @@ void cRock::Move()
         }
         
         // reverse and reduce force, re-enable jumping
-        m_fForce *= -0.5f;
-        m_bJumped = false;
+        m_fForce    *= -0.5f;
+        m_bJumped    = false;
+        m_bReflected = true;
     }
 
     // init new X position
@@ -160,20 +181,33 @@ void cRock::Move()
 #if defined(_CORE_ANDROID_)
 
     // move with left touch buttons
-    const float fMove = 100.0f * Core::System->GetTime() * m_fSensitivity;
+    const float fMove = 100.0f * Core::System->GetTime();
          if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
     else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
 
 #else
 
-    // move with keyboard (A, D, LEFT, RIGHT)
-    const float fMove = 100.0f * Core::System->GetTime() * m_fSensitivity;
+    // move with keyboard (A, D, LEFT, RIGHT) and joystick
+    const float fMove = 100.0f * Core::System->GetTime();
+
          if(Core::Input->GetKeyboardButton(SDL_SCANCODE_A,     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(SDL_SCANCODE_LEFT,  CORE_INPUT_HOLD)) fNewPos -= fMove;
+            Core::Input->GetKeyboardButton(SDL_SCANCODE_LEFT,  CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x < 0.0f                        ||
+            Core::Input->GetJoystickRelative(1).x < 0.0f) fNewPos -= fMove;
+
     else if(Core::Input->GetKeyboardButton(SDL_SCANCODE_D,     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(SDL_SCANCODE_RIGHT, CORE_INPUT_HOLD)) fNewPos += fMove;
+            Core::Input->GetKeyboardButton(SDL_SCANCODE_RIGHT, CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x > 0.0f                        ||
+            Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
 
 #endif
+
+    const float fPosDiff = fNewPos - this->GetPosition().x;
+
+    // control shaking
+         if(m_fShake >= 0.0f) {if(fPosDiff < 0.0f) m_fShake = -m_fShake - 0.1f;}
+    else if(m_fShake <  0.0f) {if(fPosDiff > 0.0f) m_fShake = -m_fShake + 0.1f;}
+    m_fShake -= SIGN(m_fShake) * Core::System->GetTime() * 0.3f;
 
     // control the rock height
     m_fHeight += m_fForce*Core::System->GetTime()*20.0f;
@@ -184,7 +218,7 @@ void cRock::Move()
     if(g_pGame->GetTime() >= 30.0f)
     {
         // define smoke color
-        coreVector4 vSmokeColor = (g_pGame->GetTime() < 100.0f) ? COLOR_WHITE_F : g_avColor[Core::Rand->Int(0, COLOR_NUM-1)];
+        coreVector4 vSmokeColor = (g_pGame->GetTime() < 100.0f) ? COLOR_WHITE_F : LERP(COLOR_WHITE_F, g_avColor[Core::Rand->Int(0, COLOR_NUM-1)], MIN(g_pGame->GetTime() - 100.0f, 1.0f));
         vSmokeColor.a *= CLAMP((g_pGame->GetTime() - 30.0f) * 0.05f, 0.0f, 1.0f);
 
         // create smoke trail
@@ -242,6 +276,7 @@ bool cRock::Jump(const float& fForce)
     m_fForce        = fForce;
     m_fWaveStrength = fForce * 10.0f;
     m_bJumped       = true;
+    ++m_iNumJumps;
 
     // play jump sound-effect and start big wave animation
     m_pUp->PlayPosition(NULL, 0.4f, 1.8f, 0.05f, false, this->GetPosition());

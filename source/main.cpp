@@ -24,9 +24,13 @@ float               g_fTargetCam      = 0.0f;
 float               g_fCurCam         = 0.0f;
 bool                g_bPause          = false;
 
+float               g_fCamSpeed       = 1.0f;
+bool                g_bUpsideDown     = false;
+
+int                 g_iNumGames       = g_bCoreDebug ? 3 : 0;
 int                 g_iNumFails       = 0;
 
-coreObject3D* m_apSave[8];   // pre-allocation of required ressources, still need to implement a more efficient way
+coreObject3D* m_apSave[9];   // pre-allocation of required ressources, still need to implement a more efficient way
 
 
 // ****************************************************************
@@ -34,10 +38,7 @@ const std::string g_asIntro[] = {"SHOW US WHAT YOU'VE GOT",
                                  "GIVE THE KID SOME ROOM",
                                  "KEEP ON JUMPIN'",
                                  "FOLLOW THE BEAT",
-                                 //"HE'S TAKING OVER AGAIN",
-                                 //"MOVE ON TILL THE DAWN",
-                                 //"LET THE ROCKS HIT THE FLOOR",
-                                 //"ONCE MORE UNTO THE BREACH",
+                                 "SOUND FLY THROUGH THE NIGHT",
                                  "GET READY TO DISCO",
                                  "YOU SHOULD BE DANCING"};
 sMsgList g_MsgIntro(g_asIntro, ARRAY_SIZE(g_asIntro));
@@ -48,11 +49,7 @@ const std::string g_asFallen[] = {"SEE ME FALLING",
                                   "NOOOOO!",
                                   "COME ON",
                                   "AVENGE ME",
-                                  //"FREE FALL",
                                   "WHAT WAS THAT?",
-                                  //"DROP IT",
-                                  //"MY BAD",
-                                  //"STOP IT",
                                   "OPEN YOUR EYES",
                                   "REALLY?"};
 sMsgList g_MsgFallen(g_asFallen, ARRAY_SIZE(g_asFallen));
@@ -60,11 +57,10 @@ sMsgList g_MsgFallen(g_asFallen, ARRAY_SIZE(g_asFallen));
 
 // ****************************************************************
 const std::string g_asTrap[] = {"TO THE SKY",
-                                //"FREE STYLE",
                                 "WEEEEE!",
                                 "MAKE SOME NOISE",
                                 "YEAH BABY YEAH",
-                                //"360 KICKFLIP",
+                                "SHAKE YOUR GROOVE THING",
                                 "THEY SEE ME ROLLIN'",
                                 "ROCK 'N ROLL",
                                 "SHOW ME THE LIGHT"};
@@ -114,6 +110,12 @@ void CoreApp::Init()
     g_pGJ = new gjAPI(18996, GJ_KEY);
     g_pMenu->QuickPlay();
 
+    const int aiTrophySort[] = {4666, 4635, 8325, 8326, 8327, 4665, 4637, 8328, 8329, 4636, 4667, 8330, 4638, 8331, 4671};
+    g_pGJ->InterTrophy()->SetSort(aiTrophySort, ARRAY_SIZE(aiTrophySort));
+
+    const int aiTrophySecret[] = {4666, 4635, 8325, 8327};
+    g_pGJ->InterTrophy()->SetSecret(aiTrophySecret, ARRAY_SIZE(aiTrophySecret));
+
     // create music player and load music files (loading-order is important, hardcoded music speed in background class)
     g_pMusicPlayer = new coreMusicPlayer();
     g_pMusicPlayer->AddFile("data/music/Aurea Carmina.ogg");
@@ -122,6 +124,8 @@ void CoreApp::Init()
 
     g_pMusicPlayer->Shuffle();
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
+
+    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, Core::Config->GetFloat(CORE_CONFIG_AUDIO_VOLUME_SOUND) * 0.07f);
 
     // create particle system
     g_pParticleSystem = new coreParticleSystem(128);
@@ -136,10 +140,11 @@ void CoreApp::Init()
     m_apSave[1] = new cMojito();
     m_apSave[2] = new cBlue();
     m_apSave[3] = new cCoola();
-    m_apSave[4] = new cRock();
-    m_apSave[5] = new cPlate(0.0f, coreVector2());
-    m_apSave[6] = new cRay(coreVector3());
-    m_apSave[7] = new cTrap();
+    m_apSave[4] = new cFranka();
+    m_apSave[5] = new cRock();
+    m_apSave[6] = new cPlate(0.0f, coreVector2(1.0f,1.0f));
+    m_apSave[7] = new cRay(coreVector3(1.0f,1.0f,1.0f));
+    m_apSave[8] = new cTrap();
 }
 
 
@@ -195,8 +200,8 @@ void CoreApp::Move()
         bool bChallenge = false;
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUint& i)
         {
-            bChallenge |= (Core::Input->GetTouchPosition(i).x < -0.45f*Core::System->GetResolution().AspectRatio()) &&
-                          (Core::Input->GetTouchPosition(i).y >  0.45f);
+            bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.45f*Core::System->GetResolution().AspectRatio()) &&
+                          (ABS(Core::Input->GetTouchPosition(i).y) > 0.45f);
         });
 
 #else
@@ -218,6 +223,8 @@ void CoreApp::Move()
         g_fTargetSpeed = 1.0f;
         g_fCurCam      = 0.0f;
         g_fTargetCam   = 0.0f;
+        g_fCamSpeed    = 1.0f;
+        g_bUpsideDown  = false;
 
         // reset all holes in the dance floor
         bool abIndex[BACK_BLOCKS_X];
@@ -230,11 +237,11 @@ void CoreApp::Move()
     Core::System->SetTimeSpeed(0, g_bPause ? 0.0f : g_fCurSpeed);
 
     // smoothly move the camera
-    if(!g_bPause) g_fCurCam += (sinf(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 1.5f;
+    if(!g_bPause) g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 0.25f * g_fCamSpeed;
 
     constexpr_var coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
     constexpr_var coreVector3 vCamDir = -vCamPos;
-    const         coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f, 0.0f, 1.0f);
+    const         coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f);
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
@@ -264,4 +271,15 @@ void CoreApp::Move()
     // adjust music speed/pitch and update the streaming
     g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
     g_pMusicPlayer->Update();
+
+#if !defined(_CORE_ANDROID_)
+
+    // wireframe mode for fun
+    if(Core::Input->GetKeyboardButton(SDL_SCANCODE_LSHIFT, CORE_INPUT_HOLD))
+    {
+             if(Core::Input->GetKeyboardButton(SDL_SCANCODE_1, CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else if(Core::Input->GetKeyboardButton(SDL_SCANCODE_2, CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    }
+
+#endif
 }

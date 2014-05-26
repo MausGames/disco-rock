@@ -19,7 +19,7 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 , m_pDestroy     (coreTimer(30.0f, 20.0f, 1))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
-, m_fVolume      (fVolume*0.6f)
+, m_fVolume      (fVolume*0.8f)
 , m_fPitch       (fPitch*0.65f)
 {
     // load drink shader
@@ -235,5 +235,32 @@ cCoola::cCoola()noexcept
 
 // ****************************************************************
 cCoola::~cCoola()
+{
+}
+
+
+// ****************************************************************
+cFranka::cFranka()noexcept
+: cBeverage (0, -2.6f, 1.0f, 1.0f, 1.2f)
+{
+    // load object resources
+    this->DefineModelFile("data/models/bear.md5mesh");
+    this->DefineTextureFile(0, "data/textures/bear.png");
+
+    // set object properties
+    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*2.25f);
+    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
+
+    // create glass
+    m_pGlass = new coreObject3D();
+
+    // override sound
+    m_pClink = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/bump.wav");
+}
+
+
+// ****************************************************************
+cFranka::~cFranka()
 {
 }

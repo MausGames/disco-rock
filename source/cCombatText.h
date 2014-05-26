@@ -39,6 +39,10 @@ private:
     coreTimer m_Delay;                     // delay between two created texts to increase visibility
     coreTimer m_aFloat[COMBAT_TEXT_NUM];   // timer for the float-animation
     float m_afAlpha[COMBAT_TEXT_NUM];      // saved initial alpha values for more dynamic fading
+
+    coreObject2D m_Trophy;                 // flying trophy symbol
+    coreLabel m_TrophyLabel;               // dedicated trophy label
+    coreTimer m_TrophyTimer;               // timer for the flying trophy symbol
                             
     std::deque<sData> m_aData;             // text data deque
 
@@ -57,6 +61,9 @@ public:
     // add new combat text data
     inline void AddText(const char* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
     void AddTextTransformed(const char* pcText, const coreVector3& vPosition, const coreVector4& vColor);
+
+    // show trophy animation
+    void ShowTrophy(const char* pcText, const coreVector3& vPosition);
 
 
 private:

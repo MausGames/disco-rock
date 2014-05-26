@@ -16,24 +16,26 @@
 #include "gjAPI.h"
 #include <deque>
 
+static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!");
+
 #define FONT_ROCKS "data/fonts/gomarice_rocks.ttf"
 
 #define COLOR_WHITE_F  coreVector4(  1.0f,   1.0f,   1.0f, 1.0f)
 #define COLOR_YELLOW_F coreVector4(  1.0f, 0.824f, 0.392f, 1.0f)
 #define COLOR_ORANGE_F coreVector4(  1.0f, 0.443f, 0.227f, 1.0f)
 #define COLOR_RED_F    coreVector4(  1.0f, 0.275f, 0.275f, 1.0f)
+#define COLOR_PURPLE_F coreVector4( 0.71f, 0.333f,   1.0f, 1.0f)
 #define COLOR_BLUE_F   coreVector4(0.102f, 0.702f,   1.0f, 1.0f)
 #define COLOR_GREEN_F  coreVector4(0.118f, 0.745f, 0.353f, 1.0f)
-#define COLOR_PURPLE_F coreVector4( 0.71f, 0.333f,   1.0f, 1.0f)
 
 static constexpr_var coreVector4 g_avColor[] = 
 {
     COLOR_YELLOW_F,
     COLOR_ORANGE_F,
     COLOR_RED_F,
+    COLOR_PURPLE_F,
     COLOR_BLUE_F,
     COLOR_GREEN_F,
-    COLOR_PURPLE_F,
 };
 #define COLOR_NUM ARRAY_SIZE(g_avColor)
 
@@ -67,6 +69,10 @@ extern float               g_fTargetCam;
 extern float               g_fCurCam;
 extern bool                g_bPause;
 
+extern float               g_fCamSpeed;
+extern bool                g_bUpsideDown;
+
+extern int                 g_iNumGames;
 extern int                 g_iNumFails;
 
 
