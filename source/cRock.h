@@ -30,6 +30,8 @@ private:
 
     bool m_bFallen;                // touched a hole in the floor and starts to fall
     bool m_bJumped;                // jumped recently and cannot jump again
+    bool m_bReflected;             // force was reflected from the ground in this frame
+    int m_iNumJumps;               // number of successful jumps
                                    
     coreFlow m_fRotation;          // rotation-timer
                                    
@@ -37,8 +39,7 @@ private:
     coreSoundPtr m_pDown;          // sound-effect for hitting the ground
 
     coreParticleEffect m_Effect;   // particle effect object for smoke trail
-
-    float m_fSensitivity;          // mouse sensitivity
+    float m_fShake;                // helper for shaking detection (fast left-right-move)
 
 
 public:
@@ -53,8 +54,11 @@ public:
     bool Jump(const float& fForce);
 
     // get object properties
-    inline const bool& GetFallen()const {return m_bFallen;}
-    inline const bool& GetJumped()const {return m_bJumped;}
+    inline const bool& GetFallen()const    {return m_bFallen;}
+    inline const bool& GetJumped()const    {return m_bJumped;}
+    inline const bool& GetReflected()const {return m_bReflected;}
+    inline const int& GetNumJumps()const   {return m_iNumJumps;}
+    inline const float& GetShake()const    {return m_fShake;}
 };
 
 

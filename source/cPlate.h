@@ -25,7 +25,8 @@ public:
     cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept;
     ~cPlate();
 
-    // move the plate
+    // render and move the plate
+    void Render()override;
     void Move()override;
 };
 

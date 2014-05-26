@@ -13,8 +13,7 @@
 
 // ****************************************************************
 cInterface::cInterface()noexcept
-: m_bComboBackState ((Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY) < 1) ? true : false)
-, m_Show            (coreTimer(1.0f, 1.0f, 1))
+: m_Show            (coreTimer(1.0f, 1.0f, 1))
 , m_Hide            (coreTimer(1.0f, 1.0f, 1))
 {
     // create score labels
@@ -71,13 +70,6 @@ cInterface::cInterface()noexcept
     m_ComboBar.SetAlignment(coreVector2(0.0f,1.0f));
     m_ComboBar.SetColor3(COLOR_BLUE_F.xyz());
 
-    // create combo background
-    m_ComboBack.DefineProgramShare("2d_shader_color");
-    m_ComboBack.SetSize(coreVector2(COMBO_BAR_LENGTH + 0.08f,0.12f));
-    m_ComboBack.SetCenter(coreVector2(0.0f,-0.5f));
-    m_ComboBack.SetAlignment(coreVector2(0.0f,1.0f));
-    m_ComboBack.SetColor3(coreVector3(0.0f,0.0f,0.0f));
-
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
     // create touch controls
@@ -87,6 +79,7 @@ cInterface::cInterface()noexcept
     m_MoveLeft.SetSize(coreVector2(0.1f,0.15f));
     m_MoveLeft.SetCenter(coreVector2(-0.5f,0.5f));
     m_MoveLeft.SetAlignment(coreVector2(1.0f,-1.0f));
+    m_MoveLeft.SetFocusRange(1.2f);
 
     m_MoveRight.Construct("data/textures/button_move.png", "data/textures/button_move.png");
     m_MoveRight.DefineProgramShare("2d_shader"); // override
@@ -95,6 +88,7 @@ cInterface::cInterface()noexcept
     m_MoveRight.SetCenter(coreVector2(-0.5f,0.5f));
     m_MoveRight.SetAlignment(coreVector2(1.0f,-1.0f));
     m_MoveRight.SetDirection(coreVector2(0.0f,-1.0f));
+    m_MoveRight.SetFocusRange(1.2f);
 
     m_Jump.Construct("data/textures/button_jump.png", "data/textures/button_jump.png");
     m_Jump.DefineProgramShare("2d_shader"); // override
@@ -102,6 +96,7 @@ cInterface::cInterface()noexcept
     m_Jump.SetSize(coreVector2(0.15f,0.15f));
     m_Jump.SetCenter(coreVector2(0.5f,0.5f));
     m_Jump.SetAlignment(coreVector2(-1.0f,-1.0f));
+    m_Jump.SetFocusRange(1.2f);
 
     m_Pause.Construct("data/textures/button_pause.png", "data/textures/button_pause.png");
     m_Pause.DefineProgramShare("2d_shader"); // override
@@ -109,6 +104,7 @@ cInterface::cInterface()noexcept
     m_Pause.SetSize(coreVector2(0.075f,0.075f));
     m_Pause.SetCenter(coreVector2(0.5f,0.5f));
     m_Pause.SetAlignment(coreVector2(-1.0f,-1.0f));
+    m_Pause.SetFocusRange(1.2f);
 
 #endif
 
@@ -136,10 +132,6 @@ void cInterface::Render()
         m_Time.Render();
         m_TimeValueMil.Render();
         m_TimeValueSec.Render();
-
-        // render combo background
-        if(m_bComboBackState && m_ComboBar.GetSize().x > 0.0001f)
-            m_ComboBack.Render();
 
         // render combo labels and bar
         m_Combo.Render();
@@ -187,11 +179,6 @@ void cInterface::Move()
     // update combo bar and background
     m_ComboBar.SetAlpha(fAlpha);
     m_ComboBar.Move();
-    if(m_bComboBackState)
-    {
-        m_ComboBack.SetAlpha(fAlpha*0.6f);
-        m_ComboBack.Move();
-    }
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
