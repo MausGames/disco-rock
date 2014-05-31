@@ -8,6 +8,7 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
+// static texts
 #define LOGIN_START             "YOUR TOKEN IS NOT YOUR PASSWORD"
 #define LOGIN_CONNECTING        "CONNECTING..."
 #define LOGIN_ERROR_CONNECTION  "COULD NOT CONNECT TO GAME JOLT"
@@ -17,14 +18,16 @@
 #define QUESTION_ABORT  "DO YOU REALLY WANT TO ABORT THE CURRENT GAME?"
 #define QUESTION_RETURN "DO YOU REALLY WANT TO RETURN WITHOUT SUBMITTING?"
 
+// values for menu object adjustments
 #define ADJUST_LEFT(x)   x.SetCenter(coreVector2(-0.5f,0.0f)); x.SetAlignment(coreVector2( 1.0f,0.0f));
 #define ADJUST_RIGHT(x)  x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));
 #define ADJUST_BORDER(x) x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);
 
+#define LEFT_CENTER 0.46f
+
+// update displayed score and time value
 #define SHOW_BEST_SCORE(x) {m_aScoreBestValue[0].SetText(coreData::Print("%06d", (x)));}
 #define SHOW_BEST_TIME(x)  {m_aScoreBestValue[1].SetText(coreData::Print("%03d.%01d", (x) / 100, (((x) % 100) / 10)));}
-
-#define LEFT_CENTER 0.46f
 
 // macro function for changing object transparency                      
 #define ALPHA_BUTTON_TEXT(b)                                                                                           \

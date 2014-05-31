@@ -10,7 +10,7 @@
 
 void main()
 {
-#if (GL_QUALITY) < 2
+#if (_CORE_QUALITY_) < 2
 
     gl_FragColor = vec4(0.05, 0.05, 0.05, 1.0);
 

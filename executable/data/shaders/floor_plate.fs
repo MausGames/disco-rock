@@ -17,7 +17,7 @@ varying vec3 v_v3Relative;
 
 void main()
 {
-#if (GL_QUALITY) < 1
+#if (_CORE_QUALITY_) < 1
 
     vec2 v2TexCoord = fract(v_av2TexCoord[0]);
     
@@ -36,7 +36,7 @@ void main()
 
     vec3  v3TextureNorm  = texture2D(u_as2Texture[1], v_av2TexCoord[0]).rgb;
     vec2  v2TextureColor = texture2D(u_as2Texture[0], v_av2TexCoord[0]).rg;
-    #if (GL_QUALITY) > 1
+    #if (_CORE_QUALITY_) > 1
     
         float fTextureDisco  = texture2D(u_as2Texture[0], v_av2TexCoord[1]).b;
         
@@ -54,7 +54,7 @@ void main()
     vec4 v4Color = vec4(vec3(v2TextureColor.r), 1.0) * u_v4Color * (fIntensity * (0.9 * fBumpFactor + 0.25 * pow(fBumpFactor, 40.0)));
 
     gl_FragColor.rgb = v4Color.rgb * min(v4Color.a, 1.0);
-    #if (GL_QUALITY) > 1
+    #if (_CORE_QUALITY_) > 1
     
         gl_FragColor.rgb += vec3(fTextureDisco * 1.45 * (0.35 - 0.3 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x)));
     
