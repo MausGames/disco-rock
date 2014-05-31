@@ -12,9 +12,9 @@
 
 
 // ****************************************************************
-#define GAME_TROPHIES 15
-#define GAME_HEIGHT   -20.0f
+#define GAME_HEIGHT   -20.0f   // logical height of the dance floor
 
+// stage times
 #define STAGE_HOLES  18.0f
 #define STAGE_CANYON 30.0f
 #define STAGE_TOGGLE 42.0f
@@ -24,13 +24,13 @@
 #define STAGE_MASS   96.0f
 #define STAGE_FINAL  106.0f
 
-#define CANYON_DISTANCE 20
-#define CANYON_BEFORE   1
-#define CANYON_AFTER    2
+#define CANYON_DISTANCE 20     // distance between two canyons (on stage STAGE_CANYON)
+#define CANYON_BEFORE   1      // full rows before a canyon
+#define CANYON_AFTER    2      // full rows after a canyon
 
-#define CANYON_BEGIN   0
-#define CANYON_PREVENT -1000
-#define CANYON_LIMIT   -100   // to compare for a canyon-status-switch (should be < -CANYON_DISTANCE)
+#define CANYON_BEGIN   0       // value to immediately start a canyon
+#define CANYON_PREVENT -1000   // static value to prevent canyons
+#define CANYON_LIMIT   -100    // to compare for a canyon-status-switch (should be < -CANYON_DISTANCE)
 
 
 // ****************************************************************
@@ -87,7 +87,7 @@ private:
     coreSoundPtr m_pTrapSound;               // sound effect for activated trap
     coreSoundPtr m_pTrophySound;             // sound effect for achieved trophy
                                        
-    bool m_bTrophyHelper[GAME_TROPHIES];     // trophy cache
+    bool m_bTrophyHelper[MENU_TROPHIES];     // trophy cache
 
 
 public:

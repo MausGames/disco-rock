@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#define COMBO_BAR_LENGTH 0.5f
+#define COMBO_BAR_LENGTH 0.5f   // combo bar length
 
 
 // ****************************************************************
