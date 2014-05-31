@@ -12,13 +12,14 @@
 
 
 // ****************************************************************
-#define MENU_SCORE_TABLES  2
-#define MENU_SCORE_ENTRIES 8
-#define MENU_SCORE_PAGES   5
+#define MENU_SCORE_TABLES  2     // number of different score tables (leaderboards)
+#define MENU_SCORE_ENTRIES 8     // number of score entries to display at once
+#define MENU_SCORE_PAGES   5     // number of score pages
+                                 
+#define MENU_TROPHIES       15   // number of implemented trophies
+#define MENU_TROPHY_SECRETS 4    // total number of secret trophies
 
-#define MENU_TROPHIES       15
-#define MENU_TROPHY_SECRETS 4
-
+// transparency values
 #define MENU_ALPHA_ACTIVE_1 0.8f
 #define MENU_ALPHA_IDLE_1   0.5f
 #define MENU_ALPHA_ACTIVE_2 0.65f
@@ -181,10 +182,10 @@ public:
     void LoginCallback(const int& iStatus, void* pData);
 
     // control trophy parameters
-    void SetTrophyStatus(const int& iStatus)   {m_iTrophyStatus  = iStatus;}
-    void SetTrophyCurrent(const int& iCurrent) {m_iTrophyCurrent = iCurrent;}
-    inline const int& GetTrophyStatus()const   {return m_iTrophyStatus;}
-    inline const int& GetTrophyCurrent()const  {return m_iTrophyCurrent;}
+    inline void SetTrophyStatus(const int& iStatus)   {m_iTrophyStatus  = iStatus;}
+    inline void SetTrophyCurrent(const int& iCurrent) {m_iTrophyCurrent = iCurrent;}
+    inline const int& GetTrophyStatus()const          {return m_iTrophyStatus;}
+    inline const int& GetTrophyCurrent()const         {return m_iTrophyCurrent;}
 
 
 private:

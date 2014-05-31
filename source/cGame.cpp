@@ -8,8 +8,6 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-
-// ****************************************************************
 // macro function for calculating the current score multiplier
 #define COMBO_MAX    18
 #define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, (unsigned)COMBO_MAX)))
@@ -73,7 +71,7 @@ cGame::cGame(const bool& bChallenge)noexcept
     
     // reset statistics and trophy cache
     for(int i = 0; i < (int)ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected[i]   = 0;
-    for(int i = 0; i < GAME_TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
+    for(int i = 0; i < MENU_TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
     ++g_iNumGames;
 
     // load sound-effects
@@ -678,7 +676,6 @@ void cGame::Move()
         if(!m_bTrophyHelper[ 0] && m_iFirstJump == 1 && m_Rock.GetJumped())                         {this->AchieveTrophy(4666,  0);}
         if(!m_bTrophyHelper[ 1] && m_Rock.GetFallen() && m_fTime < 10.0f)                           {this->AchieveTrophy(4635,  1); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
         if(!m_bTrophyHelper[ 2] && m_Rock.GetFallen() && m_bTrapJump)                               {this->AchieveTrophy(8325,  2);}
-      //if(!m_bTrophyHelper[ 3])                                                                    {this->AchieveTrophy(8326,  3);}
         if(!m_bTrophyHelper[ 4] && m_aiCollected[5])                                                {this->AchieveTrophy(8327,  4);}
         if(!m_bTrophyHelper[ 5] && m_fComboTime >= 20.0f)                                           {this->AchieveTrophy(4665,  5);}  
         if(!m_bTrophyHelper[ 6] && m_aiCollected[4] >= 2 && !m_bChallenge)                          {this->AchieveTrophy(4637,  6);}
@@ -694,7 +691,7 @@ void cGame::Move()
         // [ 0] X(Get the Party Started,    s1) Make an air-jump at the beginning.
         // [ 1]  (I don't like Disco,       s1) Fall down the dance floor in less than 10 seconds.
         // [ 2] X(Too Much Too Soon,        s1) Fall down the dance floor while on a high-jump.
-        // [ 3] X(Show me your Moves,        1) Submit your score and time online. <in menu, with centered animation>
+        // [ 3] X(Show me your Moves,        1) Submit your score and time online. <<in menu, with centered animation>>
 
         // [ 4] X(Party Animal,             s2) Meet Franka the polar bear.
         // [ 5]  (Binge Drinker,             2) Hold a combo multiplier of x10 for at least 20 seconds.
@@ -737,6 +734,9 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
         // handle guest user
         if(!(g_pMenu->GetTrophyStatus() & (1 << iNum)))
         {
+#if defined(_CORE_ANDROID_)
+
+#endif
             this->AchieveTrophyCallback(pTrophy, (void*)(long)iNum);
         }
     }

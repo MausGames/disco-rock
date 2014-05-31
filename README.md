@@ -1,8 +1,8 @@
 # Disco Rock
 
-**You are a rock and you don't like parties.**
+**You are a rock and you like parties.**
 
-Roll through the disco and smash as many beverages as possible, avoid holes in the dance floor, jump around, make combos, and climb to the top of the highscore. 
+Roll through the disco and smash as many beverages as possible, avoid holes in the dance floor, jump around, make combos, and climb to the top of the leaderboard. 
 
 Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - try to get a good score, earn achievements and party hard.
 

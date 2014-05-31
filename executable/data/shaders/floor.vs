@@ -31,7 +31,7 @@ void main()
         
         v_v4Color = a_v4Color;
         
-#if (GL_QUALITY) < 1
+#if (_CORE_QUALITY_) < 1
 
         v_v3Relative.y = dot(vec4(u_m4ModelView[0][1],
                                   u_m4ModelView[1][1],
@@ -42,7 +42,7 @@ void main()
         v_v3Relative.y  = 1.15 - v_v3Relative.y * ((v_v3Relative.y > 0.0) ? 1.0 : -5.0);
 #else
 
-    #if (GL_QUALITY) > 1
+    #if (_CORE_QUALITY_) > 1
     
         v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
         

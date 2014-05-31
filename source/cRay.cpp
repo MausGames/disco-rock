@@ -8,8 +8,8 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#define RAY_LENGTH 120.0f
-#define RAY_WIDTH  7.5f
+#define RAY_LENGTH 120.0f   // length of the ray
+#define RAY_WIDTH  7.5f     // width value
 
 
 // ****************************************************************

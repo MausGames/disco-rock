@@ -20,7 +20,7 @@ void main()
     gl_Position      = u_m4ModelViewProj * v4Position;
     v_av2TexCoord[0] = a_v2Texture + u_v2TexSize;   // add
     
-#if (GL_QUALITY) < 1
+#if (_CORE_QUALITY_) < 1
 
     v_v3Relative.y = dot(vec4(u_m4ModelView[0][1],
                               u_m4ModelView[1][1],
@@ -32,7 +32,7 @@ void main()
         
 #else
 
-    #if (GL_QUALITY) > 1
+    #if (_CORE_QUALITY_) > 1
     
         v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
         
