@@ -36,6 +36,8 @@
       <Filter>GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\source\cTrap.cpp" />
+    <ClCompile Include="..\..\..\source\cOnline.cpp" />
+    <ClCompile Include="..\..\..\source\cFirst.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\cBackground.h" />
@@ -82,7 +84,8 @@
       <Filter>GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\source\cTrap.h" />
-    <ClInclude Include="..\..\..\source\gjKey.h" />
+    <ClInclude Include="..\..\..\source\cOnline.h" />
+    <ClInclude Include="..\..\..\source\cFirst.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="GameJoltAPI">

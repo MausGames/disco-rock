@@ -9,7 +9,7 @@
 
 
 // normalized camera vector
-const vec3 c_v3CamDir = vec3(0.0, -0.813731849, 0.581237018);
+const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);
 
 // shader output
 varying float v_fIntensity;

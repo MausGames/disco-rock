@@ -27,27 +27,22 @@ void main()
                               u_m4ModelView[2][1],
                               u_m4ModelView[3][1]), v4Position);
                               
-    v_v3Relative.y *= 0.0045 * fSign;
-    v_v3Relative.y  = 1.15 - v_v3Relative.y * ((v_v3Relative.y > 0.0) ? 1.0 : -5.0);
+    v_v3Relative.y *= fSign;
+    v_v3Relative.y  = 1.15 - v_v3Relative.y * ((v_v3Relative.y > 0.0) ? 0.0045 : -0.0225);
         
 #else
 
     #if (_CORE_QUALITY_) > 1
     
-        v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.55;
+        v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.6;
         
     #endif
-    
-    const vec3 n = vec3( 0.0, 0.0, -1.0);
-    const vec3 t = vec3(-1.0, 0.0,  0.0);
-    const vec3 b = vec3( 0.0, 1.0,  0.0);
-    
+
     v_v3Relative = (u_m4ModelView * v4Position).xyz;
     
-    vec3 v3MathLightDir  = normalize(v_v3Relative);
-    v_av4LightDir[0].x   = dot(v3MathLightDir, t) * fSign;
-    v_av4LightDir[0].y   = dot(v3MathLightDir, b) * fSign;
-    v_av4LightDir[0].z   = dot(v3MathLightDir, n);
+    v_av4LightDir[0].x = -v_v3Relative.x * fSign;
+    v_av4LightDir[0].y =  v_v3Relative.y * fSign;
+    v_av4LightDir[0].z = -v_v3Relative.z;
     v_av4LightDir[0].xyz = normalize(v_av4LightDir[0].xyz);
     
     v_v3Relative.z *= fSign;

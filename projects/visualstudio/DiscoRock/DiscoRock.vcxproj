@@ -22,9 +22,11 @@
     <ClCompile Include="..\..\..\source\cBackground.cpp" />
     <ClCompile Include="..\..\..\source\cBeverage.cpp" />
     <ClCompile Include="..\..\..\source\cCombatText.cpp" />
+    <ClCompile Include="..\..\..\source\cFirst.cpp" />
     <ClCompile Include="..\..\..\source\cGame.cpp" />
     <ClCompile Include="..\..\..\source\cInterface.cpp" />
     <ClCompile Include="..\..\..\source\cMenu.cpp" />
+    <ClCompile Include="..\..\..\source\cOnline.cpp" />
     <ClCompile Include="..\..\..\source\cPlate.cpp" />
     <ClCompile Include="..\..\..\source\cRay.cpp" />
     <ClCompile Include="..\..\..\source\cRock.cpp" />
@@ -46,14 +48,15 @@
     <ClInclude Include="..\..\..\source\cBackground.h" />
     <ClInclude Include="..\..\..\source\cBeverage.h" />
     <ClInclude Include="..\..\..\source\cCombatText.h" />
+    <ClInclude Include="..\..\..\source\cFirst.h" />
     <ClInclude Include="..\..\..\source\cGame.h" />
     <ClInclude Include="..\..\..\source\cInterface.h" />
     <ClInclude Include="..\..\..\source\cMenu.h" />
+    <ClInclude Include="..\..\..\source\cOnline.h" />
     <ClInclude Include="..\..\..\source\cPlate.h" />
     <ClInclude Include="..\..\..\source\cRay.h" />
     <ClInclude Include="..\..\..\source\cRock.h" />
     <ClInclude Include="..\..\..\source\cTrap.h" />
-    <ClInclude Include="..\..\..\source\gjKey.h" />
     <ClInclude Include="..\..\..\source\main.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
