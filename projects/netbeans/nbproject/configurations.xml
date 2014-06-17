@@ -5,7 +5,7 @@
                    displayName="Source Files"
                    projectFiles="true">
       <logicalFolder name="source" displayName="source" projectFiles="true">
-        <logicalFolder name="source" displayName="source" projectFiles="true">
+        <logicalFolder name="source" displayName="GameJoltAPI" projectFiles="true">
           <itemPath>../../../GameJoltAPI/source/Base64.cpp</itemPath>
           <itemPath>../../../GameJoltAPI/source/Base64.h</itemPath>
           <itemPath>../../../GameJoltAPI/source/MD5.cpp</itemPath>
@@ -32,12 +32,16 @@
         <itemPath>../../source/cBeverage.h</itemPath>
         <itemPath>../../source/cCombatText.cpp</itemPath>
         <itemPath>../../source/cCombatText.h</itemPath>
+        <itemPath>../../source/cFirst.cpp</itemPath>
+        <itemPath>../../source/cFirst.h</itemPath>
         <itemPath>../../source/cGame.cpp</itemPath>
         <itemPath>../../source/cGame.h</itemPath>
         <itemPath>../../source/cInterface.cpp</itemPath>
         <itemPath>../../source/cInterface.h</itemPath>
         <itemPath>../../source/cMenu.cpp</itemPath>
         <itemPath>../../source/cMenu.h</itemPath>
+        <itemPath>../../source/cOnline.cpp</itemPath>
+        <itemPath>../../source/cOnline.h</itemPath>
         <itemPath>../../source/cPlate.cpp</itemPath>
         <itemPath>../../source/cPlate.h</itemPath>
         <itemPath>../../source/cRay.cpp</itemPath>
@@ -46,7 +50,6 @@
         <itemPath>../../source/cRock.h</itemPath>
         <itemPath>../../source/cTrap.cpp</itemPath>
         <itemPath>../../source/cTrap.h</itemPath>
-        <itemPath>../../source/gjKey.h</itemPath>
         <itemPath>../../source/main.h</itemPath>
       </logicalFolder>
       <itemPath>../../source/main.cpp</itemPath>
@@ -235,6 +238,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -246,6 +253,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -262,8 +273,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -431,6 +440,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -442,6 +455,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -458,8 +475,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -627,6 +642,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -638,6 +657,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -654,8 +677,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -836,6 +857,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -847,6 +872,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -863,8 +892,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1041,6 +1068,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -1052,6 +1083,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1068,8 +1103,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1245,6 +1278,10 @@
       </item>
       <item path="../../source/cCombatText.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cFirst.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cFirst.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="../../source/cGame.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cGame.h" ex="false" tool="3" flavor2="0">
@@ -1256,6 +1293,10 @@
       <item path="../../source/cMenu.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cMenu.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="../../source/cOnline.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/cPlate.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -1272,8 +1313,6 @@
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
-      </item>
-      <item path="../../source/gjKey.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="../../source/main.cpp" ex="false" tool="1" flavor2="0">
       </item>
