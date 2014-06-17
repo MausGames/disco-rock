@@ -24,24 +24,24 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 {
     // load drink shader
     this->DefineProgramShare("drink_shader")
-          ->AttachShaderFile("data/shaders/drink.vs")
-          ->AttachShaderFile("data/shaders/drink.fs")
-          ->Finish();
+        ->AttachShaderFile("data/shaders/drink.vs")
+        ->AttachShaderFile("data/shaders/drink.fs")
+        ->Finish();
 
     // create shadow
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
     m_Shadow.DefineProgramShare("shadow_shader")
-             ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-             ->AttachShaderFile("data/shaders/shadow.fs")
-             ->Finish();
+        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
+        ->AttachShaderFile("data/shaders/shadow.fs")
+        ->Finish();
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // load glass shader
     m_pGlasProgram = Core::Manager::Memory->Share<coreProgram>("glass_shader");
     m_pGlasProgram->AttachShaderFile("data/shaders/glass.vs")
-                  ->AttachShaderFile("data/shaders/glass.fs")
-                  ->Finish();
+        ->AttachShaderFile("data/shaders/glass.fs")
+        ->Finish();
 
     // load sound-effects
     m_pClink = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/clink.wav");
@@ -92,7 +92,7 @@ void cBeverage::Move()
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-    m_Shadow.SetSize(this->GetSize() * 3.0f * MAX(1.0f - 0.018f*fGround, 0.0f));
+    m_Shadow.SetSize(this->GetSize() * 2.344f * MAX(1.0f - 0.018f*fGround, 0.0f));
     m_Shadow.Move();
 
     if(m_pStraw) 
@@ -124,7 +124,7 @@ void cBeverage::Move()
 
 // ****************************************************************
 cSunrise::cSunrise()noexcept
-: cBeverage (5, 0.0f, 0.91f, 0.2f, 1.0f)
+: cBeverage (5, 0.5f, 0.91f, 0.2f, 1.0f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_sunrise.md5mesh");
@@ -151,7 +151,7 @@ cSunrise::~cSunrise()
 
 // ****************************************************************
 cMojito::cMojito()noexcept
-: cBeverage (10, 0.0f, 0.85f, 0.4f, 1.2f)
+: cBeverage (10, -0.2f, 0.85f, 0.4f, 1.2f)
 {
     // load object resources
     this->DefineModelFile("data/models/drink_mojito.md5mesh");
@@ -227,9 +227,9 @@ cCoola::cCoola()noexcept
     m_pGlass->DefineModelFile("data/models/drink_cola.md5mesh");
     m_pGlass->DefineTextureFile(0, "data/textures/drink_cola_glass.png");
     m_pGlass->DefineProgramShare("glass_cola_shader")
-              ->AttachShaderFile("data/shaders/glass.vs")
-              ->AttachShaderFile("data/shaders/glass_cola.fs")
-              ->Finish();
+        ->AttachShaderFile("data/shaders/glass.vs")
+        ->AttachShaderFile("data/shaders/glass_cola.fs")
+        ->Finish();
 }
 
 

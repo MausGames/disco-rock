@@ -22,25 +22,25 @@ cBackground::cBackground()noexcept
 {
     // load dance floor geometry
     m_pModel = Core::Manager::Resource->LoadNew<coreModel>();
-    __LoadGeometry();
+    this->__LoadGeometry();
 
     // load object resources
     this->DefineTextureFile(0, "data/textures/background.png");
     this->DefineTextureFile(1, "data/textures/background_norm.png");
     this->DefineProgramShare("floor_shader")
-          ->AttachShaderFile("data/shaders/floor.vs")
-          ->AttachShaderFile("data/shaders/floor.fs")
-          ->BindAttribute("a_v2Position", 0)
-          ->BindAttribute("a_v4Color",    2)
-          ->BindAttribute("a_fHeight",    3)
-          ->Finish();
+        ->AttachShaderFile("data/shaders/floor.vs")
+        ->AttachShaderFile("data/shaders/floor.fs")
+        ->BindAttribute("a_v2Position", 0)
+        ->BindAttribute("a_v4Color",    2)
+        ->BindAttribute("a_fHeight",    3)
+        ->Finish();
 
     // create filling background
     m_Fill.DefineTextureFile(0, "data/textures/background.png");
     m_Fill.DefineProgramShare("fill_shader")
-           ->AttachShaderFile("data/shaders/fill.vs")
-           ->AttachShaderFile("data/shaders/fill.fs")
-           ->Finish();
+        ->AttachShaderFile("data/shaders/fill.vs")
+        ->AttachShaderFile("data/shaders/fill.fs")
+        ->Finish();
     m_Fill.FitToScreen();
     m_Fill.SetTexSize(m_Fill.GetSize()*7.2f);
 }
@@ -61,53 +61,53 @@ cBackground::~cBackground()
 void cBackground::Render()
 {
     glDisable(GL_BLEND);
-
-    // light flash (made in render-function to animate even in pause-mode)
     {
-        // get music speed (yes this is currently hardcoded, needs to be improved)
-        float fSpeed = 0.0f;
-             if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0)) fSpeed = 1.9166667f;
-        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1)) fSpeed = 2.00f;
-        else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2)) fSpeed = 1.95f;
-
-        // update light time
-        m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
-
-        // check for new tick
-        const int iNewTick = (int)std::floor(m_fLightTime);
-        if(m_iLightTick < iNewTick)
+        // light flash (made in render-function to animate even in pause-mode)
         {
-            // create flash
-            m_iLightTick = iNewTick;
-            m_fLightStrength = 0.3f;
+            // get music speed (yes this is currently hardcoded, needs to be improved)
+            float fSpeed = 0.0f;
+                 if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0)) fSpeed = 1.9166667f;
+            else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1)) fSpeed = 2.00f;
+            else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2)) fSpeed = 1.95f;
+
+            // update light time
+            m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
+
+            // check for new tick
+            const int iNewTick = (int)std::floor(m_fLightTime);
+            if(m_iLightTick < iNewTick)
+            {
+                // create flash
+                m_iLightTick = iNewTick;
+                m_fLightStrength = 0.3f;
+            }
+
+            // reduce light strength (flash) over time
+            m_fLightStrength = MAX(m_fLightStrength * (1.0f - Core::System->GetTime() * 4.0f), 0.0f);
+
+            if(!g_bPause)
+            {
+                // calculate final light power
+                const float fPower = MAX(g_fCurSpeed-1.0f, 0.5f) * 1.5f * m_fLightStrength;
+
+                // set alpha values used as light power in the shader
+                m_Fill.SetAlpha((1.0f + 2.0f*fPower) * 0.375f);
+                this->SetAlpha(1.0f + fPower);
+            }
         }
 
-        // reduce light strength (flash) over time
-        m_fLightStrength = MAX(m_fLightStrength * (1.0f - Core::System->GetTime() * 4.0f), 0.0f);
-
-        if(!g_bPause)
+        // enable all resources
+        if(this->Enable())
         {
-            // calculate final light power
-            const float fPower = MAX(g_fCurSpeed-1.0f, 0.5f) * 1.5f * m_fLightStrength;
-
-            // set alpha values used as light power in the shader
-            m_Fill.SetAlpha(1.0f + 2.0f*fPower);
-            this->SetAlpha(1.0f + fPower);
+            // draw the model
+            coreModel::Lock();
+            glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
+            coreModel::Unlock();
         }
+
+        // render the filling background
+        m_Fill.Render();
     }
-
-    // enable all resources
-    if(this->Enable())
-    {
-        // draw the model
-        coreModel::Lock();
-        glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
-        coreModel::Unlock();
-    }
-
-    // render the filling background
-    m_Fill.Render();
-
     glEnable(GL_BLEND);
 }
 
@@ -122,15 +122,17 @@ void cBackground::Move()
 
     // calculate drawing offset and background position
     m_iOffset = coreUint(std::floor(m_fPositionTime)) * BACK_BLOCKS_X * BACK_PER_INDICES * sizeof(coreWord);
-    this->SetPosition(coreVector3(0.0f, -m_fPositionTime * BACK_DETAIL_Y, 0.0f));
+    this->SetPosition(coreVector3(0.0f, -m_fPositionTime * BACK_DETAIL_Y, GAME_HEIGHT));
 
     // update dance floor light animation
     m_fFloorTime.Update(0.5f, 0);
+    if(m_fFloorTime >= 20.0f) m_fFloorTime -= 20.0f;
     this->SetTexOffset(coreVector2(1.0f,-1.0f) * m_fFloorTime);
 
     // update and move the filling background
-    m_fFillTime.Update(10.0f, 0);
-    m_Fill.SetTexOffset(coreVector2(-0.075f * m_fFillTime, 0.0f));
+    m_fFillTime.Update(0.75f, 0);
+    if(m_fFillTime >= 5.0f) m_fFillTime -= 5.0f;
+    m_Fill.SetTexOffset(coreVector2(-m_fFillTime, 0.0f));
     m_Fill.Move();
 
     // move the object
@@ -143,8 +145,8 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 {
     coreModel::Lock();
     {
-        const coreUint iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
-        const coreUint iSize = iNum * sizeof(float);
+        constexpr_var coreUint iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
+        constexpr_var coreUint iSize = iNum * sizeof(float);
 
         // map required area
         float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
@@ -153,7 +155,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
         // set height values of the selected line
         for(coreUint i = 0; i < iNum; ++i)
         {
-            pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : GAME_HEIGHT;
+            pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : 0.0f;
         }
 
         // unmap area
@@ -220,7 +222,7 @@ void cBackground::__LoadGeometry()
 
     // create persistent array with mutable height data (the holes are just out of screen)
     m_pfHeight = new float[BACK_TOTAL_VERTICES];
-    for(int i = 0; i < BACK_TOTAL_VERTICES; ++i) m_pfHeight[i] = GAME_HEIGHT;
+    for(int i = 0; i < BACK_TOTAL_VERTICES; ++i) m_pfHeight[i] = 0.0f;
 
     // define color values
     int iCurColor = 0;
@@ -236,7 +238,7 @@ void cBackground::__LoadGeometry()
         avColor.push_back(g_avColor[iCurColor]);
 
         // add additional random parameter for the shader
-        avColor.back().a = Core::Rand->Float(0.9f, 1.0f);
+        avColor.back().a = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
     }
 
     // sync beginning and ending colors to create an infinit looking grid when resetting the position

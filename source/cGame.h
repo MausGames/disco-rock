@@ -21,8 +21,9 @@
 #define STAGE_SIDE_1 57.0f
 #define STAGE_SIDE_2 67.0f
 #define STAGE_NET    77.0f
-#define STAGE_MASS   96.0f
-#define STAGE_FINAL  106.0f
+#define STAGE_RANDOM 96.0f
+#define STAGE_MASS   100.0f
+#define STAGE_FINAL  110.0f
 
 #define CANYON_DISTANCE 20     // distance between two canyons (on stage STAGE_CANYON)
 #define CANYON_BEFORE   1      // full rows before a canyon
@@ -75,10 +76,12 @@ private:
     bool m_bFirstMsg;                        // show message on the first jump
     bool m_bTrapSpawn;                       // enable trap spawn
     bool m_bTrapJump;                        // current jump was triggered by a trap
+    bool m_bShakeEnable;                     // shake effect and upside-down only enabled with already saved scores
     bool m_bChallenge;                       // coola challenge mode
 
     int m_iNarrow;                           // number of rows to remove from the dance floor (6 - m_iNarrow*2)
     bool m_bSideOrder;                       // ordering for the side stage
+    int m_iCamStatus;                        // current gameplay-specific camera status
                                              
     cInterface m_Interface;                  // interface object
     coreLabel m_Message;                     // beginning message
@@ -87,7 +90,7 @@ private:
     coreSoundPtr m_pTrapSound;               // sound effect for activated trap
     coreSoundPtr m_pTrophySound;             // sound effect for achieved trophy
                                        
-    bool m_bTrophyHelper[MENU_TROPHIES];     // trophy cache
+    bool m_bTrophyHelper[TROPHIES];     // trophy cache
 
 
 public:

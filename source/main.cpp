@@ -7,14 +7,15 @@
 //*-----------------------------------------------*//
 /////////////////////////////////////////////////////
 #include "main.h"
-#include "gjKey.h"
+
+cOnline*            g_pOnline         = NULL;
 
 cBackground*        g_pBackground     = NULL;
 cMenu*              g_pMenu           = NULL;
-cGame*              g_pGame           = NULL;
 cCombatText*        g_pCombatText     = NULL;
+cGame*              g_pGame           = NULL;
+cFirst*             g_pFirst          = NULL;
 
-gjAPI*              g_pGJ             = NULL;
 coreMusicPlayer*    g_pMusicPlayer    = NULL;
 coreParticleSystem* g_pParticleSystem = NULL;
 
@@ -25,6 +26,9 @@ float               g_fCurCam         = 0.0f;
 bool                g_bPause          = false;
 
 float               g_fCamSpeed       = 1.0f;
+float               g_fCamTime        = 0.0f;
+float               g_fOldCam         = 0.0f;
+bool                g_bCamMode        = false;
 bool                g_bUpsideDown     = false;
 
 int                 g_iNumGames       = g_bCoreDebug ? 3 : 0;
@@ -81,13 +85,12 @@ sMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
 void CoreApp::Init()
 {
     // set window title and icon
-    Core::System->SetTitle("Disco Rock");
-    Core::System->SetIcon("data/textures/game_icon.png");
+    Core::System->SetWindowTitle("Disco Rock");
+    Core::System->SetWindowIcon("data/textures/game_icon.png");
 
-    // set curor
+    // set cursor
 #if defined(_CORE_LINUX_)
-    // X11 has somehow problems with 24/32-bit colored cursors
-    Core::Input->DefineCursor("data/textures/standard_cursor_low.png");
+    Core::Input->DefineCursor("data/textures/standard_cursor_low.png");   // X11 has somehow problems with 24/32-bit colored cursors
 #else
     Core::Input->DefineCursor("data/textures/standard_cursor.png");
 #endif
@@ -101,20 +104,36 @@ void CoreApp::Init()
     const coreVector3 vCamOri = coreVector3(0.0f,0.0f,1.0f);
     Core::Audio->SetListener(vCamPos, coreVector3(0.0f,0.0f,0.0f), vCamDir, vCamOri);
 
+    // override sound and music volume
+    float fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
+    if(fSoundVolume == 1.0f)
+    {
+        fSoundVolume = 7.0f;
+        Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fSoundVolume);
+    }
+    Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fSoundVolume * 0.07f);
+
+    if(Core::Config->GetInt("Graphics", "Quality", 10) == 10 || g_bCoreDebug)
+    {
+        // override quality settings
+        Core::Config->SetInt("Graphics", "Quality", 0, 2);
+
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+
+        // also create and show first-time menu
+        g_pFirst = new cFirst();
+
+#endif
+    }
+
     // create main components
     g_pBackground = new cBackground();
     g_pMenu       = new cMenu();
     g_pCombatText = new cCombatText();
 
-    // create Game Jolt API access
-    g_pGJ = new gjAPI(18996, GJ_KEY);
-    g_pMenu->QuickPlay();
-
-    const int aiTrophySort[] = {4666, 4635, 8325, 8326, 8327, 4665, 4637, 8328, 8329, 4636, 4667, 8330, 4638, 8331, 4671};
-    g_pGJ->InterTrophy()->SetSort(aiTrophySort, ARRAY_SIZE(aiTrophySort));
-
-    const int aiTrophySecret[] = {4666, 4635, 8325, 8327};
-    g_pGJ->InterTrophy()->SetSecret(aiTrophySecret, ARRAY_SIZE(aiTrophySecret));
+    // create network access
+    g_pOnline = new cOnline();
+    if(!g_pFirst) g_pMenu->QuickPlay();
 
     // create music player and load music files (loading-order is important, hardcoded music speed in background class)
     g_pMusicPlayer = new coreMusicPlayer();
@@ -125,15 +144,13 @@ void CoreApp::Init()
     g_pMusicPlayer->Shuffle();
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
 
-    Core::Config->SetFloat(CORE_CONFIG_AUDIO_VOLUME_MUSIC, Core::Config->GetFloat(CORE_CONFIG_AUDIO_VOLUME_SOUND) * 0.07f);
-
     // create particle system
     g_pParticleSystem = new coreParticleSystem(128);
     g_pParticleSystem->DefineTextureFile(0, "data/textures/effect_particle.png");
     g_pParticleSystem->DefineProgramShare("particle_shader")
-                       ->AttachShaderFile("data/shaders/particle.vs")
-                       ->AttachShaderFile("data/shaders/particle.fs")
-                       ->Finish();
+        ->AttachShaderFile("data/shaders/particle.vs")
+        ->AttachShaderFile("data/shaders/particle.fs")
+        ->Finish();
 
     // pre-allocate all required ressources
     m_apSave[0] = new cSunrise();
@@ -151,8 +168,8 @@ void CoreApp::Init()
 // ****************************************************************
 void CoreApp::Exit()
 {
-    // delete Game Jolt API access
-    SAFE_DELETE(g_pGJ)
+    // delete network access
+    SAFE_DELETE(g_pOnline)
 
     // delete all allocation objects
     for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
@@ -162,6 +179,7 @@ void CoreApp::Exit()
     SAFE_DELETE(g_pBackground)
     SAFE_DELETE(g_pMenu)
     SAFE_DELETE(g_pGame)
+    SAFE_DELETE(g_pFirst)
     SAFE_DELETE(g_pCombatText)
 
     // delete all sub components
@@ -173,16 +191,23 @@ void CoreApp::Exit()
 // ****************************************************************
 void CoreApp::Render()
 {
+    if(g_pFirst)
+    {
+        // render first-time menu
+        g_pFirst->Render();
+        return;
+    }
+
     // render background and game
     g_pBackground->Render();
     if(g_pGame) g_pGame->Render();
 
     glDisable(GL_DEPTH_TEST);
-
-    // render combat text and menu
-    g_pCombatText->Render();
-    g_pMenu->Render();
-
+    {
+        // render combat text and menu
+        g_pCombatText->Render();
+        g_pMenu->Render();
+    }
     glEnable(GL_DEPTH_TEST);
 }
 
@@ -190,6 +215,18 @@ void CoreApp::Render()
 // ****************************************************************
 void CoreApp::Move()
 {
+    if(g_pFirst)
+    {
+        // move first-time menu
+        g_pFirst->Move();
+        if(g_pFirst->GetStatus())
+        {
+            SAFE_DELETE(g_pFirst)
+            g_pMenu->QuickPlay();
+        }
+        return;
+    }
+
     // move menu
     g_pMenu->Move();
     if(g_pMenu->GetStatus() == 1)
@@ -200,8 +237,8 @@ void CoreApp::Move()
         bool bChallenge = false;
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUint& i)
         {
-            bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.45f*Core::System->GetResolution().AspectRatio()) &&
-                          (ABS(Core::Input->GetTouchPosition(i).y) > 0.45f);
+            bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
+                          (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);
         });
 
 #else
@@ -224,6 +261,9 @@ void CoreApp::Move()
         g_fCurCam      = 0.0f;
         g_fTargetCam   = 0.0f;
         g_fCamSpeed    = 1.0f;
+        g_fCamTime     = 0.0f;
+        g_fOldCam      = 0.0f;
+        g_bCamMode     = false;
         g_bUpsideDown  = false;
 
         // reset all holes in the dance floor
@@ -237,7 +277,13 @@ void CoreApp::Move()
     Core::System->SetTimeSpeed(0, g_bPause ? 0.0f : g_fCurSpeed);
 
     // smoothly move the camera
-    if(!g_bPause) g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * Core::System->GetTime() * 0.25f * g_fCamSpeed;
+    if(!g_bPause)
+    {
+        const float fSpeed = Core::System->GetTime() * 0.25f * g_fCamSpeed;
+
+        if(g_bCamMode) {g_fCurCam  = 4.0f * LERPS(g_fOldCam, g_fTargetCam, g_fCamTime); g_fCamTime = MIN(g_fCamTime + fSpeed, 1.0f);}
+                  else {g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * fSpeed;}
+    }
 
     constexpr_var coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
     constexpr_var coreVector3 vCamDir = -vCamPos;
@@ -260,17 +306,20 @@ void CoreApp::Move()
         g_pCombatText->Move();
     }
 
-    // update Game Jolt API access
-    g_pGJ->SetSessionActive(g_pGame ? true : false);
-    g_pGJ->Update();
+    // update the network object
+    g_pOnline->Update();
 
     // start music delayed
     if(Core::System->GetTotalTime() > 0.5 && !g_pMusicPlayer->Control()->IsPlaying())
         g_pMusicPlayer->Control()->Play();
 
-    // adjust music speed/pitch and update the streaming
+    // adjust music speed/pitch and update music streaming
     g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
-    g_pMusicPlayer->Update();
+    if(g_pMusicPlayer->Update())
+    {
+        // update music volume
+        g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * (g_bPause ? 0.5f : 1.0f));
+    }
 
 #if !defined(_CORE_ANDROID_)
 

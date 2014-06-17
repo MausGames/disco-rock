@@ -13,11 +13,10 @@
 
 // ****************************************************************
 #include "Core.h"
-#include "gjAPI.h"
 #include <deque>
 
-static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!");
 
+// ****************************************************************
 #define FONT_ROCKS "data/fonts/gomarice_rocks.ttf"
 
 #define COLOR_WHITE_F  coreVector4(  1.0f,   1.0f,   1.0f, 1.0f)
@@ -27,6 +26,8 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 #define COLOR_PURPLE_F coreVector4( 0.71f, 0.333f,   1.0f, 1.0f)
 #define COLOR_BLUE_F   coreVector4(0.102f, 0.702f,   1.0f, 1.0f)
 #define COLOR_GREEN_F  coreVector4(0.118f, 0.745f, 0.353f, 1.0f)
+
+#define COLOR_BRIGHTNESS 0.83f
 
 static constexpr_var coreVector4 g_avColor[] = 
 {
@@ -39,10 +40,15 @@ static constexpr_var coreVector4 g_avColor[] =
 };
 #define COLOR_NUM ARRAY_SIZE(g_avColor)
 
+#define CONTROL_CLASSIC    0
+#define CONTROL_MOTION     1
+#define CONTROL_FULLSCREEN 2
+
 
 // ****************************************************************
-#include "cMenu.h"
+#include "cOnline.h"
 #include "cBackground.h"
+#include "cMenu.h"
 #include "cPlate.h"
 #include "cRay.h"
 #include "cRock.h"
@@ -50,30 +56,36 @@ static constexpr_var coreVector4 g_avColor[] =
 #include "cTrap.h"
 #include "cCombatText.h"
 #include "cInterface.h"
+#include "cFirst.h"
 #include "cGame.h"
 
 
 // ****************************************************************
-extern cBackground*        g_pBackground;
-extern cMenu*              g_pMenu;
-extern cGame*              g_pGame;
-extern cCombatText*        g_pCombatText;
+extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
 
-extern gjAPI*              g_pGJ;
-extern coreMusicPlayer*    g_pMusicPlayer;
-extern coreParticleSystem* g_pParticleSystem;
+extern cBackground*        g_pBackground;       // background with dance floor
+extern cMenu*              g_pMenu;             // global menu object
+extern cCombatText*        g_pCombatText;       // global "combat" text object
+extern cGame*              g_pGame;             // global game object
+extern cFirst*             g_pFirst;            // special menu displayed at the first time
 
-extern float               g_fTargetSpeed;
-extern float               g_fCurSpeed;
-extern float               g_fTargetCam;
-extern float               g_fCurCam;
-extern bool                g_bPause;
+extern coreMusicPlayer*    g_pMusicPlayer;      // primary music player
+extern coreParticleSystem* g_pParticleSystem;   // primary particle system
 
-extern float               g_fCamSpeed;
-extern bool                g_bUpsideDown;
+extern float               g_fTargetSpeed;      // new target speed
+extern float               g_fCurSpeed;         // current speed
+extern float               g_fTargetCam;        // new target camera position (sin(Y))
+extern float               g_fCurCam;           // current camera position
+extern bool                g_bPause;            // pause status
 
-extern int                 g_iNumGames;
-extern int                 g_iNumFails;
+extern float               g_fCamSpeed;         // helper value for camera movement calculations
+extern float               g_fCamTime;          // time value fpor interpolation
+extern float               g_fOldCam;           // old camera value for interpolation
+extern bool                g_bCamMode;          // false = move smooth to target, true = interpolate
+extern bool                g_bUpsideDown;       // upside-down camera status
+
+extern int                 g_iNumGames;         // number of started games
+extern int                 g_iNumFails;         // number of deaths below 10 seconds
 
 
 // ****************************************************************

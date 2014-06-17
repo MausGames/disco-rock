@@ -8,6 +8,12 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
+#if defined(_CORE_ANDROID_)
+    #define ROCK_SHAKE_STRENGTH 0.13f
+#else
+    #define ROCK_SHAKE_STRENGTH 0.11f
+#endif
+
 
 // ****************************************************************
 cRock::cRock()noexcept
@@ -29,9 +35,9 @@ cRock::cRock()noexcept
     this->DefineModelFile("data/models/rock.md5mesh");
     this->DefineTextureFile(0, "data/textures/rock.png");
     this->DefineProgramShare("rock_shader")
-          ->AttachShaderFile("data/shaders/rock.vs")
-          ->AttachShaderFile("data/shaders/rock.fs")
-          ->Finish();
+        ->AttachShaderFile("data/shaders/rock.vs")
+        ->AttachShaderFile("data/shaders/rock.fs")
+        ->Finish();
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*5.0f);
@@ -41,9 +47,9 @@ cRock::cRock()noexcept
     m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
     m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
     m_Shadow.DefineProgramShare("shadow_shader")
-             ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-             ->AttachShaderFile("data/shaders/shadow.fs")
-             ->Finish();
+        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
+        ->AttachShaderFile("data/shaders/shadow.fs")
+        ->Finish();
     m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP); // for array drawing
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
@@ -51,9 +57,9 @@ cRock::cRock()noexcept
     m_Wave.DefineModelFile("data/models/standard_square.md5mesh");
     m_Wave.DefineTextureFile(0, "data/textures/effect_wave.png");
     m_Wave.DefineProgramShare("wave_shader")
-           ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-           ->AttachShaderFile("data/shaders/wave.fs")
-           ->Finish();
+        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
+        ->AttachShaderFile("data/shaders/wave.fs")
+        ->Finish();
     m_Wave.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // create small wave
@@ -77,23 +83,23 @@ cRock::~cRock()
 void cRock::Render()
 {
     glDisable(GL_DEPTH_TEST);
-
-    // render shadow
-    if(m_Shadow.Enable())
-        m_Shadow.GetModel()->DrawArrays();
-
-    // render waves
-    if(m_WaveTimer.GetStatus())
     {
-        if(m_Wave.Enable())
-            m_Wave.GetModel()->DrawArrays();
+        // render shadow
+        if(m_Shadow.Enable())
+            m_Shadow.GetModel()->DrawArrays();
+
+        // render waves
+        if(m_WaveTimer.GetStatus())
+        {
+            if(m_Wave.Enable())
+                m_Wave.GetModel()->DrawArrays();
+        }
+        if(m_WaveSmallTimer.GetStatus())
+        {
+            if(m_WaveSmall.Enable())
+                m_WaveSmall.GetModel()->DrawArrays();
+        } 
     }
-    if(m_WaveSmallTimer.GetStatus())
-    {
-        if(m_WaveSmall.Enable())
-            m_WaveSmall.GetModel()->DrawArrays();
-    } 
-
     glEnable(GL_DEPTH_TEST);
 
     // render the object
@@ -113,8 +119,33 @@ void cRock::Move()
 
 #if defined(_CORE_ANDROID_)
 
+    bool bJump = false;
+
     // jump with right touch button
-    if(g_pGame->GetInterface()->GetTouchJump()->IsClicked())
+    if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
+        bJump = g_pGame->GetInterface()->GetTouchJump()->IsClicked();
+
+    // jump when touching the whole screen
+    else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
+    {
+        if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUint& i) {bJump = true;});
+    }
+
+    // jump then touching the right third of the screen
+    else // == CONTROL_FULLSCREEN
+    {
+        if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
+        {
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUint& i)
+            {
+                if(Core::Input->GetTouchPosition(i).x > 0.1667f)
+                    bJump = true;
+            });
+        }
+    }
+
+    if(bJump)
 
 #else
 
@@ -136,7 +167,8 @@ void cRock::Move()
     if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-1.2f, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 1.2f, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f,-1.2f)) > 0.0f &&
-       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, 1.2f)) > 0.0f && this->GetPosition().z < fGround && m_fForce <= 0.0f && !m_bFallen)
+       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, 1.2f)) > 0.0f && 
+       this->GetPosition().z < fGround && m_fForce <= 0.0f && !m_bFallen)
     {
         // see me falling
         m_bFallen = true;
@@ -180,13 +212,35 @@ void cRock::Move()
 
 #if defined(_CORE_ANDROID_)
 
-    // move with left touch buttons
     const float fMove = 100.0f * Core::System->GetTime();
-         if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
-    else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
+
+    // move with left touch buttons
+    if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
+    {
+             if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
+        else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
+    }
+
+    // move with screen space
+    else if(g_pGame->GetInterface()->GetControlType() == CONTROL_FULLSCREEN)
+    {
+        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint& i)
+        {
+            const float& fX = Core::Input->GetTouchPosition(i).x;
+
+                                   if(fX < -0.1667f) fNewPos -= fMove;
+            else if(-0.1667f <= fX && fX <= 0.1667f) fNewPos += fMove;
+        });
+    }
+
+    const float fPosDiff = (fNewPos + fMove * Core::Input->GetJoystickRelative(0).x) - this->GetPosition().x;
+
+    // move with device motion
+    if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
+        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x;
 
 #else
-
+    
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
     const float fMove = 100.0f * Core::System->GetTime();
 
@@ -200,13 +254,13 @@ void cRock::Move()
             Core::Input->GetJoystickRelative(0).x > 0.0f                        ||
             Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
 
-#endif
-
     const float fPosDiff = fNewPos - this->GetPosition().x;
 
+#endif
+
     // control shaking
-         if(m_fShake >= 0.0f) {if(fPosDiff < 0.0f) m_fShake = -m_fShake - 0.1f;}
-    else if(m_fShake <  0.0f) {if(fPosDiff > 0.0f) m_fShake = -m_fShake + 0.1f;}
+         if(m_fShake >= 0.0f) {if(fPosDiff > 0.0f) m_fShake = -m_fShake - ROCK_SHAKE_STRENGTH;}
+    else if(m_fShake <  0.0f) {if(fPosDiff < 0.0f) m_fShake = -m_fShake + ROCK_SHAKE_STRENGTH;}
     m_fShake -= SIGN(m_fShake) * Core::System->GetTime() * 0.3f;
 
     // control the rock height
@@ -236,7 +290,7 @@ void cRock::Move()
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-    m_Shadow.SetSize(this->GetSize() * 3.0f * MAX(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight)), 0.0f));
+    m_Shadow.SetSize(this->GetSize() * 2.344f * MAX(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight)), 0.0f));
     m_Shadow.SetAlpha(m_bFallen ? MIN(1.0f + m_fHeight*0.1f, 1.0f) : 1.0f);
     m_Shadow.Move();
 
@@ -248,7 +302,7 @@ void cRock::Move()
         // update big wave
         m_WaveTimer.Update(1.0f);
         m_Wave.SetPosition(m_Wave.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_Wave.SetSize(coreVector3(1.0f,1.0f,1.0f) * m_fWaveStrength * m_WaveTimer.GetCurrent(false));
+        m_Wave.SetSize(coreVector3(1.0f,1.0f,1.0f) * 0.781f * m_fWaveStrength * m_WaveTimer.GetCurrent(false));
         m_Wave.SetAlpha(1.5f * m_WaveTimer.GetCurrent(true));
         m_Wave.Move();
     }
@@ -257,7 +311,7 @@ void cRock::Move()
         // update small wave
         m_WaveSmallTimer.Update(1.0f);
         m_WaveSmall.SetPosition(m_WaveSmall.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_WaveSmall.SetSize(coreVector3(1.0f,1.0f,1.0f) * 30.0f * m_WaveSmallTimer.GetCurrent(false));
+        m_WaveSmall.SetSize(coreVector3(1.0f,1.0f,1.0f) * 23.44f * m_WaveSmallTimer.GetCurrent(false));
         m_WaveSmall.SetAlpha(m_fWaveSmallStrength * m_WaveSmallTimer.GetCurrent(true));
         m_WaveSmall.Move();
     }
