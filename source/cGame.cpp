@@ -56,9 +56,11 @@ cGame::cGame(const bool& bChallenge)noexcept
 , m_bFirstMsg        (true)
 , m_bTrapSpawn       (false)
 , m_bTrapJump        (false)
+, m_bShakeEnable     (Core::Config->GetInt("Game", "Score", 0) ? true : false)
 , m_bChallenge       (bChallenge)
 , m_iNarrow          (0)
 , m_bSideOrder       (Core::Rand->Int(0,1) ? true : false)
+, m_iCamStatus       (0)
 , m_Message          (FONT_ROCKS, 45, 0)
 , m_ShowMessage      (coreTimer(1.0f, 0.333f, 1))
 {
@@ -71,7 +73,7 @@ cGame::cGame(const bool& bChallenge)noexcept
     
     // reset statistics and trophy cache
     for(int i = 0; i < (int)ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected[i]   = 0;
-    for(int i = 0; i < MENU_TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
+    for(int i = 0; i < TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
     ++g_iNumGames;
 
     // load sound-effects
@@ -103,11 +105,11 @@ cGame::~cGame()
 void cGame::Render()
 {
     glDisable(GL_DEPTH_TEST);
-
-    // render beverage shadows
-    FOR_EACH_REV(it, m_apBeverage)  (*it)->RenderShadow();
-    FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderShadow();
-
+    {
+        // render beverage shadows
+        FOR_EACH_REV(it, m_apBeverage)  (*it)->RenderShadow();
+        FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderShadow();
+    }
     glEnable(GL_DEPTH_TEST);
 
     // render plates
@@ -122,14 +124,14 @@ void cGame::Render()
     FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderDrink();
 
     glDepthMask(false);
+    {
+        // render traps
+        glCullFace(GL_FRONT);
+        FOR_EACH_REV(it, m_apTrap) (*it)->Render();
 
-    // render traps
-    glCullFace(GL_FRONT);
-    FOR_EACH_REV(it, m_apTrap) (*it)->Render();
-
-    glCullFace(GL_BACK);
-    FOR_EACH_REV(it, m_apTrap) (*it)->Render();
-
+        glCullFace(GL_BACK);
+        FOR_EACH_REV(it, m_apTrap) (*it)->Render();
+    }
     glDepthMask(true);
 
     // render beverage glasses
@@ -145,13 +147,13 @@ void cGame::Render()
     m_Rock.Render();
 
     glDepthMask(false);
+    {
+        // render rays
+        FOR_EACH_REV(it, m_apRay) (*it)->Render();
 
-    // render rays
-    FOR_EACH_REV(it, m_apRay) (*it)->Render();
-
-    // render global particle system
-    g_pParticleSystem->Render();
-
+        // render global particle system
+        g_pParticleSystem->Render();
+    }
     glDepthMask(true);
     
     // render interface
@@ -175,7 +177,7 @@ void cGame::Move()
     // show message on first jump (over the first line)
     if(m_bFirstMsg)
     {
-        if((m_fTime >= 5.6f && m_Rock.GetJumped()) || (m_fTime >= 6.1f && !m_Rock.GetFallen()))
+        if((m_fTime >= 5.8f && m_Rock.GetJumped()) || (m_fTime >= 6.3f && !m_Rock.GetFallen()))
         {
             m_bFirstMsg = false;
             g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
@@ -235,8 +237,10 @@ void cGame::Move()
                 }
                 else
                 {
+                    // # spaghetti code, look at comments and stage-values to find the right spot
+
                     // control spawn column
-                    if(m_fTime >= STAGE_TOGGLE && m_fTime < STAGE_SIDE_1)   // toggle stage
+                    if(m_fTime >= STAGE_TOGGLE && m_fTime < STAGE_SIDE_1)   // # toggle stage
                     {
                         // calculate next spawn column
                         if(m_iCurLine % 2)
@@ -252,7 +256,7 @@ void cGame::Move()
                         // prevent canyon
                         m_iCanyonCounter = CANYON_PREVENT;
                     }
-                    else if(m_fTime >= STAGE_SIDE_1 && m_fTime < STAGE_NET)   // side stage
+                    else if(m_fTime >= STAGE_SIDE_1 && m_fTime < STAGE_NET)   // # side stage
                     {
                         const bool bToLeft = m_bSideOrder ? (m_fTime >= STAGE_SIDE_2) : (m_fTime < STAGE_SIDE_2);
 
@@ -263,29 +267,43 @@ void cGame::Move()
                                    else {if(++m_iCurSpawn > iNarrowUp) m_iCurSpawn = m_iNarrow;}
                         }
 
+                        // activate interpolated camera
+                        if(m_iCamStatus == 0 || 
+                          (m_iCamStatus == 1 && m_fTime >= STAGE_SIDE_2))
+                        {
+                            if(m_iCamStatus)
+                            {
+                                g_fCamSpeed = 0.8f;
+                                g_fOldCam   = g_fTargetCam;
+                            }
+                            g_fCamTime = 0.0f;
+                            g_bCamMode = true;
+                            ++m_iCamStatus;
+                        }
+
                         // move camera to the side
-                        if(bToLeft) g_fTargetCam =  0.5f;
-                               else g_fTargetCam = -0.5f;
+                        if(bToLeft) g_fTargetCam =  1.0f;
+                               else g_fTargetCam = -1.0f;
 
                         // prevent canyon
                         m_iCanyonCounter = CANYON_PREVENT;
                     }
                     else
                     {
-                        if(m_fTime >= STAGE_MASS && m_fTime < STAGE_FINAL)
+                        if(m_fTime >= STAGE_MASS && m_fTime < STAGE_FINAL)   // # mass-canyon stage
                         {
                             // always change column on the mass-canyon stage (but only once per jump)
                             if(m_iCanyonCounter == iBorder+1)
                                 m_iCurSpawn = CLAMP(m_iCurSpawn + (Core::Rand->Int((m_iCurSpawn <= 1) ? 1 : 0, (m_iCurSpawn >= BACK_BLOCKS_X-4) ? 0 : 1) ? 1 : -1) * Core::Rand->Int(1,2), m_iNarrow, iNarrowUp);
                         }
-                        else
+                        else   // # all other stages
                         {
                             if(m_iThreeDrinks) --m_iThreeDrinks;
                             else 
                             {
                                 // calculate next spawn column
                                 const int iOldSpawn = m_iCurSpawn;
-                                if(Core::Rand->Int(0, (m_fTime < STAGE_NET) ? 2 : 1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), m_iNarrow, iNarrowUp);
+                                if(Core::Rand->Int(0, (m_fTime < STAGE_NET || m_fTime > STAGE_FINAL) ? 2 : 1)) m_iCurSpawn = CLAMP(m_iCurSpawn + CLAMP(Core::Rand->Int((m_iCurSpawn >= 3) ? -(m_iCurSpawn-2) : -1, (m_iCurSpawn <= 2) ? (3-m_iCurSpawn) : 1), -1, 1), m_iNarrow, iNarrowUp);
                             
                                 // create at least three drinks in a row after a column change
                                 if(iOldSpawn != m_iCurSpawn)
@@ -293,12 +311,20 @@ void cGame::Move()
                             }
                         }
 
-                        // move camera to the center
-                        if(m_fTime < STAGE_MASS) g_fTargetCam = 0.0f;
+                        // move camera back to center
+                        if(m_fTime < STAGE_MASS && m_iCamStatus == 2)
+                        {
+                            g_fCamSpeed  = 1.0f;
+                            g_fOldCam    = g_fTargetCam;
+                            g_fCamTime   = 0.0f;
+                            g_bCamMode   = true;
+                            g_fTargetCam = 0.0f;
+                            ++m_iCamStatus;
+                        }
                         else m_iCurSpawn = CLAMP(m_iCurSpawn, 1, BACK_BLOCKS_X-4);   // force early narrow
                     }
 
-                    // control side-holes
+                    // control path-holes
                     if(m_fTime < STAGE_NET)
                     {
                         // add holes to create a path around spawn locations
@@ -314,7 +340,7 @@ void cGame::Move()
                             for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
                                 abHole[i] = !(m_iCurSpawn >= i-3 && m_iCurSpawn <= i+1);
                         }
-                        else
+                        else // >= STAGE_NET
                         {
                             // add holes to create a net pattern
                             for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
@@ -334,7 +360,7 @@ void cGame::Move()
                     else if(m_fTime >= STAGE_FINAL+4.0f)
                     {
                         // create triple-holes with increasing rate at the final stage
-                        if(++m_iFinalHoles >= int(2.0f + 6.0f / (1.0f + 0.05f*(m_fTime-(STAGE_FINAL+4.0f)))))
+                        if(++m_iFinalHoles >= int(2.0f + 6.0f / (1.0f + 0.1f*(m_fTime-(STAGE_FINAL+4.0f)))))
                         {
                             m_iFinalHoles =  0;
                             iSelection    = -1;
@@ -347,6 +373,16 @@ void cGame::Move()
                         if((m_fTime >= STAGE_CANYON && m_fTime < STAGE_CANYON+10.0f) ||
                            (m_fTime >= STAGE_MASS   && m_fTime < STAGE_FINAL))
                             m_iCanyonCounter = CANYON_BEGIN;
+                    }
+
+                    // override everything on the random area
+                    if(m_fTime >= STAGE_RANDOM && m_fTime < STAGE_MASS)
+                    {
+                        m_iCurSpawn = Core::Rand->Int(m_iNarrow, iNarrowUp);
+                        m_iCanyonCounter = CANYON_PREVENT;
+
+                        for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+                            abHole[i] = false;
                     }
                 }
 
@@ -508,10 +544,13 @@ void cGame::Move()
 
     // move camera at the final stage
     if(m_fTime >= STAGE_MASS+4.0f && (g_fTargetCam || !this->GetStatus()))
+    {
         g_fTargetCam += Core::System->GetTime() * 0.15f;
+        g_bCamMode    = false;
+    }
 
     // shake camera upside-down
-    if(m_fTime < 5.0f && ABS(m_Rock.GetShake()) >= 1.0f && !g_bUpsideDown)
+    if(m_fTime < 5.0f && ABS(m_Rock.GetShake()) >= 1.0f && !g_bUpsideDown && m_bShakeEnable)
     {
         g_bUpsideDown = true;
         g_fTargetCam  = 0.0f;
@@ -522,20 +561,36 @@ void cGame::Move()
         g_pMenu->ChangeSurface(10, 1.0f);
 
         // play sound
-        m_pTrapSound->PlayPosition(NULL, 0.38f, 1.5f, 0.05f, false, m_Rock.GetPosition());
+        m_pTrapSound->PlayPosition(NULL, 0.38f, 0.8f, 0.05f, false, m_Rock.GetPosition());
     }
-    if(m_fTime >= 5.0f || g_bUpsideDown) g_fCamSpeed = 1.0f;
-    else
+    if(!m_iCamStatus)
     {
-        // change camera and increase animation speed
-        g_fTargetCam = m_Rock.GetShake() * 0.55f;
-        g_fCamSpeed  = 1.0f + ABS(m_Rock.GetShake()) * 11.0f;
+        if(m_fTime >= 5.0f || g_bUpsideDown)
+        {
+            // reset camera smoothly
+            g_fTargetCam = 0.0f;
+            g_fCamSpeed  = 1.0f;
+        }
+        else
+        {
+#if !defined(_CORE_ANDROID_)
+
+            if(m_bShakeEnable)
+            {
+                // change camera and increase animation speed
+                g_fTargetCam = m_Rock.GetShake() * 0.55f;
+                g_fCamSpeed  = 1.0f + ABS(m_Rock.GetShake()) * 11.0f;
+            }
+#endif
+        }
     }
 
     // move rock
     if(!this->GetStatus())
     {
+#if defined(_CORE_ANDROID_)
         m_Interface.InteractControl();
+#endif
         m_Rock.Move();
     }
 
@@ -602,12 +657,13 @@ void cGame::Move()
         }
     }
 
-    // update all inactive beverages, plates and rays
+    // update all inactive beverages,, traps plates and rays
     PROCESS_OBJECT_ARRAY(m_apDestroyed, fMove30)
     PROCESS_OBJECT_ARRAY(m_apTrap,      fMove10)
     PROCESS_OBJECT_ARRAY(m_apPlate,     fMove10)
     PROCESS_OBJECT_ARRAY(m_apRay,       fMove10)
 
+    // test trap collisions
     FOR_EACH(it, m_apTrap)
     {
         cTrap* pTrap = (*it);
@@ -673,20 +729,20 @@ void cGame::Move()
         if(m_iFirstJump < 2 && m_Rock.GetReflected()) ++m_iFirstJump;
 
         // check for achievements/trophies/whatever you call that unnecessary game enlargement bullshit everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
-        if(!m_bTrophyHelper[ 0] && m_iFirstJump == 1 && m_Rock.GetJumped())                         {this->AchieveTrophy(4666,  0);}
-        if(!m_bTrophyHelper[ 1] && m_Rock.GetFallen() && m_fTime < 10.0f)                           {this->AchieveTrophy(4635,  1); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
-        if(!m_bTrophyHelper[ 2] && m_Rock.GetFallen() && m_bTrapJump)                               {this->AchieveTrophy(8325,  2);}
-        if(!m_bTrophyHelper[ 4] && m_aiCollected[5])                                                {this->AchieveTrophy(8327,  4);}
-        if(!m_bTrophyHelper[ 5] && m_fComboTime >= 20.0f)                                           {this->AchieveTrophy(4665,  5);}  
-        if(!m_bTrophyHelper[ 6] && m_aiCollected[4] >= 2 && !m_bChallenge)                          {this->AchieveTrophy(4637,  6);}
-        if(!m_bTrophyHelper[ 7] && m_iCollectedNoBlue >= 80 && !m_bChallenge)                       {this->AchieveTrophy(8328,  7);}
-        if(!m_bTrophyHelper[ 8] && m_Rock.GetNumJumps() >= 69)                                      {this->AchieveTrophy(8329,  8);}
-        if(!m_bTrophyHelper[ 9] && !m_aiCollected[0] && m_bTrapJump)                                {this->AchieveTrophy(4636,  9);}
-        if(!m_bTrophyHelper[10] && m_dScore >= 30000.0 && !m_bChallenge)                            {this->AchieveTrophy(4667, 10);}
-        if(!m_bTrophyHelper[11] && m_dScore >= 15000.0 && !m_bChallenge && g_bUpsideDown)           {this->AchieveTrophy(8330, 11);}
-        if(!m_bTrophyHelper[12] && m_fTime >= 100.0f)                                               {this->AchieveTrophy(4638, 12);}
-        if(!m_bTrophyHelper[13] && m_dScore >= 20000.0 && !m_bChallenge && m_iMaxCombo < COMBO_MAX) {this->AchieveTrophy(8331, 13);}
-        if(!m_bTrophyHelper[14] && m_dScore >= 200000.0 && m_bChallenge)                            {this->AchieveTrophy(4671, 14);}
+        if(!m_bTrophyHelper[ 0] && m_iFirstJump == 1 && m_Rock.GetJumped())                         {this->AchieveTrophy(GJ_TROPHY_01,  0);}
+        if(!m_bTrophyHelper[ 1] && m_Rock.GetFallen() && m_fTime < 10.0f)                           {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
+        if(!m_bTrophyHelper[ 2] && m_Rock.GetFallen() && m_bTrapJump)                               {this->AchieveTrophy(GJ_TROPHY_03,  2);}
+        if(!m_bTrophyHelper[ 4] && m_aiCollected[5])                                                {this->AchieveTrophy(GJ_TROPHY_05,  4);}
+        if(!m_bTrophyHelper[ 5] && m_fComboTime >= 20.0f)                                           {this->AchieveTrophy(GJ_TROPHY_06,  5);}  
+        if(!m_bTrophyHelper[ 6] && m_aiCollected[4] >= 2 && !m_bChallenge)                          {this->AchieveTrophy(GJ_TROPHY_07,  6);}
+        if(!m_bTrophyHelper[ 7] && m_iCollectedNoBlue >= 80 && !m_bChallenge)                       {this->AchieveTrophy(GJ_TROPHY_08,  7);}
+        if(!m_bTrophyHelper[ 8] && m_Rock.GetNumJumps() >= 69)                                      {this->AchieveTrophy(GJ_TROPHY_09,  8);}
+        if(!m_bTrophyHelper[ 9] && !m_aiCollected[0] && m_bTrapJump)                                {this->AchieveTrophy(GJ_TROPHY_10,  9);}
+        if(!m_bTrophyHelper[10] && m_dScore >= 30000.0 && !m_bChallenge)                            {this->AchieveTrophy(GJ_TROPHY_11, 10);}
+        if(!m_bTrophyHelper[11] && m_dScore >= 15000.0 && !m_bChallenge && g_bUpsideDown)           {this->AchieveTrophy(GJ_TROPHY_12, 11);}
+        if(!m_bTrophyHelper[12] && m_fTime >= 100.0f)                                               {this->AchieveTrophy(GJ_TROPHY_13, 12);}
+        if(!m_bTrophyHelper[13] && m_dScore >= 10000.0 && !m_bChallenge && m_iMaxCombo < COMBO_MAX) {this->AchieveTrophy(GJ_TROPHY_14, 13);}
+        if(!m_bTrophyHelper[14] && m_dScore >= 250000.0 && m_bChallenge)                            {this->AchieveTrophy(GJ_TROPHY_15, 14);}
         
         // [ 0] X(Get the Party Started,    s1) Make an air-jump at the beginning.
         // [ 1]  (I don't like Disco,       s1) Fall down the dance floor in less than 10 seconds.
@@ -704,8 +760,8 @@ void cGame::Move()
         // [11] X(Boy, You Turn Me,          3) Shake the world upside-down and get 15.000 points in a normal run.
 
         // [12]  (You Should Be Dancing,     4) Survive at least 100 seconds on the dance floor.
-        // [13]  (Get Up and Boogie,         4) Reach 20.000 points without ever getting a combo multiplier of x10.
-        // [14] X(The Coola Challenge,       4) Hold 'C' (or a screen corner) while starting a game and get at least 200.000 points.
+        // [13]  (Get Up and Boogie,         4) Reach 10.000 points without ever getting a combo multiplier of x10.
+        // [14] X(The Coola Challenge,       4) Hold 'C' (or a screen corner) while starting a game and get at least 250.000 points.
     }
 }
 
@@ -727,18 +783,12 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
     m_bTrophyHelper[iNum] = true; 
 
     // achieve trophy
-    gjTrophy* pTrophy = g_pGJ->InterTrophy()->GetTrophy(iID);
-    if(g_pGJ->IsUserConnected()) pTrophy->AchieveCall(this, &cGame::AchieveTrophyCallback, (void*)(long)iNum);
+    gjTrophy* pTrophy = g_pOnline->GameJolt()->InterTrophy()->GetTrophy(iID);
+    if(g_pOnline->IsUserConnected()) g_pOnline->AchieveTrophy(pTrophy, this, &cGame::AchieveTrophyCallback, (void*)(long)iNum);
     else
     {
         // handle guest user
-        if(!(g_pMenu->GetTrophyStatus() & (1 << iNum)))
-        {
-#if defined(_CORE_ANDROID_)
-
-#endif
-            this->AchieveTrophyCallback(pTrophy, (void*)(long)iNum);
-        }
+        this->AchieveTrophyCallback(pTrophy, (void*)(long)iNum);
     }
 }
 
@@ -746,18 +796,24 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
 // ****************************************************************
 void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
+    const int iNum = (long)pData;
+
     if(pTrophy)
     {
-        const int iNum = (long)pData;
-        const coreVector3 vPos = this->GetStatus() ? coreVector3(0.0f,0.0f,0.0f) : m_Rock.GetPosition();
+        if(!(g_pMenu->GetTrophyStatus() & (1 << iNum)))
+        {
+            const coreVector3 vPos = this->GetStatus() ? coreVector3(0.0f,0.0f,0.0f) : m_Rock.GetPosition();
 
-        // show achievement title and play sound
-        g_pCombatText->ShowTrophy(coreData::StrUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
-        m_pTrophySound->PlayPosition(NULL, 0.2f, 1.0f, 0.0f, false, vPos);
+            // show achievement title and play sound
+            g_pCombatText->ShowTrophy(coreData::StrUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
+            m_pTrophySound->PlayPosition(NULL, 0.2f, 1.0f, 0.0f, false, vPos);
 
-        // set and save current trophy status
-        g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | (1 << iNum));
-        g_pMenu->SetTrophyCurrent(-1);
-        Core::Config->SetInt("Game Jolt", "Trophy", 0, Core::Config->GetInt("Game Jolt", "Trophy", 0) | (1 << iNum));
+            // set and save current trophy status
+            g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | (1 << iNum));
+            g_pMenu->SetTrophyCurrent(-1);
+        }
+
+        // save status always in offline config
+        Core::Config->SetInt("Game", "Trophy", 0, Core::Config->GetInt("Game", "Trophy", 0) | (1 << iNum));
     }
 }

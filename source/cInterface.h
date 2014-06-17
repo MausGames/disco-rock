@@ -19,7 +19,7 @@ private:
     coreLabel m_ScoreValue;     // score value text
                                 
     coreLabel m_Time;           // time name text
-    coreLabel m_TimeValueSec;   // time value text (seperated to remove wobbling)
+    coreLabel m_TimeValueSec;   // time value text (separated to remove wobbling)
     coreLabel m_TimeValueMil;   // time value text
                                   
     coreLabel m_Combo;          // combo name text
@@ -32,6 +32,11 @@ private:
     coreButton m_MoveRight;     // touch move right button
     coreButton m_Jump;          // touch jump button
     coreButton m_Pause;         // touch pause button
+
+    coreObject2D m_apLine[2];   // line objects separating the screen into three parts
+
+    int m_iControlType;         // cached control type value
+    float m_fFadeOut;           // fade out fullscreen touch elements
                                 
 #endif                          
                                 
@@ -55,17 +60,25 @@ public:
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
-    // access touch objects
-    inline coreObject2D* GetTouchMoveLeft()  {return &m_MoveLeft;}
-    inline coreObject2D* GetTouchMoveRight() {return &m_MoveRight;}
-    inline coreObject2D* GetTouchJump()      {return &m_Jump;}
-    inline coreObject2D* GetTouchPause()     {return &m_Pause;}
+    // render touch objects separately
+    void RenderTouch();
 
-#endif
+    // access touch objects
+    inline coreObject2D* GetTouchMoveLeft()         {return &m_MoveLeft;}
+    inline coreObject2D* GetTouchMoveRight()        {return &m_MoveRight;}
+    inline coreObject2D* GetTouchJump()             {return &m_Jump;}
+    inline coreObject2D* GetTouchPause()            {return &m_Pause;}
+    inline coreObject2D* GetLine(const int& iIndex) {return &m_apLine[iIndex];}
+
+    // control control type !
+    void ChangeControlType(const int& iControlType);
+    inline const int& GetControlType()const  {return m_iControlType;}
 
     // interact with touch objects
     void InteractControl();
     void InteractPause();
+
+#endif 
 };
 
 

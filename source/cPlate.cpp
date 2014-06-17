@@ -22,9 +22,9 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
     this->DefineTextureFile(0, "data/textures/background.png");
     this->DefineTextureFile(1, "data/textures/background_norm.png");
     this->DefineProgramShare("floor_plate_shader")
-          ->AttachShaderFile("data/shaders/floor_plate.vs")
-          ->AttachShaderFile("data/shaders/floor_plate.fs")
-          ->Finish();
+        ->AttachShaderFile("data/shaders/floor_plate.vs")
+        ->AttachShaderFile("data/shaders/floor_plate.fs")
+        ->Finish();
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X, BACK_DETAIL_Y, 1.0f));
@@ -33,7 +33,7 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
 
     // set random plate color
     const coreVector4& vColor = g_avColor[Core::Rand->Int(0, COLOR_NUM-1)];
-    this->SetColor4(coreVector4(vColor.xyz(), Core::Rand->Float(0.9f, 1.0f)));
+    this->SetColor4(coreVector4(vColor.xyz(), Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS));
 }
 
 // ****************************************************************
