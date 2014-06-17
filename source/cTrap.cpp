@@ -17,9 +17,9 @@ cTrap::cTrap()noexcept
     // load object resources
     this->DefineModelFile("data/models/standard_cube.md5mesh");
     this->DefineProgramShare("trap_shader")
-          ->AttachShaderFile("data/shaders/trap.vs")
-          ->AttachShaderFile("data/shaders/trap.fs")
-          ->Finish();
+        ->AttachShaderFile("data/shaders/trap.vs")
+        ->AttachShaderFile("data/shaders/trap.fs")
+        ->Finish();
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));

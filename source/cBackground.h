@@ -85,8 +85,6 @@ public:
 
     // get object properties
     inline const float& GetPositionTime()const {return m_fPositionTime;}
-    inline const float& GetFloorTime()const    {return m_fFloorTime;}
-    inline coreObject2D* GetFill()             {return &m_Fill;}
 
 
 private:
