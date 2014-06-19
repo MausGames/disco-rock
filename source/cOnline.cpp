@@ -14,7 +14,7 @@
     pthread_key_t iThreadKey  = 0;   // thread key
 
     float fCurAlpha = 0.0f;          // current banner transparency
-    double dCurTime = 0.0f;          // current time to reduce the update frequency
+    double dCurTime = 0.0;           // current time to reduce the update frequency
 
 
     // ****************************************************************
@@ -74,7 +74,9 @@
             }
         }
     }
-
+    
+#else
+    void SetBannerAlpha(float fAlpha) {}
 #endif
 
 
