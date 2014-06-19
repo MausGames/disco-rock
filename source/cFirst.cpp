@@ -22,7 +22,7 @@ cFirst::cFirst()noexcept
     // create control configuration objects
     m_ControlText.Construct(FONT_ROCKS, 45, 0);
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
-    m_ControlText.SetText("CONTROL PATTERN");
+    m_ControlText.SetText("CONTROLS");
 
     m_ControlType.Construct(FONT_ROCKS, 29, 16, 3);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
@@ -80,7 +80,7 @@ cFirst::~cFirst()
 // ****************************************************************
 void cFirst::Render()
 {
-    const float fTouchAlpha = m_ControlText.GetAlpha() * 0.5f;
+    const float fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN((float)Core::System->GetTotalTime() * 12.0f));
 
     // forward menu alpha value
     m_Interface.GetTouchMoveLeft()->SetAlpha(fTouchAlpha);

@@ -196,6 +196,7 @@ void cGame::Move()
 
         // array used to create holes in the dance floor (true = hole, false = no hole)
         bool abHole[BACK_BLOCKS_X];
+        for(int i = 0; i < BACK_BLOCKS_X; ++i) abHole[i] = true; // reset safely
 
         // compensate framerate (background position) and movement when spawning objects
         const float fSpawn = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * (g_pBackground->GetPositionTime() - std::floor(g_pBackground->GetPositionTime()));
@@ -510,7 +511,7 @@ void cGame::Move()
                 const float fPlateCmp = MAX(1.0f - ((m_fTime-0.0f) / 30.0f), 0.1f) * (m_fTime < 77.0f ? 3.0f : 1.0f);
                 for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
                 {
-                    if(abHole[i] && (m_fTime < 10.0f || (Core::Rand->Float(0.0f,1.0f) < fPlateCmp && (!abHole[MAX(i-1,0)] || !abHole[MIN(i+1,BACK_BLOCKS_X-1)]))))
+                    if(abHole[i] && (m_fTime < 10.0f || (Core::Rand->Float(0.0f,1.0f) < fPlateCmp && (!abHole[MAX(i-1,1)] || !abHole[MIN(i+1,BACK_BLOCKS_X-2)]))))
                     {
                         // create plate and add to list
                         cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -std::floor(g_pBackground->GetPositionTime())));
@@ -735,11 +736,11 @@ void cGame::Move()
         if(!m_bTrophyHelper[ 4] && m_aiCollected[5])                                                {this->AchieveTrophy(GJ_TROPHY_05,  4);}
         if(!m_bTrophyHelper[ 5] && m_fComboTime >= 20.0f)                                           {this->AchieveTrophy(GJ_TROPHY_06,  5);}  
         if(!m_bTrophyHelper[ 6] && m_aiCollected[4] >= 2 && !m_bChallenge)                          {this->AchieveTrophy(GJ_TROPHY_07,  6);}
-        if(!m_bTrophyHelper[ 7] && m_iCollectedNoBlue >= 80 && !m_bChallenge)                       {this->AchieveTrophy(GJ_TROPHY_08,  7);}
-        if(!m_bTrophyHelper[ 8] && m_Rock.GetNumJumps() >= 69)                                      {this->AchieveTrophy(GJ_TROPHY_09,  8);}
+        if(!m_bTrophyHelper[ 7] && m_iCollectedNoBlue >= 90 && !m_bChallenge)                       {this->AchieveTrophy(GJ_TROPHY_08,  7);}
+        if(!m_bTrophyHelper[ 8] && m_Rock.GetNumJumps() >= 80)                                      {this->AchieveTrophy(GJ_TROPHY_09,  8);}
         if(!m_bTrophyHelper[ 9] && !m_aiCollected[0] && m_bTrapJump)                                {this->AchieveTrophy(GJ_TROPHY_10,  9);}
         if(!m_bTrophyHelper[10] && m_dScore >= 30000.0 && !m_bChallenge)                            {this->AchieveTrophy(GJ_TROPHY_11, 10);}
-        if(!m_bTrophyHelper[11] && m_dScore >= 15000.0 && !m_bChallenge && g_bUpsideDown)           {this->AchieveTrophy(GJ_TROPHY_12, 11);}
+        if(!m_bTrophyHelper[11] && m_dScore >= 20000.0 && !m_bChallenge && g_bUpsideDown)           {this->AchieveTrophy(GJ_TROPHY_12, 11);}
         if(!m_bTrophyHelper[12] && m_fTime >= 100.0f)                                               {this->AchieveTrophy(GJ_TROPHY_13, 12);}
         if(!m_bTrophyHelper[13] && m_dScore >= 10000.0 && !m_bChallenge && m_iMaxCombo < COMBO_MAX) {this->AchieveTrophy(GJ_TROPHY_14, 13);}
         if(!m_bTrophyHelper[14] && m_dScore >= 250000.0 && m_bChallenge)                            {this->AchieveTrophy(GJ_TROPHY_15, 14);}
@@ -752,12 +753,12 @@ void cGame::Move()
         // [ 4] X(Party Animal,             s2) Meet Franka the polar bear.
         // [ 5]  (Binge Drinker,             2) Hold a combo multiplier of x10 for at least 20 seconds.
         // [ 6]  (Designated Driver,         2) Bump into 2 Coola bottles within one normal run.
-        // [ 7] X(Before there was any Blue, 2) Hit 80 normal beverages in a row, without touching a blue drink.
+        // [ 7] X(Before there was any Blue, 2) Hit 90 normal beverages in a row, without touching a blue drink.
 
-        // [ 8] X(The Floor is Lava,         3) Jump 69 times in one run. (high-jumps count as one jump)
+        // [ 8] X(The Floor is Lava,         3) Jump 80 times in one run. (high-jumps count as one jump)
         // [ 9] X(Sober in the 70s,          3) Roll to the first high-jumper without touching beverages, not even a Coola bottle.
         // [10]  (Shagadelic,                3) Get at least 30.000 points in a normal run. (Tip: don't drop your combo and hit Coola bottles)	
-        // [11] X(Boy, You Turn Me,          3) Shake the world upside-down and get 15.000 points in a normal run.
+        // [11] X(Boy, You Turn Me,          3) Shake the world upside-down and get 20.000 points in a normal run.
 
         // [12]  (You Should Be Dancing,     4) Survive at least 100 seconds on the dance floor.
         // [13]  (Get Up and Boogie,         4) Reach 10.000 points without ever getting a combo multiplier of x10.

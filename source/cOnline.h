@@ -33,24 +33,24 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 
 #define GJ_KEY ""
 
-#define GJ_TROPHY_01 0
-#define GJ_TROPHY_02 0
-#define GJ_TROPHY_03 0
-#define GJ_TROPHY_04 0
-#define GJ_TROPHY_05 0
-#define GJ_TROPHY_06 0
-#define GJ_TROPHY_07 0
-#define GJ_TROPHY_08 0
-#define GJ_TROPHY_09 0
-#define GJ_TROPHY_10 0
-#define GJ_TROPHY_11 0
-#define GJ_TROPHY_12 0
-#define GJ_TROPHY_13 0
-#define GJ_TROPHY_14 0
-#define GJ_TROPHY_15 0
+#define GJ_TROPHY_01  0
+#define GJ_TROPHY_02  1
+#define GJ_TROPHY_03  2
+#define GJ_TROPHY_04  3
+#define GJ_TROPHY_05  4
+#define GJ_TROPHY_06  5
+#define GJ_TROPHY_07  6
+#define GJ_TROPHY_08  7
+#define GJ_TROPHY_09  8
+#define GJ_TROPHY_10  9
+#define GJ_TROPHY_11 10
+#define GJ_TROPHY_12 11
+#define GJ_TROPHY_13 12
+#define GJ_TROPHY_14 13
+#define GJ_TROPHY_15 14
 
 #define GJ_LEADERBOARD_01 0
-#define GJ_LEADERBOARD_02 0
+#define GJ_LEADERBOARD_02 1
 
 
 // ****************************************************************
@@ -76,12 +76,10 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
     extern JavaVM* g_pJNIJavaVM;          // Java Virtual Machine object
     extern jobject g_pJNIActivity;        // reference to the singleton activity
 
-    // control ad banner transparency
-    extern void SetBannerAlpha(float fAlpha);
-
-#else
-    static void SetBannerAlpha(float fAlpha) {}
 #endif
+
+// control ad banner transparency
+extern void SetBannerAlpha(float fAlpha);
 
 #define GPG_TROPHY_01 ""
 #define GPG_TROPHY_02 ""

@@ -331,7 +331,7 @@ cMenu::cMenu()noexcept
     m_VideoText.Construct(FONT_ROCKS, 45, 0);
     m_VideoText.SetPosition(coreVector2(LEFT_CENTER,0.235f));
     m_VideoText.SetCenter(coreVector2(-0.5f,0.0f));
-    m_VideoText.SetText("GRAPHICS");
+    m_VideoText.SetText("VIDEO");
 
     const int iCurQuality = CLAMP(Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY), 0, 2);
 
@@ -445,7 +445,7 @@ cMenu::cMenu()noexcept
     m_ControlText.Construct(FONT_ROCKS, 45, 0);
     m_ControlText.SetPosition(coreVector2(LEFT_CENTER,-0.141f));
     m_ControlText.SetCenter(coreVector2(-0.5f,0.0f));
-    m_ControlText.SetText("INPUT");
+    m_ControlText.SetText("CONTROLS");
 
     const int iCurControl = CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2);
 
@@ -1045,6 +1045,8 @@ void cMenu::Move()
                     if(g_pGame->GetChallenge()) this->End();
                     else
                     {
+                        g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 0.5f);
+
                         // enter submit menu
                         this->ChangeSurface(14, 1.0f);
                         m_ScoreMenu.ChangeSurface(0, 0.0f);
@@ -1450,7 +1452,7 @@ void cMenu::Move()
             // set volume
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fVolume * 10.0f);
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fVolume * 0.7f);
-            g_pMusicPlayer->Control()->SetVolume(fVolume * (g_bPause ? 0.35f : 0.7f));
+            g_pMusicPlayer->Control()->SetVolume(fVolume * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.35f : 0.7f));
         }
 
         if(m_LoginConfigStart.IsClicked())
@@ -1696,6 +1698,7 @@ void cMenu::End()
     // reset pause and menu status
     g_bPause  = false;
     m_iStatus = 2;
+    g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 1.0f);
     Core::Input->ShowCursor(true);
 
     // reset record notification
