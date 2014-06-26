@@ -9,10 +9,18 @@ Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - t
 > - very simple arcade game with moderate difficulty
 > - online leaderboards for score and time
 > - many different trophies and challenges
-> - originally made within 9 days for the 10th Game Jolt Contest (Theme: Party)
+> - originally made within 9 days for the 10th [Game Jolt][1] Contest (Theme: Party)
 
-You can download the game from [Game Jolt][1] (Windows and Linux) and from [Google Play][2] (Android).
+<br />
 
+**Windows and Linux Version:**  
+<http://gamejolt.com/games/arcade/disco-rock/18996/>
 
-[1]: http://gamejolt.com/games/arcade/disco-rock/18996/
-[2]: https://play.google.com/store/apps/details?id=at.mausgames.dr
+**Android Version:**  
+<https://play.google.com/store/apps/details?id=at.mausgames.dr>
+
+**Music:**  
+by Kevin MacLeod (<http://incompetech.com/music/royalty-free/index.html?genre=Disco>)  
+Licensed under CC BY (<http://creativecommons.org/licenses/by/3.0/>)
+
+[1]: http://gamejolt.com/
