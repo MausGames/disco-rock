@@ -126,7 +126,7 @@ void cFirst::Move()
     {
         if(Core::Config->GetInt("Game", "Control", 0) != m_ControlType.GetCurIndex())
         {
-            Core::Config->SetInt("Game", "Control", 0, m_ControlType.GetCurIndex());
+            Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
             m_Interface.ChangeControlType(m_ControlType.GetCurIndex());
         }
     }

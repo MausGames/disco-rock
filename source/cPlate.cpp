@@ -32,8 +32,8 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
     this->SetTexSize(m_vFixedOffset);
 
     // set random plate color
-    const coreVector4& vColor = g_avColor[Core::Rand->Int(0, COLOR_NUM-1)];
-    this->SetColor4(coreVector4(vColor.xyz(), Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS));
+    const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));
+    this->SetColor4(coreVector4(vColor, Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS));
 }
 
 // ****************************************************************

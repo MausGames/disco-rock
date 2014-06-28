@@ -11,18 +11,23 @@
 
 // ****************************************************************
 cBackground::cBackground()noexcept
-: m_fPositionTime  (0.0f)
-, m_fFloorTime     (0.0f)
-, m_fFillTime      (0.0f)
-, m_pfHeight       (NULL)
-, m_iOffset        (0)
-, m_fLightStrength (0.0f)
-, m_iLightTick     (0)
-, m_fLightTime     (0.0f)
+: m_fPositionTime   (0.0f)
+, m_fFloorTime      (0.0f)
+, m_fFillTime       (0.0f)
+, m_pfHeight        (NULL)
+, m_iOffset         (0)
+, m_fLightStrength  (0.0f)
+, m_iLightTick      (0)
+, m_fLightTime      (0.0f)
+, m_fCurColorHue    (-1.0f)
+, m_fLightDirection (-1.0f)
 {
+    std::memset(m_avColor, 0, sizeof(m_avColor));
+
     // load dance floor geometry
     m_pModel = Core::Manager::Resource->LoadNew<coreModel>();
-    this->__LoadGeometry();
+    this->ModifyColor();
+    this->LoadGeometry();
 
     // load object resources
     this->DefineTextureFile(0, "data/textures/background.png");
@@ -127,12 +132,12 @@ void cBackground::Move()
     // update dance floor light animation
     m_fFloorTime.Update(0.5f, 0);
     if(m_fFloorTime >= 20.0f) m_fFloorTime -= 20.0f;
-    this->SetTexOffset(coreVector2(1.0f,-1.0f) * m_fFloorTime);
+    this->SetTexOffset(coreVector2(m_fLightDirection,-1.0f) * m_fFloorTime);
 
     // update and move the filling background
     m_fFillTime.Update(0.75f, 0);
     if(m_fFillTime >= 5.0f) m_fFillTime -= 5.0f;
-    m_Fill.SetTexOffset(coreVector2(-m_fFillTime, 0.0f));
+    m_Fill.SetTexOffset(coreVector2(-m_fFillTime * m_fLightDirection, 0.0f));
     m_Fill.Move();
 
     // move the object
@@ -150,7 +155,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 
         // map required area
         float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
-        SDL_assert((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
+        ASSERT((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
 
         // set height values of the selected line
         for(coreUint i = 0; i < iNum; ++i)
@@ -176,15 +181,15 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
     const float fY = (vPos.y-vBackPos.y) / BACK_DETAIL_Y + BACK_OFFSET_Y;
 
      // retrieve height value of the block
-    return m_pfHeight[(int(floor(fX)) + int(floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
+    return m_pfHeight[(int(std::floor(fX)) + int(std::floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
 
 /*
     // retrieve all four corners of the block
-    const int iI00 = (int(floor(fX)) + int(floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
+    const int iI00 = (int(std::floor(fX)) + int(std::floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
     const int iI01 = iI00 + 1;
     const int iI10 = iI00 + 2;
     const int iI11 = iI00 + 3;
-    SDL_assert(iI11 < BACK_BLOCKS * BACK_PER_VERTICES);
+    ASSERT(iI11 < BACK_BLOCKS * BACK_PER_VERTICES);
     
     // retrieve height values of the corners
     const float& fH00 = m_pfHeight[iI00];
@@ -193,20 +198,23 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
     const float& fH11 = m_pfHeight[iI11];
 
     // interpolate between all height values
-    float fTemp;
-    const float fFractX = std::modf(fX, &fTemp);
-    const float fFractY = std::modf(fY, &fTemp);
+    const float fFractX = FRACT(fX);
+    const float fFractY = FRACT(fY);
     return LERP(LERP(fH00, fH10, fFractX), LERP(fH01, fH11, fFractX), fFractY);
 */
 }
 
 
 // ****************************************************************
-void cBackground::__LoadGeometry()
+void cBackground::LoadGeometry()
 {
     std::vector<coreVector4> avColor;   avColor.reserve(BACK_BLOCKS);
     std::vector<sVertex> m_pVertexData; m_pVertexData.reserve(BACK_TOTAL_VERTICES);
     std::vector<coreWord> m_pIndexData; m_pIndexData.reserve(BACK_TOTAL_INDICES);
+
+    // delete old data
+    m_pModel->Unload();
+    SAFE_DELETE_ARRAY(m_pfHeight)
 
     // create base geometry
     sVertex* pBaseVertex = new sVertex[BACK_WIDTH * BACK_HEIGHT];
@@ -233,9 +241,9 @@ void cBackground::__LoadGeometry()
         {
             iCurColor = (iCurColor + Core::Rand->Int(1, COLOR_NUM-1)) % COLOR_NUM;
         }
-        while(i >= BACK_BLOCKS_X && (g_avColor[iCurColor].xyz() == avColor[i-BACK_BLOCKS_X].xyz() ||
-                                     g_avColor[iCurColor].xyz() == avColor[i-1].xyz()));
-        avColor.push_back(g_avColor[iCurColor]);
+        while(i >= BACK_BLOCKS_X && (m_avColor[iCurColor] == avColor[i-BACK_BLOCKS_X].xyz() ||
+                                     m_avColor[iCurColor] == avColor[i-1].xyz()));
+        avColor.push_back(coreVector4(m_avColor[iCurColor], 1.0f));
 
         // add additional random parameter for the shader
         avColor.back().a = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
@@ -299,4 +307,32 @@ void cBackground::__LoadGeometry()
 
     // cthulhu fhtagn cheezburger
     Core::Log->Info("Background loaded");
+}
+
+
+// ****************************************************************
+void cBackground::ModifyColor()
+{
+    // change current hue offset
+         if(m_fCurColorHue ==   0.0f/360.0f) m_fCurColorHue = 190.0f/360.0f;
+    else if(m_fCurColorHue == 190.0f/360.0f) m_fCurColorHue =         -1.0f;   // gr[e/a]y
+                                        else m_fCurColorHue =   0.0f/360.0f;
+
+    // modify default colors
+         if(m_fCurColorHue  < 0.0f) for(int i = 0; i < 6; ++i) m_avColor[i] = coreMath::HSVtoRGB(coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].xyz().Min()*1.6f));
+    else if(m_fCurColorHue == 0.0f) for(int i = 0; i < 6; ++i) m_avColor[i] = g_avColor[i].xyz();
+    else
+    {
+        for(int i = 0; i < 6; ++i)
+        {
+            // change hue of all default colors
+            coreVector3 vNewColor = coreMath::RGBtoHSV(g_avColor[i].xyz());
+            vNewColor.x  = FRACT(vNewColor.x + m_fCurColorHue);
+            vNewColor.z *= 0.95f;
+            m_avColor[i] = coreMath::HSVtoRGB(vNewColor);
+        }
+    }
+
+    // flip light direction
+    m_fLightDirection = -m_fLightDirection;
 }

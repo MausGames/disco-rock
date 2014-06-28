@@ -37,7 +37,7 @@ cMenu::cMenu()noexcept
 , m_iTrophyCurrent (-1)
 , m_bFromGuest     (false)
 {
-    SDL_assert(sizeof(m_iTrophyStatus)*8 >= TROPHIES);
+    ASSERT(sizeof(m_iTrophyStatus)*8 >= TROPHIES);
     
     // create intro objects
     m_Made.Construct(FONT_ROCKS, 29, 0);
@@ -1072,13 +1072,13 @@ void cMenu::Move()
                         if(Core::Config->GetInt("Game", "Score", 0) < aiValue[0])
                         {
                             if(!g_pOnline->IsUserConnected()) {this->NewRecord(0); SHOW_BEST_SCORE(aiValue[0])}
-                            Core::Config->SetInt("Game", "Score", 0, aiValue[0]);
+                            Core::Config->SetInt("Game", "Score", aiValue[0]);
                         }
 
                         if(Core::Config->GetInt("Game", "Time", 0) < aiValue[1])
                         {
                             if(!g_pOnline->IsUserConnected()) {this->NewRecord(1); SHOW_BEST_TIME(aiValue[1])}
-                            Core::Config->SetInt("Game", "Time", 0, aiValue[1]);
+                            Core::Config->SetInt("Game", "Time", aiValue[1]);
                         }
 
                         // show new online record
@@ -1490,7 +1490,7 @@ void cMenu::Move()
         {
             if(Core::Config->GetInt("Game", "Control", 0) != m_ControlType.GetCurIndex())
             {
-                Core::Config->SetInt("Game", "Control", 0, m_ControlType.GetCurIndex());
+                Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
 
                 // also change on running game
                 if(g_pGame) g_pGame->GetInterface()->ChangeControlType(m_ControlType.GetCurIndex());
@@ -1752,7 +1752,7 @@ void cMenu::ResetShaders()
 // ****************************************************************
 void cMenu::NewRecord(const coreByte& iIndex)
 {
-    SDL_assert(iIndex < SCORE_TABLES);
+    ASSERT(iIndex < SCORE_TABLES);
 
     const bool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
 
@@ -1808,7 +1808,7 @@ void cMenu::SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, c
 // ****************************************************************
 void cMenu::SubmitScore(const char* pcGuestName)
 {
-    SDL_assert(g_pGame);
+    ASSERT(g_pGame);
     if(m_bSubmited) return;
 
     // convert values
@@ -1816,7 +1816,7 @@ void cMenu::SubmitScore(const char* pcGuestName)
                             (int)std::floor(m_afSubmitValue[1]*100.0f)};
     
     // save guest name
-    if(pcGuestName) Core::Config->SetString("Game", "Guest", NULL, pcGuestName);
+    if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
 
     // create extra-data string
     const std::string sExtra = coreData::Print("%.0f %.3f - %d - %d %d %d %d %d", m_afSubmitValue[0], m_afSubmitValue[1], g_pGame->GetMaxCombo(), 
@@ -1933,8 +1933,8 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 // ****************************************************************   
 void cMenu::RetrieveScoresCallback3(const int& iTableNum)
 {
-    SDL_assert(iTableNum < SCORE_TABLES);
-    SDL_assert(m_iCurPage < SCORE_PAGES);
+    ASSERT(iTableNum < SCORE_TABLES);
+    ASSERT(m_iCurPage < SCORE_PAGES);
 
     // set table and page
     const gjScoreList& apScore = m_aapCurScores[iTableNum];
@@ -2060,8 +2060,8 @@ void cMenu::LoginCallback(const int& iStatus, void* pData)
         m_BottomLoginName.SetText(coreData::Print("LOGGED IN AS %s", coreData::StrUpper(g_pOnline->GetUserName())));
 
         // save credentials
-        Core::Config->SetString("Game", "Name",  NULL, g_pOnline->GetUserName());
-        Core::Config->SetString("Game", "Token", NULL, g_pOnline->GetUserToken());
+        Core::Config->SetString("Game", "Name",  g_pOnline->GetUserName());
+        Core::Config->SetString("Game", "Token", g_pOnline->GetUserToken());
 
         // submit or check scores
         this->ResetRecord();
@@ -2098,8 +2098,8 @@ void cMenu::Logout()
     g_pOnline->Logout();
 
     // reset credentials
-    Core::Config->SetString("Game", "Name",  NULL, "");
-    Core::Config->SetString("Game", "Token", NULL, "");
+    Core::Config->SetString("Game", "Name",  "");
+    Core::Config->SetString("Game", "Token", "");
 
     // load local values
     SHOW_BEST_SCORE(Core::Config->GetInt("Game", "Score", 0))

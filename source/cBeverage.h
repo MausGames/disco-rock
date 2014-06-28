@@ -39,7 +39,7 @@ public:
     virtual ~cBeverage();
 
     // render and move the beverage
-    inline void Render()override {SDL_assert(false);}
+    inline void Render()override {ASSERT(false);}
     void Move()override;
 
     // render different parts of the object separately for batched rendering

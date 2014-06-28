@@ -52,18 +52,22 @@ private:
 
 
 private:
-    coreObject2D m_Fill;        // filling background with funky disco lights
+    coreObject2D m_Fill;                // filling background with funky disco lights
 
-    coreFlow m_fPositionTime;   // timer for the current dance floor position
-    coreFlow m_fFloorTime;      // timer for the light animation on the dance floor
-    coreFlow m_fFillTime;       // timer for the light animation in the background
+    coreFlow m_fPositionTime;           // timer for the current dance floor position
+    coreFlow m_fFloorTime;              // timer for the light animation on the dance floor
+    coreFlow m_fFillTime;               // timer for the light animation in the background
     
-    float* m_pfHeight;          // height data for height calculations
-    coreUint m_iOffset;         // current drawing offset
+    float* m_pfHeight;                  // height data for height calculations
+    coreUint m_iOffset;                 // current drawing offset
 
-    float m_fLightStrength;     // light strength (from the imaginary disco ball)
-    int m_iLightTick;           // tick count
-    float m_fLightTime;         // time compared with tick count to create regular light flashs
+    float m_fLightStrength;             // light strength (from the imaginary disco ball)
+    int m_iLightTick;                   // tick count
+    float m_fLightTime;                 // time compared with tick count to create regular light flashs
+
+    coreVector3 m_avColor[COLOR_NUM];   // modified default colors
+    float m_fCurColorHue;               // current hue offset used to modify default colors
+    float m_fLightDirection;            // move-direction of the light animation
 
 
 public:
@@ -84,14 +88,16 @@ public:
     inline float GetHeight(const coreVector2& vPos)const {return this->GetHeight(vPos, this->GetPosition().xy());}
 
     // get object properties
-    inline const float& GetPositionTime()const {return m_fPositionTime;}
+    inline const float& GetPositionTime()const                      {return m_fPositionTime;}
+    inline const coreVector3& GetColor(const coreUint& iIndex)const {ASSERT(iIndex < COLOR_NUM); return m_avColor[iIndex];}
+
+    // load dance floor geometry
+    void LoadGeometry();
+    void ModifyColor();
 
 
 private:
     DISABLE_COPY(cBackground)
-
-    // load dance floor geometry
-    void __LoadGeometry();
 };
 
 
