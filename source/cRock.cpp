@@ -272,7 +272,7 @@ void cRock::Move()
     if(g_pGame->GetTime() >= 30.0f)
     {
         // define smoke color
-        coreVector4 vSmokeColor = (g_pGame->GetTime() < 100.0f) ? COLOR_WHITE_F : LERP(COLOR_WHITE_F, g_avColor[Core::Rand->Int(0, COLOR_NUM-1)], MIN(g_pGame->GetTime() - 100.0f, 1.0f));
+        coreVector4 vSmokeColor = (g_pGame->GetTime() < 100.0f) ? COLOR_WHITE_F : LERP(COLOR_WHITE_F, coreVector4(g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1)), 1.0f), MIN(g_pGame->GetTime() - 100.0f, 1.0f));
         vSmokeColor.a *= CLAMP((g_pGame->GetTime() - 30.0f) * 0.05f, 0.0f, 1.0f);
 
         // create smoke trail

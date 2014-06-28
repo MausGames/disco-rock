@@ -815,6 +815,6 @@ void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
         }
 
         // save status always in offline config
-        Core::Config->SetInt("Game", "Trophy", 0, Core::Config->GetInt("Game", "Trophy", 0) | (1 << iNum));
+        Core::Config->SetInt("Game", "Trophy", Core::Config->GetInt("Game", "Trophy", 0) | (1 << iNum));
     }
 }
