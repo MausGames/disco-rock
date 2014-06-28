@@ -96,7 +96,7 @@ void CoreApp::Init()
 #endif
 
     // set view frustum
-    Core::Graphics->ResizeView(Core::System->GetResolution(), TO_RAD(55.0f), 0.1f, 1000.0f);
+    Core::Graphics->ResizeView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 1000.0f);
 
     // set audio listener (for 3d sound)
     const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
@@ -116,7 +116,7 @@ void CoreApp::Init()
     if(Core::Config->GetInt("Graphics", "Quality", 10) == 10 || g_bCoreDebug)
     {
         // override quality settings
-        Core::Config->SetInt("Graphics", "Quality", 0, 2);
+        Core::Config->SetInt("Graphics", "Quality", 2);
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
@@ -267,9 +267,11 @@ void CoreApp::Move()
         g_bUpsideDown  = false;
 
         // reset all holes in the dance floor
-        bool abIndex[BACK_BLOCKS_X];
-        for(int i = 0; i < BACK_BLOCKS_X; ++i) abIndex[i] = false;
-        for(int i = 0; i < 62;            ++i) g_pBackground->UpdateHoles(i, abIndex);
+        //bool abIndex[BACK_BLOCKS_X];
+        //for(int i = 0; i < BACK_BLOCKS_X; ++i) abIndex[i] = false;
+        //for(int i = 0; i < 62;            ++i) g_pBackground->UpdateHoles(i, abIndex);
+        g_pBackground->ModifyColor();
+        g_pBackground->LoadGeometry();
     }
 
     // smoothly update the real game speed with an additional target value
