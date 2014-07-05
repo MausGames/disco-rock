@@ -19,8 +19,8 @@
 #define QUESTION_RETURN "DO YOU REALLY WANT TO RETURN WITHOUT SUBMITTING?"
 
 // update displayed score and time value
-#define SHOW_BEST_SCORE(x) {m_aScoreBestValue[0].SetText(coreData::Print("%06d", (x)));}
-#define SHOW_BEST_TIME(x)  {m_aScoreBestValue[1].SetText(coreData::Print("%03d.%01d", (x) / 100, (((x) % 100) / 10)));}
+#define SHOW_BEST_SCORE(x) {m_aScoreBestValue[0].SetText(PRINT("%06d", (x)));}
+#define SHOW_BEST_TIME(x)  {m_aScoreBestValue[1].SetText(PRINT("%03d.%01d", (x) / 100, (((x) % 100) / 10)));}
 
 
 // ****************************************************************
@@ -112,7 +112,7 @@ cMenu::cMenu()noexcept
     m_Start.DefineProgramShare("2d_shader_border"); // override
     m_Start.SetPosition(coreVector2(-0.06f,-0.092f));
     m_Start.SetSize(coreVector2(m_BackgroundRight.GetSize().x - 0.06f,0.1f));
-    m_Start.SetColor3(COLOR_BLUE_F.xyz());
+    m_Start.SetColor3(COLOR_BLUE_F);
     m_Start.GetCaption()->SetText("START GAME");
     m_Start.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Start)
@@ -122,7 +122,7 @@ cMenu::cMenu()noexcept
     m_Exit.DefineProgramShare("2d_shader_border"); // override
     m_Exit.SetPosition(coreVector2(-0.06f,-0.222f));
     m_Exit.SetSize(m_Start.GetSize());
-    m_Exit.SetColor3(COLOR_RED_F.xyz());
+    m_Exit.SetColor3(COLOR_RED_F);
     m_Exit.GetCaption()->SetText("EXIT GAME");
     m_Exit.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Exit)
@@ -135,7 +135,7 @@ cMenu::cMenu()noexcept
     m_Resume.DefineProgramShare("2d_shader_border"); // override
     m_Resume.SetPosition(m_Start.GetPosition());
     m_Resume.SetSize(m_Start.GetSize());
-    m_Resume.SetColor3(COLOR_BLUE_F.xyz());
+    m_Resume.SetColor3(COLOR_BLUE_F);
     m_Resume.GetCaption()->SetText(bTooSmall ? "RESUME" : "RESUME GAME");
     m_Resume.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Resume)
@@ -145,7 +145,7 @@ cMenu::cMenu()noexcept
     m_Abort.DefineProgramShare("2d_shader_border"); // override
     m_Abort.SetPosition(m_Exit.GetPosition());
     m_Abort.SetSize(m_Start.GetSize());
-    m_Abort.SetColor3(COLOR_RED_F.xyz());
+    m_Abort.SetColor3(COLOR_RED_F);
     m_Abort.GetCaption()->SetText(bTooSmall ? "ABORT" : "ABORT GAME");
     m_Abort.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Abort)
@@ -155,7 +155,7 @@ cMenu::cMenu()noexcept
     m_Submit.DefineProgramShare("2d_shader_border"); // override
     m_Submit.SetPosition(m_Start.GetPosition());
     m_Submit.SetSize(m_Start.GetSize());
-    m_Submit.SetColor3(COLOR_ORANGE_F.xyz());
+    m_Submit.SetColor3(COLOR_ORANGE_F);
     m_Submit.GetCaption()->SetText(bTooSmall ? "SUBMIT" : "SUBMIT ONLINE");
     m_Submit.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Submit)
@@ -165,7 +165,7 @@ cMenu::cMenu()noexcept
     m_Finish.DefineProgramShare("2d_shader_border"); // override
     m_Finish.SetPosition(m_Exit.GetPosition());
     m_Finish.SetSize(m_Start.GetSize());
-    m_Finish.SetColor3(COLOR_PURPLE_F.xyz());
+    m_Finish.SetColor3(COLOR_PURPLE_F);
     m_Finish.GetCaption()->SetText("RETURN");
     m_Finish.GetCaption()->SetAlpha(0.0f);
     ADJUST_RIGHT(m_Finish)
@@ -216,13 +216,13 @@ cMenu::cMenu()noexcept
     m_TopBatteryBolt.SetSize(coreVector2(0.05f,0.05f));
     m_TopBatteryBolt.SetCenter(coreVector2(-0.5f,0.5f));
     m_TopBatteryBolt.SetAlignment(coreVector2(1.0f,-1.0f));
-    m_TopBatteryBolt.SetColor3(COLOR_BLUE_F.xyz());
+    m_TopBatteryBolt.SetColor3(COLOR_BLUE_F);
 
     m_TopBatteryValue.Construct(FONT_ROCKS, 29, 8);
     m_TopBatteryValue.SetPosition(coreVector2(0.048f,-0.015f));
     m_TopBatteryValue.SetCenter(coreVector2(-0.5f,0.5f));
     m_TopBatteryValue.SetAlignment(coreVector2(1.0f,-1.0f));
-    m_TopBatteryValue.SetColor3(COLOR_BLUE_F.xyz());
+    m_TopBatteryValue.SetColor3(COLOR_BLUE_F);
 
 #endif
 
@@ -260,7 +260,7 @@ cMenu::cMenu()noexcept
     m_BottomInfo.SetPosition(coreVector2(0.01333f,0.00933f));
     m_BottomInfo.SetCenter(coreVector2(-0.5f,-0.5f));
     m_BottomInfo.SetAlignment(coreVector2(1.0f,1.0f));
-    m_BottomInfo.SetText(coreData::StrUpper(coreData::Print("(c) 2013-2014 Maus Games - v1.2 - %s %.5s", __DATE__, __TIME__)));
+    m_BottomInfo.SetText(coreData::StrUpper(PRINT("(c) 2013-2014 Maus Games - v1.2 - %s %.5s", __DATE__, __TIME__)));
 
     m_BottomCredit.Construct(FONT_ROCKS, 21, 0);
     m_BottomCredit.SetPosition(coreVector2(-0.01333f,0.00933f));
@@ -316,14 +316,14 @@ cMenu::cMenu()noexcept
     m_Yes.Construct("data/textures/button_ok.png", "data/textures/button_ok.png");
     m_Yes.SetPosition(coreVector2(-0.2f,-0.08f));
     m_Yes.SetSize(coreVector2(0.075f,0.075f));
-    m_Yes.SetColor3(LERP(COLOR_GREEN_F.xyz(), COLOR_WHITE_F.xyz(), 0.75f));
+    m_Yes.SetColor3(LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
     m_Yes.SetFocusRange(1.2f);
     m_Yes.Move();
 
     m_No.Construct("data/textures/button_cancel.png", "data/textures/button_cancel.png");
     m_No.SetPosition(coreVector2(0.2f,-0.08f));
     m_No.SetSize(m_Yes.GetSize());
-    m_No.SetColor3(LERP(COLOR_RED_F.xyz(), COLOR_WHITE_F.xyz(), 0.75f));
+    m_No.SetColor3(LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
     m_No.SetFocusRange(1.2f);
     m_No.Move();
 
@@ -340,7 +340,7 @@ cMenu::cMenu()noexcept
     m_VideoLow.SetPosition(coreVector2(LEFT_CENTER - 0.17f,0.15f)); // old Y: 0.13f
     m_VideoLow.SetSize(coreVector2(0.15f,0.075f));
     m_VideoLow.SetCenter(coreVector2(-0.5f,0.0f));
-    m_VideoLow.SetColor3((iCurQuality == 0) ? COLOR_GREEN_F.xyz() : coreVector3(0.5f,0.5f,0.5f));
+    m_VideoLow.SetColor3((iCurQuality == 0) ? COLOR_GREEN_F : coreVector3(0.5f,0.5f,0.5f));
     m_VideoLow.GetCaption()->SetText("LOW");
     m_VideoLow.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoLow)
@@ -350,7 +350,7 @@ cMenu::cMenu()noexcept
     m_VideoMedium.SetPosition(coreVector2(LEFT_CENTER, m_VideoLow.GetPosition().y));
     m_VideoMedium.SetSize(m_VideoLow.GetSize());
     m_VideoMedium.SetCenter(coreVector2(-0.5f,0.0f));
-    m_VideoMedium.SetColor3((iCurQuality == 1) ? COLOR_YELLOW_F.xyz() : coreVector3(0.5f,0.5f,0.5f));
+    m_VideoMedium.SetColor3((iCurQuality == 1) ? COLOR_YELLOW_F : coreVector3(0.5f,0.5f,0.5f));
     m_VideoMedium.GetCaption()->SetText("MID");
     m_VideoMedium.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoMedium)
@@ -360,7 +360,7 @@ cMenu::cMenu()noexcept
     m_VideoHigh.SetPosition(coreVector2(LEFT_CENTER + 0.17f, m_VideoLow.GetPosition().y));
     m_VideoHigh.SetSize(m_VideoLow.GetSize());
     m_VideoHigh.SetCenter(coreVector2(-0.5f,0.0f));
-    m_VideoHigh.SetColor3((iCurQuality == 2) ? COLOR_RED_F.xyz() : coreVector3(0.5f,0.5f,0.5f));
+    m_VideoHigh.SetColor3((iCurQuality == 2) ? COLOR_RED_F : coreVector3(0.5f,0.5f,0.5f));
     m_VideoHigh.GetCaption()->SetText("HIGH");
     m_VideoHigh.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoHigh)
@@ -394,7 +394,7 @@ cMenu::cMenu()noexcept
     m_AudioBar.SetSize(coreVector2((m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x) * fCurVolume, 0.056f));
     m_AudioBar.SetPosition(coreVector2(LEFT_CENTER + (m_AudioBar.GetSize().x - m_AudioBarBack.GetSize().x) * 0.5f, m_AudioBarBack.GetPosition().y));
     m_AudioBar.SetCenter(coreVector2(-0.5f,0.0f));
-    m_AudioBar.SetColor3(COLOR_BLUE_F.xyz() * MENU_ALPHA_IDLE_2);
+    m_AudioBar.SetColor3(COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
 
     m_AudioIconHigh.DefineTextureFile(0, "data/textures/icon_audio_1.png");
     m_AudioIconHigh.DefineProgramShare("2d_shader_color_icon");
@@ -536,12 +536,12 @@ cMenu::cMenu()noexcept
     m_LoginOK.Construct("data/textures/button_ok.png", "data/textures/button_ok.png");
     m_LoginOK.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, m_LoginPopup.GetSize().y * 0.5f - 0.0575f));
     m_LoginOK.SetSize(coreVector2(0.075f,0.075f));
-    m_LoginOK.SetColor3(LERP(COLOR_GREEN_F.xyz(), COLOR_WHITE_F.xyz(), 0.75f));
+    m_LoginOK.SetColor3(LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
 
     m_LoginCancel.Construct("data/textures/button_cancel.png", "data/textures/button_cancel.png");
     m_LoginCancel.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, -m_LoginPopup.GetSize().y * 0.5f + 0.0575f));
     m_LoginCancel.SetSize(coreVector2(0.075f,0.075f));
-    m_LoginCancel.SetColor3(LERP(COLOR_RED_F.xyz(), COLOR_WHITE_F.xyz(), 0.75f));
+    m_LoginCancel.SetColor3(LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
 
     m_LoginError.Construct(FONT_ROCKS, 21, 32);
     m_LoginError.SetPosition(m_LoginPopup.GetPosition() + coreVector2(0.0f,-0.122f));
@@ -589,13 +589,13 @@ cMenu::cMenu()noexcept
             m_aaScoreEntry[i][j][0].SetCenter(vCen);
             m_aaScoreEntry[i][j][0].SetAlignment(coreVector2(-1.0f,0.0f));
             m_aaScoreEntry[i][j][0].SetColor3(coreVector3(0.75f,0.75f,0.75f));
-            m_aaScoreEntry[i][j][0].SetText(coreData::Print("%d.", j+1));
+            m_aaScoreEntry[i][j][0].SetText(PRINT("%d.", j+1));
 
             m_aaScoreEntry[i][j][1].Construct(FONT_ROCKS, 23, 24);
             m_aaScoreEntry[i][j][1].SetPosition(coreVector2(vPos.x - 0.19466f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][1].SetCenter(vCen);
             m_aaScoreEntry[i][j][1].SetAlignment(coreVector2(1.0f,0.0f));
-            m_aaScoreEntry[i][j][1].SetColor3(LERP(COLOR_YELLOW_F.xyz(), COLOR_WHITE_F.xyz(), float(MIN(j, 3) / 3)));
+            m_aaScoreEntry[i][j][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(j, 3) / 3)));
             m_aaScoreEntry[i][j][1].SetText("-");
 
             m_aaScoreEntry[i][j][2].Construct(FONT_ROCKS, 23, 16);
@@ -676,12 +676,12 @@ cMenu::cMenu()noexcept
 
     for(int i = 0; i < TROPHIES; ++i)
     {
-        m_aTrophyImage[i].DefineTextureFile(0, coreData::Print("data/textures/trophy_%i.png", (i == TROPHIES-1) ? 2 : 1));
+        m_aTrophyImage[i].DefineTextureFile(0, PRINT("data/textures/trophy_%i.png", (i == TROPHIES-1) ? 2 : 1));
         m_aTrophyImage[i].DefineProgramShare("2d_shader");
         m_aTrophyImage[i].SetPosition(coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
         m_aTrophyImage[i].SetSize(coreVector2(0.09f,0.09f));
         m_aTrophyImage[i].SetCenter(coreVector2(-0.5f,0.0f));
-        m_aTrophyImage[i].SetColor3((i % (COLOR_NUM+1)) ? g_avColor[(i-(1+i/7))%COLOR_NUM].xyz() : (COLOR_WHITE_F.xyz()*0.9f));
+        m_aTrophyImage[i].SetColor3((i % (COLOR_NUM+1)) ? g_avColor[(i-(1+i/7))%COLOR_NUM] : (COLOR_WHITE_F*0.9f));
 
         m_aTrophyCheck[i].DefineTextureFile(0, "data/textures/icon_success.png");
         m_aTrophyCheck[i].DefineProgram(m_TrophyText.GetProgram());
@@ -726,7 +726,7 @@ cMenu::cMenu()noexcept
     }
 
 #if defined(_CORE_DEBUG_)
-    this->SetErrorMessage(COLOR_ORANGE_F.xyz(), "DEBUG ERROR", "MORE DEBUG ERROR", "");
+    this->SetErrorMessage(COLOR_ORANGE_F, "DEBUG ERROR", "MORE DEBUG ERROR", "");
 #endif
 
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
@@ -750,7 +750,7 @@ cMenu::cMenu()noexcept
     m_Loading.SetPosition(coreVector2(LEFT_CENTER - 0.05f, -0.05f) + m_BackgroundLeft.GetSize()*0.5f);
     m_Loading.SetSize(coreVector2(0.05f,0.05f));
     m_Loading.SetCenter(coreVector2(-0.5f,0.0f));
-    m_Loading.SetColor3(COLOR_YELLOW_F.xyz());
+    m_Loading.SetColor3(COLOR_YELLOW_F);
 
     // start intro
     m_Intro.Play(true);
@@ -1089,8 +1089,8 @@ void cMenu::Move()
                         }
 
                         // display both values
-                        m_aAfterBestValue[0].SetText(coreData::Print("%06.0f",      std::floor(m_afSubmitValue[0])));
-                        m_aAfterBestValue[1].SetText(coreData::Print("%03.0f.%01d", std::floor(m_afSubmitValue[1]), int(std::floor(m_afSubmitValue[1] * 10.0f)) % 10));
+                        m_aAfterBestValue[0].SetText(PRINT("%06.0f",      std::floor(m_afSubmitValue[0])));
+                        m_aAfterBestValue[1].SetText(PRINT("%03.0f.%01d", std::floor(m_afSubmitValue[1]), int(std::floor(m_afSubmitValue[1] * 10.0f)) % 10));
 
                         // set submit status
                         m_bSubmited      = (m_afSubmitValue[1] >= 10.0f) ? false : true;
@@ -1370,14 +1370,14 @@ void cMenu::Move()
 
             // set transparency of tropies
             m_aTrophyImage[i].SetAlpha(m_aTrophyImage[i].GetAlpha() * ((m_iTrophyCurrent == i) ? 0.5f : 1.0f));
-            m_aTrophyCheck[i].SetAlpha(m_aTrophyCheck[i].GetAlpha() * ((m_iTrophyStatus & (1 << i)) ? 1.0f : 0.0f));
+            m_aTrophyCheck[i].SetAlpha(m_aTrophyCheck[i].GetAlpha() * ((m_iTrophyStatus & BIT(i)) ? 1.0f : 0.0f));
         }
 
         // set question marks
-        if(m_iTrophyStatus & (1 << 0)) m_aTrophySecret[0].SetAlpha(0.0f);
-        if(m_iTrophyStatus & (1 << 1)) m_aTrophySecret[1].SetAlpha(0.0f);
-        if(m_iTrophyStatus & (1 << 2)) m_aTrophySecret[2].SetAlpha(0.0f);
-        if(m_iTrophyStatus & (1 << 4)) m_aTrophySecret[3].SetAlpha(0.0f);
+        if(m_iTrophyStatus & BIT(0)) m_aTrophySecret[0].SetAlpha(0.0f);
+        if(m_iTrophyStatus & BIT(1)) m_aTrophySecret[1].SetAlpha(0.0f);
+        if(m_iTrophyStatus & BIT(2)) m_aTrophySecret[2].SetAlpha(0.0f);
+        if(m_iTrophyStatus & BIT(4)) m_aTrophySecret[3].SetAlpha(0.0f);
     }
     else if((m_ScoreMenu.GetCurSurface() == 5 || m_LoginConfigStart.IsClicked()) && bInNormalMenu)
     {
@@ -1398,9 +1398,9 @@ void cMenu::Move()
             if(iNewQuality != Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY))
             {
                 // display current selection
-                m_VideoLow.SetColor3   ((iNewQuality == 0) ? COLOR_GREEN_F.xyz()  : coreVector3(0.5f,0.5f,0.5f));
-                m_VideoMedium.SetColor3((iNewQuality == 1) ? COLOR_YELLOW_F.xyz() : coreVector3(0.5f,0.5f,0.5f));
-                m_VideoHigh.SetColor3  ((iNewQuality == 2) ? COLOR_RED_F.xyz()    : coreVector3(0.5f,0.5f,0.5f));
+                m_VideoLow.SetColor3   ((iNewQuality == 0) ? COLOR_GREEN_F  : coreVector3(0.5f,0.5f,0.5f));
+                m_VideoMedium.SetColor3((iNewQuality == 1) ? COLOR_YELLOW_F : coreVector3(0.5f,0.5f,0.5f));
+                m_VideoHigh.SetColor3  ((iNewQuality == 2) ? COLOR_RED_F    : coreVector3(0.5f,0.5f,0.5f));
 
                 // set new video quality and reload all shaders
                 Core::Config->SetInt(CORE_CONFIG_GRAPHICS_QUALITY, iNewQuality);
@@ -1590,9 +1590,9 @@ void cMenu::Move()
     {
         for(int i = 0; i < SCORE_TABLES; ++i)
         {
-            if(m_iTableUpdate & (1 << i)) 
+            if(m_iTableUpdate & BIT(i)) 
             {
-                m_iTableUpdate &= ~(1 << i);
+                BIT_RESET(m_iTableUpdate, i)
                 this->RetrieveScoresCallback3(i); 
             }
         }
@@ -1616,12 +1616,12 @@ void cMenu::Move()
         // show remaining time if available
         const int iHour =  aiPower[0] / 3600;
         const int iMin  = (aiPower[0] % 3600) / 60;
-        m_TopBatteryValue.SetText(coreData::Print("%d:%02d", iHour, iMin));
+        m_TopBatteryValue.SetText(PRINT("%d:%02d", iHour, iMin));
     }
     else if(aiPower[1] >= 0)
     {
         // show remaining percent
-        m_TopBatteryValue.SetText(coreData::Print("%d%%", aiPower[1]));
+        m_TopBatteryValue.SetText(PRINT("%d%%", aiPower[1]));
     }
 
 #elif defined(_CORE_DEBUG_)
@@ -1633,12 +1633,12 @@ void cMenu::Move()
     // calculate and display current FPS (# static)
     static float fFPSValue = 0.0f;
     if(Core::System->GetTime()) fFPSValue = fFPSValue * 0.95f + RCP(Core::System->GetTime()) * 0.05f;
-    m_TopFPSSec.SetText(coreData::Print("%.0f.", std::floor(fFPSValue)));
-    m_TopFPSMil.SetText(coreData::Print("%01d",  int(std::floor(fFPSValue * 10.0f)) % 10));
+    m_TopFPSSec.SetText(PRINT("%.0f.", std::floor(fFPSValue)));
+    m_TopFPSMil.SetText(PRINT("%01d",  int(std::floor(fFPSValue * 10.0f)) % 10));
 
     // adjust color in relation to the FPS
     const float fFPSLerp        = MIN(fFPSValue * 0.01666667f, 1.0f);
-    const coreVector3 vFPSColor = LERP(COLOR_RED_F.xyz(), LERP(COLOR_YELLOW_F.xyz(), COLOR_GREEN_F.xyz(), MAX((fFPSLerp-0.5f) * 2.0f, 0.0f)), MIN(fFPSLerp * 2.0f, 1.0f));
+    const coreVector3 vFPSColor = LERP(COLOR_RED_F, LERP(COLOR_YELLOW_F, COLOR_GREEN_F, MAX((fFPSLerp-0.5f) * 2.0f, 0.0f)), MIN(fFPSLerp * 2.0f, 1.0f));
     m_TopFPSTacho.SetColor3(vFPSColor);
     m_TopFPSSec.SetColor3(vFPSColor);
     m_TopFPSMil.SetColor3(vFPSColor);
@@ -1646,7 +1646,7 @@ void cMenu::Move()
 #if defined(_CORE_DEBUG_)
 
     // show full network load
-    m_TopUpdating.SetText(coreData::Print("COMMUNICATING WITH SERVER... (%u)", g_pOnline->GetNumConnections()));
+    m_TopUpdating.SetText(PRINT("COMMUNICATING WITH SERVER... (%u)", g_pOnline->GetNumConnections()));
         
 #endif
 
@@ -1757,8 +1757,8 @@ void cMenu::NewRecord(const coreByte& iIndex)
     const bool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
 
     // set score color
-    m_aScoreBestValue[iIndex].SetColor3(COLOR_YELLOW_F.xyz());
-    m_aAfterBestValue[iIndex].SetColor3(COLOR_YELLOW_F.xyz());
+    m_aScoreBestValue[iIndex].SetColor3(COLOR_YELLOW_F);
+    m_aAfterBestValue[iIndex].SetColor3(COLOR_YELLOW_F);
 
     // set notification text
     m_aScoreRecord[iIndex].SetText("NEW RECORD");
@@ -1819,12 +1819,12 @@ void cMenu::SubmitScore(const char* pcGuestName)
     if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
 
     // create extra-data string
-    const std::string sExtra = coreData::Print("%.0f %.3f - %d - %d %d %d %d %d", m_afSubmitValue[0], m_afSubmitValue[1], g_pGame->GetMaxCombo(), 
-                                               g_pGame->GetStat(0), g_pGame->GetStat(1), g_pGame->GetStat(2), g_pGame->GetStat(3), g_pGame->GetStat(4));
+    const std::string sExtra = PRINT("%.0f %.3f - %d - %d %d %d %d %d", m_afSubmitValue[0], m_afSubmitValue[1], g_pGame->GetMaxCombo(), 
+                                     g_pGame->GetStat(0), g_pGame->GetStat(1), g_pGame->GetStat(2), g_pGame->GetStat(3), g_pGame->GetStat(4));
 
     // send score and time values
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_01, coreData::Print("%d Points",    aiValue[0]),                                aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_02, coreData::Print("%.1f Seconds", std::floor(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                                aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", std::floor(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
 }
 
 
@@ -1949,22 +1949,22 @@ void cMenu::RetrieveScoresCallback3(const int& iTableNum)
         if(iTableNum == 0) // == GJ_LEADERBOARD_01
         {
             // fill score leaderboard
-            m_aaScoreEntry[0][i][0].SetText(coreData::Print("%d.", i+1 + iScoreStart));
+            m_aaScoreEntry[0][i][0].SetText(PRINT("%d.", i+1 + iScoreStart));
             m_aaScoreEntry[0][i][1].SetText(pScore ? (pScore->GetUserName().substr(0, 16) + (bOver ? ">" : "")).c_str() : "-");
-            m_aaScoreEntry[0][i][2].SetText(pScore ? coreData::Print("%06d", pScore->GetSort()) : "-");
+            m_aaScoreEntry[0][i][2].SetText(pScore ? PRINT("%06d", pScore->GetSort()) : "-");
 
             // highlight best players
-            m_aaScoreEntry[0][i][1].SetColor3(LERP(COLOR_YELLOW_F.xyz(), COLOR_WHITE_F.xyz(), float(MIN(i + iScoreStart, 3) / 3)));
+            m_aaScoreEntry[0][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(i + iScoreStart, 3) / 3)));
         }
         else // == GJ_LEADERBOARD_02
         {
             // fill time leaderboard
-            m_aaScoreEntry[1][i][0].SetText(coreData::Print("%d.", i+1 + iScoreStart));
+            m_aaScoreEntry[1][i][0].SetText(PRINT("%d.", i+1 + iScoreStart));
             m_aaScoreEntry[1][i][1].SetText(pScore ? (pScore->GetUserName().substr(0, 16) + (bOver ? ">" : "")).c_str() : "-");
-            m_aaScoreEntry[1][i][2].SetText(pScore ? coreData::Print("%03d.%01d", pScore->GetSort() / 100, ((pScore->GetSort() % 100) / 10)) : "-");
+            m_aaScoreEntry[1][i][2].SetText(pScore ? PRINT("%03d.%01d", pScore->GetSort() / 100, ((pScore->GetSort() % 100) / 10)) : "-");
         
             // highlight best players
-            m_aaScoreEntry[1][i][1].SetColor3(LERP(COLOR_YELLOW_F.xyz(), COLOR_WHITE_F.xyz(), float(MIN(i + iScoreStart, 3) / 3)));
+            m_aaScoreEntry[1][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(i + iScoreStart, 3) / 3)));
         }
     }
 }
@@ -1988,7 +1988,7 @@ void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
     m_TrophyName.SetText(apTrophy[iNum]->GetTitle().c_str());
 
     // split trophy description into two even parts
-    const char* pcDesc = coreData::Print("%s", (m_iTrophyStatus & (1 << iNum) || !apTrophy[iNum]->IsSecret()) ? apTrophy[iNum]->GetDescriptionTrue().c_str() : GJ_API_TEXT_SECRET);
+    const char* pcDesc = PRINT("%s", (m_iTrophyStatus & BIT(iNum) || !apTrophy[iNum]->IsSecret()) ? apTrophy[iNum]->GetDescriptionTrue().c_str() : GJ_API_TEXT_SECRET);
     coreUint iMid = std::strlen(pcDesc) / 2;
     while(iMid > 0 && pcDesc[iMid] != ' ') --iMid;
 
@@ -2004,7 +2004,7 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
     // save trophy status
     m_iTrophyStatus = 0;
     for(int i = 0; i < MIN((int)apTrophy.size(), TROPHIES); ++i)
-        if(apTrophy[i]->IsAchieved()) m_iTrophyStatus |= (1 << i);
+        if(apTrophy[i]->IsAchieved()) BIT_SET(m_iTrophyStatus, i)
 
     // reset current trophy
     this->FetchTrophiesCallback1(apTrophy, (void*)0);
@@ -2057,7 +2057,7 @@ void cMenu::LoginCallback(const int& iStatus, void* pData)
         // login successful
         m_LoginName.SetText(g_pOnline->GetUserName());
         m_LoginToken.SetText(g_pOnline->GetUserToken());
-        m_BottomLoginName.SetText(coreData::Print("LOGGED IN AS %s", coreData::StrUpper(g_pOnline->GetUserName())));
+        m_BottomLoginName.SetText(PRINT("LOGGED IN AS %s", coreData::StrUpper(g_pOnline->GetUserName())));
 
         // save credentials
         Core::Config->SetString("Game", "Name",  g_pOnline->GetUserName());

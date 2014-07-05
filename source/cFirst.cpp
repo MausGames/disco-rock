@@ -49,12 +49,12 @@ cFirst::cFirst()noexcept
     m_Start.DefineProgramShare("2d_shader_border"); // override
     m_Start.SetPosition(coreVector2(0.0f,0.0f));
     m_Start.SetSize(coreVector2(0.49f,0.1f));
-    m_Start.SetColor3(COLOR_BLUE_F.xyz());
+    m_Start.SetColor3(COLOR_BLUE_F);
     m_Start.GetCaption()->SetText("START GAME");
     m_Start.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_Start)
 
-    constexpr_var coreVector3 vTouchColor = LERP(COLOR_BLUE_F.xyz(), COLOR_WHITE_F.xyz(), 0.75f);
+    constexpr_var coreVector3 vTouchColor = LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.75f);
 
     // overload trouch object color
     m_Interface.GetTouchMoveLeft()->SetColor3(vTouchColor);

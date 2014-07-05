@@ -50,7 +50,7 @@ cCombatText::cCombatText()noexcept
     m_Trophy.DefineTextureFile(0, "data/textures/icon_trophy.png");
     m_Trophy.DefineProgram(m_aText[0].GetProgram());
     m_Trophy.SetSize(coreVector2(0.12f,0.12f));
-    m_Trophy.SetColor3(COLOR_YELLOW_F.xyz());
+    m_Trophy.SetColor3(COLOR_YELLOW_F);
 
     // creatr trophy label
     m_TrophyLabel.Construct(FONT_ROCKS, 37, 32);
