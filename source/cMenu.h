@@ -198,7 +198,7 @@ public:
     inline void UpdateControl() {m_ControlType.Select(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
     
     // invoke score table update
-    inline void InvokeScoreUpdate(const int& iTableNum) {m_iTableUpdate |= (1 << iTableNum);}
+    inline void InvokeScoreUpdate(const int& iTableNum) {BIT_SET(m_iTableUpdate, iTableNum)}
 
     // submit score functions
     void SubmitScore(const char* pcGuestName);

@@ -57,7 +57,7 @@ public:
     // get object properties
     inline const int& GetScore()const {return m_iScore;}
     virtual coreByte GetSigID()const = 0;
-    virtual coreVector4 GetSigColor()const = 0;
+    virtual coreVector3 GetSigColor()const = 0;
 
 
 private:
@@ -75,7 +75,7 @@ public:
 
     // get object properties
     inline coreByte GetSigID()const override       {return 1;}
-    inline coreVector4 GetSigColor()const override {return COLOR_YELLOW_F;}
+    inline coreVector3 GetSigColor()const override {return COLOR_YELLOW_F;}
 };
 
 
@@ -89,7 +89,7 @@ public:
 
     // get object properties
     inline coreByte GetSigID()const override       {return 2;}
-    inline coreVector4 GetSigColor()const override {return COLOR_GREEN_F;}
+    inline coreVector3 GetSigColor()const override {return COLOR_GREEN_F;}
 };
 
 
@@ -103,7 +103,7 @@ public:
 
     // get object properties
     inline coreByte GetSigID()const override       {return 3;}
-    inline coreVector4 GetSigColor()const override {return COLOR_BLUE_F;}
+    inline coreVector3 GetSigColor()const override {return COLOR_BLUE_F;}
 };
 
 
@@ -117,7 +117,7 @@ public:
 
     // get object properties
     inline coreByte GetSigID()const override       {return 4;}
-    inline coreVector4 GetSigColor()const override {return COLOR_PURPLE_F;}
+    inline coreVector3 GetSigColor()const override {return COLOR_PURPLE_F;}
 };
 
 
@@ -131,7 +131,7 @@ public:
 
     // get object properties
     inline coreByte GetSigID()const override       {return 5;}
-    inline coreVector4 GetSigColor()const override {return COLOR_RED_F;}
+    inline coreVector3 GetSigColor()const override {return COLOR_RED_F;}
 };
 
 

@@ -180,7 +180,7 @@ void cGame::Move()
         if((m_fTime >= 5.8f && m_Rock.GetJumped()) || (m_fTime >= 6.3f && !m_Rock.GetFallen()))
         {
             m_bFirstMsg = false;
-            g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
+            g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
         }
     }
 
@@ -630,15 +630,15 @@ void cGame::Move()
                 if(pBeverage->GetSigID() == 4 || fTextAlpha > 0.2f)
                 {
                     // get and modify beverage color
-                    coreVector4 vColor = pBeverage->GetSigColor();
+                    coreVector4 vColor = coreVector4(pBeverage->GetSigColor(), 1.0f);
                     if(pBeverage->GetSigID() != 4) vColor.a *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
 
                     // create floating score text
-                    g_pCombatText->AddTextTransformed(fValue ? coreData::Print("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);
+                    g_pCombatText->AddTextTransformed(fValue ? PRINT("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);
                 }
                 
                 // create max combo text (after score text)
-                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), COLOR_ORANGE_F);
+                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), coreVector4(COLOR_ORANGE_F, 1.0f));
 
                 // send beverage into the air, try not to spill it
                 pBeverage->Destroy(pBeverage->GetPosition() - m_Rock.GetPosition());
@@ -682,7 +682,7 @@ void cGame::Move()
                 
                 // play trap sound effect and show message
                 m_pTrapSound->PlayPosition(NULL, 0.38f, 1.1f, 0.05f, false, m_Rock.GetPosition());
-                g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), COLOR_WHITE_F);
+                g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
 
                 // reset combo timer (a little bit more than a beverage)
                 m_fComboDelay = 1.1f;
@@ -696,7 +696,7 @@ void cGame::Move()
     if(m_fComboDelay <= 0.0f && m_iCombo)
     {
         // reset combo
-        g_pCombatText->AddTextTransformed("-COMBO", m_Rock.GetPosition(), COLOR_RED_F);
+        g_pCombatText->AddTextTransformed("-COMBO", m_Rock.GetPosition(), coreVector4(COLOR_RED_F, 1.0f));
         m_iCombo     = 0;
         m_fComboTime = 0.0f;
     }
@@ -801,7 +801,7 @@ void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 
     if(pTrophy)
     {
-        if(!(g_pMenu->GetTrophyStatus() & (1 << iNum)))
+        if(!(g_pMenu->GetTrophyStatus() & BIT(iNum)))
         {
             const coreVector3 vPos = this->GetStatus() ? coreVector3(0.0f,0.0f,0.0f) : m_Rock.GetPosition();
 
@@ -810,11 +810,11 @@ void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
             m_pTrophySound->PlayPosition(NULL, 0.2f, 1.0f, 0.0f, false, vPos);
 
             // set and save current trophy status
-            g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | (1 << iNum));
+            g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | BIT(iNum));
             g_pMenu->SetTrophyCurrent(-1);
         }
 
         // save status always in offline config
-        Core::Config->SetInt("Game", "Trophy", Core::Config->GetInt("Game", "Trophy", 0) | (1 << iNum));
+        Core::Config->SetInt("Game", "Trophy", Core::Config->GetInt("Game", "Trophy", 0) | BIT(iNum));
     }
 }

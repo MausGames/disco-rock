@@ -68,7 +68,7 @@ cInterface::cInterface()noexcept
     m_ComboBar.DefineProgramShare("2d_shader_color");
     m_ComboBar.SetCenter(coreVector2(0.0f,-0.5f));
     m_ComboBar.SetAlignment(coreVector2(0.0f,1.0f));
-    m_ComboBar.SetColor3(COLOR_BLUE_F.xyz());
+    m_ComboBar.SetColor3(COLOR_BLUE_F);
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
@@ -179,7 +179,7 @@ void cInterface::Move()
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
     // display jump status
-    m_Jump.SetColor3(g_pGame->GetRock()->GetJumped() ? LERP(COLOR_BLUE_F.xyz(), COLOR_WHITE_F.xyz(), 0.25f) : COLOR_WHITE_F.xyz());
+    m_Jump.SetColor3(g_pGame->GetRock()->GetJumped() ? LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.25f) : COLOR_WHITE_F);
 
     // update touch controls
     if(m_iControlType == CONTROL_FULLSCREEN)
@@ -222,17 +222,17 @@ void cInterface::Update(const float& fScore, const float& fTime, const float& fC
     if(m_Hide.GetCurrent(false) >= 1.0f) return;
 
     // update score and time value text
-    m_ScoreValue.SetText  (coreData::Print("%06.0f",  std::floor(fScore)));
-    m_TimeValueSec.SetText(coreData::Print("%03.0f.", std::floor(fTime)));
-    m_TimeValueMil.SetText(coreData::Print("%01d",    int(std::floor(fTime * 10.0f)) % 10));
+    m_ScoreValue.SetText  (PRINT("%06.0f",  std::floor(fScore)));
+    m_TimeValueSec.SetText(PRINT("%03.0f.", std::floor(fTime)));
+    m_TimeValueMil.SetText(PRINT("%01d",    int(std::floor(fTime * 10.0f)) % 10));
 
     // update combo value text
     const bool bCombo = (fCombo > 1.0f) ? true : false;
-    m_Combo.SetText     (bCombo ? "COMBO"                            : "");
-    m_ComboValue.SetText(bCombo ? coreData::Print("x%01.1f", fCombo) : "");
+    m_Combo.SetText     (bCombo ? "COMBO"                  : "");
+    m_ComboValue.SetText(bCombo ? PRINT("x%01.1f", fCombo) : "");
 
     // update combo value and bar color
-    const coreVector3 vComboColor = LERP(COLOR_RED_F.xyz(), LERP(COLOR_YELLOW_F.xyz(), COLOR_GREEN_F.xyz(), MAX((fDelay-0.5f) * 2.0f, 0.0f)), MIN(fDelay * 2.0f, 1.0f));
+    const coreVector3 vComboColor = LERP(COLOR_RED_F, LERP(COLOR_YELLOW_F, COLOR_GREEN_F, MAX((fDelay-0.5f) * 2.0f, 0.0f)), MIN(fDelay * 2.0f, 1.0f));
     m_ComboValue.SetColor3(vComboColor);
     m_ComboBar.SetColor3  (vComboColor);
     m_ComboBar.SetSize(coreVector2(COMBO_BAR_LENGTH * fDelay, 0.01f));

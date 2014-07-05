@@ -261,7 +261,7 @@ template <typename T> int cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK
     case 12: sTrophyID = GPG_TROPHY_13; break;
     case 13: sTrophyID = GPG_TROPHY_14; break;
     case 14: sTrophyID = GPG_TROPHY_15; break;
-    default: Core::Log->Error(false, "Trophy (%d) not found", iTrophyID); return GJ_REQUEST_FAILED;
+    default: Core::Log->Warning("Trophy (%d) not found", iTrophyID); return GJ_REQUEST_FAILED;
     }
 
     // achieve trophy with Google Play Games
@@ -348,7 +348,7 @@ template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::s
     {
     case GJ_LEADERBOARD_01: sLeaderboardID = GPG_LEADERBOARD_01; break;
     case GJ_LEADERBOARD_02: sLeaderboardID = GPG_LEADERBOARD_02; break;
-    default: Core::Log->Error(false, "Leaderboard (%d) not found", iTableID); return GJ_REQUEST_FAILED;
+    default: Core::Log->Warning("Leaderboard (%d) not found", iTableID); return GJ_REQUEST_FAILED;
     }
 
     // submit score with Google Play Games (no guest supported)
@@ -409,7 +409,7 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
     {
     case GJ_LEADERBOARD_01: sLeaderboardID = GPG_LEADERBOARD_01; break;
     case GJ_LEADERBOARD_02: sLeaderboardID = GPG_LEADERBOARD_02; break;
-    default: Core::Log->Error(false, "Leaderboard (%d) not found", iTableID); return GJ_REQUEST_FAILED;
+    default: Core::Log->Warning("Leaderboard (%d) not found", iTableID); return GJ_REQUEST_FAILED;
     }
 
     // get fetch type (0 = all, 1 = user only)
@@ -564,10 +564,10 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
                 break;
 
             // failed
-            case gpg::AuthStatus::ERROR_INTERNAL:                this->__SetErrorMessage(COLOR_RED_F.xyz(), "", "GOOGLE PLAY GAMES", "INTERNAL PROBLEM");      break;
-            case gpg::AuthStatus::ERROR_TIMEOUT:                 this->__SetErrorMessage(COLOR_ORANGE_F.xyz(), "GOOGLE PLAY GAMES", "CONNECTION TIMEOUT", ""); break;
-            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F.xyz(), "GOOGLE PLAY GAMES", "NOT YET AUTHORIZED", ""); break;
-            case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED: this->__SetErrorMessage(COLOR_RED_F.xyz(), "", "GOOGLE PLAY GAMES", "UPDATE REQUIRED");       break;
+            case gpg::AuthStatus::ERROR_INTERNAL:                this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "INTERNAL PROBLEM");      break;
+            case gpg::AuthStatus::ERROR_TIMEOUT:                 this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "CONNECTION TIMEOUT", ""); break;
+            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "NOT YET AUTHORIZED", ""); break;
+            case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED: this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "UPDATE REQUIRED");       break;
             }
 
             if(this->m_bAuthorized)
@@ -619,7 +619,7 @@ inline void cOnline::Logout()
 #if defined(_API_GOOGLE_PLAY_)
 
     // logout with Google Play Games
-    return m_pGooglePlay->SignOut();
+    m_pGooglePlay->SignOut();
 
 #else
 
