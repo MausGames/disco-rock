@@ -49,7 +49,7 @@ void cTrap::Move()
         pParticle->SetPositionRel(coreVector3(coreVector2::Rand(1.0f, BACK_DETAIL_X*0.37f), -5.0f), coreVector3(0.0f, 0.0f, 25.0f));
         pParticle->SetScaleStc(4.0f);
         pParticle->SetAngleStc(0.0f);
-        pParticle->SetColor4Stc(COLOR_WHITE_F);
+        pParticle->SetColor4Stc(coreVector4(COLOR_WHITE_F, 1.0f));
         pParticle->SetSpeed(2.0f);
     });
 
