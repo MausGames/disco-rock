@@ -1,6 +1,6 @@
 # Disco Rock
 
-**You are a rock and you like parties**
+**You are a rock and you like parties!**
 
 Roll through the disco and smash as many beverages as possible, avoid holes in the dance floor, jump around, make combos, and climb to the top of the leaderboard. 
 
