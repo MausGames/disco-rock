@@ -15,11 +15,8 @@ cTrap::cTrap()noexcept
 , m_Effect (g_pParticleSystem)
 {
     // load object resources
-    this->DefineModelFile("data/models/standard_cube.md5mesh");
-    this->DefineProgramShare("trap_shader")
-        ->AttachShaderFile("data/shaders/trap.vs")
-        ->AttachShaderFile("data/shaders/trap.fs")
-        ->Finish();
+    this->DefineModel("default_cube.md5mesh");
+    this->DefineProgram("trap_program");
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));

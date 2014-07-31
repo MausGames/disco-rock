@@ -19,22 +19,22 @@
 #define BACK_BLOCKS_Y (BACK_HEIGHT-1)                                // blocks per column
 #define BACK_BLOCKS   (BACK_BLOCKS_X*BACK_BLOCKS_Y)                  // number of all blocks
                                                                      
-#define BACK_PER_VERTICES    4                                       // vertices per block
-#define BACK_PER_INDICES     6                                       // indices per block
+#define BACK_PER_VERTICES   (4)                                      // vertices per block
+#define BACK_PER_INDICES    (6)                                      // indices per block
 #define BACK_TOTAL_VERTICES (BACK_PER_VERTICES*BACK_BLOCKS)          // total number of vertices
 #define BACK_TOTAL_INDICES  (BACK_PER_INDICES*BACK_BLOCKS)           // total number of indices
                                                                      
 #define BACK_DETAIL_X (24.0f*0.91f)                                  // X size of a block
-#define BACK_DETAIL_Y  24.0f                                         // Y size of a block
-#define BACK_OFFSET_Y  2.0f                                          // Y position offset
+#define BACK_DETAIL_Y (24.0f)                                        // Y size of a block
+#define BACK_OFFSET_Y (2.0f)                                         // Y position offset
                                                                      
-#define BACK_VIEW    24                                              // visible rows
-#define BACK_REPEAT  40                                              // rows when to repeat (BACK_VIEW + BACK_REPEAT < BACK_HEIGHT)
+#define BACK_VIEW   (24)                                             // visible rows
+#define BACK_REPEAT (40)                                             // rows when to repeat (BACK_VIEW + BACK_REPEAT < BACK_HEIGHT)
 #define BACK_RANGE  (BACK_BLOCKS_X * BACK_PER_INDICES * BACK_VIEW)   // vertices to draw at once
 
 #define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (float(i) - (float(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
 #define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))             // Y position at where to spawn objects on the horizon
-#define BACK_REMOVE_Y     -52.0f                                                           // Y position at where to remove objects
+#define BACK_REMOVE_Y     (-52.0f)                                                         // Y position at where to remove objects
 
 
 // ****************************************************************
@@ -80,7 +80,7 @@ public:
 
     // make or remove holes, get current horizon line, do other fancy stuff
     void UpdateHoles(const coreUint& iLine, const bool* pbIndex);
-    inline int GetCurLine()const {return (int)std::floor(m_fPositionTime);}
+    inline int GetCurLine()const {return (int)FLOOR(m_fPositionTime);}
     inline float GetFlash(const float& fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
 
     // get height value at specific position

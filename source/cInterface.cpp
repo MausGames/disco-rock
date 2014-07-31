@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#define COMBO_BAR_LENGTH 0.5f   // combo bar length
+#define COMBO_BAR_LENGTH (0.5f)   // combo bar length
 
 
 // ****************************************************************
@@ -65,7 +65,7 @@ cInterface::cInterface()noexcept
     m_Combo.SetColor3(coreVector3(0.75f,0.75f,0.75));
 
     // create combo bar
-    m_ComboBar.DefineProgramShare("2d_shader_color");
+    m_ComboBar.DefineProgram("2d_program_color");
     m_ComboBar.SetCenter(coreVector2(0.0f,-0.5f));
     m_ComboBar.SetAlignment(coreVector2(0.0f,1.0f));
     m_ComboBar.SetColor3(COLOR_BLUE_F);
@@ -73,30 +73,30 @@ cInterface::cInterface()noexcept
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
     // create touch controls
-    m_MoveLeft.Construct("data/textures/button_move.png", "data/textures/button_move.png");
-    m_MoveLeft.DefineProgramShare("2d_shader"); // override
+    m_MoveLeft.Construct("button_move.png", "button_move.png");
+    m_MoveLeft.DefineProgram("2d_program"); // override
     m_MoveLeft.SetSize(coreVector2(0.1f,0.15f));
     m_MoveLeft.SetFocusRange(1.2f);
 
-    m_MoveRight.Construct("data/textures/button_move.png", "data/textures/button_move.png");
-    m_MoveRight.DefineProgramShare("2d_shader"); // override
+    m_MoveRight.Construct("button_move.png", "button_move.png");
+    m_MoveRight.DefineProgram("2d_program"); // override
     m_MoveRight.SetSize(coreVector2(0.1f,0.15f));
     m_MoveRight.SetDirection(coreVector2(0.0f,-1.0f));
     m_MoveRight.SetFocusRange(1.2f);
 
-    m_Jump.Construct("data/textures/button_jump.png", "data/textures/button_jump.png");
-    m_Jump.DefineProgramShare("2d_shader"); // override
+    m_Jump.Construct("button_jump.png", "button_jump.png");
+    m_Jump.DefineProgram("2d_program"); // override
     m_Jump.SetSize(coreVector2(0.15f,0.15f));
     m_Jump.SetFocusRange(1.8f);
 
-    m_Pause.Construct("data/textures/button_pause.png", "data/textures/button_pause.png");
-    m_Pause.DefineProgramShare("2d_shader"); // override
+    m_Pause.Construct("button_pause.png", "button_pause.png");
+    m_Pause.DefineProgram("2d_program"); // override
     m_Pause.SetSize(coreVector2(0.075f,0.075f));
 
     // create separating lines
     for(int i = 0; i < 2; ++i)
     {
-        m_apLine[i].DefineProgramShare("2d_shader_color");
+        m_apLine[i].DefineProgram("2d_program_color");
         m_apLine[i].SetPosition(coreVector2((i ? 0.1667f : -0.1667f) * Core::System->GetResolution().AspectRatio(), 0.0f));
         m_apLine[i].SetSize(coreVector2(0.01f,1.01f));
         m_apLine[i].SetColor3(coreVector3(1.0f,1.0f,1.0f));
@@ -108,7 +108,7 @@ cInterface::cInterface()noexcept
 #endif
 
     // fade in the interface
-    m_Show.Play(true);
+    m_Show.Play(CORE_TIMER_PLAY_RESET);
 }
 
 
@@ -121,7 +121,7 @@ cInterface::~cInterface()
 // ****************************************************************
 void cInterface::Render()
 {
-    if(m_Hide.GetCurrent(false) >= 1.0f) return;
+    if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
     if(!g_bPause)
     {
@@ -150,7 +150,7 @@ void cInterface::Render()
 // ****************************************************************
 void cInterface::Move()
 {
-    if(m_Hide.GetCurrent(false) >= 1.0f) return;
+    if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
     // update both fade timers
     m_Show.Update(1.0f);
@@ -161,7 +161,7 @@ void cInterface::Move()
     constexpr_var int iNum = ARRAY_SIZE(apLabel);
 
     // calculate alpha and scale value
-    const float fAlpha = m_Show.GetCurrent(false) - m_Hide.GetCurrent(false);
+    const float fAlpha = m_Show.GetValue(CORE_TIMER_GET_NORMAL) - m_Hide.GetValue(CORE_TIMER_GET_NORMAL);
     const float fScale = g_pBackground->GetFlash(0.3f);
 
     for(int i = 0; i < iNum; ++i)
@@ -219,12 +219,12 @@ void cInterface::Move()
 // ****************************************************************
 void cInterface::Update(const float& fScore, const float& fTime, const float& fCombo, const float& fDelay)
 {
-    if(m_Hide.GetCurrent(false) >= 1.0f) return;
+    if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
     // update score and time value text
-    m_ScoreValue.SetText  (PRINT("%06.0f",  std::floor(fScore)));
-    m_TimeValueSec.SetText(PRINT("%03.0f.", std::floor(fTime)));
-    m_TimeValueMil.SetText(PRINT("%01d",    int(std::floor(fTime * 10.0f)) % 10));
+    m_ScoreValue.SetText  (PRINT("%06.0f",  FLOOR(fScore)));
+    m_TimeValueSec.SetText(PRINT("%03.0f.", FLOOR(fTime)));
+    m_TimeValueMil.SetText(PRINT("%01d",    int(FLOOR(fTime * 10.0f)) % 10));
 
     // update combo value text
     const bool bCombo = (fCombo > 1.0f) ? true : false;
@@ -320,7 +320,7 @@ void cInterface::ChangeControlType(const int& iControlType)
     }
 
     // override alpha
-    const float fAlpha = (m_Show.GetCurrent(false) - m_Hide.GetCurrent(false)) * MENU_ALPHA_IDLE_1;
+    const float fAlpha = (m_Show.GetValue(CORE_TIMER_GET_NORMAL) - m_Hide.GetValue(CORE_TIMER_GET_NORMAL)) * MENU_ALPHA_IDLE_1;
     m_MoveLeft.SetAlpha(fAlpha);
     m_MoveRight.SetAlpha(fAlpha);
     m_Jump.SetAlpha(fAlpha);

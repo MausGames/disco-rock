@@ -13,17 +13,17 @@
 
 // ****************************************************************
 // transparency values
-#define MENU_ALPHA_ACTIVE_1 0.8f
-#define MENU_ALPHA_IDLE_1   0.5f
-#define MENU_ALPHA_ACTIVE_2 0.65f
-#define MENU_ALPHA_IDLE_2   0.95f
+#define MENU_ALPHA_ACTIVE_1 (0.8f)
+#define MENU_ALPHA_IDLE_1   (0.5f)
+#define MENU_ALPHA_ACTIVE_2 (0.65f)
+#define MENU_ALPHA_IDLE_2   (0.95f)
 
 // values for menu object adjustments
-#define ADJUST_LEFT(x)   x.SetCenter(coreVector2(-0.5f,0.0f)); x.SetAlignment(coreVector2( 1.0f,0.0f));
-#define ADJUST_RIGHT(x)  x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));
-#define ADJUST_BORDER(x) x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);
+#define ADJUST_LEFT(x)   {x.SetCenter(coreVector2(-0.5f,0.0f)); x.SetAlignment(coreVector2( 1.0f,0.0f));}
+#define ADJUST_RIGHT(x)  {x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));}
+#define ADJUST_BORDER(x) {x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);}
 
-#define LEFT_CENTER 0.46f
+#define LEFT_CENTER (0.46f)
 
 // macro function for changing object transparency                      
 #define ALPHA_BUTTON_TEXT(b)                                                                                             \
@@ -144,8 +144,8 @@ private:
     coreLabel m_aAfterRecord[SCORE_TABLES];
 
     coreLabel m_TrophyText;
-    coreObject2D m_aTrophyImage[TROPHIES];
-    coreObject2D m_aTrophyCheck[TROPHIES];
+    coreObject2D m_aTrophyImage[TROPHY_ITEMS];
+    coreObject2D m_aTrophyCheck[TROPHY_ITEMS];
     coreLabel m_aTrophySecret[TROPHY_SECRETS];
     coreLabel m_TrophyName;
     coreLabel m_aTrophyDesc[2];

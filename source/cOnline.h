@@ -19,12 +19,12 @@
     #define _API_GAME_JOLT_
 #endif
 
-#define SCORE_TABLES   2     // number of different score tables (leaderboards)
-#define SCORE_ENTRIES  8     // number of score entries to display at once
-#define SCORE_PAGES    5     // number of score pages
+#define SCORE_TABLES   (2)    // number of different score tables (leaderboards)
+#define SCORE_ENTRIES  (8)    // number of score entries to display at once
+#define SCORE_PAGES    (5)    // number of score pages
                                  
-#define TROPHIES       15   // number of implemented trophies
-#define TROPHY_SECRETS 4    // number of secret trophies
+#define TROPHY_ITEMS   (15)   // number of implemented trophies
+#define TROPHY_SECRETS (4)    // number of secret trophies
 
 
 // ****************************************************************
@@ -33,24 +33,24 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 
 #define GJ_KEY ""
 
-#define GJ_TROPHY_01  0
-#define GJ_TROPHY_02  1
-#define GJ_TROPHY_03  2
-#define GJ_TROPHY_04  3
-#define GJ_TROPHY_05  4
-#define GJ_TROPHY_06  5
-#define GJ_TROPHY_07  6
-#define GJ_TROPHY_08  7
-#define GJ_TROPHY_09  8
-#define GJ_TROPHY_10  9
-#define GJ_TROPHY_11 10
-#define GJ_TROPHY_12 11
-#define GJ_TROPHY_13 12
-#define GJ_TROPHY_14 13
-#define GJ_TROPHY_15 14
+#define GJ_TROPHY_01 (0)
+#define GJ_TROPHY_02 (1)
+#define GJ_TROPHY_03 (2)
+#define GJ_TROPHY_04 (3)
+#define GJ_TROPHY_05 (4)
+#define GJ_TROPHY_06 (5)
+#define GJ_TROPHY_07 (6)
+#define GJ_TROPHY_08 (7)
+#define GJ_TROPHY_09 (8)
+#define GJ_TROPHY_10 (9)
+#define GJ_TROPHY_11 (10)
+#define GJ_TROPHY_12 (11)
+#define GJ_TROPHY_13 (12)
+#define GJ_TROPHY_14 (13)
+#define GJ_TROPHY_15 (14)
 
-#define GJ_LEADERBOARD_01 0
-#define GJ_LEADERBOARD_02 1
+#define GJ_LEADERBOARD_01 (0)
+#define GJ_LEADERBOARD_02 (1)
 
 
 // ****************************************************************
@@ -292,7 +292,7 @@ template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList)
         --this->m_iNumConnections;
 
         gjTrophyList apTrophy;
-        apTrophy.reserve(TROPHIES);
+        apTrophy.reserve(TROPHY_ITEMS);
 
         // check for valid response
         if(Response.status == gpg::ResponseStatus::VALID)
@@ -566,7 +566,7 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
             // failed
             case gpg::AuthStatus::ERROR_INTERNAL:                this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "INTERNAL PROBLEM");      break;
             case gpg::AuthStatus::ERROR_TIMEOUT:                 this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "CONNECTION TIMEOUT", ""); break;
-            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "NOT YET AUTHORIZED", ""); break;
+            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "NOT YET ENABLED",    ""); break;
             case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED: this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "UPDATE REQUIRED");       break;
             }
 

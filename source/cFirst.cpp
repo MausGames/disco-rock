@@ -24,7 +24,7 @@ cFirst::cFirst()noexcept
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
     m_ControlText.SetText("CONTROLS");
 
-    m_ControlType.Construct(FONT_ROCKS, 29, 16, 3);
+    m_ControlType.Construct(FONT_ROCKS, 29, 16);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
     m_ControlType.SetSize(coreVector2(0.49f,0.075f));
     m_ControlType.GetCaption()->SetColor3(coreVector3(0.75f,0.75f,0.75f));
@@ -37,7 +37,7 @@ cFirst::cFirst()noexcept
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
         pArrow->Construct(NULL, NULL, FONT_ROCKS, 45, 2);
-        pArrow->DefineProgramShare("2d_shader_border");
+        pArrow->DefineProgram("2d_program_border");
         pArrow->SetColor3(coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize(coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
         pArrow->SetFocusRange(1.2f);
@@ -45,8 +45,8 @@ cFirst::cFirst()noexcept
     }
 
     // create start button
-    m_Start.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Start.DefineProgramShare("2d_shader_border"); // override
+    m_Start.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Start.DefineProgram("2d_program_border"); // override
     m_Start.SetPosition(coreVector2(0.0f,0.0f));
     m_Start.SetSize(coreVector2(0.49f,0.1f));
     m_Start.SetColor3(COLOR_BLUE_F);
@@ -65,9 +65,9 @@ cFirst::cFirst()noexcept
     m_Interface.GetLine(1)->SetColor3(vTouchColor);
 
     // add menu objects
-    this->AddObject(1, &m_ControlText);
-    this->AddObject(1, &m_ControlType);
-    this->AddObject(1, &m_Start);
+    this->BindObject(1, &m_ControlText);
+    this->BindObject(1, &m_ControlType);
+    this->BindObject(1, &m_Start);
 }
 
 
@@ -124,7 +124,7 @@ void cFirst::Move()
     // apply and save control changes
     if(m_ControlType.IsClicked())
     {
-        if(Core::Config->GetInt("Game", "Control", 0) != m_ControlType.GetCurIndex())
+        if(Core::Config->GetInt("Game", "Control", 0) != (int)m_ControlType.GetCurIndex())
         {
             Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
             m_Interface.ChangeControlType(m_ControlType.GetCurIndex());

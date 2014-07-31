@@ -37,7 +37,7 @@ cMenu::cMenu()noexcept
 , m_iTrophyCurrent (-1)
 , m_bFromGuest     (false)
 {
-    ASSERT(sizeof(m_iTrophyStatus)*8 >= TROPHIES);
+    ASSERT(sizeof(m_iTrophyStatus)*8 >= TROPHY_ITEMS);
     
     // create intro objects
     m_Made.Construct(FONT_ROCKS, 29, 0);
@@ -48,46 +48,37 @@ cMenu::cMenu()noexcept
     m_For.SetPosition(coreVector2(0.0f,-0.06667f));
     m_For.SetText("FOR");
 
-    m_Maus.DefineTextureFile(0, "data/textures/maus_logo.png");
-    m_Maus.DefineProgramShare("2d_shader")
-        ->AttachShaderFile("data/shaders/default_2d_simple.vs")
-        ->AttachShaderFile("data/shaders/default.fs")
-        ->Finish();
+    m_Maus.DefineTexture(0, "maus_logo.png");
+    m_Maus.DefineProgram("2d_program");
     m_Maus.SetPosition(coreVector2(0.0f,0.13333f));
     m_Maus.SetSize(coreVector2(0.512f,0.256f) * 0.93333f);
 
-    m_GameJolt.DefineTextureFile(0, "data/textures/gamejolt_logo.png");
-    m_GameJolt.DefineProgramShare("2d_shader");
+    m_GameJolt.DefineTexture(0, "gamejolt_logo.png");
+    m_GameJolt.DefineProgram("2d_program");
     m_GameJolt.SetPosition(coreVector2(0.0f,-0.13333f));
     m_GameJolt.SetSize(coreVector2(0.512f,0.064f) * 1.33333f);
 
-    m_BigLogo.DefineTextureFile(0, "data/textures/game_logo.png");
-    m_BigLogo.DefineProgramShare("2d_shader");
+    m_BigLogo.DefineTexture(0, "game_logo.png");
+    m_BigLogo.DefineProgram("2d_program");
     m_BigLogo.SetPosition(coreVector2(0.0f,0.05f));
 
     // create background objects
-    m_Black.DefineProgramShare("2d_shader_color")
-        ->AttachShaderFile("data/shaders/default_2d_simple.vs")
-        ->AttachShaderFile("data/shaders/color.fs")
-        ->Finish();
+    m_Black.DefineProgram("2d_program_color");
     m_Black.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_Black.FitToScreen();
 
-    m_White.DefineProgramShare("2d_shader_color");
+    m_White.DefineProgram("2d_program_color");
     m_White.FitToScreen();
     m_White.Move();
 
-    m_BackgroundLeft.DefineProgramShare("2d_shader_border")
-        ->AttachShaderFile("data/shaders/default_2d_simple.vs")
-        ->AttachShaderFile("data/shaders/border.fs")
-        ->Finish();
+    m_BackgroundLeft.DefineProgram("2d_program_border");
     m_BackgroundLeft.SetPosition(coreVector2(0.15f,0.0f));
     m_BackgroundLeft.SetSize(coreVector2(0.62f,0.62f));
     m_BackgroundLeft.SetColor3(coreVector3(0.05f,0.05f,0.05f));
     ADJUST_LEFT(m_BackgroundLeft)
     ADJUST_BORDER(m_BackgroundLeft)
 
-    m_BackgroundRight.DefineProgramShare("2d_shader_border");
+    m_BackgroundRight.DefineProgram("2d_program_border");
     m_BackgroundRight.SetPosition(coreVector2(-0.03f,0.0f));
     m_BackgroundRight.SetSize(coreVector2(MIN(Core::System->GetResolution().AspectRatio() - 0.62f - 0.15f - 0.06f, 0.62f + 0.12f), 0.62f));
     m_BackgroundRight.SetColor3(coreVector3(0.05f,0.05f,0.05f));
@@ -97,8 +88,8 @@ cMenu::cMenu()noexcept
     const coreVector2 vRightCenter = m_BackgroundRight.GetPosition() - 0.5f*m_BackgroundRight.GetSize();
 
     // create header objects
-    m_Logo.DefineTextureFile(0, "data/textures/game_logo.png");
-    m_Logo.DefineProgramShare("2d_shader");
+    m_Logo.DefineTexture(0, "game_logo.png");
+    m_Logo.DefineProgram("2d_program");
     m_Logo.SetPosition(coreVector2(vRightCenter.x, 0.129f));
     m_Logo.SetCenter(coreVector2(0.5f,0.0f));
     
@@ -108,8 +99,8 @@ cMenu::cMenu()noexcept
     m_Pause.SetText("PAUSE");
 
     // create labeled buttons
-    m_Start.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Start.DefineProgramShare("2d_shader_border"); // override
+    m_Start.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Start.DefineProgram("2d_program_border"); // override
     m_Start.SetPosition(coreVector2(-0.06f,-0.092f));
     m_Start.SetSize(coreVector2(m_BackgroundRight.GetSize().x - 0.06f,0.1f));
     m_Start.SetColor3(COLOR_BLUE_F);
@@ -118,8 +109,8 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT(m_Start)
     ADJUST_BORDER(m_Start)
 
-    m_Exit.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Exit.DefineProgramShare("2d_shader_border"); // override
+    m_Exit.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Exit.DefineProgram("2d_program_border"); // override
     m_Exit.SetPosition(coreVector2(-0.06f,-0.222f));
     m_Exit.SetSize(m_Start.GetSize());
     m_Exit.SetColor3(COLOR_RED_F);
@@ -131,8 +122,8 @@ cMenu::cMenu()noexcept
     const bool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
     const bool bTooSmall    = Core::System->GetResolution().AspectRatio() < 1.3f;
 
-    m_Resume.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Resume.DefineProgramShare("2d_shader_border"); // override
+    m_Resume.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Resume.DefineProgram("2d_program_border"); // override
     m_Resume.SetPosition(m_Start.GetPosition());
     m_Resume.SetSize(m_Start.GetSize());
     m_Resume.SetColor3(COLOR_BLUE_F);
@@ -141,8 +132,8 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT(m_Resume)
     ADJUST_BORDER(m_Resume)
 
-    m_Abort.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Abort.DefineProgramShare("2d_shader_border"); // override
+    m_Abort.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Abort.DefineProgram("2d_program_border"); // override
     m_Abort.SetPosition(m_Exit.GetPosition());
     m_Abort.SetSize(m_Start.GetSize());
     m_Abort.SetColor3(COLOR_RED_F);
@@ -151,8 +142,8 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT(m_Abort)
     ADJUST_BORDER(m_Abort)
 
-    m_Submit.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Submit.DefineProgramShare("2d_shader_border"); // override
+    m_Submit.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Submit.DefineProgram("2d_program_border"); // override
     m_Submit.SetPosition(m_Start.GetPosition());
     m_Submit.SetSize(m_Start.GetSize());
     m_Submit.SetColor3(COLOR_ORANGE_F);
@@ -161,8 +152,8 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT(m_Submit)
     ADJUST_BORDER(m_Submit)
 
-    m_Finish.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 45, 0);
-    m_Finish.DefineProgramShare("2d_shader_border"); // override
+    m_Finish.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Finish.DefineProgram("2d_program_border"); // override
     m_Finish.SetPosition(m_Exit.GetPosition());
     m_Finish.SetSize(m_Start.GetSize());
     m_Finish.SetColor3(COLOR_PURPLE_F);
@@ -174,7 +165,7 @@ cMenu::cMenu()noexcept
     // create graphical buttons
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
-    m_Short.Construct("data/textures/button_play.png", "data/textures/button_play.png");
+    m_Short.Construct("button_play.png", "button_play.png");
     m_Short.SetPosition(coreVector2(-0.06f,0.2425f));
     m_Short.SetSize(coreVector2(0.075f,0.075f));
     m_Short.SetFocusRange(1.2f);
@@ -182,27 +173,27 @@ cMenu::cMenu()noexcept
 
 #else
 
-    m_Short.Construct("data/textures/standard_black.png", "data/textures/standard_black.png");
+    m_Short.Construct("default_black.png", "default_black.png");
     m_Short.SetPosition(coreVector2(1000.0f,1000.0f));
 
 #endif
 
-    m_ButtonScore.Construct("data/textures/button_score.png", "data/textures/button_score.png");
+    m_ButtonScore.Construct("button_score.png", "button_score.png");
     m_ButtonScore.SetPosition(coreVector2(0.03f,0.24f));
     m_ButtonScore.SetSize(coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonScore)
 
-    m_ButtonTime.Construct("data/textures/button_time.png", "data/textures/button_time.png");
+    m_ButtonTime.Construct("button_time.png", "button_time.png");
     m_ButtonTime.SetPosition(coreVector2(0.03f,0.12f));
     m_ButtonTime.SetSize(coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonTime)
 
-    m_ButtonTrophy.Construct("data/textures/button_trophy.png", "data/textures/button_trophy.png");
+    m_ButtonTrophy.Construct("button_trophy.png", "button_trophy.png");
     m_ButtonTrophy.SetPosition(coreVector2(0.03f,-0.12f));
     m_ButtonTrophy.SetSize(coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonTrophy)
 
-    m_ButtonConfig.Construct("data/textures/button_config.png", "data/textures/button_config.png");
+    m_ButtonConfig.Construct("button_config.png", "button_config.png");
     m_ButtonConfig.SetPosition(coreVector2(0.03f,-0.24f));
     m_ButtonConfig.SetSize(coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonConfig)
@@ -210,8 +201,8 @@ cMenu::cMenu()noexcept
     // create objects on the upper screen
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
-    m_TopBatteryBolt.DefineTextureFile(0, "data/textures/icon_power.png");
-    m_TopBatteryBolt.DefineProgramShare("2d_shader_color_icon");
+    m_TopBatteryBolt.DefineTexture(0, "icon_power.png");
+    m_TopBatteryBolt.DefineProgram("2d_program_color_icon");
     m_TopBatteryBolt.SetPosition(coreVector2(0.00333f,-0.00933f));
     m_TopBatteryBolt.SetSize(coreVector2(0.05f,0.05f));
     m_TopBatteryBolt.SetCenter(coreVector2(-0.5f,0.5f));
@@ -226,11 +217,8 @@ cMenu::cMenu()noexcept
 
 #endif
 
-    m_TopFPSTacho.DefineTextureFile(0, "data/textures/icon_speed.png");
-    m_TopFPSTacho.DefineProgramShare("2d_shader_color_icon")
-        ->AttachShaderFile("data/shaders/default_2d_simple.vs")
-        ->AttachShaderFile("data/shaders/color_icon.fs")
-        ->Finish();
+    m_TopFPSTacho.DefineTexture(0, "icon_speed.png");
+    m_TopFPSTacho.DefineProgram("2d_program_color_icon");
     m_TopFPSTacho.SetPosition(coreVector2(-0.01633f,-0.007f));
     m_TopFPSTacho.SetSize(coreVector2(0.05f,0.05f));
     m_TopFPSTacho.SetCenter(coreVector2(0.5f,0.5f));
@@ -274,27 +262,27 @@ cMenu::cMenu()noexcept
     m_BottomLoginName.SetAlignment(coreVector2(-1.0f,1.0f));
 
 #if defined(_API_GOOGLE_PLAY_)
-    m_BottomLoginJolt.DefineTextureFile(0, "data/textures/google_controller.png");
+    m_BottomLoginJolt.DefineTexture(0, "google_controller.png");
     m_BottomLoginJolt.SetPosition(coreVector2(-0.025f,0.045f));
     m_BottomLoginJolt.SetSize(coreVector2(0.036f,0.036f)*2.5f);
 #else
-    m_BottomLoginJolt.DefineTextureFile(0, "data/textures/gamejolt_jolt.png");
+    m_BottomLoginJolt.DefineTexture(0, "gamejolt_jolt.png");
     m_BottomLoginJolt.SetPosition(coreVector2(-0.02f,0.016f));
     m_BottomLoginJolt.SetSize(coreVector2(0.036f,0.036f)*2.0f);
 #endif
-    m_BottomLoginJolt.DefineProgramShare("2d_shader");
+    m_BottomLoginJolt.DefineProgram("2d_program");
     m_BottomLoginJolt.SetCenter(coreVector2(0.5f,-0.5f));
     m_BottomLoginJolt.SetAlignment(coreVector2(-1.0f,1.0f));
 
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
 
-    m_GoogleFullTrophy.Construct("data/textures/button_full_trophy.png", "data/textures/button_full_trophy.png");
+    m_GoogleFullTrophy.Construct("button_full_trophy.png", "button_full_trophy.png");
     m_GoogleFullTrophy.SetPosition(coreVector2(-0.017f - 0.23f, 0.06f));
     m_GoogleFullTrophy.SetSize(coreVector2(0.075f,0.075f));
     m_GoogleFullTrophy.SetCenter(coreVector2(0.5f,-0.5f));
     m_GoogleFullTrophy.SetAlignment(coreVector2(-1.0f,1.0f));
 
-    m_GoogleFullScore.Construct("data/textures/button_full_score.png", "data/textures/button_full_score.png");
+    m_GoogleFullScore.Construct("button_full_score.png", "button_full_score.png");
     m_GoogleFullScore.SetPosition(coreVector2(-0.017f - 0.335f, m_GoogleFullTrophy.GetPosition().y));
     m_GoogleFullScore.SetSize(coreVector2(0.075f,0.075f));
     m_GoogleFullScore.SetCenter(coreVector2(0.5f,-0.5f));
@@ -303,7 +291,7 @@ cMenu::cMenu()noexcept
 #endif
 
     // create question objects
-    m_QuestionBlack.DefineProgramShare("2d_shader_color");
+    m_QuestionBlack.DefineProgram("2d_program_color");
     m_QuestionBlack.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_QuestionBlack.FitToScreen();
     m_QuestionBlack.Move();
@@ -313,14 +301,14 @@ cMenu::cMenu()noexcept
     m_Question.SetText("Do you want to go out with me?");
     m_Question.Move();
 
-    m_Yes.Construct("data/textures/button_ok.png", "data/textures/button_ok.png");
+    m_Yes.Construct("button_ok.png", "button_ok.png");
     m_Yes.SetPosition(coreVector2(-0.2f,-0.08f));
     m_Yes.SetSize(coreVector2(0.075f,0.075f));
     m_Yes.SetColor3(LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
     m_Yes.SetFocusRange(1.2f);
     m_Yes.Move();
 
-    m_No.Construct("data/textures/button_cancel.png", "data/textures/button_cancel.png");
+    m_No.Construct("button_cancel.png", "button_cancel.png");
     m_No.SetPosition(coreVector2(0.2f,-0.08f));
     m_No.SetSize(m_Yes.GetSize());
     m_No.SetColor3(LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
@@ -335,8 +323,8 @@ cMenu::cMenu()noexcept
 
     const int iCurQuality = CLAMP(Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY), 0, 2);
 
-    m_VideoLow.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 0);
-    m_VideoLow.DefineProgramShare("2d_shader_border"); // override
+    m_VideoLow.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
+    m_VideoLow.DefineProgram("2d_program_border"); // override
     m_VideoLow.SetPosition(coreVector2(LEFT_CENTER - 0.17f,0.15f)); // old Y: 0.13f
     m_VideoLow.SetSize(coreVector2(0.15f,0.075f));
     m_VideoLow.SetCenter(coreVector2(-0.5f,0.0f));
@@ -345,8 +333,8 @@ cMenu::cMenu()noexcept
     m_VideoLow.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoLow)
 
-    m_VideoMedium.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 0);
-    m_VideoMedium.DefineProgramShare("2d_shader_border"); // override
+    m_VideoMedium.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
+    m_VideoMedium.DefineProgram("2d_program_border"); // override
     m_VideoMedium.SetPosition(coreVector2(LEFT_CENTER, m_VideoLow.GetPosition().y));
     m_VideoMedium.SetSize(m_VideoLow.GetSize());
     m_VideoMedium.SetCenter(coreVector2(-0.5f,0.0f));
@@ -355,8 +343,8 @@ cMenu::cMenu()noexcept
     m_VideoMedium.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoMedium)
 
-    m_VideoHigh.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 0);
-    m_VideoHigh.DefineProgramShare("2d_shader_border"); // override
+    m_VideoHigh.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
+    m_VideoHigh.DefineProgram("2d_program_border"); // override
     m_VideoHigh.SetPosition(coreVector2(LEFT_CENTER + 0.17f, m_VideoLow.GetPosition().y));
     m_VideoHigh.SetSize(m_VideoLow.GetSize());
     m_VideoHigh.SetCenter(coreVector2(-0.5f,0.0f));
@@ -373,38 +361,35 @@ cMenu::cMenu()noexcept
 
     const float fCurVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME) * 0.1f;
 
-    m_AudioBarBack.DefineProgramShare("2d_shader_color_bar")
-        ->AttachShaderFile("data/shaders/default_2d_simple.vs")
-        ->AttachShaderFile("data/shaders/color_bar.fs")
-        ->Finish();
+    m_AudioBarBack.DefineProgram("2d_program_color_bar");
     m_AudioBarBack.SetPosition(coreVector2(LEFT_CENTER, -0.04f)); // old Y: -0.08f
     m_AudioBarBack.SetSize(coreVector2(0.5f,0.056f));
     m_AudioBarBack.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioBarBack.SetColor3(coreVector3(0.5f,0.5f,0.5f));
 
-    m_AudioDrag.Construct("data/textures/standard_black.png", "data/textures/standard_black.png");
-    m_AudioDrag.DefineProgramShare("2d_shader_border"); // override
+    m_AudioDrag.Construct("default_black.png", "default_black.png");
+    m_AudioDrag.DefineProgram("2d_program_border"); // override
     m_AudioDrag.SetSize(coreVector2(0.035f,0.085f));
     m_AudioDrag.SetPosition(coreVector2(LEFT_CENTER + (fCurVolume - 0.5f) * (m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x), m_AudioBarBack.GetPosition().y));
     m_AudioDrag.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioDrag.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     ADJUST_BORDER(m_AudioDrag)
 
-    m_AudioBar.DefineProgramShare("2d_shader_color_bar");
+    m_AudioBar.DefineProgram("2d_program_color_bar");
     m_AudioBar.SetSize(coreVector2((m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x) * fCurVolume, 0.056f));
     m_AudioBar.SetPosition(coreVector2(LEFT_CENTER + (m_AudioBar.GetSize().x - m_AudioBarBack.GetSize().x) * 0.5f, m_AudioBarBack.GetPosition().y));
     m_AudioBar.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioBar.SetColor3(COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
 
-    m_AudioIconHigh.DefineTextureFile(0, "data/textures/icon_audio_1.png");
-    m_AudioIconHigh.DefineProgramShare("2d_shader_color_icon");
+    m_AudioIconHigh.DefineTexture(0, "icon_audio_1.png");
+    m_AudioIconHigh.DefineProgram("2d_program_color_icon");
     m_AudioIconHigh.SetPosition(coreVector2(LEFT_CENTER + 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconHigh.SetSize(coreVector2(0.05f,0.05f));
     m_AudioIconHigh.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioIconHigh.SetFocusRange(0.0f);
 
-    m_AudioIconLow.DefineTextureFile(0, "data/textures/icon_audio_2.png");
-    m_AudioIconLow.DefineProgramShare("2d_shader_color_icon");
+    m_AudioIconLow.DefineTexture(0, "icon_audio_2.png");
+    m_AudioIconLow.DefineProgram("2d_program_color_icon");
     m_AudioIconLow.SetPosition(coreVector2(LEFT_CENTER - 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconLow.SetSize(coreVector2(0.05f,0.05f));
     m_AudioIconLow.SetCenter(coreVector2(-0.5f,0.0f));
@@ -418,20 +403,20 @@ cMenu::cMenu()noexcept
     m_LoginConfigOr.SetCenter(coreVector2(-0.5f,0.0f));
     m_LoginConfigOr.SetText("LOG INTO");
 
-    m_LoginConfigLogo.DefineTextureFile(0, "data/textures/gamejolt_logo.png");
-    m_LoginConfigLogo.DefineProgramShare("2d_shader");
+    m_LoginConfigLogo.DefineTexture(0, "gamejolt_logo.png");
+    m_LoginConfigLogo.DefineProgram("2d_program");
     m_LoginConfigLogo.SetPosition(coreVector2(LEFT_CENTER - 0.047f,-0.238f));
     m_LoginConfigLogo.SetSize(coreVector2(0.512f,0.064f) * 1.2f);
     m_LoginConfigLogo.SetCenter(coreVector2(-0.5f,0.0f));
 
-    m_LoginConfigStart.Construct("data/textures/button_login.png", "data/textures/button_login.png");
-    m_LoginConfigStart.SetPosition(coreVector2(LEFT_CENTER + 0.17f, g_bCoreDebug ? -0.33f : -0.221f));
+    m_LoginConfigStart.Construct("button_login.png", "button_login.png");
+    m_LoginConfigStart.SetPosition(coreVector2(LEFT_CENTER + 0.17f, DEFINED(_CORE_DEBUG_) ? -0.33f : -0.221f));
     m_LoginConfigStart.SetSize(coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_LoginConfigStart)
 
 #else
 
-    m_LoginConfigStart.Construct("data/textures/button_login.png", "data/textures/button_login.png");
+    m_LoginConfigStart.Construct("button_login.png", "button_login.png");
     m_LoginConfigStart.SetPosition(coreVector2(-0.017f - 0.125f, m_GoogleFullTrophy.GetPosition().y));
     m_LoginConfigStart.SetSize(coreVector2(0.075f,0.075f));
     m_LoginConfigStart.SetCenter(coreVector2(0.5f,-0.5f));
@@ -449,7 +434,7 @@ cMenu::cMenu()noexcept
 
     const int iCurControl = CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2);
 
-    m_ControlType.Construct(FONT_ROCKS, 29, 16, 3);
+    m_ControlType.Construct(FONT_ROCKS, 29, 16);
     m_ControlType.SetPosition(coreVector2(LEFT_CENTER,-0.221f));
     m_ControlType.SetSize(coreVector2(0.49f,0.075f));
     m_ControlType.SetCenter(coreVector2(-0.5f,0.0f));
@@ -464,7 +449,7 @@ cMenu::cMenu()noexcept
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
         pArrow->Construct(NULL, NULL, FONT_ROCKS, 45, 2);
-        pArrow->DefineProgramShare("2d_shader_border");
+        pArrow->DefineProgram("2d_program_border");
         pArrow->SetColor3(coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize(coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
         pArrow->GetCaption()->SetText(i ? ">" : "<");
@@ -475,12 +460,12 @@ cMenu::cMenu()noexcept
 #if !defined(_API_GOOGLE_PLAY_)
 
     // create login objects
-    m_LoginBlack.DefineProgramShare("2d_shader_color");
+    m_LoginBlack.DefineProgram("2d_program_color");
     m_LoginBlack.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_LoginBlack.FitToScreen();
     m_LoginBlack.Move();
 
-    m_LoginPopup.DefineProgramShare("2d_shader_border");
+    m_LoginPopup.DefineProgram("2d_program_border");
     m_LoginPopup.SetPosition(coreVector2(0.0f,0.25f));
     m_LoginPopup.SetSize(coreVector2(0.62f,0.37f));
     m_LoginPopup.SetColor3(coreVector3(0.05f,0.05f,0.05f));
@@ -508,16 +493,16 @@ cMenu::cMenu()noexcept
     m_LoginEnterGuest.SetAlignment(coreVector2(1.0f,0.0f));
     m_LoginEnterGuest.SetText("NAME");
 
-    m_LoginName.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 32);
-    m_LoginName.DefineProgramShare("2d_shader_color"); // override
+    m_LoginName.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 32);
+    m_LoginName.DefineProgram("2d_program_color"); // override
     m_LoginName.SetPosition(m_LoginEnterName.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginName.SetSize(coreVector2(0.35f,0.05f));
     m_LoginName.SetAlignment(coreVector2(-1.0f,0.0f));
     m_LoginName.SetColor3(coreVector3(0.25f,0.25f,0.25f));
     m_LoginName.SetCursor('<');
 
-    m_LoginToken.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 64);
-    m_LoginToken.DefineProgramShare("2d_shader_color"); // override
+    m_LoginToken.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 64);
+    m_LoginToken.DefineProgram("2d_program_color"); // override
     m_LoginToken.SetPosition(m_LoginEnterToken.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginToken.SetSize(m_LoginName.GetSize());
     m_LoginToken.SetAlignment(coreVector2(-1.0f,0.0f));
@@ -525,20 +510,20 @@ cMenu::cMenu()noexcept
     m_LoginToken.SetCursor('<');
     m_LoginToken.SetReplace('*');
 
-    m_LoginGuest.Construct("data/textures/standard_black.png", "data/textures/standard_black.png", FONT_ROCKS, 29, 32);
-    m_LoginGuest.DefineProgramShare("2d_shader_color"); // override
+    m_LoginGuest.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 32);
+    m_LoginGuest.DefineProgram("2d_program_color"); // override
     m_LoginGuest.SetPosition(m_LoginEnterGuest.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginGuest.SetSize(m_LoginName.GetSize() + coreVector2(0.085f,0.0f));
     m_LoginGuest.SetAlignment(coreVector2(-1.0f,0.0f));
     m_LoginGuest.SetColor3(coreVector3(0.25f,0.25f,0.25f));
     m_LoginGuest.SetCursor('<');
 
-    m_LoginOK.Construct("data/textures/button_ok.png", "data/textures/button_ok.png");
+    m_LoginOK.Construct("button_ok.png", "button_ok.png");
     m_LoginOK.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, m_LoginPopup.GetSize().y * 0.5f - 0.0575f));
     m_LoginOK.SetSize(coreVector2(0.075f,0.075f));
     m_LoginOK.SetColor3(LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
 
-    m_LoginCancel.Construct("data/textures/button_cancel.png", "data/textures/button_cancel.png");
+    m_LoginCancel.Construct("button_cancel.png", "button_cancel.png");
     m_LoginCancel.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, -m_LoginPopup.GetSize().y * 0.5f + 0.0575f));
     m_LoginCancel.SetSize(coreVector2(0.075f,0.075f));
     m_LoginCancel.SetColor3(LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
@@ -551,12 +536,12 @@ cMenu::cMenu()noexcept
     m_LoginJoltOr.SetPosition(m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.067f));
     m_LoginJoltOr.SetText("OR LOG INTO");
 
-    m_LoginJoltLogo.DefineTextureFile(0, "data/textures/gamejolt_logo.png");
-    m_LoginJoltLogo.DefineProgramShare("2d_shader");
+    m_LoginJoltLogo.DefineTexture(0, "gamejolt_logo.png");
+    m_LoginJoltLogo.DefineProgram("2d_program");
     m_LoginJoltLogo.SetPosition(m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.11f));
     m_LoginJoltLogo.SetSize(coreVector2(0.512f,0.064f) * 1.2f);
 
-    m_LoginJoltStart.Construct("data/textures/button_login.png", "data/textures/button_login.png");
+    m_LoginJoltStart.Construct("button_login.png", "button_login.png");
     m_LoginJoltStart.SetPosition(m_LoginPopup.GetPosition() + coreVector2(0.17f,-0.093f));
     m_LoginJoltStart.SetSize(coreVector2(0.075f,0.075f));
     m_LoginJoltStart.SetAlignment(coreVector2(1.0f,0.0f));
@@ -564,7 +549,7 @@ cMenu::cMenu()noexcept
 #endif
 
     // create successful submit object
-    m_Successful.DefineTextureFile(0, "data/textures/icon_success.png");
+    m_Successful.DefineTexture(0, "icon_success.png");
     m_Successful.DefineProgram(m_Made.GetProgram());
     m_Successful.SetPosition(m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
     m_Successful.SetSize(coreVector2(0.06f,0.06f));
@@ -637,7 +622,7 @@ cMenu::cMenu()noexcept
 #endif
     }
 
-    m_PageChange.Construct("data/textures/button_scroll.png", "data/textures/button_scroll.png");
+    m_PageChange.Construct("button_scroll.png", "button_scroll.png");
     m_PageChange.SetPosition(coreVector2(LEFT_CENTER + 0.17f,-0.221f));
     m_PageChange.SetSize(coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_PageChange)
@@ -674,16 +659,16 @@ cMenu::cMenu()noexcept
     m_TrophyText.SetCenter(coreVector2(-0.5f,0.0f));
     m_TrophyText.SetText("TROPHIES");
 
-    for(int i = 0; i < TROPHIES; ++i)
+    for(int i = 0; i < TROPHY_ITEMS; ++i)
     {
-        m_aTrophyImage[i].DefineTextureFile(0, PRINT("data/textures/trophy_%i.png", (i == TROPHIES-1) ? 2 : 1));
-        m_aTrophyImage[i].DefineProgramShare("2d_shader");
+        m_aTrophyImage[i].DefineTexture(0, PRINT("trophy_%i.png", (i == TROPHY_ITEMS-1) ? 2 : 1));
+        m_aTrophyImage[i].DefineProgram("2d_program");
         m_aTrophyImage[i].SetPosition(coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
         m_aTrophyImage[i].SetSize(coreVector2(0.09f,0.09f));
         m_aTrophyImage[i].SetCenter(coreVector2(-0.5f,0.0f));
         m_aTrophyImage[i].SetColor3((i % (COLOR_NUM+1)) ? g_avColor[(i-(1+i/7))%COLOR_NUM] : (COLOR_WHITE_F*0.9f));
 
-        m_aTrophyCheck[i].DefineTextureFile(0, "data/textures/icon_success.png");
+        m_aTrophyCheck[i].DefineTexture(0, "icon_success.png");
         m_aTrophyCheck[i].DefineProgram(m_TrophyText.GetProgram());
         m_aTrophyCheck[i].SetPosition(coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
         m_aTrophyCheck[i].SetSize(coreVector2(0.06f,0.06f));
@@ -731,13 +716,13 @@ cMenu::cMenu()noexcept
 
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
 
-    m_AuthLogo.DefineTextureFile(0, "data/textures/google_controller.png");
-    m_AuthLogo.DefineProgramShare("2d_shader");
+    m_AuthLogo.DefineTexture(0, "google_controller.png");
+    m_AuthLogo.DefineProgram("2d_program");
     m_AuthLogo.SetPosition(coreVector2(LEFT_CENTER - 0.07f,-0.045f));
     m_AuthLogo.SetSize(coreVector2(0.036f,0.036f) * 3.0f);
     m_AuthLogo.SetCenter(coreVector2(-0.5f,0.0f));
 
-    m_AuthButton.Construct("data/textures/button_login.png", "data/textures/button_login.png");
+    m_AuthButton.Construct("button_login.png", "button_login.png");
     m_AuthButton.SetPosition(coreVector2(LEFT_CENTER + 0.03f,-0.045f));
     m_AuthButton.SetSize(coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_AuthButton)
@@ -745,15 +730,15 @@ cMenu::cMenu()noexcept
 #endif
 
     // create loading objects
-    m_Loading.DefineTextureFile(0, "data/textures/icon_load.png");
-    m_Loading.DefineProgramShare("2d_shader_color_icon");
+    m_Loading.DefineTexture(0, "icon_load.png");
+    m_Loading.DefineProgram("2d_program_color_icon");
     m_Loading.SetPosition(coreVector2(LEFT_CENTER - 0.05f, -0.05f) + m_BackgroundLeft.GetSize()*0.5f);
     m_Loading.SetSize(coreVector2(0.05f,0.05f));
     m_Loading.SetCenter(coreVector2(-0.5f,0.0f));
     m_Loading.SetColor3(COLOR_YELLOW_F);
 
     // start intro
-    m_Intro.Play(true);
+    m_Intro.Play(CORE_TIMER_PLAY_RESET);
 
     // main menu
     // 0  black
@@ -785,206 +770,206 @@ cMenu::cMenu()noexcept
     // 0 login Game Jolt
     // 1 login guest
 
-    this->AddObject(0, &m_Black);
+    this->BindObject(0, &m_Black);
 
-    this->AddObject(1, &m_Black);
-    this->AddObject(1, &m_Made);
-    this->AddObject(1, &m_For);
-    this->AddObject(1, &m_Maus);
-    this->AddObject(1, &m_GameJolt);
+    this->BindObject(1, &m_Black);
+    this->BindObject(1, &m_Made);
+    this->BindObject(1, &m_For);
+    this->BindObject(1, &m_Maus);
+    this->BindObject(1, &m_GameJolt);
 
-    this->AddObject(3, &m_BigLogo);
+    this->BindObject(3, &m_BigLogo);
 
-    this->AddObject(5, &m_White);
+    this->BindObject(5, &m_White);
 
     for(int i = 6; i <= 8; ++i)
     {
-        this->AddObject(i, &m_BackgroundLeft);
-        this->AddObject(i, &m_BackgroundRight);
-        this->AddObject(i, &m_Logo);
-        this->AddObject(i, &m_Start);
-        this->AddObject(i, &m_Exit);
-        this->AddObject(i, &m_Short);
-        this->AddObject(i, &m_ButtonScore);
-        this->AddObject(i, &m_ButtonTime);
-        this->AddObject(i, &m_ButtonTrophy);
-        this->AddObject(i, &m_ButtonConfig);
-        this->AddObject(i, &m_TopBatteryBolt);
-        this->AddObject(i, &m_TopBatteryValue);
-        this->AddObject(i, &m_TopFPSTacho);
-        this->AddObject(i, &m_TopFPSSec);
-        this->AddObject(i, &m_TopFPSMil);
-        this->AddObject(i, &m_TopUpdating);
-        this->AddObject(i, &m_BottomInfo);
-        this->AddObject(i, &m_BottomCredit);
-        this->AddObject(i, &m_BottomLoginJolt);
-        this->AddObject(i, &m_BottomLoginName);
+        this->BindObject(i, &m_BackgroundLeft);
+        this->BindObject(i, &m_BackgroundRight);
+        this->BindObject(i, &m_Logo);
+        this->BindObject(i, &m_Start);
+        this->BindObject(i, &m_Exit);
+        this->BindObject(i, &m_Short);
+        this->BindObject(i, &m_ButtonScore);
+        this->BindObject(i, &m_ButtonTime);
+        this->BindObject(i, &m_ButtonTrophy);
+        this->BindObject(i, &m_ButtonConfig);
+        this->BindObject(i, &m_TopBatteryBolt);
+        this->BindObject(i, &m_TopBatteryValue);
+        this->BindObject(i, &m_TopFPSTacho);
+        this->BindObject(i, &m_TopFPSSec);
+        this->BindObject(i, &m_TopFPSMil);
+        this->BindObject(i, &m_TopUpdating);
+        this->BindObject(i, &m_BottomInfo);
+        this->BindObject(i, &m_BottomCredit);
+        this->BindObject(i, &m_BottomLoginJolt);
+        this->BindObject(i, &m_BottomLoginName);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->AddObject(i, &m_GoogleFullTrophy);
-        this->AddObject(i, &m_GoogleFullScore);
-        this->AddObject(i, &m_LoginConfigStart);
+        this->BindObject(i, &m_GoogleFullTrophy);
+        this->BindObject(i, &m_GoogleFullScore);
+        this->BindObject(i, &m_LoginConfigStart);
 #endif
-        this->AddObject(i, &m_ScoreMenu);
+        this->BindObject(i, &m_ScoreMenu);
     }
-    this->AddObject(7, &m_QuestionBlack);
-    this->AddObject(7, &m_Question);
-    this->AddObject(7, &m_Yes);
-    this->AddObject(7, &m_No);
-    this->AddObject(8, &m_LoginBlack);
-    this->AddObject(8, &m_LoginMenu);
+    this->BindObject(7, &m_QuestionBlack);
+    this->BindObject(7, &m_Question);
+    this->BindObject(7, &m_Yes);
+    this->BindObject(7, &m_No);
+    this->BindObject(8, &m_LoginBlack);
+    this->BindObject(8, &m_LoginMenu);
 
     for(int i = 11; i <= 13; ++i)
     {
-        this->AddObject(i, &m_Black);
-        this->AddObject(i, &m_BackgroundLeft);
-        this->AddObject(i, &m_BackgroundRight);
-        this->AddObject(i, &m_Pause);
-        this->AddObject(i, &m_Resume);
-        this->AddObject(i, &m_Abort);
-        this->AddObject(i, &m_Short);
-        this->AddObject(i, &m_ButtonTrophy);
-        this->AddObject(i, &m_ButtonConfig);
-        this->AddObject(i, &m_TopBatteryBolt);
-        this->AddObject(i, &m_TopBatteryValue);
-        this->AddObject(i, &m_TopFPSTacho);
-        this->AddObject(i, &m_TopFPSSec);
-        this->AddObject(i, &m_TopFPSMil);
-        this->AddObject(i, &m_TopUpdating);
-        this->AddObject(i, &m_BottomLoginJolt);
-        this->AddObject(i, &m_BottomLoginName);
+        this->BindObject(i, &m_Black);
+        this->BindObject(i, &m_BackgroundLeft);
+        this->BindObject(i, &m_BackgroundRight);
+        this->BindObject(i, &m_Pause);
+        this->BindObject(i, &m_Resume);
+        this->BindObject(i, &m_Abort);
+        this->BindObject(i, &m_Short);
+        this->BindObject(i, &m_ButtonTrophy);
+        this->BindObject(i, &m_ButtonConfig);
+        this->BindObject(i, &m_TopBatteryBolt);
+        this->BindObject(i, &m_TopBatteryValue);
+        this->BindObject(i, &m_TopFPSTacho);
+        this->BindObject(i, &m_TopFPSSec);
+        this->BindObject(i, &m_TopFPSMil);
+        this->BindObject(i, &m_TopUpdating);
+        this->BindObject(i, &m_BottomLoginJolt);
+        this->BindObject(i, &m_BottomLoginName);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->AddObject(i, &m_GoogleFullTrophy);
-        this->AddObject(i, &m_GoogleFullScore);
-        this->AddObject(i, &m_LoginConfigStart);
+        this->BindObject(i, &m_GoogleFullTrophy);
+        this->BindObject(i, &m_GoogleFullScore);
+        this->BindObject(i, &m_LoginConfigStart);
 #endif
-        this->AddObject(i, &m_ScoreMenu);
+        this->BindObject(i, &m_ScoreMenu);
     }
-    this->AddObject(12, &m_QuestionBlack);
-    this->AddObject(12, &m_Question);
-    this->AddObject(12, &m_Yes);
-    this->AddObject(12, &m_No);
-    this->AddObject(13, &m_LoginBlack);
-    this->AddObject(13, &m_LoginMenu);
+    this->BindObject(12, &m_QuestionBlack);
+    this->BindObject(12, &m_Question);
+    this->BindObject(12, &m_Yes);
+    this->BindObject(12, &m_No);
+    this->BindObject(13, &m_LoginBlack);
+    this->BindObject(13, &m_LoginMenu);
 
     for(int i = 14; i <= 16; ++i)
     {
-        this->AddObject(i, &m_Black);
-        this->AddObject(i, &m_BackgroundLeft);
-        this->AddObject(i, &m_BackgroundRight);
+        this->BindObject(i, &m_Black);
+        this->BindObject(i, &m_BackgroundLeft);
+        this->BindObject(i, &m_BackgroundRight);
         for(int j = 0; j < SCORE_TABLES; ++j)
         {
-            this->AddObject(i, &m_aAfterBest[j]);
-            this->AddObject(i, &m_aAfterBestValue[j]);
-            this->AddObject(i, &m_aAfterRecord[j]);
+            this->BindObject(i, &m_aAfterBest[j]);
+            this->BindObject(i, &m_aAfterBestValue[j]);
+            this->BindObject(i, &m_aAfterRecord[j]);
         }
-        this->AddObject(i, &m_Submit);
-        this->AddObject(i, &m_Finish);
-        this->AddObject(i, &m_Short);
-        this->AddObject(i, &m_ButtonScore);
-        this->AddObject(i, &m_ButtonTime);
-        this->AddObject(i, &m_ButtonTrophy);
-        this->AddObject(i, &m_ButtonConfig);
-        this->AddObject(i, &m_TopBatteryBolt);
-        this->AddObject(i, &m_TopBatteryValue);
-        this->AddObject(i, &m_TopFPSTacho);
-        this->AddObject(i, &m_TopFPSSec);
-        this->AddObject(i, &m_TopFPSMil);
-        this->AddObject(i, &m_TopUpdating);
-        this->AddObject(i, &m_BottomLoginJolt);
-        this->AddObject(i, &m_BottomLoginName);
+        this->BindObject(i, &m_Submit);
+        this->BindObject(i, &m_Finish);
+        this->BindObject(i, &m_Short);
+        this->BindObject(i, &m_ButtonScore);
+        this->BindObject(i, &m_ButtonTime);
+        this->BindObject(i, &m_ButtonTrophy);
+        this->BindObject(i, &m_ButtonConfig);
+        this->BindObject(i, &m_TopBatteryBolt);
+        this->BindObject(i, &m_TopBatteryValue);
+        this->BindObject(i, &m_TopFPSTacho);
+        this->BindObject(i, &m_TopFPSSec);
+        this->BindObject(i, &m_TopFPSMil);
+        this->BindObject(i, &m_TopUpdating);
+        this->BindObject(i, &m_BottomLoginJolt);
+        this->BindObject(i, &m_BottomLoginName);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->AddObject(i, &m_GoogleFullTrophy);
-        this->AddObject(i, &m_GoogleFullScore);
-        this->AddObject(i, &m_LoginConfigStart);
+        this->BindObject(i, &m_GoogleFullTrophy);
+        this->BindObject(i, &m_GoogleFullScore);
+        this->BindObject(i, &m_LoginConfigStart);
 #endif
-        this->AddObject(i, &m_Successful);
-        this->AddObject(i, &m_ScoreMenu);
+        this->BindObject(i, &m_Successful);
+        this->BindObject(i, &m_ScoreMenu);
     }
-    this->AddObject(15, &m_QuestionBlack);
-    this->AddObject(15, &m_Question);
-    this->AddObject(15, &m_Yes);
-    this->AddObject(15, &m_No);
-    this->AddObject(16, &m_LoginBlack);
-    this->AddObject(16, &m_LoginMenu);
+    this->BindObject(15, &m_QuestionBlack);
+    this->BindObject(15, &m_Question);
+    this->BindObject(15, &m_Yes);
+    this->BindObject(15, &m_No);
+    this->BindObject(16, &m_LoginBlack);
+    this->BindObject(16, &m_LoginMenu);
 
     for(int i = 0; i < SCORE_TABLES; ++i)
     {
-        m_ScoreMenu.AddObject(i, &m_aScoreTable[i]);
+        m_ScoreMenu.BindObject(i, &m_aScoreTable[i]);
 
         for(int j = 0; j < SCORE_ENTRIES; ++j)
             for(int k = 0; k < 3; ++k)
-                m_ScoreMenu.AddObject(i, &m_aaScoreEntry[i][j][k]);
+                m_ScoreMenu.BindObject(i, &m_aaScoreEntry[i][j][k]);
 
-        m_ScoreMenu.AddObject(i, &m_aScoreBest[i]);
-        m_ScoreMenu.AddObject(i, &m_aScoreBestValue[i]);
-        m_ScoreMenu.AddObject(i, &m_aScoreRecord[i]);
-        m_ScoreMenu.AddObject(i, &m_aScoreRank[i]);
+        m_ScoreMenu.BindObject(i, &m_aScoreBest[i]);
+        m_ScoreMenu.BindObject(i, &m_aScoreBestValue[i]);
+        m_ScoreMenu.BindObject(i, &m_aScoreRecord[i]);
+        m_ScoreMenu.BindObject(i, &m_aScoreRank[i]);
 
         for(int j = 0; j < 3; ++j)
-            m_ScoreMenu.AddObject(i, &m_aConnectionError[j]);
-        m_ScoreMenu.AddObject(i, &m_AuthLogo);
-        m_ScoreMenu.AddObject(i, &m_AuthButton);
-        m_ScoreMenu.AddObject(i, &m_Loading);
-        m_ScoreMenu.AddObject(i, &m_PageChange);
+            m_ScoreMenu.BindObject(i, &m_aConnectionError[j]);
+        m_ScoreMenu.BindObject(i, &m_AuthLogo);
+        m_ScoreMenu.BindObject(i, &m_AuthButton);
+        m_ScoreMenu.BindObject(i, &m_Loading);
+        m_ScoreMenu.BindObject(i, &m_PageChange);
     }
 
-    m_ScoreMenu.AddObject(4, &m_TrophyText);
-    for(int i = 0; i < TROPHIES; ++i)
+    m_ScoreMenu.BindObject(4, &m_TrophyText);
+    for(int i = 0; i < TROPHY_ITEMS; ++i)
     {
-        m_ScoreMenu.AddObject(4, &m_aTrophyImage[i]);
-        m_ScoreMenu.AddObject(4, &m_aTrophyCheck[i]);
+        m_ScoreMenu.BindObject(4, &m_aTrophyImage[i]);
+        m_ScoreMenu.BindObject(4, &m_aTrophyCheck[i]);
     }
     for(int i = 0; i < TROPHY_SECRETS; ++i)
     {
-        m_ScoreMenu.AddObject(4, &m_aTrophySecret[i]);
+        m_ScoreMenu.BindObject(4, &m_aTrophySecret[i]);
     }
-    m_ScoreMenu.AddObject(4, &m_TrophyName);
-    m_ScoreMenu.AddObject(4, &m_aTrophyDesc[0]);
-    m_ScoreMenu.AddObject(4, &m_aTrophyDesc[1]);
-    m_ScoreMenu.AddObject(4, &m_Loading);
+    m_ScoreMenu.BindObject(4, &m_TrophyName);
+    m_ScoreMenu.BindObject(4, &m_aTrophyDesc[0]);
+    m_ScoreMenu.BindObject(4, &m_aTrophyDesc[1]);
+    m_ScoreMenu.BindObject(4, &m_Loading);
     
-    m_ScoreMenu.AddObject(5, &m_VideoText);
-    m_ScoreMenu.AddObject(5, &m_VideoLow);
-    m_ScoreMenu.AddObject(5, &m_VideoMedium);
-    m_ScoreMenu.AddObject(5, &m_VideoHigh);
-    m_ScoreMenu.AddObject(5, &m_AudioText);
-    m_ScoreMenu.AddObject(5, &m_AudioBarBack);
-    m_ScoreMenu.AddObject(5, &m_AudioBar);
-    m_ScoreMenu.AddObject(5, &m_AudioIconHigh);
-    m_ScoreMenu.AddObject(5, &m_AudioIconLow);
-    m_ScoreMenu.AddObject(5, &m_AudioDrag);
+    m_ScoreMenu.BindObject(5, &m_VideoText);
+    m_ScoreMenu.BindObject(5, &m_VideoLow);
+    m_ScoreMenu.BindObject(5, &m_VideoMedium);
+    m_ScoreMenu.BindObject(5, &m_VideoHigh);
+    m_ScoreMenu.BindObject(5, &m_AudioText);
+    m_ScoreMenu.BindObject(5, &m_AudioBarBack);
+    m_ScoreMenu.BindObject(5, &m_AudioBar);
+    m_ScoreMenu.BindObject(5, &m_AudioIconHigh);
+    m_ScoreMenu.BindObject(5, &m_AudioIconLow);
+    m_ScoreMenu.BindObject(5, &m_AudioDrag);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-    m_ScoreMenu.AddObject(5, &m_ControlText);
-    m_ScoreMenu.AddObject(5, &m_ControlType);
+    m_ScoreMenu.BindObject(5, &m_ControlText);
+    m_ScoreMenu.BindObject(5, &m_ControlType);
 #endif
 #if !defined(_API_GOOGLE_PLAY_)
-    m_ScoreMenu.AddObject(5, &m_LoginConfigLogo);
-    m_ScoreMenu.AddObject(5, &m_LoginConfigStart);
-    m_ScoreMenu.AddObject(5, &m_LoginConfigOr);
+    m_ScoreMenu.BindObject(5, &m_LoginConfigLogo);
+    m_ScoreMenu.BindObject(5, &m_LoginConfigStart);
+    m_ScoreMenu.BindObject(5, &m_LoginConfigOr);
 #endif
-    m_ScoreMenu.AddObject(5, &m_Loading);
+    m_ScoreMenu.BindObject(5, &m_Loading);
 
 #if !defined(_API_GOOGLE_PLAY_)
 
-    m_LoginMenu.AddObject(0, &m_LoginPopup);
-    m_LoginMenu.AddObject(0, &m_aLoginText[0]);
-    m_LoginMenu.AddObject(0, &m_LoginEnterName);
-    m_LoginMenu.AddObject(0, &m_LoginEnterToken);
-    m_LoginMenu.AddObject(0, &m_LoginName);
-    m_LoginMenu.AddObject(0, &m_LoginToken);
-    m_LoginMenu.AddObject(0, &m_LoginOK);
-    m_LoginMenu.AddObject(0, &m_LoginCancel);
-    m_LoginMenu.AddObject(0, &m_LoginError);
+    m_LoginMenu.BindObject(0, &m_LoginPopup);
+    m_LoginMenu.BindObject(0, &m_aLoginText[0]);
+    m_LoginMenu.BindObject(0, &m_LoginEnterName);
+    m_LoginMenu.BindObject(0, &m_LoginEnterToken);
+    m_LoginMenu.BindObject(0, &m_LoginName);
+    m_LoginMenu.BindObject(0, &m_LoginToken);
+    m_LoginMenu.BindObject(0, &m_LoginOK);
+    m_LoginMenu.BindObject(0, &m_LoginCancel);
+    m_LoginMenu.BindObject(0, &m_LoginError);
 
-    m_LoginMenu.AddObject(1, &m_LoginPopup);
-    m_LoginMenu.AddObject(1, &m_aLoginText[1]);
-    m_LoginMenu.AddObject(1, &m_LoginEnterGuest);
-    m_LoginMenu.AddObject(1, &m_LoginGuest);
-    m_LoginMenu.AddObject(1, &m_LoginOK);
-    m_LoginMenu.AddObject(1, &m_LoginCancel);
-    m_LoginMenu.AddObject(1, &m_LoginJoltOr);
-    m_LoginMenu.AddObject(1, &m_LoginJoltLogo);
-    m_LoginMenu.AddObject(1, &m_LoginJoltStart);
+    m_LoginMenu.BindObject(1, &m_LoginPopup);
+    m_LoginMenu.BindObject(1, &m_aLoginText[1]);
+    m_LoginMenu.BindObject(1, &m_LoginEnterGuest);
+    m_LoginMenu.BindObject(1, &m_LoginGuest);
+    m_LoginMenu.BindObject(1, &m_LoginOK);
+    m_LoginMenu.BindObject(1, &m_LoginCancel);
+    m_LoginMenu.BindObject(1, &m_LoginJoltOr);
+    m_LoginMenu.BindObject(1, &m_LoginJoltLogo);
+    m_LoginMenu.BindObject(1, &m_LoginJoltStart);
 
 #endif
 }
@@ -1012,7 +997,7 @@ void cMenu::Move()
 #endif
 
     // check for back button (especially important on Android)
-    const bool bBackButton = Core::Input->GetKeyboardButton(SDL_SCANCODE_AC_BACK, CORE_INPUT_PRESS);
+    const bool bBackButton = Core::Input->GetKeyboardButton(KEY(AC_BACK), CORE_INPUT_PRESS);
 
     // associate banner transparency with menu background
     SetBannerAlpha(m_BackgroundLeft.GetAlpha());
@@ -1023,9 +1008,9 @@ void cMenu::Move()
         // check for escape key, interrupt and pause button
 #if defined(_CORE_ANDROID_)
         g_pGame->GetInterface()->InteractPause();     
-        if(Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || g_pGame->GetInterface()->GetTouchPause()->IsClicked())
+        if(Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || g_pGame->GetInterface()->GetTouchPause()->IsClicked())
 #else
-        if(Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || Core::Input->GetJoystickButton(0, 1, CORE_INPUT_PRESS) || Core::Input->GetJoystickButton(1, 1, CORE_INPUT_PRESS))
+        if(Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || Core::Input->GetJoystickButton(0, 1, CORE_INPUT_PRESS) || Core::Input->GetJoystickButton(1, 1, CORE_INPUT_PRESS))
 #endif
         {
             // enter pause menu
@@ -1065,8 +1050,8 @@ void cMenu::Move()
                         }
 
                         // convert values
-                        const int aiValue[2] = {(int)std::floor(m_afSubmitValue[0]),
-                                                (int)std::floor(m_afSubmitValue[1]*100.0f)};
+                        const int aiValue[2] = {(int)FLOOR(m_afSubmitValue[0]),
+                                                (int)FLOOR(m_afSubmitValue[1]*100.0f)};
 
                         // check and save new best values, show new offline record
                         if(Core::Config->GetInt("Game", "Score", 0) < aiValue[0])
@@ -1089,11 +1074,11 @@ void cMenu::Move()
                         }
 
                         // display both values
-                        m_aAfterBestValue[0].SetText(PRINT("%06.0f",      std::floor(m_afSubmitValue[0])));
-                        m_aAfterBestValue[1].SetText(PRINT("%03.0f.%01d", std::floor(m_afSubmitValue[1]), int(std::floor(m_afSubmitValue[1] * 10.0f)) % 10));
+                        m_aAfterBestValue[0].SetText(PRINT("%06.0f",      FLOOR(m_afSubmitValue[0])));
+                        m_aAfterBestValue[1].SetText(PRINT("%03.0f.%01d", FLOOR(m_afSubmitValue[1]), int(FLOOR(m_afSubmitValue[1] * 10.0f)) % 10));
 
                         // set submit status
-                        m_bSubmited      = (m_afSubmitValue[1] >= 10.0f) ? false : true;
+                        m_bSubmited      = (m_afSubmitValue[1] < 10.0f) ? true : false;
                         m_bInLeaderboard = false;
                         if(!m_bSubmited) 
                         {
@@ -1138,9 +1123,9 @@ void cMenu::Move()
             Core::System->Quit();
         }
         else if(m_No.IsClicked() ||
-                Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,                CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,                CORE_INPUT_PRESS))
+                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
         {
             // return to main menu
             this->ChangeSurface(6, 5.0f);
@@ -1150,10 +1135,10 @@ void cMenu::Move()
     else if(this->GetCurSurface() == 11)
     {
         // check for pause menu
-        if(m_Resume.IsClicked() || m_Short.IsClicked()                           || 
-           Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(0, 1,                CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 1,                CORE_INPUT_PRESS))
+        if(m_Resume.IsClicked() || m_Short.IsClicked()                   || 
+           Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
         {
             // resume current game
             g_bPause = false;
@@ -1179,10 +1164,10 @@ void cMenu::Move()
             // exit the current game
             this->End();
         }
-        else if(m_No.IsClicked() ||
-                Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,                CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,                CORE_INPUT_PRESS))
+        else if(m_No.IsClicked()                                              ||
+                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
         {
             // return to pause menu
             this->ChangeSurface(11, 5.0f);
@@ -1242,10 +1227,10 @@ void cMenu::Move()
             // finish the game
             this->End();
         }
-        else if(m_No.IsClicked() || 
-                Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,                CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,                CORE_INPUT_PRESS))
+        else if(m_No.IsClicked()                                              || 
+                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
         {
             // return to submit menu
             this->ChangeSurface(14, 5.0f);
@@ -1312,14 +1297,14 @@ void cMenu::Move()
     }
     else
     {
-        if(!g_bCoreDebug) m_LoginConfigStart.SetAlpha(0.0f);
+        if(!DEFINED(_CORE_DEBUG_)) m_LoginConfigStart.SetAlpha(0.0f);
         m_GoogleFullScore.SetAlpha(0.0f);
         m_GoogleFullTrophy.SetAlpha(0.0f);
     }
     if(m_aConnectionError[0].GetText()[0] && !m_aConnectionError[2].GetText()[0])
     {
         ALPHA_BUTTON_INSIDE(m_AuthButton);
-        if(!g_bCoreDebug) m_PageChange.SetAlpha(0.0f);
+        if(!DEFINED(_CORE_DEBUG_)) m_PageChange.SetAlpha(0.0f);
 
         if(m_AuthButton.IsClicked())
         {
@@ -1359,7 +1344,7 @@ void cMenu::Move()
     
     if(m_ScoreMenu.GetCurSurface() == 4 || (m_ScoreMenu.GetOldSurface() == 4 && m_ScoreMenu.GetTransition().GetStatus()))
     {
-        for(int i = 0; i < TROPHIES; ++i)
+        for(int i = 0; i < TROPHY_ITEMS; ++i)
         {
             // update trophy description
             if(((m_aTrophyImage[i].IsFocused() && m_iTrophyCurrent != i) || m_iTrophyCurrent < 0) && bInNormalMenu)
@@ -1546,14 +1531,14 @@ void cMenu::Move()
 
             if(m_LoginMenu.GetCurSurface() == 0)
             {
-                if(Core::Input->GetKeyboardButton(SDL_SCANCODE_RETURN, CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_RETURN)
+                if(Core::Input->GetKeyboardButton(KEY(RETURN), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_RETURN)
                 {
                     // switch input focus or start login with enter-key
                          if(!m_LoginName.GetText()[0])  m_LoginName.SetInput(true);
                     else if(!m_LoginToken.GetText()[0]) m_LoginToken.SetInput(true);
                     else bDoLogin = true;
                 }
-                else if(Core::Input->GetKeyboardButton(SDL_SCANCODE_TAB, CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_TAB)
+                else if(Core::Input->GetKeyboardButton(KEY(TAB), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_TAB)
                 {
                     // switch input focus with tab-key
                          if(m_LoginName.GetInput())  {m_LoginName.SetInput(false); m_LoginToken.SetInput(true);}
@@ -1633,8 +1618,8 @@ void cMenu::Move()
     // calculate and display current FPS (# static)
     static float fFPSValue = 0.0f;
     if(Core::System->GetTime()) fFPSValue = fFPSValue * 0.95f + RCP(Core::System->GetTime()) * 0.05f;
-    m_TopFPSSec.SetText(PRINT("%.0f.", std::floor(fFPSValue)));
-    m_TopFPSMil.SetText(PRINT("%01d",  int(std::floor(fFPSValue * 10.0f)) % 10));
+    m_TopFPSSec.SetText(PRINT("%.0f.", FLOOR(fFPSValue)));
+    m_TopFPSMil.SetText(PRINT("%01d",  int(FLOOR(fFPSValue * 10.0f)) % 10));
 
     // adjust color in relation to the FPS
     const float fFPSLerp        = MIN(fFPSValue * 0.01666667f, 1.0f);
@@ -1664,13 +1649,13 @@ void cMenu::Move()
     {
         // skip intro when pressing specific keys
         if(Core::Input->GetMouseButton(1, CORE_INPUT_PRESS) ||
-           Core::Input->GetKeyboardButton(SDL_SCANCODE_ESCAPE, CORE_INPUT_PRESS) || 
-           Core::Input->GetKeyboardButton(SDL_SCANCODE_RETURN, CORE_INPUT_PRESS) || 
-           Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE,  CORE_INPUT_PRESS) ||
-           Core::Input->GetJoystickButton(0, 0,                CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 0,                CORE_INPUT_PRESS) ||
-           Core::Input->GetJoystickButton(0, 1,                CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 1,                CORE_INPUT_PRESS) ||
+           Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || 
+           Core::Input->GetKeyboardButton(KEY(RETURN), CORE_INPUT_PRESS) || 
+           Core::Input->GetKeyboardButton(KEY(SPACE),  CORE_INPUT_PRESS) ||
+           Core::Input->GetJoystickButton(0, 0,        CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 0,        CORE_INPUT_PRESS) ||
+           Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS) ||
            bBackButton)
         {
             this->ChangeSurface(6, 1.0f);
@@ -1678,10 +1663,10 @@ void cMenu::Move()
         }
 
         // change surface over time
-             if(this->GetCurSurface() == 0 && m_Intro.GetCurrent(false) >= 0.0f) this->ChangeSurface(1, 1.0f);
-        else if(this->GetCurSurface() == 1 && m_Intro.GetCurrent(false) >= 3.0f) this->ChangeSurface(2, 1.0f);
-        else if(this->GetCurSurface() == 2 && m_Intro.GetCurrent(false) >= 5.5f) this->ChangeSurface(3, 1.0f);
-        else if(this->GetCurSurface() == 3 && m_Intro.GetCurrent(false) >= 8.0f)
+             if(this->GetCurSurface() == 0 && m_Intro.GetValue(CORE_TIMER_GET_NORMAL) >= 0.0f) this->ChangeSurface(1, 1.0f);
+        else if(this->GetCurSurface() == 1 && m_Intro.GetValue(CORE_TIMER_GET_NORMAL) >= 3.0f) this->ChangeSurface(2, 1.0f);
+        else if(this->GetCurSurface() == 2 && m_Intro.GetValue(CORE_TIMER_GET_NORMAL) >= 5.5f) this->ChangeSurface(3, 1.0f);
+        else if(this->GetCurSurface() == 3 && m_Intro.GetValue(CORE_TIMER_GET_NORMAL) >= 8.0f)
         {
             this->ChangeSurface(6, 1.0f);
             m_Intro.Stop();
@@ -1723,29 +1708,14 @@ void cMenu::End()
 // reset all relevant shaders after quality changes
 void cMenu::ResetShaders()
 {
-    // invoke a refresh on all relevant shader-programs
-    Core::Manager::Memory->Share<coreProgram>("fill_shader")->Refresh();
-    Core::Manager::Memory->Share<coreProgram>("floor_shader")->Refresh();
-    Core::Manager::Memory->Share<coreProgram>("floor_plate_shader")->Refresh();
+    // reload shader-programs
+    Core::Manager::Resource->Get<coreProgram>("fill_program")->Reload();
+    Core::Manager::Resource->Get<coreProgram>("floor_program")->Reload();
+    Core::Manager::Resource->Get<coreProgram>("floor_plate_program")->Reload();
 
-    // define shader reset lambda
-    auto ResetShaderLambda = [](const char* pcPath)
-    {
-        coreShaderPtr pShader = Core::Manager::Resource->LoadFile<coreShader>(pcPath);
-        pShader->Unload();
-
-        coreFile* pFile = Core::Manager::Resource->RetrieveFile(pcPath);
-        pShader->Load(pFile);
-        pFile->UnloadData();
-    };
-
-    // unload and reload all relevant shaders
-    ResetShaderLambda("data/shaders/fill.vs");
-    ResetShaderLambda("data/shaders/fill.fs");
-    ResetShaderLambda("data/shaders/floor.vs");
-    ResetShaderLambda("data/shaders/floor.fs");
-    ResetShaderLambda("data/shaders/floor_plate.vs");
-    ResetShaderLambda("data/shaders/floor_plate.fs");
+    // force immediate resource update
+    glFinish();
+    Core::Manager::Resource->Update();
 }
 
 
@@ -1812,8 +1782,8 @@ void cMenu::SubmitScore(const char* pcGuestName)
     if(m_bSubmited) return;
 
     // convert values
-    const int aiValue[2] = {(int)std::floor(m_afSubmitValue[0]),
-                            (int)std::floor(m_afSubmitValue[1]*100.0f)};
+    const int aiValue[2] = {(int)FLOOR(m_afSubmitValue[0]),
+                            (int)FLOOR(m_afSubmitValue[1]*100.0f)};
     
     // save guest name
     if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
@@ -1823,8 +1793,8 @@ void cMenu::SubmitScore(const char* pcGuestName)
                                      g_pGame->GetStat(0), g_pGame->GetStat(1), g_pGame->GetStat(2), g_pGame->GetStat(3), g_pGame->GetStat(4));
 
     // send score and time values
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                                aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", std::floor(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", FLOOR(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
 }
 
 
@@ -1906,7 +1876,7 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
             else // == GJ_LEADERBOARD_02
             {
                 // check for time
-                const bool bInLeaderboard = std::floor(m_afSubmitValue[1]*100.0f) > float((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
+                const bool bInLeaderboard = FLOOR(m_afSubmitValue[1]*100.0f) > float((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
                 if(!m_bSubmited) m_bInLeaderboard |= bInLeaderboard;
             }
         }
@@ -2003,7 +1973,7 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
 {
     // save trophy status
     m_iTrophyStatus = 0;
-    for(int i = 0; i < MIN((int)apTrophy.size(), TROPHIES); ++i)
+    for(int i = 0; i < MIN((int)apTrophy.size(), TROPHY_ITEMS); ++i)
         if(apTrophy[i]->IsAchieved()) BIT_SET(m_iTrophyStatus, i)
 
     // reset current trophy
@@ -2073,7 +2043,7 @@ void cMenu::LoginCallback(const int& iStatus, void* pData)
 
         // change login button
         m_LoginConfigOr.SetText("LOG OUT OF");
-        m_LoginConfigStart.Construct("data/textures/button_logout.png", "data/textures/button_logout.png");
+        m_LoginConfigStart.Construct("button_logout.png", "button_logout.png");
 
 #if !defined(_API_GOOGLE_PLAY_)
 
@@ -2109,7 +2079,7 @@ void cMenu::Logout()
 
     // change login button
     m_LoginConfigOr.SetText("LOG INTO");
-    m_LoginConfigStart.Construct("data/textures/button_login.png", "data/textures/button_login.png");
+    m_LoginConfigStart.Construct("button_login.png", "button_login.png");
 
 #if defined(_API_GOOGLE_PLAY_)
 

@@ -31,8 +31,10 @@ float               g_fOldCam         = 0.0f;
 bool                g_bCamMode        = false;
 bool                g_bUpsideDown     = false;
 
-int                 g_iNumGames       = g_bCoreDebug ? 3 : 0;
+int                 g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3 : 0;
 int                 g_iNumFails       = 0;
+
+static void LoadResources();
 
 coreObject3D* m_apSave[9];   // pre-allocation of required ressources, still need to implement a more efficient way
 
@@ -90,9 +92,9 @@ void CoreApp::Init()
 
     // set cursor
 #if defined(_CORE_LINUX_)
-    Core::Input->DefineCursor("data/textures/standard_cursor_low.png");   // X11 has somehow problems with 24/32-bit colored cursors
+    Core::Input->DefineCursor("data/textures/default_cursor_low.png");   // X11 has somehow problems with 24/32-bit colored cursors
 #else
-    Core::Input->DefineCursor("data/textures/standard_cursor.png");
+    Core::Input->DefineCursor("data/textures/default_cursor.png");
 #endif
 
     // set view frustum
@@ -113,12 +115,15 @@ void CoreApp::Init()
     }
     Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fSoundVolume * 0.07f);
 
-    if(Core::Config->GetInt("Graphics", "Quality", 10) == 10 || g_bCoreDebug)
+    // load all resources
+    LoadResources();
+
+    if(Core::Config->GetInt("Graphics", "Quality", 10) == 10)
     {
         // override quality settings
         Core::Config->SetInt("Graphics", "Quality", 2);
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_)
 
         // also create and show first-time menu
         g_pFirst = new cFirst();
@@ -137,20 +142,19 @@ void CoreApp::Init()
 
     // create music player and load music files (loading-order is important, hardcoded music speed in background class)
     g_pMusicPlayer = new coreMusicPlayer();
-    g_pMusicPlayer->AddFile("data/music/Aurea Carmina.ogg");
-    g_pMusicPlayer->AddFile("data/music/Ether Disco.ogg");
-    g_pMusicPlayer->AddFile("data/music/Stringed Disco.ogg");
+    g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.ogg");
+    g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
+    g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
 
     g_pMusicPlayer->Shuffle();
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
 
     // create particle system
     g_pParticleSystem = new coreParticleSystem(128);
-    g_pParticleSystem->DefineTextureFile(0, "data/textures/effect_particle.png");
-    g_pParticleSystem->DefineProgramShare("particle_shader")
-        ->AttachShaderFile("data/shaders/particle.vs")
-        ->AttachShaderFile("data/shaders/particle.fs")
-        ->Finish();
+    g_pParticleSystem->DefineTexture(0, "effect_particle.png");
+    g_pParticleSystem->DefineProgram("particle_program");
+
+#if defined(_CORE_ANDROID_)
 
     // pre-allocate all required ressources
     m_apSave[0] = new cSunrise();
@@ -162,6 +166,8 @@ void CoreApp::Init()
     m_apSave[6] = new cPlate(0.0f, coreVector2(1.0f,1.0f));
     m_apSave[7] = new cRay(coreVector3(1.0f,1.0f,1.0f));
     m_apSave[8] = new cTrap();
+
+#endif
 }
 
 
@@ -171,9 +177,13 @@ void CoreApp::Exit()
     // delete network access
     SAFE_DELETE(g_pOnline)
 
-    // delete all allocation objects
+#if defined(_CORE_ANDROID_)
+
+    // delete all pre-allocated objects
     for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
         SAFE_DELETE(m_apSave[i])
+
+#endif
 
     // delete all main components
     SAFE_DELETE(g_pBackground)
@@ -243,7 +253,7 @@ void CoreApp::Move()
 
 #else
         // check C key for Coola challenge
-        const bool bChallenge = Core::Input->GetKeyboardButton(SDL_SCANCODE_C, CORE_INPUT_HOLD);
+        const bool bChallenge = Core::Input->GetKeyboardButton(KEY(C), CORE_INPUT_HOLD);
 
 #endif
         // create/start a new game
@@ -267,9 +277,6 @@ void CoreApp::Move()
         g_bUpsideDown  = false;
 
         // reset all holes in the dance floor
-        //bool abIndex[BACK_BLOCKS_X];
-        //for(int i = 0; i < BACK_BLOCKS_X; ++i) abIndex[i] = false;
-        //for(int i = 0; i < 62;            ++i) g_pBackground->UpdateHoles(i, abIndex);
         g_pBackground->ModifyColor();
         g_pBackground->LoadGeometry();
     }
@@ -287,9 +294,9 @@ void CoreApp::Move()
                   else {g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * fSpeed;}
     }
 
-    constexpr_var coreVector3 vCamPos = coreVector3(0.0f,-70.0f,51.0f);
-    constexpr_var coreVector3 vCamDir = -vCamPos;
-    const         coreVector3 vCamOri = coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f);
+    constexpr_var coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
+    const         coreVector3 vCamDir = -vCamPos.Normalized();
+    const         coreVector3 vCamOri =  coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f).Normalize();
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
@@ -326,11 +333,199 @@ void CoreApp::Move()
 #if !defined(_CORE_ANDROID_)
 
     // wireframe mode for fun
-    if(Core::Input->GetKeyboardButton(SDL_SCANCODE_LSHIFT, CORE_INPUT_HOLD))
+    if(Core::Input->GetKeyboardButton(KEY(LSHIFT), CORE_INPUT_HOLD))
     {
-             if(Core::Input->GetKeyboardButton(SDL_SCANCODE_1, CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else if(Core::Input->GetKeyboardButton(SDL_SCANCODE_2, CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+             if(Core::Input->GetKeyboardButton(KEY(1), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else if(Core::Input->GetKeyboardButton(KEY(2), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
 #endif
+}
+
+
+// ****************************************************************
+static void LoadResources()
+{
+    Core::Manager::Resource->Load<coreModel>  ("bear.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/bear.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("default_cube.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_cola.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_cola.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito_straw.md5mesh",  CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito_straw.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise.md5mesh",       CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh");
+    
+    Core::Manager::Resource->Load<coreTexture>("background.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.png");
+    Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png");
+    Core::Manager::Resource->Load<coreTexture>("bear.png",                    CORE_RESOURCE_UPDATE_AUTO,   "data/textures/bear.png");
+    Core::Manager::Resource->Load<coreTexture>("button_full_score.png",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_score.png");
+    Core::Manager::Resource->Load<coreTexture>("button_full_trophy.png",      CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_trophy.png");
+    Core::Manager::Resource->Load<coreTexture>("button_ok.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_ok.png");
+    Core::Manager::Resource->Load<coreTexture>("button_cancel.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_cancel.png");
+    Core::Manager::Resource->Load<coreTexture>("button_login.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_login.png");
+    Core::Manager::Resource->Load<coreTexture>("button_move.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_move.png");
+    Core::Manager::Resource->Load<coreTexture>("button_jump.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_jump.png");
+    Core::Manager::Resource->Load<coreTexture>("button_pause.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_pause.png");
+    Core::Manager::Resource->Load<coreTexture>("button_play.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_play.png");
+    Core::Manager::Resource->Load<coreTexture>("button_score.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_score.png");
+    Core::Manager::Resource->Load<coreTexture>("button_time.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_time.png");
+    Core::Manager::Resource->Load<coreTexture>("button_trophy.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_trophy.png");
+    Core::Manager::Resource->Load<coreTexture>("button_config.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_config.png");
+    Core::Manager::Resource->Load<coreTexture>("button_scroll.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_scroll.png");
+    Core::Manager::Resource->Load<coreTexture>("button_logout.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_logout.png");
+    Core::Manager::Resource->Load<coreTexture>("default_black.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/default_black.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_mojito.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_mojito.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_sunrise.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_sunrise.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_citrus.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_citrus.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_blue.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_blue.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_cola.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola.png");
+    Core::Manager::Resource->Load<coreTexture>("drink_cola_glass.png",        CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola_glass.png");
+    Core::Manager::Resource->Load<coreTexture>("effect_shadow.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_shadow.png");
+    Core::Manager::Resource->Load<coreTexture>("effect_particle.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_particle.png");
+    Core::Manager::Resource->Load<coreTexture>("effect_wave.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_wave.png");
+    Core::Manager::Resource->Load<coreTexture>("game_logo.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/game_logo.png");
+    Core::Manager::Resource->Load<coreTexture>("gamejolt_logo.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_logo.png");
+    Core::Manager::Resource->Load<coreTexture>("gamejolt_jolt.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_jolt.png");
+    Core::Manager::Resource->Load<coreTexture>("google_controller.png",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/google_controller.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_power.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_power.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_speed.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_speed.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_load.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_load.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_audio_1.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_audio_1.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_audio_2.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_audio_2.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_success.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_success.png");
+    Core::Manager::Resource->Load<coreTexture>("icon_trophy.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/icon_trophy.png");
+    Core::Manager::Resource->Load<coreTexture>("maus_logo.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/maus_logo.png");
+    Core::Manager::Resource->Load<coreTexture>("rock.png",                    CORE_RESOURCE_UPDATE_AUTO,   "data/textures/rock.png");
+    Core::Manager::Resource->Load<coreTexture>("trophy_1.png",                CORE_RESOURCE_UPDATE_AUTO,   "data/textures/trophy_1.png");
+    Core::Manager::Resource->Load<coreTexture>("trophy_2.png",                CORE_RESOURCE_UPDATE_AUTO,   "data/textures/trophy_2.png");
+
+    Core::Manager::Resource->Load<coreShader> ("border.frag",                 CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/border.frag");
+    Core::Manager::Resource->Load<coreShader> ("color.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color.frag");
+    Core::Manager::Resource->Load<coreShader> ("color_bar.frag",              CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_bar.frag");
+    Core::Manager::Resource->Load<coreShader> ("color_icon.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_icon.frag");
+    Core::Manager::Resource->Load<coreShader> ("default_2d.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.frag");
+    Core::Manager::Resource->Load<coreShader> ("default_2d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.vert", CORE_SHADER_OPTION_NO_TEXTURE_TRANSFORM);
+    Core::Manager::Resource->Load<coreShader> ("default_3d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_3d.vert", CORE_SHADER_OPTION_NO_TEXTURE_TRANSFORM);
+    Core::Manager::Resource->Load<coreShader> ("drink.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.vert");
+    Core::Manager::Resource->Load<coreShader> ("drink.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.frag");
+    Core::Manager::Resource->Load<coreShader> ("fill.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/fill.vert");
+    Core::Manager::Resource->Load<coreShader> ("fill.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/fill.frag");
+    Core::Manager::Resource->Load<coreShader> ("floor.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor.vert");
+    Core::Manager::Resource->Load<coreShader> ("floor.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor.frag");
+    Core::Manager::Resource->Load<coreShader> ("floor_plate.vert",            CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor_plate.vert");
+    Core::Manager::Resource->Load<coreShader> ("floor_plate.frag",            CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor_plate.frag");
+    Core::Manager::Resource->Load<coreShader> ("glass.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.vert");
+    Core::Manager::Resource->Load<coreShader> ("glass.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.frag");
+    Core::Manager::Resource->Load<coreShader> ("glass_cola.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass_cola.frag");
+    Core::Manager::Resource->Load<coreShader> ("default_particle.vert",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.vert", CORE_SHADER_OPTION_NO_PARTICLE_ROTATION);
+    Core::Manager::Resource->Load<coreShader> ("default_particle.frag",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.frag");
+    Core::Manager::Resource->Load<coreShader> ("ray.vert",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.vert");
+    Core::Manager::Resource->Load<coreShader> ("ray.frag",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.frag");
+    Core::Manager::Resource->Load<coreShader> ("rock.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.vert");
+    Core::Manager::Resource->Load<coreShader> ("rock.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.frag");
+    Core::Manager::Resource->Load<coreShader> ("shadow.frag",                 CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/shadow.frag");
+    Core::Manager::Resource->Load<coreShader> ("trap.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.vert");
+    Core::Manager::Resource->Load<coreShader> ("trap.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.frag");
+    Core::Manager::Resource->Load<coreShader> ("wave.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/wave.frag");
+
+    Core::Manager::Resource->Load<coreSound>  ("achieve.wav",                 CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/achieve.wav");
+    Core::Manager::Resource->Load<coreSound>  ("bump.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/bump.wav");
+    Core::Manager::Resource->Load<coreSound>  ("clink.wav",                   CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/clink.wav");
+    Core::Manager::Resource->Load<coreSound>  ("dust.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/dust.wav");
+    Core::Manager::Resource->Load<coreSound>  ("trap.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/trap.wav");
+
+    Core::Manager::Resource->Load<coreFont>   ("gomarice_rocks.ttf",          CORE_RESOURCE_UPDATE_AUTO,   "data/fonts/gomarice_rocks.ttf");
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("floor_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("floor.vert")
+        ->AttachShader("floor.frag")
+        ->BindAttribute("a_v2Position", 0)
+        ->BindAttribute("a_v4Color",    2)
+        ->BindAttribute("a_fHeight",    3)
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("fill_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("fill.vert")
+        ->AttachShader("fill.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("drink_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("drink.vert")
+        ->AttachShader("drink.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("shadow_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_3d_simple.vert")
+        ->AttachShader("shadow.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("glass_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("glass.vert")
+        ->AttachShader("glass.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("glass_cola_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("glass.vert")
+        ->AttachShader("glass_cola.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("default_2d.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("color.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_border", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("border.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color_icon", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("color_icon.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color_bar", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("color_bar.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("floor_plate_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("floor_plate.vert")
+        ->AttachShader("floor_plate.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("ray_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("ray.vert")
+        ->AttachShader("ray.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("rock_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("rock.vert")
+        ->AttachShader("rock.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("wave_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_3d_simple.vert")
+        ->AttachShader("wave.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("trap_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("trap.vert")
+        ->AttachShader("trap.frag")
+        ->Finish();
+
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("particle_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+        ->AttachShader("default_particle.vert")
+        ->AttachShader("default_particle.frag")
+        ->Finish();
 }

@@ -9,8 +9,8 @@
 #include "main.h"
 
 // macro function for calculating the current score multiplier
-#define COMBO_MAX    18
-#define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, (unsigned)COMBO_MAX)))
+#define COMBO_MAX   (18u)
+#define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, COMBO_MAX)))
 
 // macro function for moving and removing game objects
 #define PROCESS_OBJECT_ARRAY(a,m)                             \
@@ -65,20 +65,20 @@ cGame::cGame(const bool& bChallenge)noexcept
 , m_ShowMessage      (coreTimer(1.0f, 0.333f, 1))
 {
     // create beginning message
-    m_ShowMessage.Play(false);
-    m_ShowMessage.SetCurrent(-0.333f);
+    m_ShowMessage.Play(CORE_TIMER_PLAY_CURRENT);
+    m_ShowMessage.SetValue(-0.333f);
 
     m_Message.SetPosition(coreVector2(0.0f,0.2f));
     m_Message.SetText(g_MsgIntro.Get());
     
     // reset statistics and trophy cache
     for(int i = 0; i < (int)ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected[i]   = 0;
-    for(int i = 0; i < TROPHIES;                  ++i) m_bTrophyHelper[i] = false;
+    for(int i = 0; i < TROPHY_ITEMS;                   ++i) m_bTrophyHelper[i] = false;
     ++g_iNumGames;
 
     // load sound-effects
-    m_pTrapSound   = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/trap.wav");
-    m_pTrophySound = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/achieve.wav");
+    m_pTrapSound   = Core::Manager::Resource->Get<coreSound>("trap.wav");
+    m_pTrophySound = Core::Manager::Resource->Get<coreSound>("achieve.wav");
 }
 
 
@@ -161,7 +161,7 @@ void cGame::Render()
     if(m_ShowMessage.GetStatus() && !g_bPause)
     {
         // render beginning message
-        if(m_ShowMessage.GetCurrent(false) >= 0.0f)
+        if(m_ShowMessage.GetValue(CORE_TIMER_GET_NORMAL) >= 0.0f)
             m_Message.Render();
     }
 }
@@ -183,8 +183,8 @@ void cGame::Move()
             g_pCombatText->AddTextTransformed(g_MsgBegin.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
         }
     }
-
-    // calculate movement value
+    
+    // calculate movement values
     const float fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;
     const float fMove30 = Core::System->GetTime()  * 3.0f * BACK_DETAIL_Y;
 
@@ -199,7 +199,7 @@ void cGame::Move()
         for(int i = 0; i < BACK_BLOCKS_X; ++i) abHole[i] = true; // reset safely
 
         // compensate framerate (background position) and movement when spawning objects
-        const float fSpawn = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * (g_pBackground->GetPositionTime() - std::floor(g_pBackground->GetPositionTime()));
+        const float fSpawn = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * (g_pBackground->GetPositionTime() - FLOOR(g_pBackground->GetPositionTime()));
 
         if(m_bFirstLine)
         {
@@ -210,7 +210,7 @@ void cGame::Move()
         else
         {
             // calculate canyon length, so it can only be crossed by using a trap jump
-            const int iBorder = int(std::floor(1.0f + 2.2f*g_fCurSpeed));
+            const int iBorder = int(FLOOR(1.0f + 2.2f*g_fCurSpeed));
 
             // activate narrow stage later
             if(m_fTime >= STAGE_FINAL+0.5f) m_iNarrow = 1;
@@ -329,7 +329,7 @@ void cGame::Move()
                     if(m_fTime < STAGE_NET)
                     {
                         // add holes to create a path around spawn locations
-                        const int iBroad = MAX(5 - int(std::floor(m_fTime * 0.2f)), 2);
+                        const int iBroad = MAX(5 - int(FLOOR(m_fTime * 0.2f)), 2);
                         for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
                             abHole[i] = !(m_iCurSpawn >= i-iBroad && m_iCurSpawn <= i+(iBroad-2));
                     }
@@ -514,7 +514,7 @@ void cGame::Move()
                     if(abHole[i] && (m_fTime < 10.0f || (Core::Rand->Float(0.0f,1.0f) < fPlateCmp && (!abHole[MAX(i-1,1)] || !abHole[MIN(i+1,BACK_BLOCKS_X-2)]))))
                     {
                         // create plate and add to list
-                        cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -std::floor(g_pBackground->GetPositionTime())));
+                        cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -FLOOR(g_pBackground->GetPositionTime())));
                         pPlate->SetPosition(coreVector3(BACK_SPAWN_X(i, 0.5f), fSpawn, GAME_HEIGHT));
                         m_apPlate.push_back(pPlate);
                     }
@@ -574,15 +574,12 @@ void cGame::Move()
         }
         else
         {
-#if !defined(_CORE_ANDROID_)
-
             if(m_bShakeEnable)
             {
                 // change camera and increase animation speed
                 g_fTargetCam = m_Rock.GetShake() * 0.55f;
                 g_fCamSpeed  = 1.0f + ABS(m_Rock.GetShake()) * 11.0f;
             }
-#endif
         }
     }
 
@@ -658,7 +655,7 @@ void cGame::Move()
         }
     }
 
-    // update all inactive beverages,, traps plates and rays
+    // update all inactive beverages, traps, plates and rays
     PROCESS_OBJECT_ARRAY(m_apDestroyed, fMove30)
     PROCESS_OBJECT_ARRAY(m_apTrap,      fMove10)
     PROCESS_OBJECT_ARRAY(m_apPlate,     fMove10)
@@ -677,9 +674,6 @@ void cGame::Move()
                 m_bTrapJump = true;
                 ++m_iCollectedTraps;
 
-                // move camera
-                // if(m_fTime < 100.0f) g_fTargetCam += g_fTargetCam ? 1.0f : 0.5f; #deactivated
-                
                 // play trap sound effect and show message
                 m_pTrapSound->PlayPosition(NULL, 0.38f, 1.1f, 0.05f, false, m_Rock.GetPosition());
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
@@ -718,8 +712,8 @@ void cGame::Move()
         m_ShowMessage.Update(1.0f);
 
         // update message at the beginning
-        m_Message.SetAlpha(MIN(2.0f * SIN(m_ShowMessage.GetCurrent(false) * PI), 1.0f));
-        m_Message.SetDirection(coreVector2::Direction(0.2f * SIN(m_ShowMessage.GetCurrent(false) * PI * 4.0f)));
+        m_Message.SetAlpha(MIN(2.0f * SIN(m_ShowMessage.GetValue(CORE_TIMER_GET_NORMAL) * PI), 1.0f));
+        m_Message.SetDirection(coreVector2::Direction(0.2f * SIN(m_ShowMessage.GetValue(CORE_TIMER_GET_NORMAL) * PI * 4.0f)));
         m_Message.SetScale(g_pBackground->GetFlash(0.4f));
         m_Message.Move();
     }
@@ -729,7 +723,7 @@ void cGame::Move()
         // handle first big air-jump
         if(m_iFirstJump < 2 && m_Rock.GetReflected()) ++m_iFirstJump;
 
-        // check for achievements/trophies/whatever you call that unnecessary game enlargement bullshit everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
+        // check for achievements/trophies/whatever you call that stuff everybody likes, maybe I should implement a share-button with selfie-attachement-function as well
         if(!m_bTrophyHelper[ 0] && m_iFirstJump == 1 && m_Rock.GetJumped())                         {this->AchieveTrophy(GJ_TROPHY_01,  0);}
         if(!m_bTrophyHelper[ 1] && m_Rock.GetFallen() && m_fTime < 10.0f)                           {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5) coreData::OpenURL(Core::Rand->Int(0,1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
         if(!m_bTrophyHelper[ 2] && m_Rock.GetFallen() && m_bTrapJump)                               {this->AchieveTrophy(GJ_TROPHY_03,  2);}
