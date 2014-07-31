@@ -17,7 +17,7 @@
 
 
 // ****************************************************************
-#define FONT_ROCKS "data/fonts/gomarice_rocks.ttf"
+#define FONT_ROCKS "gomarice_rocks.ttf"
 
 #define COLOR_WHITE_F  coreVector3(1.000f, 1.000f, 1.000f)
 #define COLOR_YELLOW_F coreVector3(1.000f, 0.824f, 0.392f)
@@ -27,7 +27,7 @@
 #define COLOR_BLUE_F   coreVector3(0.102f, 0.702f, 1.000f)
 #define COLOR_GREEN_F  coreVector3(0.118f, 0.745f, 0.353f)
 
-#define COLOR_BRIGHTNESS 0.83f
+#define COLOR_BRIGHTNESS (0.83f)
 
 static constexpr_var coreVector3 g_avColor[] = 
 {
@@ -40,9 +40,9 @@ static constexpr_var coreVector3 g_avColor[] =
 };
 #define COLOR_NUM ARRAY_SIZE(g_avColor)
 
-#define CONTROL_CLASSIC    0
-#define CONTROL_MOTION     1
-#define CONTROL_FULLSCREEN 2
+#define CONTROL_CLASSIC    (0)
+#define CONTROL_MOTION     (1)
+#define CONTROL_FULLSCREEN (2)
 
 
 // ****************************************************************
