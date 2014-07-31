@@ -12,7 +12,6 @@
 const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);
 
 // shader input
-varying vec4 v_v4Color;
 varying vec3 v_v3Relative;
 
 // faster pow(x, 40.0) calculation
@@ -29,7 +28,7 @@ float pow40(in float x)
 
 void main()
 {
-    if(v_v4Color.a <= 0.5) gl_FragColor = vec4(0.0); // discard;
+    if(v_v4VarColor.a <= 0.5) gl_FragColor = vec4(0.0); // discard;
     else
     {
 #if (_CORE_QUALITY_) < 1
@@ -44,7 +43,7 @@ void main()
         else
         {
             float fIntensity = v_v3Relative.y;
-            gl_FragColor     = vec4(v_v4Color.rgb * (0.9 * fIntensity * min(v_v4Color.a * fIntensity, 1.0)), 1.0);
+            gl_FragColor     = vec4(v_v4VarColor.rgb * (0.9 * fIntensity * min(v_v4VarColor.a * fIntensity, 1.0)), 1.0);
         }
 
 #else
@@ -64,7 +63,7 @@ void main()
         vec3  v3MathNormal   = normalize(v3TextureNorm * 2.0 - 1.0);
         float fBumpFactor    = max(0.0, dot(v3MathLightDir, v3MathNormal) * 2.0 - 1.0);
    
-        vec4 v4Color = vec4(vec3(v2TextureColor.r), 1.0) * v_v4Color * (fIntensity * (0.9 * fBumpFactor + 0.25 * pow40(fBumpFactor)));
+        vec4 v4Color = vec4(vec3(v2TextureColor.r), 1.0) * v_v4VarColor * (fIntensity * (0.9 * fBumpFactor + 0.25 * pow40(fBumpFactor)));
 
         gl_FragColor.rgb = v4Color.rgb * min(v4Color.a, 1.0);
         #if (_CORE_QUALITY_) > 1
