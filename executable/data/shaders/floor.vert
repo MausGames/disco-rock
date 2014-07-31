@@ -14,7 +14,6 @@ attribute float a_fHeight;
 attribute vec4  a_v4Color;
 
 // shader output
-varying vec4 v_v4Color;
 varying vec3 v_v3Relative;
 
 
@@ -23,7 +22,7 @@ void main()
     if(a_fHeight > 1.0)
     {
         gl_Position      = vec4(0.0);
-        v_v4Color        = vec4(0.0);
+        v_v4VarColor     = vec4(0.0);
         v_v3Relative     = vec3(0.0);
         v_av2TexCoord[0] = vec2(0.0);
         v_av4LightDir[0] = vec4(0.0);
@@ -36,7 +35,7 @@ void main()
         gl_Position      = u_m4ModelViewProj * v4Position;
         v_av2TexCoord[0] = a_v2Texture;
 
-        v_v4Color = a_v4Color;
+        v_v4VarColor = a_v4Color;
         
 #if (_CORE_QUALITY_) < 1
 

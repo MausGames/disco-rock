@@ -10,8 +10,8 @@
 
 void main()
 {
-    gl_Position   = u_m4ScreenView * vec4(a_v3Position.xy, 1.0, 1.0);
-    gl_Position.z = 1.0;
+    vec3 v3Position = u_m3ScreenView * vec3(a_v3Position.xy, 1.0);
+    gl_Position     = vec4(v3Position.xy, 1.0, v3Position.z);
     
 #if (_CORE_QUALITY_) > 1
 
