@@ -18,7 +18,7 @@ protected:
     coreObject3D  m_Shadow;          // shadow object
     coreObject3D* m_pStraw;          // optional straw object
     coreObject3D* m_pGlass;          // optional separate glass object
-    coreProgramShr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
+    coreProgramPtr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
 
     int m_iScore;                    // score value of the beverage
 
@@ -49,7 +49,7 @@ public:
     inline void RenderGlass()  {if(m_pGlass) m_pGlass->Render(); else coreObject3D::Render(m_pGlasProgram);}
 
     // destroy the object (send it flying)
-    inline void Destroy(const coreVector3& vFlyImpact) {m_pDestroy.Play(true); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
+    inline void Destroy(const coreVector3& vFlyImpact) {m_pDestroy.Play(CORE_TIMER_PLAY_RESET); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
 
     // play a completely shitty glass clinking sound effect
     inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}

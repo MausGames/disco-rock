@@ -19,32 +19,23 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 , m_pDestroy     (coreTimer(30.0f, 20.0f, 1))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
-, m_fVolume      (fVolume*0.8f)
+, m_fVolume      (fVolume*0.6f)
 , m_fPitch       (fPitch*0.65f)
 {
     // load drink shader
-    this->DefineProgramShare("drink_shader")
-        ->AttachShaderFile("data/shaders/drink.vs")
-        ->AttachShaderFile("data/shaders/drink.fs")
-        ->Finish();
+    this->DefineProgram("drink_program");
 
     // create shadow
-    m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
-    m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
-    m_Shadow.DefineProgramShare("shadow_shader")
-        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-        ->AttachShaderFile("data/shaders/shadow.fs")
-        ->Finish();
+    m_Shadow.DefineTexture(0, "effect_shadow.png");
+    m_Shadow.DefineModel("default_square.md5mesh");
+    m_Shadow.DefineProgram("shadow_program");
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // load glass shader
-    m_pGlasProgram = Core::Manager::Memory->Share<coreProgram>("glass_shader");
-    m_pGlasProgram->AttachShaderFile("data/shaders/glass.vs")
-        ->AttachShaderFile("data/shaders/glass.fs")
-        ->Finish();
+    m_pGlasProgram = Core::Manager::Resource->Get<coreProgram>("glass_program");
 
     // load sound-effects
-    m_pClink = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/clink.wav");
+    m_pClink = Core::Manager::Resource->Get<coreSound>("clink.wav");
 }
 
 
@@ -80,7 +71,7 @@ void cBeverage::Move()
     }
 
     // calculate vertical position above the ground
-    const float fGround = m_pModel->GetRadius()*this->GetSize().x + m_pDestroy.GetCurrent(false)*10.0f + m_fHeight + GAME_HEIGHT;
+    const float fGround = m_pModel->GetRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
 
     // fade in
@@ -127,8 +118,8 @@ cSunrise::cSunrise()noexcept
 : cBeverage (5, 0.5f, 0.91f, 0.2f, 1.0f)
 {
     // load object resources
-    this->DefineModelFile("data/models/drink_sunrise.md5mesh");
-    this->DefineTextureFile(0, "data/textures/drink_sunrise.png");
+    this->DefineModel("drink_sunrise.md5mesh");
+    this->DefineTexture(0, "drink_sunrise.png");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
@@ -137,9 +128,9 @@ cSunrise::cSunrise()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModelFile("data/models/drink_sunrise_straw.md5mesh");
-    m_pStraw->DefineTextureFile(0, "data/textures/standard_black.png");
-    m_pStraw->DefineProgramShare("drink_shader");
+    m_pStraw->DefineModel("drink_sunrise_straw.md5mesh");
+    m_pStraw->DefineTexture(0, "default_black.png");
+    m_pStraw->DefineProgram("drink_program");
 }
 
 
@@ -154,8 +145,8 @@ cMojito::cMojito()noexcept
 : cBeverage (10, -0.2f, 0.85f, 0.4f, 1.2f)
 {
     // load object resources
-    this->DefineModelFile("data/models/drink_mojito.md5mesh");
-    this->DefineTextureFile(0, "data/textures/drink_mojito.png");
+    this->DefineModel("drink_mojito.md5mesh");
+    this->DefineTexture(0, "drink_mojito.png");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
@@ -164,9 +155,9 @@ cMojito::cMojito()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModelFile("data/models/drink_mojito_straw.md5mesh");
-    m_pStraw->DefineTextureFile(0, "data/textures/standard_black.png");
-    m_pStraw->DefineProgramShare("drink_shader");
+    m_pStraw->DefineModel("drink_mojito_straw.md5mesh");
+    m_pStraw->DefineTexture(0, "default_black.png");
+    m_pStraw->DefineProgram("drink_program");
 }
 
 
@@ -181,8 +172,8 @@ cBlue::cBlue()noexcept
 : cBeverage (30, 5.8f, 0.87f, 0.6f, 1.6f)
 {
     // load object resources
-    this->DefineModelFile("data/models/drink_blue.md5mesh");
-    this->DefineTextureFile(0, "data/textures/drink_blue.png");
+    this->DefineModel("drink_blue.md5mesh");
+    this->DefineTexture(0, "drink_blue.png");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -191,15 +182,15 @@ cBlue::cBlue()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModelFile("data/models/drink_blue_straw.md5mesh");
-    m_pStraw->DefineTextureFile(0, "data/textures/drink_citrus.png");
-    m_pStraw->DefineProgramShare("drink_shader");
+    m_pStraw->DefineModel("drink_blue_straw.md5mesh");
+    m_pStraw->DefineTexture(0, "drink_citrus.png");
+    m_pStraw->DefineProgram("drink_program");
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModelFile("data/models/drink_blue_glass.md5mesh");
-    m_pGlass->DefineTextureFile(0, "data/textures/drink_blue.png");
-    m_pGlass->DefineProgramShare("glass_shader");
+    m_pGlass->DefineModel("drink_blue_glass.md5mesh");
+    m_pGlass->DefineTexture(0, "drink_blue.png");
+    m_pGlass->DefineProgram("glass_program");
 }
 
 
@@ -214,8 +205,8 @@ cCoola::cCoola()noexcept
 : cBeverage (500, -3.0f, 0.8f, 1.0f, 0.3f)
 {
     // load object resources
-    this->DefineModelFile("data/models/drink_cola.md5mesh");
-    this->DefineTextureFile(0, "data/textures/drink_cola.png");
+    this->DefineModel("drink_cola.md5mesh");
+    this->DefineTexture(0, "drink_cola.png");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -224,12 +215,9 @@ cCoola::cCoola()noexcept
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModelFile("data/models/drink_cola.md5mesh");
-    m_pGlass->DefineTextureFile(0, "data/textures/drink_cola_glass.png");
-    m_pGlass->DefineProgramShare("glass_cola_shader")
-        ->AttachShaderFile("data/shaders/glass.vs")
-        ->AttachShaderFile("data/shaders/glass_cola.fs")
-        ->Finish();
+    m_pGlass->DefineModel("drink_cola.md5mesh");
+    m_pGlass->DefineTexture(0, "drink_cola_glass.png");
+    m_pGlass->DefineProgram("glass_cola_program");
 }
 
 
@@ -244,8 +232,8 @@ cFranka::cFranka()noexcept
 : cBeverage (0, -2.6f, 1.0f, 1.0f, 1.2f)
 {
     // load object resources
-    this->DefineModelFile("data/models/bear.md5mesh");
-    this->DefineTextureFile(0, "data/textures/bear.png");
+    this->DefineModel("bear.md5mesh");
+    this->DefineTexture(0, "bear.png");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*2.25f);
@@ -256,7 +244,7 @@ cFranka::cFranka()noexcept
     m_pGlass = new coreObject3D();
 
     // override sound
-    m_pClink = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/bump.wav");
+    m_pClink = Core::Manager::Resource->Get<coreSound>("bump.wav");
 }
 
 

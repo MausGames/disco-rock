@@ -30,22 +30,13 @@ cBackground::cBackground()noexcept
     this->LoadGeometry();
 
     // load object resources
-    this->DefineTextureFile(0, "data/textures/background.png");
-    this->DefineTextureFile(1, "data/textures/background_norm.png");
-    this->DefineProgramShare("floor_shader")
-        ->AttachShaderFile("data/shaders/floor.vs")
-        ->AttachShaderFile("data/shaders/floor.fs")
-        ->BindAttribute("a_v2Position", 0)
-        ->BindAttribute("a_v4Color",    2)
-        ->BindAttribute("a_fHeight",    3)
-        ->Finish();
+    this->DefineTexture(0, "background.png");
+    this->DefineTexture(1, "background_norm.png");
+    this->DefineProgram("floor_program");
 
     // create filling background
-    m_Fill.DefineTextureFile(0, "data/textures/background.png");
-    m_Fill.DefineProgramShare("fill_shader")
-        ->AttachShaderFile("data/shaders/fill.vs")
-        ->AttachShaderFile("data/shaders/fill.fs")
-        ->Finish();
+    m_Fill.DefineTexture(0, "background.png");
+    m_Fill.DefineProgram("fill_program");
     m_Fill.FitToScreen();
     m_Fill.SetTexSize(m_Fill.GetSize()*7.2f);
 }
@@ -79,7 +70,7 @@ void cBackground::Render()
             m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
 
             // check for new tick
-            const int iNewTick = (int)std::floor(m_fLightTime);
+            const int iNewTick = (int)FLOOR(m_fLightTime);
             if(m_iLightTick < iNewTick)
             {
                 // create flash
@@ -105,9 +96,7 @@ void cBackground::Render()
         if(this->Enable())
         {
             // draw the model
-            coreModel::Lock();
             glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
-            coreModel::Unlock();
         }
 
         // render the filling background
@@ -126,7 +115,7 @@ void cBackground::Move()
     if(m_fPositionTime > BACK_REPEAT) m_fPositionTime -= BACK_REPEAT;
 
     // calculate drawing offset and background position
-    m_iOffset = coreUint(std::floor(m_fPositionTime)) * BACK_BLOCKS_X * BACK_PER_INDICES * sizeof(coreWord);
+    m_iOffset = coreUint(FLOOR(m_fPositionTime)) * BACK_BLOCKS_X * BACK_PER_INDICES * sizeof(coreUshort);
     this->SetPosition(coreVector3(0.0f, -m_fPositionTime * BACK_DETAIL_Y, GAME_HEIGHT));
 
     // update dance floor light animation
@@ -148,28 +137,24 @@ void cBackground::Move()
 // ****************************************************************
 void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 {
-    coreModel::Lock();
+    constexpr_var coreUint iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
+    constexpr_var coreUint iSize = iNum * sizeof(float);
+
+    // map required area
+    float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
+    ASSERT((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
+
+    // set height values of the selected line
+    for(coreUint i = 0; i < iNum; ++i)
     {
-        constexpr_var coreUint iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
-        constexpr_var coreUint iSize = iNum * sizeof(float);
-
-        // map required area
-        float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
-        ASSERT((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
-
-        // set height values of the selected line
-        for(coreUint i = 0; i < iNum; ++i)
-        {
-            pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : 0.0f;
-        }
-
-        // unmap area
-        m_pModel->GetVertexBuffer(1)->Unmap(pfData);  
-
-        // reset current model object
-        coreModel::Disable(false);
+        pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : 0.0f;
     }
-    coreModel::Unlock();
+
+    // unmap area
+    m_pModel->GetVertexBuffer(1)->Unmap(pfData);  
+
+    // reset current model object
+    coreModel::Disable(false);
 }
 
 
@@ -181,11 +166,11 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
     const float fY = (vPos.y-vBackPos.y) / BACK_DETAIL_Y + BACK_OFFSET_Y;
 
      // retrieve height value of the block
-    return m_pfHeight[(int(std::floor(fX)) + int(std::floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
+    return m_pfHeight[(int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
 
 /*
     // retrieve all four corners of the block
-    const int iI00 = (int(std::floor(fX)) + int(std::floor(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
+    const int iI00 = (int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
     const int iI01 = iI00 + 1;
     const int iI10 = iI00 + 2;
     const int iI11 = iI00 + 3;
@@ -208,9 +193,9 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
 // ****************************************************************
 void cBackground::LoadGeometry()
 {
-    std::vector<coreVector4> avColor;   avColor.reserve(BACK_BLOCKS);
-    std::vector<sVertex> m_pVertexData; m_pVertexData.reserve(BACK_TOTAL_VERTICES);
-    std::vector<coreWord> m_pIndexData; m_pIndexData.reserve(BACK_TOTAL_INDICES);
+    std::vector<coreVector4> avColor;       avColor.reserve      (BACK_BLOCKS);
+    std::vector<sVertex>     m_pVertexData; m_pVertexData.reserve(BACK_TOTAL_VERTICES);
+    std::vector<coreUshort>  m_pIndexData;  m_pIndexData.reserve (BACK_TOTAL_INDICES);
 
     // delete old data
     m_pModel->Unload();
@@ -265,8 +250,8 @@ void cBackground::LoadGeometry()
         {
             const coreUint j = x + y*BACK_WIDTH;
 
-            const coreVector4& vColor  = avColor[x + y*BACK_BLOCKS_X];
-            const coreWord iStartIndex = m_pVertexData.size();
+            const coreVector4& vColor    = avColor[x + y*BACK_BLOCKS_X];
+            const coreUshort iStartIndex = m_pVertexData.size();
 
             // copy base vertices to create unique plates and add generated color values
             m_pVertexData.push_back(pBaseVertex[j]);              m_pVertexData.back().vColor = vColor;
@@ -297,7 +282,7 @@ void cBackground::LoadGeometry()
     pBuffer->DefineAttribute(3, 1, GL_FLOAT, 0);
 
     // create index buffer
-    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreWord), m_pIndexData.data(), GL_STATIC_DRAW);
+    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), m_pIndexData.data(), GL_STATIC_DRAW);
 
     // clear memory
     avColor.clear();

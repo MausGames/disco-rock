@@ -18,13 +18,10 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
     m_Animation.SetTimeID(0);
 
     // load object resources
-    this->DefineModelFile("data/models/standard_square.md5mesh");
-    this->DefineTextureFile(0, "data/textures/background.png");
-    this->DefineTextureFile(1, "data/textures/background_norm.png");
-    this->DefineProgramShare("floor_plate_shader")
-        ->AttachShaderFile("data/shaders/floor_plate.vs")
-        ->AttachShaderFile("data/shaders/floor_plate.fs")
-        ->Finish();
+    this->DefineModel("default_square.md5mesh");
+    this->DefineTexture(0, "background.png");
+    this->DefineTexture(1, "background_norm.png");
+    this->DefineProgram("floor_plate_program");
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X, BACK_DETAIL_Y, 1.0f));
@@ -58,7 +55,7 @@ void cPlate::Move()
     if((this->GetPosition().y <= m_fStartY) && (m_fStartY > 0.0f))
     {
         // start lift-animation and invalidate start-parameter
-        m_Animation.Play(true);
+        m_Animation.Play(CORE_TIMER_PLAY_RESET);
         m_fStartY = -1.0f;
     }
 
@@ -69,7 +66,7 @@ void cPlate::Move()
             m_iStatus = 1;   // mark as finished
 
         // calculate the position
-        this->SetPosition(coreVector3(this->GetPosition().xy(), 110.0f * m_Animation.GetCurrent(false) + GAME_HEIGHT));
+        this->SetPosition(coreVector3(this->GetPosition().xy(), 110.0f * m_Animation.GetValue(CORE_TIMER_GET_NORMAL) + GAME_HEIGHT));
     }
 
     // calculate the texture-offset for the disco-lights

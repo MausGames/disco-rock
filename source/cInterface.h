@@ -56,7 +56,7 @@ public:
     void Update(const float& fScore, const float& fTime, const float& fCombo, const float& fDelay);
 
     // smoothly fade out the interface
-    inline void Hide() {if(m_Hide.GetCurrent(false) == 0.0f) m_Hide.Play(false);}
+    inline void Hide() {if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) == 0.0f) m_Hide.Play(CORE_TIMER_PLAY_CURRENT);}
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 

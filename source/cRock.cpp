@@ -9,9 +9,9 @@
 #include "main.h"
 
 #if defined(_CORE_ANDROID_)
-    #define ROCK_SHAKE_STRENGTH 0.13f
+    #define ROCK_SHAKE_STRENGTH (0.07f)
 #else
-    #define ROCK_SHAKE_STRENGTH 0.11f
+    #define ROCK_SHAKE_STRENGTH (0.11f)
 #endif
 
 
@@ -32,45 +32,38 @@ cRock::cRock()noexcept
 , m_fShake             (0.0f)
 {
     // load object resources
-    this->DefineModelFile("data/models/rock.md5mesh");
-    this->DefineTextureFile(0, "data/textures/rock.png");
-    this->DefineProgramShare("rock_shader")
-        ->AttachShaderFile("data/shaders/rock.vs")
-        ->AttachShaderFile("data/shaders/rock.fs")
-        ->Finish();
+    this->DefineModel("rock.md5mesh");
+    this->DefineTexture(0, "rock.png");
+    this->DefineProgram("rock_program");
 
     // set object properties
     this->SetSize(coreVector3(1.0f,1.0f,1.0f)*5.0f);
     this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
 
     // create shadow
-    m_Shadow.DefineModelFile("data/models/standard_square.md5mesh");
-    m_Shadow.DefineTextureFile(0, "data/textures/effect_shadow.png");
-    m_Shadow.DefineProgramShare("shadow_shader")
-        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-        ->AttachShaderFile("data/shaders/shadow.fs")
-        ->Finish();
-    m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP); // for array drawing
+    m_Shadow.DefineModel("default_square.md5mesh");
+    m_Shadow.DefineTexture(0, "effect_shadow.png");
+    m_Shadow.DefineProgram("shadow_program");
     m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // create big wave
-    m_Wave.DefineModelFile("data/models/standard_square.md5mesh");
-    m_Wave.DefineTextureFile(0, "data/textures/effect_wave.png");
-    m_Wave.DefineProgramShare("wave_shader")
-        ->AttachShaderFile("data/shaders/default_3d_simple.vs")
-        ->AttachShaderFile("data/shaders/wave.fs")
-        ->Finish();
+    m_Wave.DefineModel("default_square.md5mesh");
+    m_Wave.DefineTexture(0, "effect_wave.png");
+    m_Wave.DefineProgram("wave_program");
     m_Wave.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
     // create small wave
-    m_WaveSmall.DefineModelFile("data/models/standard_square.md5mesh");
-    m_WaveSmall.DefineTextureFile(0, "data/textures/effect_wave.png");
-    m_WaveSmall.DefineProgramShare("wave_shader");
+    m_WaveSmall.DefineModel("default_square.md5mesh");
+    m_WaveSmall.DefineTexture(0, "effect_wave.png");
+    m_WaveSmall.DefineProgram("wave_program");
     m_WaveSmall.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
+    // enable array drawing
+    m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP);
+
     // load sound-effects
-    m_pUp   = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/dust.wav");
-    m_pDown = Core::Manager::Resource->LoadFile<coreSound>("data/sounds/bump.wav");
+    m_pUp   = Core::Manager::Resource->Get<coreSound>("dust.wav");
+    m_pDown = Core::Manager::Resource->Get<coreSound>("bump.wav");
 }
 
 // ****************************************************************
@@ -150,11 +143,11 @@ void cRock::Move()
 #else
 
     // jump with keyboard (W, UP, SPACE) and joystick
-    if(Core::Input->GetKeyboardButton(SDL_SCANCODE_W,     CORE_INPUT_PRESS) ||
-       Core::Input->GetKeyboardButton(SDL_SCANCODE_UP,    CORE_INPUT_PRESS) ||
-       Core::Input->GetKeyboardButton(SDL_SCANCODE_SPACE, CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(0, 0,               CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(1, 0,               CORE_INPUT_PRESS))
+    if(Core::Input->GetKeyboardButton(KEY(W),     CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(KEY(UP),    CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(KEY(SPACE), CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(0, 0,       CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(1, 0,       CORE_INPUT_PRESS))
 
 #endif
     {
@@ -187,16 +180,17 @@ void cRock::Move()
         // play sound-effect for hitting the ground
         if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f), 0.05f, false, this->GetPosition());
 
-        if(m_fForce < -10.0f)
+        if(m_fForce < -8.0f)
         {
             // start big wave animation on heavy fall (at the beginning)
-            m_WaveTimer.Play(true);
+            m_WaveTimer.Play(CORE_TIMER_PLAY_RESET);
             m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
+            m_fWaveStrength = 60.0f;
         }
         else if(m_fForce < -1.0f)
         {
             // start small wave animation
-            m_WaveSmallTimer.Play(true);
+            m_WaveSmallTimer.Play(CORE_TIMER_PLAY_RESET);
             m_WaveSmall.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
             m_fWaveSmallStrength = CLAMP(-m_fForce*0.2f, 0.0f, 1.0f);
         }
@@ -214,15 +208,21 @@ void cRock::Move()
 
     const float fMove = 100.0f * Core::System->GetTime();
 
+    const float fPosDiff = (fNewPos + fMove * Core::Input->GetJoystickRelative(0).x) - this->GetPosition().x;
+
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
     {
-             if(g_pGame->GetInterface()->GetTouchMoveLeft()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))  fNewPos -= fMove;
+             if(g_pGame->GetInterface()->GetTouchMoveLeft ()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos -= fMove;
         else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
     }
 
+    // move with device motion
+    else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
+        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x;
+
     // move with screen space
-    else if(g_pGame->GetInterface()->GetControlType() == CONTROL_FULLSCREEN)
+    else // == CONTROL_FULLSCREEN)
     {
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint& i)
         {
@@ -233,25 +233,19 @@ void cRock::Move()
         });
     }
 
-    const float fPosDiff = (fNewPos + fMove * Core::Input->GetJoystickRelative(0).x) - this->GetPosition().x;
-
-    // move with device motion
-    if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
-        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x;
-
 #else
     
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
     const float fMove = 100.0f * Core::System->GetTime();
 
-         if(Core::Input->GetKeyboardButton(SDL_SCANCODE_A,     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(SDL_SCANCODE_LEFT,  CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x < 0.0f                        ||
+         if(Core::Input->GetKeyboardButton(KEY(A),     CORE_INPUT_HOLD) ||
+            Core::Input->GetKeyboardButton(KEY(LEFT),  CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x < 0.0f                ||
             Core::Input->GetJoystickRelative(1).x < 0.0f) fNewPos -= fMove;
 
-    else if(Core::Input->GetKeyboardButton(SDL_SCANCODE_D,     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(SDL_SCANCODE_RIGHT, CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x > 0.0f                        ||
+    else if(Core::Input->GetKeyboardButton(KEY(D),     CORE_INPUT_HOLD) ||
+            Core::Input->GetKeyboardButton(KEY(RIGHT), CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x > 0.0f                ||
             Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
 
     const float fPosDiff = fNewPos - this->GetPosition().x;
@@ -302,8 +296,8 @@ void cRock::Move()
         // update big wave
         m_WaveTimer.Update(1.0f);
         m_Wave.SetPosition(m_Wave.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_Wave.SetSize(coreVector3(1.0f,1.0f,1.0f) * 0.781f * m_fWaveStrength * m_WaveTimer.GetCurrent(false));
-        m_Wave.SetAlpha(1.5f * m_WaveTimer.GetCurrent(true));
+        m_Wave.SetSize(coreVector3(1.0f,1.0f,1.0f) * 0.781f * m_fWaveStrength * m_WaveTimer.GetValue(CORE_TIMER_GET_NORMAL));
+        m_Wave.SetAlpha(1.5f * m_WaveTimer.GetValue(CORE_TIMER_GET_REVERSED));
         m_Wave.Move();
     }
     if(m_WaveSmallTimer.GetStatus())
@@ -311,8 +305,8 @@ void cRock::Move()
         // update small wave
         m_WaveSmallTimer.Update(1.0f);
         m_WaveSmall.SetPosition(m_WaveSmall.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_WaveSmall.SetSize(coreVector3(1.0f,1.0f,1.0f) * 23.44f * m_WaveSmallTimer.GetCurrent(false));
-        m_WaveSmall.SetAlpha(m_fWaveSmallStrength * m_WaveSmallTimer.GetCurrent(true));
+        m_WaveSmall.SetSize(coreVector3(1.0f,1.0f,1.0f) * 23.44f * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_NORMAL));
+        m_WaveSmall.SetAlpha(m_fWaveSmallStrength * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_REVERSED));
         m_WaveSmall.Move();
     }
 
@@ -334,7 +328,7 @@ bool cRock::Jump(const float& fForce)
 
     // play jump sound-effect and start big wave animation
     m_pUp->PlayPosition(NULL, 0.4f, 1.8f, 0.05f, false, this->GetPosition());
-    m_WaveTimer.Play(true);
+    m_WaveTimer.Play(CORE_TIMER_PLAY_RESET);
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 
     return true;
