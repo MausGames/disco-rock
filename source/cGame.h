@@ -25,13 +25,37 @@
 #define STAGE_MASS   (100.0f)
 #define STAGE_FINAL  (110.0f)
 
-#define CANYON_DISTANCE (20)     // distance between two canyons (on stage STAGE_CANYON)
-#define CANYON_BEFORE   (1)      // full rows before a canyon
-#define CANYON_AFTER    (2)      // full rows after a canyon
+#define CANYON_DISTANCE (20)      // distance between two canyons (on stage STAGE_CANYON)
+#define CANYON_BEFORE   (1)       // full rows before a canyon
+#define CANYON_AFTER    (2)       // full rows after a canyon
 
-#define CANYON_BEGIN   (0)       // value to immediately start a canyon
-#define CANYON_PREVENT (-1000)   // static value to prevent canyons
-#define CANYON_LIMIT   (-100)    // to compare for a canyon-status-switch (should be < -CANYON_DISTANCE)
+#define CANYON_BEGIN    (0)       // value to immediately start a canyon
+#define CANYON_PREVENT  (-1000)   // static value to prevent canyons
+#define CANYON_LIMIT    (-100)    // to compare for a canyon-status-switch (should be < -CANYON_DISTANCE)
+
+// macro function for calculating the current score multiplier
+#define COMBO_MAX   (18u)
+#define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, COMBO_MAX)))
+
+// macro function for moving and removing game objects
+#define PROCESS_OBJECT_ARRAY(a,m)                             \
+    FOR_EACH_DYN(it, a)                                       \
+    {                                                         \
+        coreObject3D* o = (*it);                              \
+                                                              \
+        if(o->GetStatus() == 1)                               \
+        {                                                     \
+            SAFE_DELETE(o)                                    \
+            DYN_REMOVE(it, a)                                 \
+        }                                                     \
+        else                                                  \
+        {                                                     \
+            const coreVector3& p = o->GetPosition();          \
+            o->SetPosition(coreVector3(p.x, p.y - (m), p.z)); \
+            o->Move();                                        \
+            DYN_KEEP(it)                                      \
+        }                                                     \
+    }
 
 
 // ****************************************************************

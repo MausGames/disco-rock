@@ -43,7 +43,7 @@ public:
     void Move()override;
 
     // render different parts of the object separately for batched rendering
-    inline void RenderShadow() {if(m_Shadow.Enable()) m_Shadow.GetModel()->DrawArrays();}
+    inline void RenderShadow() {m_Shadow.Render();}
     inline void RenderStraw()  {if(m_pStraw) m_pStraw->Render();}
     inline void RenderDrink()  {coreObject3D::Render();}
     inline void RenderGlass()  {if(m_pGlass) m_pGlass->Render(); else coreObject3D::Render(m_pGlasProgram);}

@@ -141,7 +141,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
     constexpr_var coreUint iSize = iNum * sizeof(float);
 
     // map required area
-    float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, false);
+    float* pfData = m_pModel->GetVertexBuffer(1)->Map<float>(iLine*iSize, iSize, CORE_DATABUFFER_MAP_INVALIDATE_RANGE);
     ASSERT((iLine+1) * iSize < BACK_TOTAL_INDICES * sizeof(float));
 
     // set height values of the selected line
@@ -272,17 +272,17 @@ void cBackground::LoadGeometry()
     coreVertexBuffer* pBuffer;
 
     // create static vertex buffer
-    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), m_pVertexData.data(), GL_STATIC_DRAW);
+    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), m_pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
     pBuffer->DefineAttribute(0, 2, GL_FLOAT, 0);
     pBuffer->DefineAttribute(1, 2, GL_FLOAT, 2*sizeof(float));
     pBuffer->DefineAttribute(2, 4, GL_FLOAT, 4*sizeof(float));
 
     // create dynamic height data buffer
-    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, GL_DYNAMIC_DRAW);
+    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, CORE_DATABUFFER_STORAGE_PERSISTENT);
     pBuffer->DefineAttribute(3, 1, GL_FLOAT, 0);
 
     // create index buffer
-    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), m_pIndexData.data(), GL_STATIC_DRAW);
+    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), m_pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
 
     // clear memory
     avColor.clear();

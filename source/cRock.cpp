@@ -8,12 +8,6 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#if defined(_CORE_ANDROID_)
-    #define ROCK_SHAKE_STRENGTH (0.07f)
-#else
-    #define ROCK_SHAKE_STRENGTH (0.11f)
-#endif
-
 
 // ****************************************************************
 cRock::cRock()noexcept
@@ -58,12 +52,22 @@ cRock::cRock()noexcept
     m_WaveSmall.DefineProgram("wave_program");
     m_WaveSmall.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
 
-    // enable array drawing
-    m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP);
-
     // load sound-effects
     m_pUp   = Core::Manager::Resource->Get<coreSound>("dust.wav");
     m_pDown = Core::Manager::Resource->Get<coreSound>("bump.wav");
+
+    // schedule model customization
+    Core::Manager::Resource->AttachFunction([&]()
+    {
+        if(m_Shadow.GetModel().IsUsable())
+        {
+            // enable array drawing
+            m_Shadow.GetModel()->GetIndexBuffer()->Delete();
+            m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP);
+            return CORE_OK;
+        }
+        return CORE_BUSY;
+    });
 }
 
 // ****************************************************************
@@ -78,20 +82,11 @@ void cRock::Render()
     glDisable(GL_DEPTH_TEST);
     {
         // render shadow
-        if(m_Shadow.Enable())
-            m_Shadow.GetModel()->DrawArrays();
+        m_Shadow.Render();
 
         // render waves
-        if(m_WaveTimer.GetStatus())
-        {
-            if(m_Wave.Enable())
-                m_Wave.GetModel()->DrawArrays();
-        }
-        if(m_WaveSmallTimer.GetStatus())
-        {
-            if(m_WaveSmall.Enable())
-                m_WaveSmall.GetModel()->DrawArrays();
-        } 
+        if(m_WaveTimer.GetStatus())      m_Wave.Render();
+        if(m_WaveSmallTimer.GetStatus()) m_WaveSmall.Render();
     }
     glEnable(GL_DEPTH_TEST);
 
