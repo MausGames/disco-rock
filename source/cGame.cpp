@@ -8,30 +8,6 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-// macro function for calculating the current score multiplier
-#define COMBO_MAX   (18u)
-#define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, COMBO_MAX)))
-
-// macro function for moving and removing game objects
-#define PROCESS_OBJECT_ARRAY(a,m)                             \
-    FOR_EACH_DYN(it, a)                                       \
-    {                                                         \
-        coreObject3D* o = (*it);                              \
-                                                              \
-        if(o->GetStatus() == 1)                               \
-        {                                                     \
-            SAFE_DELETE(o)                                    \
-            DYN_REMOVE(it, a)                                 \
-        }                                                     \
-        else                                                  \
-        {                                                     \
-            const coreVector3& p = o->GetPosition();          \
-            o->SetPosition(coreVector3(p.x, p.y - (m), p.z)); \
-            o->Move();                                        \
-            DYN_KEEP(it)                                      \
-        }                                                     \
-    }
-
 
 // ****************************************************************
 cGame::cGame(const bool& bChallenge)noexcept

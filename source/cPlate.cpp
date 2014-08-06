@@ -40,15 +40,6 @@ cPlate::~cPlate()
 
 
 // ****************************************************************
-void cPlate::Render()
-{
-    // render the plate
-    if(this->Enable())
-        m_pModel->DrawArrays();
-}
-
-
-// ****************************************************************
 void cPlate::Move()
 {
     // check minimal distance to the front

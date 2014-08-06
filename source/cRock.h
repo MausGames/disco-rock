@@ -12,6 +12,14 @@
 
 
 // ****************************************************************
+#if defined(_CORE_ANDROID_)
+    #define ROCK_SHAKE_STRENGTH (0.07f)
+#else
+    #define ROCK_SHAKE_STRENGTH (0.11f)
+#endif
+
+
+// ****************************************************************
 class cRock final : public coreObject3D
 {
 private:

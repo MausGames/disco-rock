@@ -8,20 +8,6 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-// static texts
-#define LOGIN_START             "YOUR TOKEN IS NOT YOUR PASSWORD"
-#define LOGIN_CONNECTING        "CONNECTING..."
-#define LOGIN_ERROR_CONNECTION  "COULD NOT CONNECT TO GAME JOLT"
-#define LOGIN_ERROR_CREDENTIALS "WRONG USER NAME OR TOKEN"
-
-#define QUESTION_EXIT   "DO YOU REALLY WANT TO EXIT?"
-#define QUESTION_ABORT  "DO YOU REALLY WANT TO ABORT THE CURRENT GAME?"
-#define QUESTION_RETURN "DO YOU REALLY WANT TO RETURN WITHOUT SUBMITTING?"
-
-// update displayed score and time value
-#define SHOW_BEST_SCORE(x) {m_aScoreBestValue[0].SetText(PRINT("%06d", (x)));}
-#define SHOW_BEST_TIME(x)  {m_aScoreBestValue[1].SetText(PRINT("%03d.%01d", (x) / 100, (((x) % 100) / 10)));}
-
 
 // ****************************************************************
 cMenu::cMenu()noexcept
@@ -1715,7 +1701,7 @@ void cMenu::ResetShaders()
 
     // force immediate resource update
     glFinish();
-    Core::Manager::Resource->Update();
+    Core::Manager::Resource->UpdateResources();
 }
 
 
