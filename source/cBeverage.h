@@ -12,12 +12,13 @@
 
 
 // ****************************************************************
+// beverage interface
 class cBeverage : public coreObject3D
 {
 protected:
-    coreObject3D  m_Shadow;          // shadow object
-    coreObject3D* m_pStraw;          // optional straw object
-    coreObject3D* m_pGlass;          // optional separate glass object
+    coreObject3D   m_Shadow;         // shadow object
+    coreObject3D*  m_pStraw;         // optional straw object
+    coreObject3D*  m_pGlass;         // optional separate glass object
     coreProgramPtr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
 
     int m_iScore;                    // score value of the beverage
@@ -25,7 +26,7 @@ protected:
     float m_fHeight;                 // Z position-offset on the dance floor
     float m_fLiquidAlpha;            // alpha value of the drink
     
-    coreTimer m_pDestroy;            // timer for the fly-animation
+    coreTimer   m_pDestroy;          // timer for the fly-animation
     coreVector3 m_vFlyRotation;      // rotation-parameter for the fly-animation
     coreVector3 m_vFlyImpact;        // impact-direction to throw the object into a specific direction
 
@@ -39,8 +40,8 @@ public:
     virtual ~cBeverage();
 
     // render and move the beverage
-    inline void Render()override {ASSERT(false);}
-    void Move()override;
+    inline void Render()override {ASSERT(false)}
+    void        Move  ()override;
 
     // render different parts of the object separately for batched rendering
     inline void RenderShadow() {m_Shadow.Render();}
@@ -55,8 +56,8 @@ public:
     inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}
 
     // get object properties
-    inline const int& GetScore()const {return m_iScore;}
-    virtual coreByte GetSigID()const = 0;
+    inline const int&   GetScore   ()const {return m_iScore;}
+    virtual coreByte    GetSigID   ()const = 0;
     virtual coreVector3 GetSigColor()const = 0;
 
 
@@ -74,7 +75,7 @@ public:
     ~cSunrise();
 
     // get object properties
-    inline coreByte GetSigID()const override       {return 1;}
+    inline coreByte    GetSigID   ()const override {return 1;}
     inline coreVector3 GetSigColor()const override {return COLOR_YELLOW_F;}
 };
 
@@ -88,7 +89,7 @@ public:
     ~cMojito();
 
     // get object properties
-    inline coreByte GetSigID()const override       {return 2;}
+    inline coreByte    GetSigID   ()const override {return 2;}
     inline coreVector3 GetSigColor()const override {return COLOR_GREEN_F;}
 };
 
@@ -102,7 +103,7 @@ public:
     ~cBlue();
 
     // get object properties
-    inline coreByte GetSigID()const override       {return 3;}
+    inline coreByte    GetSigID   ()const override {return 3;}
     inline coreVector3 GetSigColor()const override {return COLOR_BLUE_F;}
 };
 
@@ -116,7 +117,7 @@ public:
     ~cCoola();
 
     // get object properties
-    inline coreByte GetSigID()const override       {return 4;}
+    inline coreByte    GetSigID   ()const override {return 4;}
     inline coreVector3 GetSigColor()const override {return COLOR_PURPLE_F;}
 };
 
@@ -130,7 +131,7 @@ public:
     ~cFranka();
 
     // get object properties
-    inline coreByte GetSigID()const override       {return 5;}
+    inline coreByte    GetSigID   ()const override {return 5;}
     inline coreVector3 GetSigColor()const override {return COLOR_RED_F;}
 };
 

@@ -10,8 +10,8 @@
 
 void main()
 {
-    if(v_av2TexCoord[0].x < u_v2TexSize.x || v_av2TexCoord[0].x > 1.0-u_v2TexSize.x ||
-       v_av2TexCoord[0].y < u_v2TexSize.y || v_av2TexCoord[0].y > 1.0-u_v2TexSize.y)
+    if(any(lessThan   (v_av2TexCoord[0], u_v2TexSize)) ||
+       any(greaterThan(v_av2TexCoord[0], vec2(1.0)-u_v2TexSize)))
     {
         gl_FragColor = vec4(1.0, 1.0, 1.0, u_v4Color.a);
     }

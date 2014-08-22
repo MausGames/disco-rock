@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
@@ -40,6 +41,7 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 
 
 // ****************************************************************
+// destructor
 cBeverage::~cBeverage()
 {
     SAFE_DELETE(m_pStraw)
@@ -48,6 +50,7 @@ cBeverage::~cBeverage()
 
 
 // ****************************************************************
+// move the beverage
 void cBeverage::Move()
 {
     float fSideSet = 0.0f;
@@ -114,6 +117,7 @@ void cBeverage::Move()
 
 
 // ****************************************************************
+// constructor
 cSunrise::cSunrise()noexcept
 : cBeverage (5, 0.5f, 0.91f, 0.2f, 1.0f)
 {
@@ -135,12 +139,14 @@ cSunrise::cSunrise()noexcept
 
 
 // ****************************************************************
+// destructor
 cSunrise::~cSunrise()
 {
 }
 
 
 // ****************************************************************
+// constructor
 cMojito::cMojito()noexcept
 : cBeverage (10, -0.2f, 0.85f, 0.4f, 1.2f)
 {
@@ -162,12 +168,14 @@ cMojito::cMojito()noexcept
 
 
 // ****************************************************************
+// destructor
 cMojito::~cMojito()
 {
 }
 
 
 // ****************************************************************
+// constructor
 cBlue::cBlue()noexcept
 : cBeverage (30, 5.8f, 0.87f, 0.6f, 1.6f)
 {
@@ -195,12 +203,14 @@ cBlue::cBlue()noexcept
 
 
 // ****************************************************************
+// destructor
 cBlue::~cBlue()
 {
 }
 
 
 // ****************************************************************
+// constructor
 cCoola::cCoola()noexcept
 : cBeverage (500, -3.0f, 0.8f, 1.0f, 0.3f)
 {
@@ -222,12 +232,14 @@ cCoola::cCoola()noexcept
 
 
 // ****************************************************************
+// destructor
 cCoola::~cCoola()
 {
 }
 
 
 // ****************************************************************
+// constructor
 cFranka::cFranka()noexcept
 : cBeverage (0, -2.6f, 1.0f, 1.0f, 1.2f)
 {
@@ -249,6 +261,7 @@ cFranka::cFranka()noexcept
 
 
 // ****************************************************************
+// destructor
 cFranka::~cFranka()
 {
 }

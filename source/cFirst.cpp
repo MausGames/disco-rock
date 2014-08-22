@@ -12,6 +12,7 @@
 
 
 // ****************************************************************
+// constructor
 cFirst::cFirst()noexcept
 : coreMenu (3, 0)
 {
@@ -72,12 +73,14 @@ cFirst::cFirst()noexcept
 
 
 // ****************************************************************
+// destructor
 cFirst::~cFirst()
 {
 }
 
 
 // ****************************************************************
+// render the first-time menu
 void cFirst::Render()
 {
     const float fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN((float)Core::System->GetTotalTime() * 12.0f));
@@ -99,6 +102,7 @@ void cFirst::Render()
 
 
 // ****************************************************************
+// move the first-time menu
 void cFirst::Move()
 {
     // move the menu

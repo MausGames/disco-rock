@@ -230,6 +230,18 @@ vec2 u_v2TexOffset = u_v4TexParam.zw;
     #define coreMax3(a,b,c) (max(a, max(b, c)))
 #endif
 
+// dot-3 transformation functions
+#define coreDot3Init()                                \
+    vec3 n = normalize(u_m3Normal * a_v3Normal);      \
+    vec3 t = normalize(u_m3Normal * a_v4Tangent.xyz); \
+    vec3 b = cross(n, t) * a_v4Tangent.w;
+    
+#define coreDot3Transform(i,o) \
+    o.x = dot(i, t);           \
+	o.y = dot(i, b);           \
+	o.z = dot(i, n);           \
+	o   = normalize(o);
+
 // square length functions
 float coreLengthSq(in vec2 v) {return dot(v, v);}
 float coreLengthSq(in vec3 v) {return dot(v, v);}
@@ -242,21 +254,20 @@ vec3 coreHSVtoRGB(in vec3 v3HSV)
     float V = v3HSV.z;
 
     float h = floor(H);
-    float f = H - h;
 
-    float VS = V  * S;
-    float VR = VS * f;
+    float s = V * S;
+    float t = s * (H - h);
 
-    float p = V - VS;
-    float q = V - VR;
-    float t = p + VR;
+    float p = V - s;
+    float q = V - t;
+    float o = p + t;
 
     if(h == 1.0) return vec3(q, V, p);
-    if(h == 2.0) return vec3(p, V, t);
+    if(h == 2.0) return vec3(p, V, o);
     if(h == 3.0) return vec3(p, q, V);
-    if(h == 4.0) return vec3(t, p, V);
+    if(h == 4.0) return vec3(o, p, V);
     if(h == 5.0) return vec3(V, p, q);
-                 return vec3(V, t, p);
+                 return vec3(V, o, p);
 }
 vec3 coreRGBtoHSV(in vec3 v3RGB)
 {
@@ -268,10 +279,12 @@ vec3 coreRGBtoHSV(in vec3 v3RGB)
     float d = v - coreMin3(R, G, B);
 
     if(d == 0.0) return vec3(0.0, 0.0, v);
+    
+    float s = d / v;
 
-         if(R == v) return vec3((0.0 + (G - B) / d) / 6.0, d / v, v);
-    else if(G == v) return vec3((2.0 + (B - R) / d) / 6.0, d / v, v);
-               else return vec3((4.0 + (R - G) / d) / 6.0, d / v, v);
+    if(R == v) return vec3((0.0 + (G - B) / d) / 6.0, s, v);
+    if(G == v) return vec3((2.0 + (B - R) / d) / 6.0, s, v);
+               return vec3((4.0 + (R - G) / d) / 6.0, s, v);
 }
 
 // pack and unpacking functions

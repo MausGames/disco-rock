@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cBackground::cBackground()noexcept
 : m_fPositionTime   (0.0f)
 , m_fFloorTime      (0.0f)
@@ -43,6 +44,7 @@ cBackground::cBackground()noexcept
 
 
 // ****************************************************************
+// destructor
 cBackground::~cBackground()
 {
     // free model
@@ -54,6 +56,7 @@ cBackground::~cBackground()
 
 
 // ****************************************************************
+// render the background
 void cBackground::Render()
 {
     glDisable(GL_BLEND);
@@ -96,7 +99,7 @@ void cBackground::Render()
         if(this->Enable())
         {
             // draw the model
-            glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_BLOCKS * BACK_PER_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
+            glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_TOTAL_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));
         }
 
         // render the filling background
@@ -107,6 +110,7 @@ void cBackground::Render()
 
 
 // ****************************************************************
+// move the background
 void cBackground::Move()
 {
     // update dance floor position
@@ -135,6 +139,7 @@ void cBackground::Move()
 
 
 // ****************************************************************
+// make or remove holes
 void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 {
     constexpr_var coreUint iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
@@ -159,6 +164,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 
 
 // ****************************************************************
+// get height value at specific position
 float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const
 {
     // convert real position to block position
@@ -168,34 +174,35 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
      // retrieve height value of the block
     return m_pfHeight[(int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
 
-/*
-    // retrieve all four corners of the block
-    const int iI00 = (int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
-    const int iI01 = iI00 + 1;
-    const int iI10 = iI00 + 2;
-    const int iI11 = iI00 + 3;
-    ASSERT(iI11 < BACK_BLOCKS * BACK_PER_VERTICES);
+    /*
+        // retrieve all four corners of the block
+        const int iI00 = (int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
+        const int iI01 = iI00 + 1;
+        const int iI10 = iI00 + 2;
+        const int iI11 = iI00 + 3;
+        ASSERT(iI11 < BACK_TOTAL_VERTICES);
     
-    // retrieve height values of the corners
-    const float& fH00 = m_pfHeight[iI00];
-    const float& fH01 = m_pfHeight[iI01];
-    const float& fH10 = m_pfHeight[iI10];
-    const float& fH11 = m_pfHeight[iI11];
+        // retrieve height values of the corners
+        const float& fH00 = m_pfHeight[iI00];
+        const float& fH01 = m_pfHeight[iI01];
+        const float& fH10 = m_pfHeight[iI10];
+        const float& fH11 = m_pfHeight[iI11];
 
-    // interpolate between all height values
-    const float fFractX = FRACT(fX);
-    const float fFractY = FRACT(fY);
-    return LERP(LERP(fH00, fH10, fFractX), LERP(fH01, fH11, fFractX), fFractY);
-*/
+        // interpolate between all height values
+        const float fFractX = FRACT(fX);
+        const float fFractY = FRACT(fY);
+        return LERP(LERP(fH00, fH10, fFractX), LERP(fH01, fH11, fFractX), fFractY);
+    */
 }
 
 
 // ****************************************************************
+// load dance floor geometry
 void cBackground::LoadGeometry()
 {
-    std::vector<coreVector4> avColor;       avColor.reserve      (BACK_BLOCKS);
-    std::vector<sVertex>     m_pVertexData; m_pVertexData.reserve(BACK_TOTAL_VERTICES);
-    std::vector<coreUshort>  m_pIndexData;  m_pIndexData.reserve (BACK_TOTAL_INDICES);
+    std::vector<coreVector4> avColor;     avColor.reserve    (BACK_BLOCKS);
+    std::vector<sVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
+    std::vector<coreUshort>  pIndexData;  pIndexData.reserve (BACK_TOTAL_INDICES);
 
     // delete old data
     m_pModel->Unload();
@@ -251,28 +258,28 @@ void cBackground::LoadGeometry()
             const coreUint j = x + y*BACK_WIDTH;
 
             const coreVector4& vColor    = avColor[x + y*BACK_BLOCKS_X];
-            const coreUshort iStartIndex = m_pVertexData.size();
+            const coreUshort iStartIndex = pVertexData.size();
 
             // copy base vertices to create unique plates and add generated color values
-            m_pVertexData.push_back(pBaseVertex[j]);              m_pVertexData.back().vColor = vColor;
-            m_pVertexData.push_back(pBaseVertex[j+1]);            m_pVertexData.back().vColor = vColor;
-            m_pVertexData.push_back(pBaseVertex[j  +BACK_WIDTH]); m_pVertexData.back().vColor = vColor;
-            m_pVertexData.push_back(pBaseVertex[j+1+BACK_WIDTH]); m_pVertexData.back().vColor = vColor;
+            pVertexData.push_back(pBaseVertex[j]);              pVertexData.back().vColor = vColor;
+            pVertexData.push_back(pBaseVertex[j+1]);            pVertexData.back().vColor = vColor;
+            pVertexData.push_back(pBaseVertex[j  +BACK_WIDTH]); pVertexData.back().vColor = vColor;
+            pVertexData.push_back(pBaseVertex[j+1+BACK_WIDTH]); pVertexData.back().vColor = vColor;
 
             // add indices for the new plate
-            m_pIndexData.push_back(iStartIndex + 0);
-            m_pIndexData.push_back(iStartIndex + 1);
-            m_pIndexData.push_back(iStartIndex + 2);
-            m_pIndexData.push_back(iStartIndex + 1);
-            m_pIndexData.push_back(iStartIndex + 3);
-            m_pIndexData.push_back(iStartIndex + 2);
+            pIndexData.push_back(iStartIndex + 0);
+            pIndexData.push_back(iStartIndex + 1);
+            pIndexData.push_back(iStartIndex + 2);
+            pIndexData.push_back(iStartIndex + 1);
+            pIndexData.push_back(iStartIndex + 3);
+            pIndexData.push_back(iStartIndex + 2);
         }
     }
 
     coreVertexBuffer* pBuffer;
 
     // create static vertex buffer
-    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), m_pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
+    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
     pBuffer->DefineAttribute(0, 2, GL_FLOAT, 0);
     pBuffer->DefineAttribute(1, 2, GL_FLOAT, 2*sizeof(float));
     pBuffer->DefineAttribute(2, 4, GL_FLOAT, 4*sizeof(float));
@@ -282,12 +289,12 @@ void cBackground::LoadGeometry()
     pBuffer->DefineAttribute(3, 1, GL_FLOAT, 0);
 
     // create index buffer
-    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), m_pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
+    m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
 
     // clear memory
     avColor.clear();
-    m_pVertexData.clear();
-    m_pIndexData.clear();
+    pVertexData.clear();
+    pIndexData.clear();
     SAFE_DELETE_ARRAY(pBaseVertex)
 
     // cthulhu fhtagn cheezburger
@@ -296,6 +303,7 @@ void cBackground::LoadGeometry()
 
 
 // ****************************************************************
+// modify colors used for the dance floor
 void cBackground::ModifyColor()
 {
     // change current hue offset

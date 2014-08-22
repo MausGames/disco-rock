@@ -81,6 +81,7 @@
 
 
 // ****************************************************************
+// constructor
 cOnline::cOnline()noexcept
 #if defined(_API_GOOGLE_PLAY_)
 : m_sUserName       ("")
@@ -122,6 +123,7 @@ cOnline::cOnline()noexcept
 
 
 // ****************************************************************
+// destructor
 cOnline::~cOnline()
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -149,6 +151,7 @@ cOnline::~cOnline()
 
 
 // ****************************************************************
+// update network transfers
 void cOnline::Update()
 {
     // update Game Jolt API access
@@ -158,6 +161,7 @@ void cOnline::Update()
 
 
 // ****************************************************************
+// forward error message to menu
 void cOnline::__SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3)
 {
     g_pMenu->SetErrorMessage(vColor, pcMessage1, pcMessage2, pcMessage3);
@@ -165,6 +169,7 @@ void cOnline::__SetErrorMessage(const coreVector3& vColor, const char* pcMessage
 
 
 // ****************************************************************
+// forward score table update to menu
 void cOnline::__InvokeScoreUpdate(const int& iTableNum)
 {
     g_pMenu->InvokeScoreUpdate(iTableNum);

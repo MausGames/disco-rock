@@ -158,6 +158,7 @@
 		<Unit filename="../../../GameJoltAPI/source/gjTrophy.h" />
 		<Unit filename="../../../GameJoltAPI/source/gjUser.cpp" />
 		<Unit filename="../../../GameJoltAPI/source/gjUser.h" />
+		<Unit filename="../../source/application.cpp" />
 		<Unit filename="../../source/cBackground.cpp" />
 		<Unit filename="../../source/cBackground.h" />
 		<Unit filename="../../source/cBeverage.cpp" />

@@ -12,11 +12,13 @@
 
 
 // ****************************************************************
+// engine header files
 #include "Core.h"
 #include <deque>
 
 
 // ****************************************************************
+// global definitions
 #define FONT_ROCKS "gomarice_rocks.ttf"
 
 #define COLOR_WHITE_F  coreVector3(1.000f, 1.000f, 1.000f)
@@ -46,6 +48,7 @@ static constexpr_var coreVector3 g_avColor[] =
 
 
 // ****************************************************************
+// game header files
 #include "cOnline.h"
 #include "cBackground.h"
 #include "cMenu.h"
@@ -61,6 +64,7 @@ static constexpr_var coreVector3 g_avColor[] =
 
 
 // ****************************************************************
+// global variables
 extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
 
 extern cBackground*        g_pBackground;       // background with dance floor
@@ -89,6 +93,7 @@ extern int                 g_iNumFails;         // number of deaths below 10 sec
 
 
 // ****************************************************************
+// message container class
 struct sMsgList
 {
     std::vector<const std::string*> m_apsMsg;   // shuffled messages
@@ -116,6 +121,7 @@ struct sMsgList
 
 
 // ****************************************************************
+// message containers
 extern sMsgList g_MsgIntro;
 extern sMsgList g_MsgFallen;
 extern sMsgList g_MsgTrap;
