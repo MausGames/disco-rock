@@ -12,10 +12,12 @@
 
 
 // ****************************************************************
+// combat text definitions
 #define COMBAT_TEXT_NUM (8)   // max number of simultenous texts
 
 
 // ****************************************************************
+// combat text class
 class cCombatText final   // actually there is no "combat" in the game
 {
 private:
@@ -34,15 +36,15 @@ private:
 
 private:
     coreLabel m_aText[COMBAT_TEXT_NUM];    // labal objects to display the combat text
-    coreByte m_iCurText;                   // current label object
+    coreByte  m_iCurText;                  // current label object
          
     coreTimer m_Delay;                     // delay between two created texts to increase visibility
     coreTimer m_aFloat[COMBAT_TEXT_NUM];   // timer for the float-animation
     float m_afAlpha[COMBAT_TEXT_NUM];      // saved initial alpha values for more dynamic fading
 
     coreObject2D m_Trophy;                 // flying trophy symbol
-    coreLabel m_TrophyLabel;               // dedicated trophy label
-    coreTimer m_TrophyTimer;               // timer for the flying trophy symbol
+    coreLabel    m_TrophyLabel;            // dedicated trophy label
+    coreTimer    m_TrophyTimer;            // timer for the flying trophy symbol
                             
     std::deque<sData> m_aData;             // text data deque
 
@@ -59,8 +61,8 @@ public:
     void Reset();
 
     // add new combat text data
-    inline void AddText(const char* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
-    void AddTextTransformed(const char* pcText, const coreVector3& vPosition, const coreVector4& vColor);
+    inline void AddText           (const char* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
+    void        AddTextTransformed(const char* pcText, const coreVector3& vPosition, const coreVector4& vColor);
 
     // show trophy animation
     void ShowTrophy(const char* pcText, const coreVector3& vPosition);

@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cGame::cGame(const bool& bChallenge)noexcept
 : m_iCurLine         (g_pBackground->GetCurLine())
 , m_iCurSpawn        (Core::Rand->Int(2,3))   // not sync
@@ -59,6 +60,7 @@ cGame::cGame(const bool& bChallenge)noexcept
 
 
 // ****************************************************************
+// destructor
 cGame::~cGame()
 {
     // delete all remaining objects
@@ -78,6 +80,7 @@ cGame::~cGame()
 
 
 // ****************************************************************
+// render the game
 void cGame::Render()
 {
     glDisable(GL_DEPTH_TEST);
@@ -144,6 +147,7 @@ void cGame::Render()
 
 
 // ****************************************************************
+// move the game
 void cGame::Move()
 {
     // update game time and calculate target speed (speed is interpolated smoothly in the main file)
@@ -738,6 +742,7 @@ void cGame::Move()
 
 
 // ****************************************************************
+// add trap object
 void cGame::AddTrap(const int& iBlock, const float& fSpawn)
 {
     // create new trap and add to list
@@ -748,6 +753,7 @@ void cGame::AddTrap(const int& iBlock, const float& fSpawn)
 
 
 // ****************************************************************
+// achieve a trophy
 void cGame::AchieveTrophy(const int& iID, const int& iNum)
 {
     // update helper
@@ -765,6 +771,7 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
 
 
 // ****************************************************************
+// callback for trophy achievements
 void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
     const int iNum = (long)pData;

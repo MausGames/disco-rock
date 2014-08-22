@@ -12,16 +12,18 @@
 
 
 // ****************************************************************
+// ray definitions
 #define RAY_LENGTH (120.0f)   // length of the ray
 #define RAY_WIDTH  (7.5f)     // width value
 
 
 // ****************************************************************
+// ray class
 class cRay final : public coreObject3D
 {
 private:
     coreVector3 m_vStart;    // starting-position of the ray
-    float m_fAngle;          // calculated starting-angle of the ray
+    float       m_fAngle;    // calculated starting-angle of the ray
 
     coreFlow m_fAnimation;   // timer for move-animation
 

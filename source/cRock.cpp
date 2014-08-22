@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cRock::cRock()noexcept
 : m_WaveTimer          (coreTimer(1.0f, 4.0f, 1))
 , m_fWaveStrength      (60.0f)
@@ -71,12 +72,14 @@ cRock::cRock()noexcept
 }
 
 // ****************************************************************
+// destructor
 cRock::~cRock()
 {
 }
 
 
 // ****************************************************************
+// render the rock
 void cRock::Render()
 {
     glDisable(GL_DEPTH_TEST);
@@ -96,6 +99,7 @@ void cRock::Render()
 
 
 // ****************************************************************
+// move the rock
 void cRock::Move()
 {
     // rotate the rock
@@ -311,6 +315,7 @@ void cRock::Move()
 
 
 // ****************************************************************
+// just jump
 bool cRock::Jump(const float& fForce)
 {
     if(m_bFallen || m_bJumped) return false;

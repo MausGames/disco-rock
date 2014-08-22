@@ -52,6 +52,7 @@
         <itemPath>../../source/cTrap.h</itemPath>
         <itemPath>../../source/main.h</itemPath>
       </logicalFolder>
+      <itemPath>../../source/application.cpp</itemPath>
       <itemPath>../../source/main.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -225,6 +226,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -428,6 +431,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.h" ex="false" tool="3" flavor2="0">
@@ -629,6 +634,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -845,6 +852,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.h" ex="false" tool="3" flavor2="0">
@@ -1056,6 +1065,8 @@
             tool="3"
             flavor2="0">
       </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.h" ex="false" tool="3" flavor2="0">
@@ -1265,6 +1276,8 @@
             ex="false"
             tool="3"
             flavor2="0">
+      </item>
+      <item path="../../source/application.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cBackground.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -14,12 +14,13 @@
 
 
 // ****************************************************************
+// first-time menu class
 class cFirst final : public coreMenu
 {
 private:
-    coreLabel m_ControlText;            // control header
+    coreLabel          m_ControlText;   // control header
     coreSwitchBox<int> m_ControlType;   // control setting selection
-    coreButton m_Start;                 // start into main menu
+    coreButton         m_Start;         // start into main menu
 
     cInterface m_Interface;             // interface instance to display current control settings
 
@@ -30,7 +31,7 @@ public:
 
     // render and move the first-time menu
     void Render()override;
-    void Move()override;
+    void Move  ()override;
 
 
 private:

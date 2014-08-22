@@ -19,6 +19,7 @@
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjTrophy.cpp" />
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjUser.cpp" />
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\MD5.cpp" />
+    <ClCompile Include="..\..\..\source\application.cpp" />
     <ClCompile Include="..\..\..\source\cBackground.cpp" />
     <ClCompile Include="..\..\..\source\cBeverage.cpp" />
     <ClCompile Include="..\..\..\source\cCombatText.cpp" />

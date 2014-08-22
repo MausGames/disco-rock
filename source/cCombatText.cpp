@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cCombatText::sData::sData()noexcept
 : sData ("", coreVector2(0.0f,0.0f), coreVector4(0.0f,0.0f,0.0f,0.0f))
 {
@@ -22,8 +23,6 @@ cCombatText::sData::sData(const char* pcText, const coreVector2& vPosition, cons
 {
 }
 
-
-// ****************************************************************
 cCombatText::sData::sData(sData&& m)noexcept
 : sText     (std::move(m.sText))
 , vPosition (m.vPosition)
@@ -33,6 +32,7 @@ cCombatText::sData::sData(sData&& m)noexcept
 
 
 // ****************************************************************
+// constructor
 cCombatText::cCombatText()noexcept
 : m_iCurText    (0)
 , m_Delay       (coreTimer(0.01f, 1.0f, 1))
@@ -58,6 +58,7 @@ cCombatText::cCombatText()noexcept
 
 
 // ****************************************************************
+// destructor
 cCombatText::~cCombatText()
 {
     // reset all active texts
@@ -66,6 +67,7 @@ cCombatText::~cCombatText()
 
 
 // ****************************************************************
+// render the combat text
 void cCombatText::Render()
 {
     // render trophy symbol
@@ -85,6 +87,7 @@ void cCombatText::Render()
 
 
 // ****************************************************************
+// move the combat text
 void cCombatText::Move()
 {
     // update delay between two texts
@@ -160,6 +163,7 @@ void cCombatText::Move()
 
 
 // ****************************************************************
+// reset all combat text entries
 void cCombatText::Reset()
 {
     // stop all timers
@@ -173,6 +177,7 @@ void cCombatText::Reset()
 
 
 // ****************************************************************
+// add new transformed combat text entry
 void cCombatText::AddTextTransformed(const char* pcText, const coreVector3& vPosition, const coreVector4& vColor)
 {
     if(vColor.a <= 0.0f) return;
@@ -184,6 +189,7 @@ void cCombatText::AddTextTransformed(const char* pcText, const coreVector3& vPos
 
 
 // ****************************************************************
+// show trophy animation
 void cCombatText::ShowTrophy(const char* pcText, const coreVector3& vPosition)
 {
     // calculate screen position

@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cMenu::cMenu()noexcept
 : coreMenu         (20, 0)
 , m_ScoreMenu      (8,  0)
@@ -962,12 +963,14 @@ cMenu::cMenu()noexcept
 
 
 // ****************************************************************
+// destructor
 cMenu::~cMenu()
 {
 }
 
 
 // ****************************************************************
+// move the menu
 void cMenu::Move()
 {
     // move the menu
@@ -1662,6 +1665,7 @@ void cMenu::Move()
 
 
 // ****************************************************************
+// end current game and return to main menu
 void cMenu::End()
 {
     if(!g_pGame) return;
@@ -1706,6 +1710,7 @@ void cMenu::ResetShaders()
 
 
 // ****************************************************************
+// activate notification for new record
 void cMenu::NewRecord(const coreByte& iIndex)
 {
     ASSERT(iIndex < SCORE_TABLES);
@@ -1723,6 +1728,7 @@ void cMenu::NewRecord(const coreByte& iIndex)
 
 
 // ****************************************************************
+// reset notification for new record
 void cMenu::ResetRecord()
 {
     for(int i = 0; i < SCORE_TABLES; ++i)
@@ -1739,6 +1745,7 @@ void cMenu::ResetRecord()
 
 
 // ****************************************************************
+// display connection error
 void cMenu::SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3)
 {
     if(pcMessage1 && pcMessage2 && pcMessage3)
@@ -1762,6 +1769,7 @@ void cMenu::SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, c
 
 
 // ****************************************************************
+// submit score
 void cMenu::SubmitScore(const char* pcGuestName)
 {
     ASSERT(g_pGame);
@@ -1785,6 +1793,7 @@ void cMenu::SubmitScore(const char* pcGuestName)
 
 
 // ****************************************************************
+// callback for score submit
 void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
 {
     if(!pScore) return;   // error submitting
@@ -1808,6 +1817,7 @@ void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
 
 
 // ****************************************************************
+// retrieve scores
 void cMenu::RetrieveScores()
 {
     // reset current score page
@@ -1821,6 +1831,7 @@ void cMenu::RetrieveScores()
 
 
 // ****************************************************************
+// callback for score retrieval (tables)
 void cMenu::RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData)
 {
     FOR_EACH(it, apTable)
@@ -1835,6 +1846,7 @@ void cMenu::RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData)
 
 
 // ****************************************************************
+// callback for score retrieval (entries)
 void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 {
     if(apScore.empty()) return;
@@ -1886,7 +1898,8 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 }
 
 
-// ****************************************************************   
+// **************************************************************** 
+// callback for score retrieval (update leaderboards)
 void cMenu::RetrieveScoresCallback3(const int& iTableNum)
 {
     ASSERT(iTableNum < SCORE_TABLES);
@@ -1926,7 +1939,8 @@ void cMenu::RetrieveScoresCallback3(const int& iTableNum)
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// fetch trophies
 void cMenu::FetchTrophies()
 {
     // fetch trophies
@@ -1934,7 +1948,8 @@ void cMenu::FetchTrophies()
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// callback for trophy fetch (description)
 void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 {
     const int iNum = (long)pData;
@@ -1954,7 +1969,8 @@ void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// callback for trophy fetch (values)
 void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
 {
     // save trophy status
@@ -1968,7 +1984,8 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// invoke quickplay login
 int cMenu::QuickPlay()
 {
     // load guest name and local values
@@ -1997,7 +2014,8 @@ int cMenu::QuickPlay()
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// invoke normal login
 int cMenu::Login(const char* pcName, const char* pcToken)
 {
     // try to login the specific user
@@ -2005,7 +2023,8 @@ int cMenu::Login(const char* pcName, const char* pcToken)
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// callback for login attempt
 void cMenu::LoginCallback(const int& iStatus, void* pData)
 {
     if(iStatus == GJ_OK)
@@ -2047,7 +2066,8 @@ void cMenu::LoginCallback(const int& iStatus, void* pData)
 }
 
 
-// ****************************************************************   
+// ****************************************************************
+// logout
 void cMenu::Logout()
 {
     // logout
