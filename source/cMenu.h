@@ -12,6 +12,9 @@
 
 
 // ****************************************************************
+// menu definitions
+#define LEFT_CENTER (0.46f)   // fixed center-value for the left menu
+
 // transparency values
 #define MENU_ALPHA_ACTIVE_1 (0.8f)
 #define MENU_ALPHA_IDLE_1   (0.5f)
@@ -22,8 +25,6 @@
 #define ADJUST_LEFT(x)   {x.SetCenter(coreVector2(-0.5f,0.0f)); x.SetAlignment(coreVector2( 1.0f,0.0f));}
 #define ADJUST_RIGHT(x)  {x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));}
 #define ADJUST_BORDER(x) {x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);}
-
-#define LEFT_CENTER (0.46f)
 
 // macro function for changing object transparency                      
 #define ALPHA_BUTTON_TEXT(b)                                                                                             \
@@ -58,11 +59,12 @@
 
 
 // ****************************************************************
+// menu class
 class cMenu final : public coreMenu
 {
 private:
-    coreLabel m_Made;
-    coreLabel m_For;
+    coreLabel    m_Made;
+    coreLabel    m_For;
     coreObject2D m_Maus;
     coreObject2D m_GameJolt;
     coreObject2D m_BigLogo;
@@ -73,7 +75,7 @@ private:
     coreObject2D m_BackgroundRight;
 
     coreObject2D m_Logo;
-    coreLabel m_Pause;
+    coreLabel    m_Pause;
 
     coreButton m_Start;
     coreButton m_Exit;
@@ -89,84 +91,84 @@ private:
     coreButton m_ButtonConfig;
 
     coreObject2D m_TopBatteryBolt;
-    coreLabel m_TopBatteryValue;
+    coreLabel    m_TopBatteryValue;
     coreObject2D m_TopFPSTacho;
-    coreLabel m_TopFPSSec;
-    coreLabel m_TopFPSMil;
+    coreLabel    m_TopFPSSec;
+    coreLabel    m_TopFPSMil;
 
-    coreLabel m_BottomInfo;
-    coreLabel m_BottomCredit;
-    coreLabel m_BottomLoginName;
+    coreLabel    m_BottomInfo;
+    coreLabel    m_BottomCredit;
+    coreLabel    m_BottomLoginName;
     coreObject2D m_BottomLoginJolt;
 
     coreButton m_GoogleFullTrophy;
     coreButton m_GoogleFullScore;
 
     coreObject2D m_QuestionBlack;
-    coreLabel m_Question;
-    coreButton m_Yes;
-    coreButton m_No;
+    coreLabel    m_Question;
+    coreButton   m_Yes;
+    coreButton   m_No;
 
-    coreLabel m_VideoText;
+    coreLabel  m_VideoText;
     coreButton m_VideoLow;
     coreButton m_VideoMedium;
     coreButton m_VideoHigh;
 
-    coreLabel m_AudioText;
+    coreLabel    m_AudioText;
     coreObject2D m_AudioBar;
     coreObject2D m_AudioBarBack;   // (no, not bareback)
     coreObject2D m_AudioIconHigh;
     coreObject2D m_AudioIconLow;
-    coreButton m_AudioDrag;
+    coreButton   m_AudioDrag;
 
-    coreLabel m_LoginConfigOr;
+    coreLabel    m_LoginConfigOr;
     coreObject2D m_LoginConfigLogo;
-    coreButton m_LoginConfigStart;
+    coreButton   m_LoginConfigStart;
 
-    coreLabel m_ControlText;
+    coreLabel          m_ControlText;
     coreSwitchBox<int> m_ControlType;
 
     coreObject2D m_LoginBlack;
     coreObject2D m_LoginPopup;
-    coreLabel m_aLoginText[2];
-    coreLabel m_LoginEnterName;
-    coreLabel m_LoginEnterToken;
-    coreLabel m_LoginEnterGuest;
-    coreTextBox m_LoginName;
-    coreTextBox m_LoginToken;
-    coreTextBox m_LoginGuest;
-    coreButton m_LoginOK;
-    coreButton m_LoginCancel;
-    coreLabel m_LoginError;
-    coreLabel m_LoginJoltOr;
+    coreLabel    m_aLoginText[2];
+    coreLabel    m_LoginEnterName;
+    coreLabel    m_LoginEnterToken;
+    coreLabel    m_LoginEnterGuest;
+    coreTextBox  m_LoginName;
+    coreTextBox  m_LoginToken;
+    coreTextBox  m_LoginGuest;
+    coreButton   m_LoginOK;
+    coreButton   m_LoginCancel;
+    coreLabel    m_LoginError;
+    coreLabel    m_LoginJoltOr;
     coreObject2D m_LoginJoltLogo;
-    coreButton m_LoginJoltStart;
+    coreButton   m_LoginJoltStart;
 
     coreObject2D m_Successful;
-    coreLabel m_TopUpdating;
+    coreLabel    m_TopUpdating;
 
-    coreLabel m_aScoreTable[SCORE_TABLES];
-    coreLabel m_aaScoreEntry[SCORE_TABLES][SCORE_ENTRIES][3];
-    coreLabel m_aScoreBest[SCORE_TABLES];
-    coreLabel m_aScoreBestValue[SCORE_TABLES];
-    coreLabel m_aScoreRecord[SCORE_TABLES];
-    coreLabel m_aScoreRank[SCORE_TABLES];
+    coreLabel  m_aScoreTable[SCORE_TABLES];
+    coreLabel  m_aaScoreEntry[SCORE_TABLES][SCORE_ENTRIES][3];
+    coreLabel  m_aScoreBest[SCORE_TABLES];
+    coreLabel  m_aScoreBestValue[SCORE_TABLES];
+    coreLabel  m_aScoreRecord[SCORE_TABLES];
+    coreLabel  m_aScoreRank[SCORE_TABLES];
     coreButton m_PageChange;
 
     coreLabel m_aAfterBest[SCORE_TABLES];
     coreLabel m_aAfterBestValue[SCORE_TABLES];
     coreLabel m_aAfterRecord[SCORE_TABLES];
 
-    coreLabel m_TrophyText;
+    coreLabel    m_TrophyText;
     coreObject2D m_aTrophyImage[TROPHY_ITEMS];
     coreObject2D m_aTrophyCheck[TROPHY_ITEMS];
-    coreLabel m_aTrophySecret[TROPHY_SECRETS];
-    coreLabel m_TrophyName;
-    coreLabel m_aTrophyDesc[2];
+    coreLabel    m_aTrophySecret[TROPHY_SECRETS];
+    coreLabel    m_TrophyName;
+    coreLabel    m_aTrophyDesc[2];
 
-    coreLabel m_aConnectionError[3];
+    coreLabel    m_aConnectionError[3];
     coreObject2D m_AuthLogo;
-    coreButton m_AuthButton;
+    coreButton   m_AuthButton;
     coreObject2D m_Loading;
 
     coreMenu m_ScoreMenu;
@@ -175,8 +177,8 @@ private:
     coreTimer m_Intro;                          // intro timer
 
     float m_afSubmitValue[SCORE_TABLES];        // fetched values after loosing the game
-    bool m_bSubmited;                           // values where successfully submited
-    bool m_bInLeaderboard;                      // current values would be in the visible leaderboard (ask to submit before leaving)
+    bool  m_bSubmited;                          // values where successfully submited
+    bool  m_bInLeaderboard;                     // current values would be in the visible leaderboard (ask to submit before leaving)
 
     gjScoreList m_aapCurScores[SCORE_TABLES];   // saved score pointers for better leaderboard paging
     int m_iCurPage;                             // current page in the leaderboards
@@ -215,13 +217,13 @@ public:
     inline void InvokeScoreUpdate(const int& iTableNum) {BIT_SET(m_iTableUpdate, iTableNum)}
 
     // submit score functions
-    void SubmitScore(const char* pcGuestName);
+    void SubmitScore        (const char* pcGuestName);
     void SubmitScoreCallback(const gjScorePtr& pScore, void* pData);
 
     // retrieve score functions
     void RetrieveScores();
     void RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData);
-    void RetrieveScoresCallback2(const gjScoreList& apScore, void* pData);
+    void RetrieveScoresCallback2(const gjScoreList&     apScore, void* pData);
     void RetrieveScoresCallback3(const int& iTableNum);
 
     // fetch trophies functions
@@ -236,9 +238,9 @@ public:
     void Logout();
 
     // control trophy parameters
-    inline void SetTrophyStatus(const int& iStatus)   {m_iTrophyStatus  = iStatus;}
+    inline void SetTrophyStatus (const int& iStatus)  {m_iTrophyStatus  = iStatus;}
     inline void SetTrophyCurrent(const int& iCurrent) {m_iTrophyCurrent = iCurrent;}
-    inline const int& GetTrophyStatus()const          {return m_iTrophyStatus;}
+    inline const int& GetTrophyStatus ()const         {return m_iTrophyStatus;}
     inline const int& GetTrophyCurrent()const         {return m_iTrophyCurrent;}
 
 

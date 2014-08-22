@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cTrap::cTrap()noexcept
 : m_pGlow  (0.0f)
 , m_Effect (g_pParticleSystem)
@@ -28,12 +29,14 @@ cTrap::cTrap()noexcept
 
 
 // ****************************************************************
+// destructor
 cTrap::~cTrap()
 {
 }
 
 
 // ****************************************************************
+// move the trap
 void cTrap::Move()
 {
     // update animation

@@ -12,10 +12,11 @@
 
 
 // ****************************************************************
+// trap class
 class cTrap final : public coreObject3D
 {
 protected:
-    coreFlow m_pGlow;              // glowing animation timer
+    coreFlow           m_pGlow;    // glowing animation timer
     coreParticleEffect m_Effect;   // particle effect object
 
 

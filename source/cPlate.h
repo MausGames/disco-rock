@@ -12,11 +12,12 @@
 
 
 // ****************************************************************
+// plate class
 class cPlate final : public coreObject3D
 {
 private:
     coreTimer m_Animation;        // timer for the lift-animation
-    float m_fStartY;              // minimal Y-distance to the front to begin the lift-animation
+    float     m_fStartY;          // minimal Y-distance to the front to begin the lift-animation
 
     coreVector2 m_vFixedOffset;   // texture-offest to correctly map the disco-lights on the plate
 

@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cRay::cRay(const coreVector3& vStart)noexcept
 : m_vStart     (vStart)
 , m_fAngle     (0.0f)
@@ -34,12 +35,14 @@ cRay::cRay(const coreVector3& vStart)noexcept
 
 
 // ****************************************************************
+// destructor
 cRay::~cRay()
 {
 }
 
 
 // ****************************************************************
+// move the ray
 void cRay::Move()
 {
     // update the move-animation

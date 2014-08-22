@@ -12,6 +12,7 @@
 
 
 // ****************************************************************
+// online definitions
 #if defined(_CORE_ANDROID_)
     #define _API_GOOGLE_PLAY_   // undefine to use Game Jolt on Android (but removes control configruation)
 #endif
@@ -28,6 +29,7 @@
 
 
 // ****************************************************************
+// Game Jolt relevant definitions
 #include "gjAPI.h"
 static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!");
 
@@ -54,6 +56,7 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 
 
 // ****************************************************************
+// Google Play Games relevant definitions
 #if defined(_API_GOOGLE_PLAY_)
 
     #include <jni.h>
@@ -102,6 +105,7 @@ extern void SetBannerAlpha(float fAlpha);
 
 
 // ****************************************************************
+// online class
 class cOnline final
 {
 private:
@@ -129,26 +133,26 @@ public:
     void Update();
 
     // get status data
-    inline const char* GetUserName()const;
-    inline const char* GetUserToken()const;
-    inline int GetNumConnections()const;
-    inline const bool& IsUserConnected()const;
+    inline const char* GetUserName      ()const;
+    inline const char* GetUserToken     ()const;
+    inline int         GetNumConnections()const;
+    inline const bool& IsUserConnected  ()const;
 
 #if defined(_API_GOOGLE_PLAY_)
 
     // open Google Play screens
     inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUI();}
-    inline void OpenScore()  {m_pGooglePlay->Leaderboards().ShowAllUI();}
+    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUI();}
 
 #endif
 
     // layered request functions to support both APIs
-    template <typename T> int AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
-    template <typename T> int FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList));
-    template <typename T> int SubmitScore(const int& iTableID, const std::string& sScore, const int& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
+    template <typename T> int AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
+    template <typename T> int FetchTrophies    (GJ_NETWORK_OUTPUT(gjTrophyList));
+    template <typename T> int SubmitScore      (const int& iTableID, const std::string& sScore, const int& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
     template <typename T> int FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap));
-    template <typename T> int FetchScores(const int& iTableID, const bool& bOnlyUser, const int& iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
-    template <typename T> int Login(const char* pcName, const char* pcToken, GJ_NETWORK_OUTPUT(int));
+    template <typename T> int FetchScores      (const int& iTableID, const bool& bOnlyUser, const int& iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
+    template <typename T> int Login            (const char* pcName, const char* pcToken, GJ_NETWORK_OUTPUT(int));
     inline void Logout();
 
     // access Game Jolt directly
@@ -167,6 +171,7 @@ private:
 
 
 // ****************************************************************
+// get user name
 inline const char* cOnline::GetUserName()const
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -184,6 +189,7 @@ inline const char* cOnline::GetUserName()const
 
 
 // ****************************************************************
+// get user token
 inline const char* cOnline::GetUserToken()const
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -201,6 +207,7 @@ inline const char* cOnline::GetUserToken()const
 
 
 // ****************************************************************
+// get current network load
 inline int cOnline::GetNumConnections()const
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -218,6 +225,7 @@ inline int cOnline::GetNumConnections()const
 
 
 // ****************************************************************
+// check for connected user
 inline const bool& cOnline::IsUserConnected()const
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -235,6 +243,7 @@ inline const bool& cOnline::IsUserConnected()const
 
 
 // ****************************************************************
+// achieve trophy
 template <typename T> int cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr))
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -281,6 +290,7 @@ template <typename T> int cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK
 
 
 // ****************************************************************
+// fetch trophies
 template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList))
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -337,6 +347,7 @@ template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList)
 
 
 // ****************************************************************
+// submit score
 template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::string& sScore, const int& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -374,6 +385,7 @@ template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::s
 
 
 // ****************************************************************
+// fetch leaderboards
 template <typename T> int cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap))
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -397,6 +409,7 @@ template <typename T> int cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTa
 
 
 // ****************************************************************
+// fetch scores
 template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& bOnlyUser, const int& iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
 {
 #if defined(_API_GOOGLE_PLAY_)
@@ -527,6 +540,7 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
 
 
 // ****************************************************************
+// login
 template <typename T> int cOnline::Login(const char* pcName, const char* pcToken, GJ_NETWORK_OUTPUT(int))
 {
     // get login type (0 = QuickPlay or Google Play Games setup)
@@ -547,7 +561,7 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
         m_pGooglePlay = gpg::GameServices::Builder()
 
         // just log everything
-        .SetLogging(gpg::DEFAULT_ON_LOG, gpg::LogLevel::VERBOSE)
+        .SetDefaultOnLog(gpg::LogLevel::VERBOSE)
 
         // set authorization callback
         .SetOnAuthActionStarted ([&](gpg::AuthOperation op) {})
@@ -564,10 +578,10 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
                 break;
 
             // failed
-            case gpg::AuthStatus::ERROR_INTERNAL:                this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "INTERNAL PROBLEM");      break;
-            case gpg::AuthStatus::ERROR_TIMEOUT:                 this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "CONNECTION TIMEOUT", ""); break;
-            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F, "GOOGLE PLAY GAMES", "NOT YET ENABLED",    ""); break;
-            case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED: this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "UPDATE REQUIRED");       break;
+            case gpg::AuthStatus::ERROR_INTERNAL:                this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "INTERNAL PROBLEM");       break;
+            case gpg::AuthStatus::ERROR_TIMEOUT:                 this->__SetErrorMessage(COLOR_ORANGE_F,  "GOOGLE PLAY GAMES", "CONNECTION TIMEOUT", ""); break;
+            case gpg::AuthStatus::ERROR_NOT_AUTHORIZED:          this->__SetErrorMessage(COLOR_ORANGE_F,  "GOOGLE PLAY GAMES", "NOT YET ENABLED",    ""); break;
+            case gpg::AuthStatus::ERROR_VERSION_UPDATE_REQUIRED: this->__SetErrorMessage(COLOR_RED_F, "", "GOOGLE PLAY GAMES", "UPDATE REQUIRED");        break;
             }
 
             if(this->m_bAuthorized)
@@ -614,6 +628,7 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
 
 
 // ****************************************************************
+// logout
 inline void cOnline::Logout()
 {
 #if defined(_API_GOOGLE_PLAY_)

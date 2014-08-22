@@ -12,36 +12,42 @@
 
 
 // ****************************************************************
+// interface definitions
+#define COMBO_BAR_LENGTH (0.5f)   // combo bar length
+
+
+// ****************************************************************
+// interface class
 class cInterface final
 {
 private:
-    coreLabel m_Score;          // score name text
-    coreLabel m_ScoreValue;     // score value text
+    coreLabel m_Score;           // score name text
+    coreLabel m_ScoreValue;      // score value text
                                 
-    coreLabel m_Time;           // time name text
-    coreLabel m_TimeValueSec;   // time value text (separated to remove wobbling)
-    coreLabel m_TimeValueMil;   // time value text
+    coreLabel m_Time;            // time name text
+    coreLabel m_TimeValueSec;    // time value text (separated to remove wobbling)
+    coreLabel m_TimeValueMil;    // time value text
                                   
-    coreLabel m_Combo;          // combo name text
-    coreLabel m_ComboValue;     // combo value text
-    coreObject2D m_ComboBar;    // simple bar to display the current combo delay
+    coreLabel    m_Combo;        // combo name text
+    coreLabel    m_ComboValue;   // combo value text
+    coreObject2D m_ComboBar;     // simple bar to display the current combo delay
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
-    coreButton m_MoveLeft;      // touch move left button
-    coreButton m_MoveRight;     // touch move right button
-    coreButton m_Jump;          // touch jump button
-    coreButton m_Pause;         // touch pause button
-
-    coreObject2D m_apLine[2];   // line objects separating the screen into three parts
-
-    int m_iControlType;         // cached control type value
-    float m_fFadeOut;           // fade out fullscreen touch elements
-                                
-#endif                          
-                                
-    coreTimer m_Show;           // timer to fade in (on game-start)
-    coreTimer m_Hide;           // timer to fade out (on game-end)
+    coreButton m_MoveLeft;       // touch move left button
+    coreButton m_MoveRight;      // touch move right button
+    coreButton m_Jump;           // touch jump button
+    coreButton m_Pause;          // touch pause button
+                                 
+    coreObject2D m_apLine[2];    // line objects separating the screen into three parts
+                                 
+    int m_iControlType;          // cached control type value
+    float m_fFadeOut;            // fade out fullscreen touch elements
+                                 
+#endif                           
+                                 
+    coreTimer m_Show;            // timer to fade in (on game-start)
+    coreTimer m_Hide;            // timer to fade out (on game-end)
 
 
 public:
@@ -64,15 +70,15 @@ public:
     void RenderTouch();
 
     // access touch objects
-    inline coreObject2D* GetTouchMoveLeft()         {return &m_MoveLeft;}
-    inline coreObject2D* GetTouchMoveRight()        {return &m_MoveRight;}
-    inline coreObject2D* GetTouchJump()             {return &m_Jump;}
-    inline coreObject2D* GetTouchPause()            {return &m_Pause;}
-    inline coreObject2D* GetLine(const int& iIndex) {return &m_apLine[iIndex];}
+    inline coreObject2D* GetTouchMoveLeft ()                  {return &m_MoveLeft;}
+    inline coreObject2D* GetTouchMoveRight()                  {return &m_MoveRight;}
+    inline coreObject2D* GetTouchJump     ()                  {return &m_Jump;}
+    inline coreObject2D* GetTouchPause    ()                  {return &m_Pause;}
+    inline coreObject2D* GetLine          (const int& iIndex) {return &m_apLine[iIndex];}
 
     // control control type !
     void ChangeControlType(const int& iControlType);
-    inline const int& GetControlType()const  {return m_iControlType;}
+    inline const int& GetControlType()const {return m_iControlType;}
 
     // interact with touch objects
     void InteractControl();

@@ -8,10 +8,9 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#define COMBO_BAR_LENGTH (0.5f)   // combo bar length
-
 
 // ****************************************************************
+// constructor
 cInterface::cInterface()noexcept
 : m_Show (coreTimer(1.0f, 1.0f, 1))
 , m_Hide (coreTimer(1.0f, 1.0f, 1))
@@ -113,12 +112,14 @@ cInterface::cInterface()noexcept
 
 
 // ****************************************************************
+// destructor
 cInterface::~cInterface()
 {
 }
 
 
 // ****************************************************************
+// render the interface
 void cInterface::Render()
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
@@ -148,6 +149,7 @@ void cInterface::Render()
 
 
 // ****************************************************************
+// move the interface
 void cInterface::Move()
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
@@ -217,6 +219,7 @@ void cInterface::Move()
 
 
 // ****************************************************************
+// update all interface values
 void cInterface::Update(const float& fScore, const float& fTime, const float& fCombo, const float& fDelay)
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
@@ -243,6 +246,7 @@ void cInterface::Update(const float& fScore, const float& fTime, const float& fC
 
 
 // ****************************************************************
+// render touch objects separately
 void cInterface::RenderTouch()
 {
     // render touch controls
@@ -264,6 +268,7 @@ void cInterface::RenderTouch()
 
 
 // ****************************************************************
+// change current control type
 void cInterface::ChangeControlType(const int& iControlType)
 {
     // save control type value
@@ -335,6 +340,7 @@ void cInterface::ChangeControlType(const int& iControlType)
 
 
 // ****************************************************************
+// interact with control objects
 void cInterface::InteractControl()
 {
     // interact with movement touch buttons
@@ -345,6 +351,7 @@ void cInterface::InteractControl()
 
 
 // ****************************************************************
+// interact with pause objects
 void cInterface::InteractPause()
 {
     // interact with pause touch button

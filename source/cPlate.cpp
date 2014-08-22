@@ -10,6 +10,7 @@
 
 
 // ****************************************************************
+// constructor
 cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
 : m_Animation    (coreTimer(1.0f, Core::Rand->Float(0.45f,0.55f), 1))
 , m_fStartY      (fStartY)
@@ -34,12 +35,14 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vFixedOffset)noexcept
 }
 
 // ****************************************************************
+// destructor
 cPlate::~cPlate()
 {
 }
 
 
 // ****************************************************************
+// move the plate
 void cPlate::Move()
 {
     // check minimal distance to the front

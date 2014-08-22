@@ -35,8 +35,8 @@ void main()
 
         vec2 v2TexCoord = fract(v_av2TexCoord[0]);
         
-        if(v2TexCoord.x < 0.06 || v2TexCoord.x > 0.94 ||
-           v2TexCoord.y < 0.06 || v2TexCoord.y > 0.94)
+        if(any(lessThan   (v2TexCoord, vec2(0.06))) ||
+           any(greaterThan(v2TexCoord, vec2(0.94))))
         {
             gl_FragColor = vec4(0.0, 0.0, 0.0, 1.0);
         }
