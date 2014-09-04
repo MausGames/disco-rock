@@ -242,7 +242,7 @@ void CoreApp::Move()
 
 #else
         // check C key for Coola challenge
-        const bool bChallenge = Core::Input->GetKeyboardButton(KEY(C), CORE_INPUT_HOLD);
+        const bool bChallenge = Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD);
 
 #endif
         // create/start a new game
@@ -322,10 +322,10 @@ void CoreApp::Move()
 #if !defined(_CORE_ANDROID_)
 
     // wireframe mode for fun
-    if(Core::Input->GetKeyboardButton(KEY(LSHIFT), CORE_INPUT_HOLD))
+    if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LSHIFT), CORE_INPUT_HOLD))
     {
-             if(Core::Input->GetKeyboardButton(KEY(1), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else if(Core::Input->GetKeyboardButton(KEY(2), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+             if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(1), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+        else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(2), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     }
 
 #endif

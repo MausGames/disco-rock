@@ -986,7 +986,7 @@ void cMenu::Move()
 #endif
 
     // check for back button (especially important on Android)
-    const bool bBackButton = Core::Input->GetKeyboardButton(KEY(AC_BACK), CORE_INPUT_PRESS);
+    const bool bBackButton = Core::Input->GetKeyboardButton(CORE_INPUT_KEY(AC_BACK), CORE_INPUT_PRESS);
 
     // associate banner transparency with menu background
     SetBannerAlpha(m_BackgroundLeft.GetAlpha());
@@ -997,9 +997,9 @@ void cMenu::Move()
         // check for escape key, interrupt and pause button
 #if defined(_CORE_ANDROID_)
         g_pGame->GetInterface()->InteractPause();     
-        if(Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || g_pGame->GetInterface()->GetTouchPause()->IsClicked())
+        if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || g_pGame->GetInterface()->GetTouchPause()->IsClicked())
 #else
-        if(Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || Core::Input->GetJoystickButton(0, 1, CORE_INPUT_PRESS) || Core::Input->GetJoystickButton(1, 1, CORE_INPUT_PRESS))
+        if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) || Core::System->GetMinimized() || bBackButton || Core::Input->GetJoystickButton(0, 1, CORE_INPUT_PRESS) || Core::Input->GetJoystickButton(1, 1, CORE_INPUT_PRESS))
 #endif
         {
             // enter pause menu
@@ -1111,10 +1111,10 @@ void cMenu::Move()
             // exit the application
             Core::System->Quit();
         }
-        else if(m_No.IsClicked() ||
-                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
+        else if(m_No.IsClicked()                                                         ||
+                Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,                   CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,                   CORE_INPUT_PRESS))
         {
             // return to main menu
             this->ChangeSurface(6, 5.0f);
@@ -1124,10 +1124,10 @@ void cMenu::Move()
     else if(this->GetCurSurface() == 11)
     {
         // check for pause menu
-        if(m_Resume.IsClicked() || m_Short.IsClicked()                   || 
-           Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
+        if(m_Resume.IsClicked() || m_Short.IsClicked()                              || 
+           Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(0, 1,                   CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 1,                   CORE_INPUT_PRESS))
         {
             // resume current game
             g_bPause = false;
@@ -1153,10 +1153,10 @@ void cMenu::Move()
             // exit the current game
             this->End();
         }
-        else if(m_No.IsClicked()                                              ||
-                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
+        else if(m_No.IsClicked()                                                         ||
+                Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,                   CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,                   CORE_INPUT_PRESS))
         {
             // return to pause menu
             this->ChangeSurface(11, 5.0f);
@@ -1216,10 +1216,10 @@ void cMenu::Move()
             // finish the game
             this->End();
         }
-        else if(m_No.IsClicked()                                              || 
-                Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) ||
-                Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
-                Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS))
+        else if(m_No.IsClicked()                                                         || 
+                Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) ||
+                Core::Input->GetJoystickButton(0, 1,                   CORE_INPUT_PRESS) || 
+                Core::Input->GetJoystickButton(1, 1,                   CORE_INPUT_PRESS))
         {
             // return to submit menu
             this->ChangeSurface(14, 5.0f);
@@ -1520,14 +1520,14 @@ void cMenu::Move()
 
             if(m_LoginMenu.GetCurSurface() == 0)
             {
-                if(Core::Input->GetKeyboardButton(KEY(RETURN), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_RETURN)
+                if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RETURN), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_RETURN)
                 {
                     // switch input focus or start login with enter-key
                          if(!m_LoginName.GetText()[0])  m_LoginName.SetInput(true);
                     else if(!m_LoginToken.GetText()[0]) m_LoginToken.SetInput(true);
                     else bDoLogin = true;
                 }
-                else if(Core::Input->GetKeyboardButton(KEY(TAB), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_TAB)
+                else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(TAB), CORE_INPUT_PRESS) || Core::Input->GetKeyboardChar() == SDLK_TAB)
                 {
                     // switch input focus with tab-key
                          if(m_LoginName.GetInput())  {m_LoginName.SetInput(false); m_LoginToken.SetInput(true);}
@@ -1637,14 +1637,14 @@ void cMenu::Move()
     if(m_Intro.GetStatus())
     {
         // skip intro when pressing specific keys
-        if(Core::Input->GetMouseButton(1, CORE_INPUT_PRESS) ||
-           Core::Input->GetKeyboardButton(KEY(ESCAPE), CORE_INPUT_PRESS) || 
-           Core::Input->GetKeyboardButton(KEY(RETURN), CORE_INPUT_PRESS) || 
-           Core::Input->GetKeyboardButton(KEY(SPACE),  CORE_INPUT_PRESS) ||
-           Core::Input->GetJoystickButton(0, 0,        CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 0,        CORE_INPUT_PRESS) ||
-           Core::Input->GetJoystickButton(0, 1,        CORE_INPUT_PRESS) || 
-           Core::Input->GetJoystickButton(1, 1,        CORE_INPUT_PRESS) ||
+        if(Core::Input->GetMouseButton   (1,                      CORE_INPUT_PRESS) ||
+           Core::Input->GetKeyboardButton(CORE_INPUT_KEY(ESCAPE), CORE_INPUT_PRESS) || 
+           Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RETURN), CORE_INPUT_PRESS) || 
+           Core::Input->GetKeyboardButton(CORE_INPUT_KEY(SPACE),  CORE_INPUT_PRESS) ||
+           Core::Input->GetJoystickButton(0, 0,                   CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 0,                   CORE_INPUT_PRESS) ||
+           Core::Input->GetJoystickButton(0, 1,                   CORE_INPUT_PRESS) || 
+           Core::Input->GetJoystickButton(1, 1,                   CORE_INPUT_PRESS) ||
            bBackButton)
         {
             this->ChangeSurface(6, 1.0f);

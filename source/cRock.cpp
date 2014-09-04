@@ -142,11 +142,11 @@ void cRock::Move()
 #else
 
     // jump with keyboard (W, UP, SPACE) and joystick
-    if(Core::Input->GetKeyboardButton(KEY(W),     CORE_INPUT_PRESS) ||
-       Core::Input->GetKeyboardButton(KEY(UP),    CORE_INPUT_PRESS) ||
-       Core::Input->GetKeyboardButton(KEY(SPACE), CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(0, 0,       CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(1, 0,       CORE_INPUT_PRESS))
+    if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(W),     CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(CORE_INPUT_KEY(UP),    CORE_INPUT_PRESS) ||
+       Core::Input->GetKeyboardButton(CORE_INPUT_KEY(SPACE), CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(0, 0,                  CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(1, 0,                  CORE_INPUT_PRESS))
 
 #endif
     {
@@ -237,14 +237,14 @@ void cRock::Move()
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
     const float fMove = 100.0f * Core::System->GetTime();
 
-         if(Core::Input->GetKeyboardButton(KEY(A),     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(KEY(LEFT),  CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x < 0.0f                ||
+         if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
+            Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x < 0.0f                           ||
             Core::Input->GetJoystickRelative(1).x < 0.0f) fNewPos -= fMove;
 
-    else if(Core::Input->GetKeyboardButton(KEY(D),     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(KEY(RIGHT), CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x > 0.0f                ||
+    else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(D),     CORE_INPUT_HOLD) ||
+            Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
+            Core::Input->GetJoystickRelative(0).x > 0.0f                           ||
             Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
 
     const float fPosDiff = fNewPos - this->GetPosition().x;
