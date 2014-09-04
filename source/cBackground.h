@@ -40,7 +40,7 @@
 
 // ****************************************************************
 // background class
-class cBackground final : public coreObject3D
+class cBackground final : public coreObject3D, public coreResourceRelation
 {
 private:
     struct sVertex
@@ -100,6 +100,9 @@ public:
 
 private:
     DISABLE_COPY(cBackground)
+
+    // reset with the resource manager
+    void __Reset(const coreResourceReset& bInit)override;
 };
 
 

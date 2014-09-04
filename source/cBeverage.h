@@ -39,9 +39,8 @@ public:
     cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept;
     virtual ~cBeverage();
 
-    // render and move the beverage
-    inline void Render()override {ASSERT(false)}
-    void        Move  ()override;
+    // move the beverage
+    void Move()override;
 
     // render different parts of the object separately for batched rendering
     inline void RenderShadow() {m_Shadow.Render();}
@@ -63,6 +62,9 @@ public:
 
 private:
     DISABLE_COPY(cBeverage)
+
+    // hide default render function
+    inline void Render()override {ASSERT(false)}
 };
 
 
