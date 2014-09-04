@@ -329,3 +329,12 @@ void cBackground::ModifyColor()
     // flip light direction
     m_fLightDirection = -m_fLightDirection;
 }
+
+
+// ****************************************************************
+// reset with the resource manager
+void cBackground::__Reset(const coreResourceReset& bInit)
+{
+    if(bInit) this->LoadGeometry();
+    else m_pModel->Unload();
+}
