@@ -8,7 +8,9 @@
 /////////////////////////////////////////////////////
 
 
-void main()
+void FragmentMain()
 {
-    gl_FragColor = vec4(u_v4Color.rgb, texture2D(u_as2Texture[0], v_av2TexCoord[0]).r * u_v4Color.a);
+    // use texture as alpha map and cut-out the icon
+    float fAlpha = coreTexture2D(0, v_av2TexCoord[0]).r;
+    gl_FragColor = vec4(u_v4Color.rgb, u_v4Color.a * fAlpha);
 }

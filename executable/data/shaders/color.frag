@@ -8,7 +8,8 @@
 /////////////////////////////////////////////////////
 
 
-void main()
+void FragmentMain()
 {
+    // draw plain color
     gl_FragColor = u_v4Color;
 }

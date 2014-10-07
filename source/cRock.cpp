@@ -56,19 +56,6 @@ cRock::cRock()noexcept
     // load sound-effects
     m_pUp   = Core::Manager::Resource->Get<coreSound>("dust.wav");
     m_pDown = Core::Manager::Resource->Get<coreSound>("bump.wav");
-
-    // schedule model customization
-    Core::Manager::Resource->AttachFunction([&]()
-    {
-        if(m_Shadow.GetModel().IsUsable())
-        {
-            // enable array drawing
-            m_Shadow.GetModel()->GetIndexBuffer()->Delete();
-            m_Shadow.GetModel()->SetPrimitiveType(GL_TRIANGLE_STRIP);
-            return CORE_OK;
-        }
-        return CORE_BUSY;
-    });
 }
 
 // ****************************************************************

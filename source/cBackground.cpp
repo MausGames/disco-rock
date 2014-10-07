@@ -285,7 +285,7 @@ void cBackground::LoadGeometry()
     pBuffer->DefineAttribute(2, 4, GL_FLOAT, 4*sizeof(float));
 
     // create dynamic height data buffer
-    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, CORE_DATABUFFER_STORAGE_PERSISTENT);
+    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
     pBuffer->DefineAttribute(3, 1, GL_FLOAT, 0);
 
     // create index buffer

@@ -8,7 +8,8 @@
 /////////////////////////////////////////////////////
 
 
-void main()
+void FragmentMain()
 {
+    // draw interpolated color
     gl_FragColor = vec4(u_v4Color.rgb * (1.1 - v_av2TexCoord[0].y * 0.6), u_v4Color.a);
 }

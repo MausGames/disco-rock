@@ -36,36 +36,36 @@ cMenu::cMenu()noexcept
     m_For.SetText("FOR");
 
     m_Maus.DefineTexture(0, "maus_logo.png");
-    m_Maus.DefineProgram("2d_program");
+    m_Maus.DefineProgram("2d_simple_program");
     m_Maus.SetPosition(coreVector2(0.0f,0.13333f));
     m_Maus.SetSize(coreVector2(0.512f,0.256f) * 0.93333f);
 
     m_GameJolt.DefineTexture(0, "gamejolt_logo.png");
-    m_GameJolt.DefineProgram("2d_program");
+    m_GameJolt.DefineProgram("2d_simple_program");
     m_GameJolt.SetPosition(coreVector2(0.0f,-0.13333f));
     m_GameJolt.SetSize(coreVector2(0.512f,0.064f) * 1.33333f);
 
     m_BigLogo.DefineTexture(0, "game_logo.png");
-    m_BigLogo.DefineProgram("2d_program");
+    m_BigLogo.DefineProgram("2d_simple_program");
     m_BigLogo.SetPosition(coreVector2(0.0f,0.05f));
 
     // create background objects
-    m_Black.DefineProgram("2d_program_color");
+    m_Black.DefineProgram("2d_color_program");
     m_Black.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_Black.FitToScreen();
 
-    m_White.DefineProgram("2d_program_color");
+    m_White.DefineProgram("2d_color_program");
     m_White.FitToScreen();
     m_White.Move();
 
-    m_BackgroundLeft.DefineProgram("2d_program_border");
+    m_BackgroundLeft.DefineProgram("2d_border_program");
     m_BackgroundLeft.SetPosition(coreVector2(0.15f,0.0f));
     m_BackgroundLeft.SetSize(coreVector2(0.62f,0.62f));
     m_BackgroundLeft.SetColor3(coreVector3(0.05f,0.05f,0.05f));
     ADJUST_LEFT(m_BackgroundLeft)
     ADJUST_BORDER(m_BackgroundLeft)
 
-    m_BackgroundRight.DefineProgram("2d_program_border");
+    m_BackgroundRight.DefineProgram("2d_border_program");
     m_BackgroundRight.SetPosition(coreVector2(-0.03f,0.0f));
     m_BackgroundRight.SetSize(coreVector2(MIN(Core::System->GetResolution().AspectRatio() - 0.62f - 0.15f - 0.06f, 0.62f + 0.12f), 0.62f));
     m_BackgroundRight.SetColor3(coreVector3(0.05f,0.05f,0.05f));
@@ -76,7 +76,7 @@ cMenu::cMenu()noexcept
 
     // create header objects
     m_Logo.DefineTexture(0, "game_logo.png");
-    m_Logo.DefineProgram("2d_program");
+    m_Logo.DefineProgram("2d_simple_program");
     m_Logo.SetPosition(coreVector2(vRightCenter.x, 0.129f));
     m_Logo.SetCenter(coreVector2(0.5f,0.0f));
     
@@ -87,7 +87,7 @@ cMenu::cMenu()noexcept
 
     // create labeled buttons
     m_Start.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Start.DefineProgram("2d_program_border"); // override
+    m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition(coreVector2(-0.06f,-0.092f));
     m_Start.SetSize(coreVector2(m_BackgroundRight.GetSize().x - 0.06f,0.1f));
     m_Start.SetColor3(COLOR_BLUE_F);
@@ -97,7 +97,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Start)
 
     m_Exit.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Exit.DefineProgram("2d_program_border"); // override
+    m_Exit.DefineProgram("2d_border_program"); // override
     m_Exit.SetPosition(coreVector2(-0.06f,-0.222f));
     m_Exit.SetSize(m_Start.GetSize());
     m_Exit.SetColor3(COLOR_RED_F);
@@ -110,7 +110,7 @@ cMenu::cMenu()noexcept
     const bool bTooSmall    = Core::System->GetResolution().AspectRatio() < 1.3f;
 
     m_Resume.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Resume.DefineProgram("2d_program_border"); // override
+    m_Resume.DefineProgram("2d_border_program"); // override
     m_Resume.SetPosition(m_Start.GetPosition());
     m_Resume.SetSize(m_Start.GetSize());
     m_Resume.SetColor3(COLOR_BLUE_F);
@@ -120,7 +120,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Resume)
 
     m_Abort.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Abort.DefineProgram("2d_program_border"); // override
+    m_Abort.DefineProgram("2d_border_program"); // override
     m_Abort.SetPosition(m_Exit.GetPosition());
     m_Abort.SetSize(m_Start.GetSize());
     m_Abort.SetColor3(COLOR_RED_F);
@@ -130,7 +130,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Abort)
 
     m_Submit.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Submit.DefineProgram("2d_program_border"); // override
+    m_Submit.DefineProgram("2d_border_program"); // override
     m_Submit.SetPosition(m_Start.GetPosition());
     m_Submit.SetSize(m_Start.GetSize());
     m_Submit.SetColor3(COLOR_ORANGE_F);
@@ -140,7 +140,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Submit)
 
     m_Finish.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Finish.DefineProgram("2d_program_border"); // override
+    m_Finish.DefineProgram("2d_border_program"); // override
     m_Finish.SetPosition(m_Exit.GetPosition());
     m_Finish.SetSize(m_Start.GetSize());
     m_Finish.SetColor3(COLOR_PURPLE_F);
@@ -189,7 +189,7 @@ cMenu::cMenu()noexcept
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
     m_TopBatteryBolt.DefineTexture(0, "icon_power.png");
-    m_TopBatteryBolt.DefineProgram("2d_program_color_icon");
+    m_TopBatteryBolt.DefineProgram("2d_color_icon_program");
     m_TopBatteryBolt.SetPosition(coreVector2(0.00333f,-0.00933f));
     m_TopBatteryBolt.SetSize(coreVector2(0.05f,0.05f));
     m_TopBatteryBolt.SetCenter(coreVector2(-0.5f,0.5f));
@@ -205,7 +205,7 @@ cMenu::cMenu()noexcept
 #endif
 
     m_TopFPSTacho.DefineTexture(0, "icon_speed.png");
-    m_TopFPSTacho.DefineProgram("2d_program_color_icon");
+    m_TopFPSTacho.DefineProgram("2d_color_icon_program");
     m_TopFPSTacho.SetPosition(coreVector2(-0.01633f,-0.007f));
     m_TopFPSTacho.SetSize(coreVector2(0.05f,0.05f));
     m_TopFPSTacho.SetCenter(coreVector2(0.5f,0.5f));
@@ -257,7 +257,7 @@ cMenu::cMenu()noexcept
     m_BottomLoginJolt.SetPosition(coreVector2(-0.02f,0.016f));
     m_BottomLoginJolt.SetSize(coreVector2(0.036f,0.036f)*2.0f);
 #endif
-    m_BottomLoginJolt.DefineProgram("2d_program");
+    m_BottomLoginJolt.DefineProgram("2d_simple_program");
     m_BottomLoginJolt.SetCenter(coreVector2(0.5f,-0.5f));
     m_BottomLoginJolt.SetAlignment(coreVector2(-1.0f,1.0f));
 
@@ -278,7 +278,7 @@ cMenu::cMenu()noexcept
 #endif
 
     // create question objects
-    m_QuestionBlack.DefineProgram("2d_program_color");
+    m_QuestionBlack.DefineProgram("2d_color_program");
     m_QuestionBlack.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_QuestionBlack.FitToScreen();
     m_QuestionBlack.Move();
@@ -311,7 +311,7 @@ cMenu::cMenu()noexcept
     const int iCurQuality = CLAMP(Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY), 0, 2);
 
     m_VideoLow.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
-    m_VideoLow.DefineProgram("2d_program_border"); // override
+    m_VideoLow.DefineProgram("2d_border_program"); // override
     m_VideoLow.SetPosition(coreVector2(LEFT_CENTER - 0.17f,0.15f)); // old Y: 0.13f
     m_VideoLow.SetSize(coreVector2(0.15f,0.075f));
     m_VideoLow.SetCenter(coreVector2(-0.5f,0.0f));
@@ -321,7 +321,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_VideoLow)
 
     m_VideoMedium.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
-    m_VideoMedium.DefineProgram("2d_program_border"); // override
+    m_VideoMedium.DefineProgram("2d_border_program"); // override
     m_VideoMedium.SetPosition(coreVector2(LEFT_CENTER, m_VideoLow.GetPosition().y));
     m_VideoMedium.SetSize(m_VideoLow.GetSize());
     m_VideoMedium.SetCenter(coreVector2(-0.5f,0.0f));
@@ -331,7 +331,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_VideoMedium)
 
     m_VideoHigh.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 0);
-    m_VideoHigh.DefineProgram("2d_program_border"); // override
+    m_VideoHigh.DefineProgram("2d_border_program"); // override
     m_VideoHigh.SetPosition(coreVector2(LEFT_CENTER + 0.17f, m_VideoLow.GetPosition().y));
     m_VideoHigh.SetSize(m_VideoLow.GetSize());
     m_VideoHigh.SetCenter(coreVector2(-0.5f,0.0f));
@@ -348,35 +348,35 @@ cMenu::cMenu()noexcept
 
     const float fCurVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME) * 0.1f;
 
-    m_AudioBarBack.DefineProgram("2d_program_color_bar");
+    m_AudioBarBack.DefineProgram("2d_color_bar_program");
     m_AudioBarBack.SetPosition(coreVector2(LEFT_CENTER, -0.04f)); // old Y: -0.08f
     m_AudioBarBack.SetSize(coreVector2(0.5f,0.056f));
     m_AudioBarBack.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioBarBack.SetColor3(coreVector3(0.5f,0.5f,0.5f));
 
     m_AudioDrag.Construct("default_black.png", "default_black.png");
-    m_AudioDrag.DefineProgram("2d_program_border"); // override
+    m_AudioDrag.DefineProgram("2d_border_program"); // override
     m_AudioDrag.SetSize(coreVector2(0.035f,0.085f));
     m_AudioDrag.SetPosition(coreVector2(LEFT_CENTER + (fCurVolume - 0.5f) * (m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x), m_AudioBarBack.GetPosition().y));
     m_AudioDrag.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioDrag.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     ADJUST_BORDER(m_AudioDrag)
 
-    m_AudioBar.DefineProgram("2d_program_color_bar");
+    m_AudioBar.DefineProgram("2d_color_bar_program");
     m_AudioBar.SetSize(coreVector2((m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x) * fCurVolume, 0.056f));
     m_AudioBar.SetPosition(coreVector2(LEFT_CENTER + (m_AudioBar.GetSize().x - m_AudioBarBack.GetSize().x) * 0.5f, m_AudioBarBack.GetPosition().y));
     m_AudioBar.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioBar.SetColor3(COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
 
     m_AudioIconHigh.DefineTexture(0, "icon_audio_1.png");
-    m_AudioIconHigh.DefineProgram("2d_program_color_icon");
+    m_AudioIconHigh.DefineProgram("2d_color_icon_program");
     m_AudioIconHigh.SetPosition(coreVector2(LEFT_CENTER + 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconHigh.SetSize(coreVector2(0.05f,0.05f));
     m_AudioIconHigh.SetCenter(coreVector2(-0.5f,0.0f));
     m_AudioIconHigh.SetFocusRange(0.0f);
 
     m_AudioIconLow.DefineTexture(0, "icon_audio_2.png");
-    m_AudioIconLow.DefineProgram("2d_program_color_icon");
+    m_AudioIconLow.DefineProgram("2d_color_icon_program");
     m_AudioIconLow.SetPosition(coreVector2(LEFT_CENTER - 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconLow.SetSize(coreVector2(0.05f,0.05f));
     m_AudioIconLow.SetCenter(coreVector2(-0.5f,0.0f));
@@ -391,7 +391,7 @@ cMenu::cMenu()noexcept
     m_LoginConfigOr.SetText("LOG INTO");
 
     m_LoginConfigLogo.DefineTexture(0, "gamejolt_logo.png");
-    m_LoginConfigLogo.DefineProgram("2d_program");
+    m_LoginConfigLogo.DefineProgram("2d_simple_program");
     m_LoginConfigLogo.SetPosition(coreVector2(LEFT_CENTER - 0.047f,-0.238f));
     m_LoginConfigLogo.SetSize(coreVector2(0.512f,0.064f) * 1.2f);
     m_LoginConfigLogo.SetCenter(coreVector2(-0.5f,0.0f));
@@ -436,7 +436,7 @@ cMenu::cMenu()noexcept
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
         pArrow->Construct(NULL, NULL, FONT_ROCKS, 45, 2);
-        pArrow->DefineProgram("2d_program_border");
+        pArrow->DefineProgram("2d_border_program");
         pArrow->SetColor3(coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize(coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
         pArrow->GetCaption()->SetText(i ? ">" : "<");
@@ -447,12 +447,12 @@ cMenu::cMenu()noexcept
 #if !defined(_API_GOOGLE_PLAY_)
 
     // create login objects
-    m_LoginBlack.DefineProgram("2d_program_color");
+    m_LoginBlack.DefineProgram("2d_color_program");
     m_LoginBlack.SetColor3(coreVector3(0.0f,0.0f,0.0f));
     m_LoginBlack.FitToScreen();
     m_LoginBlack.Move();
 
-    m_LoginPopup.DefineProgram("2d_program_border");
+    m_LoginPopup.DefineProgram("2d_border_program");
     m_LoginPopup.SetPosition(coreVector2(0.0f,0.25f));
     m_LoginPopup.SetSize(coreVector2(0.62f,0.37f));
     m_LoginPopup.SetColor3(coreVector3(0.05f,0.05f,0.05f));
@@ -481,7 +481,7 @@ cMenu::cMenu()noexcept
     m_LoginEnterGuest.SetText("NAME");
 
     m_LoginName.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 32);
-    m_LoginName.DefineProgram("2d_program_color"); // override
+    m_LoginName.DefineProgram("2d_color_program"); // override
     m_LoginName.SetPosition(m_LoginEnterName.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginName.SetSize(coreVector2(0.35f,0.05f));
     m_LoginName.SetAlignment(coreVector2(-1.0f,0.0f));
@@ -489,7 +489,7 @@ cMenu::cMenu()noexcept
     m_LoginName.SetCursor('<');
 
     m_LoginToken.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 64);
-    m_LoginToken.DefineProgram("2d_program_color"); // override
+    m_LoginToken.DefineProgram("2d_color_program"); // override
     m_LoginToken.SetPosition(m_LoginEnterToken.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginToken.SetSize(m_LoginName.GetSize());
     m_LoginToken.SetAlignment(coreVector2(-1.0f,0.0f));
@@ -498,7 +498,7 @@ cMenu::cMenu()noexcept
     m_LoginToken.SetReplace('*');
 
     m_LoginGuest.Construct("default_black.png", "default_black.png", FONT_ROCKS, 29, 32);
-    m_LoginGuest.DefineProgram("2d_program_color"); // override
+    m_LoginGuest.DefineProgram("2d_color_program"); // override
     m_LoginGuest.SetPosition(m_LoginEnterGuest.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginGuest.SetSize(m_LoginName.GetSize() + coreVector2(0.085f,0.0f));
     m_LoginGuest.SetAlignment(coreVector2(-1.0f,0.0f));
@@ -524,7 +524,7 @@ cMenu::cMenu()noexcept
     m_LoginJoltOr.SetText("OR LOG INTO");
 
     m_LoginJoltLogo.DefineTexture(0, "gamejolt_logo.png");
-    m_LoginJoltLogo.DefineProgram("2d_program");
+    m_LoginJoltLogo.DefineProgram("2d_simple_program");
     m_LoginJoltLogo.SetPosition(m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.11f));
     m_LoginJoltLogo.SetSize(coreVector2(0.512f,0.064f) * 1.2f);
 
@@ -649,7 +649,7 @@ cMenu::cMenu()noexcept
     for(int i = 0; i < TROPHY_ITEMS; ++i)
     {
         m_aTrophyImage[i].DefineTexture(0, PRINT("trophy_%i.png", (i == TROPHY_ITEMS-1) ? 2 : 1));
-        m_aTrophyImage[i].DefineProgram("2d_program");
+        m_aTrophyImage[i].DefineProgram("2d_simple_program");
         m_aTrophyImage[i].SetPosition(coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
         m_aTrophyImage[i].SetSize(coreVector2(0.09f,0.09f));
         m_aTrophyImage[i].SetCenter(coreVector2(-0.5f,0.0f));
@@ -704,7 +704,7 @@ cMenu::cMenu()noexcept
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
 
     m_AuthLogo.DefineTexture(0, "google_controller.png");
-    m_AuthLogo.DefineProgram("2d_program");
+    m_AuthLogo.DefineProgram("2d_simple_program");
     m_AuthLogo.SetPosition(coreVector2(LEFT_CENTER - 0.07f,-0.045f));
     m_AuthLogo.SetSize(coreVector2(0.036f,0.036f) * 3.0f);
     m_AuthLogo.SetCenter(coreVector2(-0.5f,0.0f));
@@ -718,7 +718,7 @@ cMenu::cMenu()noexcept
 
     // create loading objects
     m_Loading.DefineTexture(0, "icon_load.png");
-    m_Loading.DefineProgram("2d_program_color_icon");
+    m_Loading.DefineProgram("2d_color_icon_program");
     m_Loading.SetPosition(coreVector2(LEFT_CENTER - 0.05f, -0.05f) + m_BackgroundLeft.GetSize()*0.5f);
     m_Loading.SetSize(coreVector2(0.05f,0.05f));
     m_Loading.SetCenter(coreVector2(-0.5f,0.0f));
@@ -1476,7 +1476,7 @@ void cMenu::Move()
     else if(m_ScoreMenu.GetCurSurface() < 2)
     {
         // change score-page
-        if(m_PageChange.IsClicked() && m_PageChange.GetAlpha())
+        if(m_PageChange.IsClicked() && m_PageChange.GetAlpha() && bInNormalMenu)
         {
             if(++m_iCurPage >= SCORE_PAGES) m_iCurPage = 0;
             this->RetrieveScoresCallback3(0);

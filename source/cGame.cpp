@@ -218,8 +218,6 @@ void cGame::Move()
                 }
                 else
                 {
-                    // # spaghetti code, look at comments and stage-values to find the right spot
-
                     // control spawn column
                     if(m_fTime >= STAGE_TOGGLE && m_fTime < STAGE_SIDE_1)   // # toggle stage
                     {
