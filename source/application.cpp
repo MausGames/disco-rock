@@ -87,8 +87,8 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreShader> ("glass.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.vert");
     Core::Manager::Resource->Load<coreShader> ("glass.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.frag");
     Core::Manager::Resource->Load<coreShader> ("glass_cola.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass_cola.frag");
-    Core::Manager::Resource->Load<coreShader> ("default_particle.vert",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.vert", CORE_SHADER_OPTION_NO_PARTICLE_ROTATION);
-    Core::Manager::Resource->Load<coreShader> ("default_particle.frag",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.frag");
+    Core::Manager::Resource->Load<coreShader> ("default_particle.vert",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.vert", CORE_SHADER_OPTION_INSTANCING CORE_SHADER_OPTION_NO_PARTICLE_ROTATION);
+    Core::Manager::Resource->Load<coreShader> ("default_particle.frag",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.frag", CORE_SHADER_OPTION_INSTANCING);
     Core::Manager::Resource->Load<coreShader> ("ray.vert",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.vert");
     Core::Manager::Resource->Load<coreShader> ("ray.frag",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.frag");
     Core::Manager::Resource->Load<coreShader> ("rock.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.vert");
@@ -139,27 +139,27 @@ static void SetupResources()
         ->AttachShader("glass_cola.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_simple_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("default_2d_simple.vert")
         ->AttachShader("default_2d.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("default_2d_simple.vert")
         ->AttachShader("color.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_border", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_border_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("default_2d_simple.vert")
         ->AttachShader("border.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color_icon", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_icon_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("default_2d_simple.vert")
         ->AttachShader("color_icon.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_program_color_bar", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_bar_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("default_2d_simple.vert")
         ->AttachShader("color_bar.frag")
         ->Finish();
@@ -213,7 +213,7 @@ void CoreApp::Setup()
     Core::System->SetWindowIcon("data/textures/game_icon.png");
     
     // set view frustum
-    Core::Graphics->ResizeView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 1000.0f);
+    Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
     
     // set cursor
 #if defined(_CORE_LINUX_)
