@@ -135,6 +135,17 @@ void CoreApp::Init()
     g_pMusicPlayer->Shuffle();
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
 
+    // start music delayed
+    Core::Manager::Resource->AttachFunction([]()
+    {
+        if(Core::System->GetTotalTime() > 0.5 && !g_pMusicPlayer->Control()->IsPlaying())
+        {
+            g_pMusicPlayer->Control()->Play();
+            return CORE_OK;
+        }
+        return CORE_BUSY;
+    });
+
     // create particle system
     g_pParticleSystem = new coreParticleSystem(128);
     g_pParticleSystem->DefineTexture(0, "effect_particle.png");
@@ -278,24 +289,20 @@ void CoreApp::Move()
     if(!g_bPause)
     {
         const float fSpeed = Core::System->GetTime() * 0.25f * g_fCamSpeed;
-
         if(g_bCamMode) {g_fCurCam  = 4.0f * LERPS(g_fOldCam, g_fTargetCam, g_fCamTime); g_fCamTime = MIN(g_fCamTime + fSpeed, 1.0f);}
                   else {g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * fSpeed;}
     }
 
-    constexpr_var coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
-    const         coreVector3 vCamDir = -vCamPos.Normalized();
-    const         coreVector3 vCamOri =  coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f).Normalize();
+    const coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
+    const coreVector3 vCamDir = -vCamPos.Normalized();
+    const coreVector3 vCamOri =  coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f).Normalize();
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
     {
-        // move background
+        // move background and game
         g_pBackground->Move();
-
-        // move game
         if(g_pGame) g_pGame->Move();
-        else g_fTargetSpeed = 1.0f;
 
         // move particle system (render is in the game object)
         g_pParticleSystem->Move();
@@ -306,10 +313,6 @@ void CoreApp::Move()
 
     // update the network object
     g_pOnline->Update();
-
-    // start music delayed
-    if(Core::System->GetTotalTime() > 0.5 && !g_pMusicPlayer->Control()->IsPlaying())
-        g_pMusicPlayer->Control()->Play();
 
     // adjust music speed/pitch and update music streaming
     g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));

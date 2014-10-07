@@ -38,7 +38,7 @@ cFirst::cFirst()noexcept
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
         pArrow->Construct(NULL, NULL, FONT_ROCKS, 45, 2);
-        pArrow->DefineProgram("2d_program_border");
+        pArrow->DefineProgram("2d_border_program");
         pArrow->SetColor3(coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize(coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
         pArrow->SetFocusRange(1.2f);
@@ -47,7 +47,7 @@ cFirst::cFirst()noexcept
 
     // create start button
     m_Start.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
-    m_Start.DefineProgram("2d_program_border"); // override
+    m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition(coreVector2(0.0f,0.0f));
     m_Start.SetSize(coreVector2(0.49f,0.1f));
     m_Start.SetColor3(COLOR_BLUE_F);

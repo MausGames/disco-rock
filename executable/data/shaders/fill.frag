@@ -8,16 +8,21 @@
 /////////////////////////////////////////////////////
 
 
-void main()
+void FragmentMain()
 {
 #if (_CORE_QUALITY_) < 2
 
+    // draw plain black
     gl_FragColor = vec4(0.05, 0.05, 0.05, 1.0);
 
 #else
 
-    float fTextureColor = texture2D(u_as2Texture[0], v_av2TexCoord[0]).b;
-    gl_FragColor        = vec4(vec3(u_v4Color.a * fTextureColor * (1.0 - sin(v_av2TexCoord[1].x) * sin(v_av2TexCoord[1].y)) + 0.02), 1.0);
+    // lookup texture (b = disco lights)
+    float fTexture = coreTexture2D(0, v_av2TexCoord[0]).b;
+    
+    // draw color with varying intensity
+    vec2 v2Sin   = sin(v_av2TexCoord[1]);
+    gl_FragColor = vec4(vec3(u_v4Color.a * fTexture * (1.0 - v2Sin.x * v2Sin.y) + 0.02), 1.0);
     
 #endif
 }

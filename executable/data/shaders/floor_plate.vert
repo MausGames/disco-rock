@@ -9,42 +9,44 @@
 
 
 // shader output
-varying vec3 v_v3Relative;
+varying vec3 v_v3Relative;   // position relative to the viewer
 
 
-void main()
+void VertexMain()
 {
-    vec4 v4Position = vec4(a_v3Position, 1.0);
-    float fSign     = sign(u_m4ModelView[2][1]);
+    vec4 v4FullPosition = vec4(a_v3Position, 1.0);
+    mat4 m4ModelView    = u_m4Camera * u_m4Transform;
     
-    gl_Position      = u_m4ModelViewProj * v4Position;
-    v_av2TexCoord[0] = a_v2Texture + u_v2TexSize;   // add
+    // calculate orientation-sign (used when the camera is upside down)
+    float fSign = sign(m4ModelView[2][1]);
+    
+    // transform position and texture coordinates
+    gl_Position      = u_m4ViewProj * (u_m4Transform * v4FullPosition);
+    v_av2TexCoord[0] = a_v2Texture + u_v2TexSize;   // add size
     
 #if (_CORE_QUALITY_) < 1
 
-    v_v3Relative.y = dot(vec4(u_m4ModelView[0][1],
-                              u_m4ModelView[1][1],
-                              u_m4ModelView[2][1],
-                              u_m4ModelView[3][1]), v4Position);
-                              
-    v_v3Relative.y *= fSign;
-    v_v3Relative.y  = 1.15 - v_v3Relative.y * ((v_v3Relative.y > 0.0) ? 0.0045 : -0.0225);
+    // calculate only the distance for fast and simple lighting (invert at 0.0)
+    float fDistance = dot(vec4(m4ModelView[0][1],
+                               m4ModelView[1][1],
+                               m4ModelView[2][1],
+                               m4ModelView[3][1]), v4FullPosition) * fSign;
+    v_v3Relative.y  = 1.15 - fDistance * ((fDistance > 0.0) ? 0.0045 : -0.0225);
         
 #else
 
     #if (_CORE_QUALITY_) > 1
     
+        // transform texture coordinates for disco light effect
         v_av2TexCoord[1] = (a_v2Texture + u_v2TexOffset) * 0.6;
         
     #endif
 
-    v_v3Relative = (u_m4ModelView * v4Position).xyz;
-    
-    v_av4LightDir[0].x = -v_v3Relative.x * fSign;
-    v_av4LightDir[0].y =  v_v3Relative.y * fSign;
-    v_av4LightDir[0].z = -v_v3Relative.z;
-    v_av4LightDir[0].xyz = normalize(v_av4LightDir[0].xyz);
-    
+    // calculate full relative position and light direction
+    v_v3Relative = (m4ModelView * v4FullPosition).xyz;
+    v_av4LightDir[0].xyz = normalize(vec3(-v_v3Relative.x * fSign,
+                                           v_v3Relative.y * fSign, 
+                                          -v_v3Relative.z));
     v_v3Relative.z *= fSign;
     
 #endif

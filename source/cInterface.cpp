@@ -64,7 +64,7 @@ cInterface::cInterface()noexcept
     m_Combo.SetColor3(coreVector3(0.75f,0.75f,0.75));
 
     // create combo bar
-    m_ComboBar.DefineProgram("2d_program_color");
+    m_ComboBar.DefineProgram("2d_color_program");
     m_ComboBar.SetCenter(coreVector2(0.0f,-0.5f));
     m_ComboBar.SetAlignment(coreVector2(0.0f,1.0f));
     m_ComboBar.SetColor3(COLOR_BLUE_F);
@@ -73,29 +73,29 @@ cInterface::cInterface()noexcept
 
     // create touch controls
     m_MoveLeft.Construct("button_move.png", "button_move.png");
-    m_MoveLeft.DefineProgram("2d_program"); // override
+    m_MoveLeft.DefineProgram("2d_simple_program"); // override
     m_MoveLeft.SetSize(coreVector2(0.1f,0.15f));
     m_MoveLeft.SetFocusRange(1.2f);
 
     m_MoveRight.Construct("button_move.png", "button_move.png");
-    m_MoveRight.DefineProgram("2d_program"); // override
+    m_MoveRight.DefineProgram("2d_simple_program"); // override
     m_MoveRight.SetSize(coreVector2(0.1f,0.15f));
     m_MoveRight.SetDirection(coreVector2(0.0f,-1.0f));
     m_MoveRight.SetFocusRange(1.2f);
 
     m_Jump.Construct("button_jump.png", "button_jump.png");
-    m_Jump.DefineProgram("2d_program"); // override
+    m_Jump.DefineProgram("2d_simple_program"); // override
     m_Jump.SetSize(coreVector2(0.15f,0.15f));
     m_Jump.SetFocusRange(1.8f);
 
     m_Pause.Construct("button_pause.png", "button_pause.png");
-    m_Pause.DefineProgram("2d_program"); // override
+    m_Pause.DefineProgram("2d_simple_program"); // override
     m_Pause.SetSize(coreVector2(0.075f,0.075f));
 
     // create separating lines
     for(int i = 0; i < 2; ++i)
     {
-        m_apLine[i].DefineProgram("2d_program_color");
+        m_apLine[i].DefineProgram("2d_color_program");
         m_apLine[i].SetPosition(coreVector2((i ? 0.1667f : -0.1667f) * Core::System->GetResolution().AspectRatio(), 0.0f));
         m_apLine[i].SetSize(coreVector2(0.01f,1.01f));
         m_apLine[i].SetColor3(coreVector3(1.0f,1.0f,1.0f));
@@ -203,12 +203,14 @@ void cInterface::Move()
     }
     else
     {
+        // simply set alpha value according to touch status
         m_MoveLeft.SetAlpha (fAlpha * (m_MoveLeft.IsFocused()  ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
         m_MoveRight.SetAlpha(fAlpha * (m_MoveRight.IsFocused() ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
         m_Jump.SetAlpha     (fAlpha * (m_Jump.IsFocused()      ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
     }
     m_Pause.SetAlpha(fAlpha * (m_Pause.IsFocused() ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
 
+    // move touch controls
     m_MoveLeft.Move();
     m_MoveRight.Move();
     m_Jump.Move();

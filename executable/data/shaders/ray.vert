@@ -9,13 +9,15 @@
 
 
 // shader output
-varying float v_fIntensity;
+varying float v_fIntensity;   // lighting intensity (semi-Gouraud shading)
 
 
-void main()
+void VertexMain()
 {
-    gl_Position = u_m4ModelViewProj * vec4(a_v3Position, 1.0);
+    // transform position 
+    gl_Position = coreObject3DPosition();
 
+    // calculate intensity value and transformed normal (in view direction)
     v_fIntensity = a_v3Position.z * 2.5 + 1.25;
-    v_v3ViewDir  = u_m3Normal * a_v3Normal;
+    v_v3ViewDir  = coreObject3DNormalMatrix() * a_v3Normal;
 }
