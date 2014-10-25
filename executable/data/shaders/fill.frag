@@ -18,11 +18,11 @@ void FragmentMain()
 #else
 
     // lookup texture (b = disco lights)
-    float fTexture = coreTexture2D(0, v_av2TexCoord[0]).b;
+    float v1Texture = coreTexture2D(0, v_av2TexCoord[0]).b;
     
     // draw color with varying intensity
     vec2 v2Sin   = sin(v_av2TexCoord[1]);
-    gl_FragColor = vec4(vec3(u_v4Color.a * fTexture * (1.0 - v2Sin.x * v2Sin.y) + 0.02), 1.0);
+    gl_FragColor = vec4(vec3(u_v4Color.a * v1Texture * (1.0 - v2Sin.x * v2Sin.y) + 0.02), 1.0);
     
 #endif
 }

@@ -19,15 +19,15 @@
 
 // ****************************************************************
 // global definitions
-#define FONT_ROCKS "gomarice_rocks.ttf"
+#define FONT_ROCKS       "gomarice_rocks.ttf"
 
-#define COLOR_WHITE_F  coreVector3(1.000f, 1.000f, 1.000f)
-#define COLOR_YELLOW_F coreVector3(1.000f, 0.824f, 0.392f)
-#define COLOR_ORANGE_F coreVector3(1.000f, 0.443f, 0.227f)
-#define COLOR_RED_F    coreVector3(1.000f, 0.275f, 0.275f)
-#define COLOR_PURPLE_F coreVector3(0.710f, 0.333f, 1.000f)
-#define COLOR_BLUE_F   coreVector3(0.102f, 0.702f, 1.000f)
-#define COLOR_GREEN_F  coreVector3(0.118f, 0.745f, 0.353f)
+#define COLOR_WHITE_F    coreVector3(1.000f, 1.000f, 1.000f)
+#define COLOR_YELLOW_F   coreVector3(1.000f, 0.824f, 0.392f)
+#define COLOR_ORANGE_F   coreVector3(1.000f, 0.443f, 0.227f)
+#define COLOR_RED_F      coreVector3(1.000f, 0.275f, 0.275f)
+#define COLOR_PURPLE_F   coreVector3(0.710f, 0.333f, 1.000f)
+#define COLOR_BLUE_F     coreVector3(0.102f, 0.702f, 1.000f)
+#define COLOR_GREEN_F    coreVector3(0.118f, 0.745f, 0.353f)
 
 #define COLOR_BRIGHTNESS (0.83f)
 
@@ -107,8 +107,7 @@ struct sMsgList
         for(coreUint i = 0; i < iSize; ++i) m_apsMsg.push_back(&psMsg[i]);
         
         // shuffle them
-        coreRand::Seed();
-        std::random_shuffle(m_apsMsg.begin(), m_apsMsg.end(), [](int i) {return coreRand::Rand() % i;});
+        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine((int)std::time(NULL)));
     }
 
     inline const char* Get()

@@ -74,27 +74,27 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreShader> ("color_bar.frag",              CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_bar.frag");
     Core::Manager::Resource->Load<coreShader> ("color_icon.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_icon.frag");
     Core::Manager::Resource->Load<coreShader> ("default_2d.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.frag");
-    Core::Manager::Resource->Load<coreShader> ("default_2d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.vert", CORE_SHADER_OPTION_NO_TEXTURE_TRANSFORM);
-    Core::Manager::Resource->Load<coreShader> ("default_3d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_3d.vert", CORE_SHADER_OPTION_NO_TEXTURE_TRANSFORM);
+    Core::Manager::Resource->Load<coreShader> ("default_2d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.vert", CORE_SHADER_OPTION_NO_TEXPARAM);
+    Core::Manager::Resource->Load<coreShader> ("default_3d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_3d.vert", CORE_SHADER_OPTION_NO_TEXPARAM CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("drink.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.vert");
     Core::Manager::Resource->Load<coreShader> ("drink.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.frag");
     Core::Manager::Resource->Load<coreShader> ("fill.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/fill.vert");
     Core::Manager::Resource->Load<coreShader> ("fill.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/fill.frag");
-    Core::Manager::Resource->Load<coreShader> ("floor.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor.vert");
+    Core::Manager::Resource->Load<coreShader> ("floor.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor.vert", CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("floor.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor.frag");
-    Core::Manager::Resource->Load<coreShader> ("floor_plate.vert",            CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor_plate.vert");
+    Core::Manager::Resource->Load<coreShader> ("floor_plate.vert",            CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor_plate.vert", CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("floor_plate.frag",            CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/floor_plate.frag");
     Core::Manager::Resource->Load<coreShader> ("glass.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.vert");
     Core::Manager::Resource->Load<coreShader> ("glass.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass.frag");
     Core::Manager::Resource->Load<coreShader> ("glass_cola.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/glass_cola.frag");
-    Core::Manager::Resource->Load<coreShader> ("default_particle.vert",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.vert", CORE_SHADER_OPTION_INSTANCING CORE_SHADER_OPTION_NO_PARTICLE_ROTATION);
+    Core::Manager::Resource->Load<coreShader> ("default_particle.vert",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.vert", CORE_SHADER_OPTION_INSTANCING CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("default_particle.frag",       CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_particle.frag", CORE_SHADER_OPTION_INSTANCING);
     Core::Manager::Resource->Load<coreShader> ("ray.vert",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.vert");
     Core::Manager::Resource->Load<coreShader> ("ray.frag",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.frag");
     Core::Manager::Resource->Load<coreShader> ("rock.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.vert");
     Core::Manager::Resource->Load<coreShader> ("rock.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.frag");
     Core::Manager::Resource->Load<coreShader> ("shadow.frag",                 CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/shadow.frag");
-    Core::Manager::Resource->Load<coreShader> ("trap.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.vert");
+    Core::Manager::Resource->Load<coreShader> ("trap.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.vert", CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("trap.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.frag");
     Core::Manager::Resource->Load<coreShader> ("wave.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/wave.frag");
 
@@ -111,7 +111,7 @@ static void SetupResources()
         ->AttachShader("floor.frag")
         ->BindAttribute("a_v2Position", 0)
         ->BindAttribute("a_v4Color",    2)
-        ->BindAttribute("a_fHeight",    3)
+        ->BindAttribute("a_v1Height",   3)
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("fill_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())

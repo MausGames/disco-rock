@@ -73,7 +73,7 @@ void cBackground::Render()
             m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
 
             // check for new tick
-            const int iNewTick = (int)FLOOR(m_fLightTime);
+            const int iNewTick = F_TO_SI(m_fLightTime);
             if(m_iLightTick < iNewTick)
             {
                 // create flash
@@ -119,7 +119,7 @@ void cBackground::Move()
     if(m_fPositionTime > BACK_REPEAT) m_fPositionTime -= BACK_REPEAT;
 
     // calculate drawing offset and background position
-    m_iOffset = coreUint(FLOOR(m_fPositionTime)) * BACK_BLOCKS_X * BACK_PER_INDICES * sizeof(coreUshort);
+    m_iOffset = F_TO_UI(m_fPositionTime) * BACK_BLOCKS_X * BACK_PER_INDICES * sizeof(coreUshort);
     this->SetPosition(coreVector3(0.0f, -m_fPositionTime * BACK_DETAIL_Y, GAME_HEIGHT));
 
     // update dance floor light animation
@@ -168,15 +168,15 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
 float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const
 {
     // convert real position to block position
-    const float fX = (vPos.x-vBackPos.x) / BACK_DETAIL_X + float(BACK_BLOCKS_X)/2.0f;
+    const float fX = (vPos.x-vBackPos.x) / BACK_DETAIL_X + I_TO_F(BACK_BLOCKS_X)/2.0f;
     const float fY = (vPos.y-vBackPos.y) / BACK_DETAIL_Y + BACK_OFFSET_Y;
 
      // retrieve height value of the block
-    return m_pfHeight[(int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES];
+    return m_pfHeight[(F_TO_SI(fX) + F_TO_SI(fY)*BACK_BLOCKS_X) * BACK_PER_VERTICES];
 
     /*
         // retrieve all four corners of the block
-        const int iI00 = (int(FLOOR(fX)) + int(FLOOR(fY))*BACK_BLOCKS_X) * BACK_PER_VERTICES;
+        const int iI00 = (F_TO_SI(fX) + F_TO_SI(fY)*BACK_BLOCKS_X) * BACK_PER_VERTICES;
         const int iI01 = iI00 + 1;
         const int iI10 = iI00 + 2;
         const int iI11 = iI00 + 3;
@@ -216,8 +216,8 @@ void cBackground::LoadGeometry()
         const int y = i / BACK_WIDTH;
 
         // set positions and texture coordinates of the grid
-        pBaseVertex[i].vPosition = coreVector2(float(x - BACK_WIDTH/2) * BACK_DETAIL_X, (float(y) - BACK_OFFSET_Y) * BACK_DETAIL_Y);
-        pBaseVertex[i].vTexture  = coreVector2(float(x), float(-y));
+        pBaseVertex[i].vPosition = coreVector2(I_TO_F(x - BACK_WIDTH/2) * BACK_DETAIL_X, (I_TO_F(y) - BACK_OFFSET_Y) * BACK_DETAIL_Y);
+        pBaseVertex[i].vTexture  = coreVector2(I_TO_F(x), I_TO_F(-y));
     }
 
     // create persistent array with mutable height data (the holes are just out of screen)

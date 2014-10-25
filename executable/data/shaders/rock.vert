@@ -16,7 +16,7 @@ void VertexMain()
 {
     // transform position and texture coordinates
     gl_Position      = coreObject3DPosition();
-    v_av2TexCoord[0] = a_v2Texture;
+    v_av2TexCoord[0] = a_v2RawTexCoord;
     
     // dot-3 transform lighting vectors
     coreDot3VertexInit();
