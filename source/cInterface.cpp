@@ -229,7 +229,7 @@ void cInterface::Update(const float& fScore, const float& fTime, const float& fC
     // update score and time value text
     m_ScoreValue.SetText  (PRINT("%06.0f",  FLOOR(fScore)));
     m_TimeValueSec.SetText(PRINT("%03.0f.", FLOOR(fTime)));
-    m_TimeValueMil.SetText(PRINT("%01d",    int(FLOOR(fTime * 10.0f)) % 10));
+    m_TimeValueMil.SetText(PRINT("%01d",    F_TO_SI(fTime * 10.0f) % 10));
 
     // update combo value text
     const bool bCombo = (fCombo > 1.0f) ? true : false;

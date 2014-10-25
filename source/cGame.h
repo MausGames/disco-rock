@@ -36,7 +36,7 @@
 
 // macro function for calculating the current score multiplier
 #define COMBO_MAX   (18u)
-#define COMBO_MULTI (1.0f + 0.5f * float(MIN(m_iCombo, COMBO_MAX)))
+#define COMBO_MULTI (1.0f + 0.5f * I_TO_F(MIN(m_iCombo, COMBO_MAX)))
 
 // macro function for moving and removing game objects
 #define PROCESS_OBJECT_ARRAY(a,m)                             \

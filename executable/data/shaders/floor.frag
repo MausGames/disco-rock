@@ -48,8 +48,8 @@ void FragmentMain()
         else
         {
             // draw plain color block
-            float fIntensity = v_v3Relative.y;
-            gl_FragColor     = vec4(v_v4VarColor.rgb * (0.9 * fIntensity * min(v_v4VarColor.a * fIntensity, 1.0)), 1.0);
+            float v1Intensity = v_v3Relative.y;
+            gl_FragColor      = vec4(v_v4VarColor.rgb * (0.9 * v1Intensity * min(v_v4VarColor.a * v1Intensity, 1.0)), 1.0);
         }
 
 #else
@@ -59,27 +59,27 @@ void FragmentMain()
         vec2 v2TextureColor = coreTexture2D(0, v_av2TexCoord[0]).rg;
         #if (_CORE_QUALITY_) > 1
 
-            float fTextureDisco  = coreTexture2D(0, v_av2TexCoord[1]).b;
+            float v1TextureDisco = coreTexture2D(0, v_av2TexCoord[1]).b;
             
         #endif
         
         // calculate perspective intensity value
-        float fRsqrt     = inversesqrt(coreLengthSq(v_v3Relative));
-        float fIntensity = 406.25 * fRsqrt * min(abs(dot(v_v3Relative * fRsqrt, c_v3CamDir)), 1.0) - 0.4063;
+        float v1Rsqrt     = inversesqrt(coreLengthSq(v_v3Relative));
+        float v1Intensity = 406.25 * v1Rsqrt * min(abs(dot(v_v3Relative * v1Rsqrt, c_v3CamDir)), 1.0) - 0.4063;
 
         // calculate dot-3 bump factor
         vec3  v3MathLightDir = normalize(v_av4LightDir[0].xyz);
         vec3  v3MathNormal   = normalize(v3TextureNorm * 2.0 - 1.0);
-        float fBumpFactor    = max(0.0, dot(v3MathLightDir, v3MathNormal) * 2.0 - 1.0);
+        float v1BumpFactor   = max(0.0, dot(v3MathLightDir, v3MathNormal) * 2.0 - 1.0);
    
         // calculate final diffuse color
-        vec4 v4Color   = vec4(vec3(v2TextureColor.r), 1.0) * v_v4VarColor * (fIntensity * (0.9 * fBumpFactor + 0.25 * pow40(fBumpFactor)));
+        vec4 v4Color   = vec4(vec3(v2TextureColor.r), 1.0) * v_v4VarColor * (v1Intensity * (0.9 * v1BumpFactor + 0.25 * pow40(v1BumpFactor)));
         vec3 v3Diffuse = v4Color.rgb * min(v4Color.a, 1.0);
 
         #if (_CORE_QUALITY_) > 1
         
             // add disco light effect
-            v3Diffuse += vec3(u_v4Color.a * fTextureDisco * (0.5075 - 0.435 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x * 0.5 * PI)));
+            v3Diffuse += vec3(u_v4Color.a * v1TextureDisco * (0.5075 - 0.435 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x * 0.5 * PI)));
 
         #endif
         

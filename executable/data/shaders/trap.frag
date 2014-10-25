@@ -19,7 +19,7 @@ void FragmentMain()
     else
     {
         // draw smooth glow effect
-        float fPow3  = v_v3Strength.z * v_v3Strength.z * v_v3Strength.z;
-        gl_FragColor = vec4(1.0, 1.0, 1.0, fPow3 * length(v_v3Strength.xy) * u_v4Color.a);
+        float v1Pow3 = v_v3Strength.z * v_v3Strength.z * v_v3Strength.z;
+        gl_FragColor = vec4(1.0, 1.0, 1.0, v1Pow3 * length(v_v3Strength.xy) * u_v4Color.a);
     }
 }
