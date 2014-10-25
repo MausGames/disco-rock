@@ -567,7 +567,7 @@ cMenu::cMenu()noexcept
             m_aaScoreEntry[i][j][1].SetPosition(coreVector2(vPos.x - 0.19466f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][1].SetCenter(vCen);
             m_aaScoreEntry[i][j][1].SetAlignment(coreVector2(1.0f,0.0f));
-            m_aaScoreEntry[i][j][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(j, 3) / 3)));
+            m_aaScoreEntry[i][j][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(j, 3) / 3)));
             m_aaScoreEntry[i][j][1].SetText("-");
 
             m_aaScoreEntry[i][j][2].Construct(FONT_ROCKS, 23, 16);
@@ -1039,8 +1039,8 @@ void cMenu::Move()
                         }
 
                         // convert values
-                        const int aiValue[2] = {(int)FLOOR(m_afSubmitValue[0]),
-                                                (int)FLOOR(m_afSubmitValue[1]*100.0f)};
+                        const int aiValue[2] = {F_TO_SI(m_afSubmitValue[0]),
+                                                F_TO_SI(m_afSubmitValue[1]*100.0f)};
 
                         // check and save new best values, show new offline record
                         if(Core::Config->GetInt("Game", "Score", 0) < aiValue[0])
@@ -1064,7 +1064,7 @@ void cMenu::Move()
 
                         // display both values
                         m_aAfterBestValue[0].SetText(PRINT("%06.0f",      FLOOR(m_afSubmitValue[0])));
-                        m_aAfterBestValue[1].SetText(PRINT("%03.0f.%01d", FLOOR(m_afSubmitValue[1]), int(FLOOR(m_afSubmitValue[1] * 10.0f)) % 10));
+                        m_aAfterBestValue[1].SetText(PRINT("%03.0f.%01d", FLOOR(m_afSubmitValue[1]), F_TO_SI(m_afSubmitValue[1] * 10.0f) % 10));
 
                         // set submit status
                         m_bSubmited      = (m_afSubmitValue[1] < 10.0f) ? true : false;
@@ -1339,7 +1339,7 @@ void cMenu::Move()
             if(((m_aTrophyImage[i].IsFocused() && m_iTrophyCurrent != i) || m_iTrophyCurrent < 0) && bInNormalMenu)
             {
                 m_iTrophyCurrent = i;
-                g_pOnline->GameJolt()->InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, this, &cMenu::FetchTrophiesCallback1, (void*)(long)i);
+                g_pOnline->GameJolt()->InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, this, &cMenu::FetchTrophiesCallback1, I_TO_P(i));
             }
 
             // set transparency of tropies
@@ -1608,7 +1608,7 @@ void cMenu::Move()
     static float fFPSValue = 0.0f;
     if(Core::System->GetTime()) fFPSValue = fFPSValue * 0.95f + RCP(Core::System->GetTime()) * 0.05f;
     m_TopFPSSec.SetText(PRINT("%.0f.", FLOOR(fFPSValue)));
-    m_TopFPSMil.SetText(PRINT("%01d",  int(FLOOR(fFPSValue * 10.0f)) % 10));
+    m_TopFPSMil.SetText(PRINT("%01d",  F_TO_SI(fFPSValue * 10.0f) % 10));
 
     // adjust color in relation to the FPS
     const float fFPSLerp        = MIN(fFPSValue * 0.01666667f, 1.0f);
@@ -1627,7 +1627,7 @@ void cMenu::Move()
     // show light network load
     if(g_pOnline->GetNumConnections())
     {
-        m_Loading.SetDirection(coreVector2::Direction((float)Core::System->GetTotalTime() * 4.0f));
+        m_Loading.SetDirection(coreVector2::Direction(float(Core::System->GetTotalTime()) * 4.0f));
         m_Loading.Move();
     }
     else m_Loading.SetAlpha(0.0f);
@@ -1776,8 +1776,8 @@ void cMenu::SubmitScore(const char* pcGuestName)
     if(m_bSubmited) return;
 
     // convert values
-    const int aiValue[2] = {(int)FLOOR(m_afSubmitValue[0]),
-                            (int)FLOOR(m_afSubmitValue[1]*100.0f)};
+    const int aiValue[2] = {F_TO_SI(m_afSubmitValue[0]),
+                            F_TO_SI(m_afSubmitValue[1]*100.0f)};
     
     // save guest name
     if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
@@ -1809,10 +1809,10 @@ void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
     }
 
     // fetch all top values
-    g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, (void*)0);
+    g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, I_TO_P(0));
 
     // fetch best values of the current user
-    if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), true, 1, this, &cMenu::RetrieveScoresCallback2, (void*)1);
+    if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), true, 1, this, &cMenu::RetrieveScoresCallback2, I_TO_P(1));
 }
 
 
@@ -1837,10 +1837,10 @@ void cMenu::RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData)
     FOR_EACH(it, apTable)
     {
         // fetch all top values
-        g_pOnline->FetchScores(it->second->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, (void*)0);
+        g_pOnline->FetchScores(it->second->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, I_TO_P(0));
 
         // fetch best values of the current user
-        if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(it->second->GetID(), true, 1, this, &cMenu::RetrieveScoresCallback2, (void*)1);
+        if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(it->second->GetID(), true, 1, this, &cMenu::RetrieveScoresCallback2, I_TO_P(1));
     }
 }
 
@@ -1868,13 +1868,13 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
             if(iTableID == GJ_LEADERBOARD_01)
             {
                 // check for score
-                const bool bInLeaderboard = m_afSubmitValue[0] > float((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
+                const bool bInLeaderboard = m_afSubmitValue[0] > I_TO_F((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
                 if(!m_bSubmited) m_bInLeaderboard |= bInLeaderboard;
             }
             else // == GJ_LEADERBOARD_02
             {
                 // check for time
-                const bool bInLeaderboard = FLOOR(m_afSubmitValue[1]*100.0f) > float((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
+                const bool bInLeaderboard = FLOOR(m_afSubmitValue[1]*100.0f) > I_TO_F((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1]->GetSort() : 0);
                 if(!m_bSubmited) m_bInLeaderboard |= bInLeaderboard;
             }
         }
@@ -1923,7 +1923,7 @@ void cMenu::RetrieveScoresCallback3(const int& iTableNum)
             m_aaScoreEntry[0][i][2].SetText(pScore ? PRINT("%06d", pScore->GetSort()) : "-");
 
             // highlight best players
-            m_aaScoreEntry[0][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(i + iScoreStart, 3) / 3)));
+            m_aaScoreEntry[0][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(i + iScoreStart, 3) / 3)));
         }
         else // == GJ_LEADERBOARD_02
         {
@@ -1933,7 +1933,7 @@ void cMenu::RetrieveScoresCallback3(const int& iTableNum)
             m_aaScoreEntry[1][i][2].SetText(pScore ? PRINT("%03d.%01d", pScore->GetSort() / 100, ((pScore->GetSort() % 100) / 10)) : "-");
         
             // highlight best players
-            m_aaScoreEntry[1][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, float(MIN(i + iScoreStart, 3) / 3)));
+            m_aaScoreEntry[1][i][1].SetColor3(LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(i + iScoreStart, 3) / 3)));
         }
     }
 }
@@ -1952,7 +1952,7 @@ void cMenu::FetchTrophies()
 // callback for trophy fetch (description)
 void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 {
-    const int iNum = (long)pData;
+    const int iNum = P_TO_I(pData);
     if(iNum >= (int)apTrophy.size()) return;
 
     // set trophy title
@@ -1979,7 +1979,7 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
         if(apTrophy[i]->IsAchieved()) BIT_SET(m_iTrophyStatus, i)
 
     // reset current trophy
-    this->FetchTrophiesCallback1(apTrophy, (void*)0);
+    this->FetchTrophiesCallback1(apTrophy, I_TO_P(0));
     m_iTrophyCurrent = 0;
 }
 
@@ -1995,14 +1995,14 @@ int cMenu::QuickPlay()
     m_iTrophyStatus = Core::Config->GetInt("Game", "Trophy", 0);
 
     // check for quickplay
-    int iStatus = g_pOnline->Login("", "", this, &cMenu::LoginCallback, (void*)0);
+    int iStatus = g_pOnline->Login("", "", this, &cMenu::LoginCallback, I_TO_P(0));
   
 #if !defined(_API_GOOGLE_PLAY_)
 
     if(iStatus != GJ_OK)
     {
         // check for saved credentials
-        iStatus = g_pOnline->Login(Core::Config->GetString("Game", "Name", ""), Core::Config->GetString("Game", "Token", ""), this, &cMenu::LoginCallback, (void*)0);
+        iStatus = g_pOnline->Login(Core::Config->GetString("Game", "Name", ""), Core::Config->GetString("Game", "Token", ""), this, &cMenu::LoginCallback, I_TO_P(0));
 
         // fetch leaderboards early on failure
         if(iStatus != GJ_OK) g_pMenu->RetrieveScores();
@@ -2019,7 +2019,7 @@ int cMenu::QuickPlay()
 int cMenu::Login(const char* pcName, const char* pcToken)
 {
     // try to login the specific user
-    return g_pOnline->Login(pcName, pcToken, this, &cMenu::LoginCallback, (void*)1);
+    return g_pOnline->Login(pcName, pcToken, this, &cMenu::LoginCallback, I_TO_P(1));
 }
 
 

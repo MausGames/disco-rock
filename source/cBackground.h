@@ -33,9 +33,9 @@
 #define BACK_REPEAT (40)                                             // rows when to repeat (BACK_VIEW + BACK_REPEAT < BACK_HEIGHT)
 #define BACK_RANGE  (BACK_BLOCKS_X * BACK_PER_INDICES * BACK_VIEW)   // vertices to draw at once
 
-#define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (float(i) - (float(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
-#define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))             // Y position at where to spawn objects on the horizon
-#define BACK_REMOVE_Y     (-52.0f)                                                         // Y position at where to remove objects
+#define BACK_SPAWN_X(i,o) (BACK_DETAIL_X * (I_TO_F(i) - (I_TO_F(BACK_BLOCKS_X)/2.0f - o)))   // X position at a specific plate number and with offset
+#define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))               // Y position at where to spawn objects on the horizon
+#define BACK_REMOVE_Y     (-52.0f)                                                           // Y position at where to remove objects
 
 
 // ****************************************************************
@@ -82,7 +82,7 @@ public:
 
     // make or remove holes, get current horizon line, do other fancy stuff
     void UpdateHoles(const coreUint& iLine, const bool* pbIndex);
-    inline int   GetCurLine()const                       {return (int)FLOOR(m_fPositionTime);}
+    inline int   GetCurLine()const                       {return F_TO_SI(m_fPositionTime);}
     inline float GetFlash  (const float& fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
 
     // get height value at specific position

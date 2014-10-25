@@ -190,7 +190,7 @@ void cGame::Move()
         else
         {
             // calculate canyon length, so it can only be crossed by using a trap jump
-            const int iBorder = int(FLOOR(1.0f + 2.2f*g_fCurSpeed));
+            const int iBorder = F_TO_SI(1.0f + 2.2f*g_fCurSpeed);
 
             // activate narrow stage later
             if(m_fTime >= STAGE_FINAL+0.5f) m_iNarrow = 1;
@@ -307,7 +307,7 @@ void cGame::Move()
                     if(m_fTime < STAGE_NET)
                     {
                         // add holes to create a path around spawn locations
-                        const int iBroad = MAX(5 - int(FLOOR(m_fTime * 0.2f)), 2);
+                        const int iBroad = MAX(5 - F_TO_SI(m_fTime * 0.2f), 2);
                         for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
                             abHole[i] = !(m_iCurSpawn >= i-iBroad && m_iCurSpawn <= i+(iBroad-2));
                     }
@@ -339,7 +339,7 @@ void cGame::Move()
                     else if(m_fTime >= STAGE_FINAL+4.0f)
                     {
                         // create triple-holes with increasing rate at the final stage
-                        if(++m_iFinalHoles >= int(2.0f + 6.0f / (1.0f + 0.1f*(m_fTime-(STAGE_FINAL+4.0f)))))
+                        if(++m_iFinalHoles >= F_TO_SI(2.0f + 6.0f / (1.0f + 0.1f*(m_fTime-(STAGE_FINAL+4.0f)))))
                         {
                             m_iFinalHoles =  0;
                             iSelection    = -1;
@@ -492,7 +492,7 @@ void cGame::Move()
                     if(abHole[i] && (m_fTime < 10.0f || (Core::Rand->Float(0.0f,1.0f) < fPlateCmp && (!abHole[MAX(i-1,1)] || !abHole[MIN(i+1,BACK_BLOCKS_X-2)]))))
                     {
                         // create plate and add to list
-                        cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(float(i), -FLOOR(g_pBackground->GetPositionTime())));
+                        cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(0.0f,120.0f), coreVector2(I_TO_F(i), -FLOOR(g_pBackground->GetPositionTime())));
                         pPlate->SetPosition(coreVector3(BACK_SPAWN_X(i, 0.5f), fSpawn, GAME_HEIGHT));
                         m_apPlate.push_back(pPlate);
                     }
@@ -588,7 +588,7 @@ void cGame::Move()
             if(pBeverage->GetPosition().y < 10.0f && coreObject3D::Collision(*pBeverage, m_Rock))
             {
                 // calculate and increase score
-                const float fValue = float(pBeverage->GetScore()) * COMBO_MULTI;
+                const float fValue = I_TO_F(pBeverage->GetScore()) * COMBO_MULTI;
                 m_dScore += (double)fValue;
 
                 // increase statistics
@@ -682,7 +682,7 @@ void cGame::Move()
 
     // update the interface object
     if(this->GetStatus()) m_Interface.Hide();
-    m_Interface.Update((float)m_dScore, m_fTime, COMBO_MULTI, MIN((float)m_fComboDelay, 0.7f) * 1.4286f);
+    m_Interface.Update((float)m_dScore, m_fTime, COMBO_MULTI, MIN(m_fComboDelay, 0.7f) * 1.4286f);
     m_Interface.Move();
 
     if(m_ShowMessage.GetStatus())
@@ -759,11 +759,11 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
 
     // achieve trophy
     gjTrophy* pTrophy = g_pOnline->GameJolt()->InterTrophy()->GetTrophy(iID);
-    if(g_pOnline->IsUserConnected()) g_pOnline->AchieveTrophy(pTrophy, this, &cGame::AchieveTrophyCallback, (void*)(long)iNum);
+    if(g_pOnline->IsUserConnected()) g_pOnline->AchieveTrophy(pTrophy, this, &cGame::AchieveTrophyCallback, I_TO_P(iNum));
     else
     {
         // handle guest user
-        this->AchieveTrophyCallback(pTrophy, (void*)(long)iNum);
+        this->AchieveTrophyCallback(pTrophy, I_TO_P(iNum));
     }
 }
 
@@ -772,7 +772,7 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
 // callback for trophy achievements
 void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
-    const int iNum = (long)pData;
+    const int iNum = P_TO_I(pData);
 
     if(pTrophy)
     {

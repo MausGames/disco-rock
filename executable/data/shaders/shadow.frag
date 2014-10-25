@@ -11,6 +11,6 @@
 void FragmentMain()
 {
     // use texture as alpha map and cut-out the shadow (.a)
-    float fAlpha = coreTexture2D(0, v_av2TexCoord[0]).a;
-    gl_FragColor = vec4(0.0, 0.0, 0.0, u_v4Color.a * fAlpha);
+    float v1Alpha = coreTexture2D(0, v_av2TexCoord[0]).a;
+    gl_FragColor  = vec4(0.0, 0.0, 0.0, u_v4Color.a * v1Alpha);
 }
