@@ -9,7 +9,6 @@ Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - t
 > - very simple arcade game with moderate difficulty
 > - online leaderboards for score and time
 > - many different trophies and challenges
-> - originally made within 9 days for the 10th [Game Jolt][1] Contest (Theme: Party)
 
 #
 
