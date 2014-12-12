@@ -22,11 +22,12 @@ void VertexMain()
     v_av2TexCoord[0] = a_v2RawTexCoord;
 
     // remove top of the glass
-    if(a_v3RawNormal.z > 0.99) v_v1Intensity = 0.0;
+    float v1AbsNorm = abs(a_v3RawNormal.z);
+    if(v1AbsNorm > 0.99) v_v1Intensity = 0.0;
     else
     {
         // calculate intensity value
         vec3 v3NewNormal = coreQuatApply(u_v4Rotation, a_v3RawNormal);
-        v_v1Intensity    = 1.4 * abs(dot(v3NewNormal, c_v3CamDir)) + 0.56 * abs(a_v3RawNormal.z);
+        v_v1Intensity    = 1.4 * abs(dot(v3NewNormal, c_v3CamDir)) + 0.56 * v1AbsNorm;
     }
 }

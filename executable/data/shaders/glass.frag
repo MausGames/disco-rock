@@ -19,6 +19,6 @@ void FragmentMain()
     else
     {
         // draw intensity-modified color
-        gl_FragColor = vec4(coreTexture2D(0, v_av2TexCoord[0]).rgb * v_v1Intensity, u_v4Color.a * 0.5);
+        gl_FragColor = vec4(coreTexture2D(0, v_av2TexCoord[0]).rgb * v_v1Intensity, 0.5);
     }
 }
