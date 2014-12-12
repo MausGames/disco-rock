@@ -15,20 +15,20 @@
 // background definitions
 #define BACK_WIDTH  9                                                // vertices per row
 #define BACK_HEIGHT 65                                               // vertices per column
-                                                                     
+
 #define BACK_BLOCKS_X (BACK_WIDTH-1)                                 // blocks per row
 #define BACK_BLOCKS_Y (BACK_HEIGHT-1)                                // blocks per column
 #define BACK_BLOCKS   (BACK_BLOCKS_X * BACK_BLOCKS_Y)                // number of all blocks
-                                                                     
+
 #define BACK_PER_VERTICES   (4)                                      // vertices per block
 #define BACK_PER_INDICES    (6)                                      // indices per block
 #define BACK_TOTAL_VERTICES (BACK_PER_VERTICES * BACK_BLOCKS)        // total number of vertices
 #define BACK_TOTAL_INDICES  (BACK_PER_INDICES  * BACK_BLOCKS)        // total number of indices
-                                                                     
+
 #define BACK_DETAIL_X (24.0f*0.91f)                                  // X size of a block
 #define BACK_DETAIL_Y (24.0f)                                        // Y size of a block
 #define BACK_OFFSET_Y (2.0f)                                         // Y position offset
-                                                                     
+
 #define BACK_VIEW   (24)                                             // visible rows
 #define BACK_REPEAT (40)                                             // rows when to repeat (BACK_VIEW + BACK_REPEAT < BACK_HEIGHT)
 #define BACK_RANGE  (BACK_BLOCKS_X * BACK_PER_INDICES * BACK_VIEW)   // vertices to draw at once
@@ -46,8 +46,8 @@ private:
     struct sVertex
     {
         coreVector2 vPosition;   // vertex position
-        coreVector2 vTexture;    // texture coordinate
-        coreVector4 vColor;      // RGBA color-value
+        coreVector2 vTexCoord;   // texture coordinate
+        coreUint    iColor;      // RGBA color-value
 
         constexpr_func sVertex()noexcept;
     };
@@ -59,13 +59,13 @@ private:
     coreFlow m_fPositionTime;           // timer for the current dance floor position
     coreFlow m_fFloorTime;              // timer for the light animation on the dance floor
     coreFlow m_fFillTime;               // timer for the light animation in the background
-    
+
     float*   m_pfHeight;                // height data for height calculations
     coreUint m_iOffset;                 // current drawing offset
 
     float m_fLightStrength;             // light strength (from the imaginary disco ball)
     int   m_iLightTick;                 // tick count
-    float m_fLightTime;                 // time compared with tick count to create regular light flashs
+    float m_fLightTime;                 // time compared with tick count to create regular light flashes
 
     coreVector3 m_avColor[COLOR_NUM];   // modified default colors
     float m_fCurColorHue;               // current hue offset used to modify default colors
@@ -107,11 +107,11 @@ private:
 
 
 // ****************************************************************
-// conttructor
+// constructor
 constexpr_func cBackground::sVertex::sVertex()noexcept
 : vPosition (coreVector2(0.0f,0.0f))
-, vTexture  (coreVector2(0.0f,0.0f))
-, vColor    (coreVector4(0.0f,0.0f,0.0f,0.0f))
+, vTexCoord (coreVector2(0.0f,0.0f))
+, iColor    (0)
 {
 }
 

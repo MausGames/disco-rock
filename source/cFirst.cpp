@@ -21,13 +21,13 @@ cFirst::cFirst()noexcept
     m_Interface.ChangeControlType(0);
 
     // create control configuration objects
-    m_ControlText.Construct(FONT_ROCKS, 45, 0);
+    m_ControlText.Construct  (FONT_ROCKS, 45, 0);
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
-    m_ControlText.SetText("CONTROLS");
+    m_ControlText.SetText    ("CONTROLS");
 
-    m_ControlType.Construct(FONT_ROCKS, 29, 16);
+    m_ControlType.Construct  (FONT_ROCKS, 29, 16);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
-    m_ControlType.SetSize(coreVector2(0.49f,0.075f));
+    m_ControlType.SetSize    (coreVector2(0.49f,0.075f));
     m_ControlType.GetCaption()->SetColor3(coreVector3(0.75f,0.75f,0.75f));
     m_ControlType.AddEntry("CLASSIC",    CONTROL_CLASSIC);
     m_ControlType.AddEntry("MOTION",     CONTROL_MOTION);
@@ -37,31 +37,31 @@ cFirst::cFirst()noexcept
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct(NULL, NULL, FONT_ROCKS, 45, 2);
+        pArrow->Construct    (NULL, NULL, FONT_ROCKS, 45, 2);
         pArrow->DefineProgram("2d_border_program");
-        pArrow->SetColor3(coreVector3(0.05f,0.05f,0.05f));
-        pArrow->SetTexSize(coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
+        pArrow->SetColor3    (coreVector3(0.05f,0.05f,0.05f));
+        pArrow->SetTexSize   (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
         pArrow->SetFocusRange(1.2f);
         pArrow->GetCaption()->SetText(i ? ">" : "<");
     }
 
     // create start button
-    m_Start.Construct("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
     m_Start.DefineProgram("2d_border_program"); // override
-    m_Start.SetPosition(coreVector2(0.0f,0.0f));
-    m_Start.SetSize(coreVector2(0.49f,0.1f));
-    m_Start.SetColor3(COLOR_BLUE_F);
+    m_Start.SetPosition  (coreVector2(0.0f,0.0f));
+    m_Start.SetSize      (coreVector2(0.49f,0.1f));
+    m_Start.SetColor3    (COLOR_BLUE_F);
     m_Start.GetCaption()->SetText("START GAME");
     m_Start.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_Start)
 
     constexpr_var coreVector3 vTouchColor = LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.75f);
 
-    // overload trouch object color
-    m_Interface.GetTouchMoveLeft()->SetColor3(vTouchColor);
+    // overload touch object color
+    m_Interface.GetTouchMoveLeft ()->SetColor3(vTouchColor);
     m_Interface.GetTouchMoveRight()->SetColor3(vTouchColor);
-    m_Interface.GetTouchJump()->SetColor3(vTouchColor);
-    m_Interface.GetTouchPause()->SetColor3(vTouchColor);
+    m_Interface.GetTouchJump     ()->SetColor3(vTouchColor);
+    m_Interface.GetTouchPause    ()->SetColor3(vTouchColor);
     m_Interface.GetLine(0)->SetColor3(vTouchColor);
     m_Interface.GetLine(1)->SetColor3(vTouchColor);
 
@@ -86,10 +86,10 @@ void cFirst::Render()
     const float fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(float(Core::System->GetTotalTime()) * 12.0f));
 
     // forward menu alpha value
-    m_Interface.GetTouchMoveLeft()->SetAlpha(fTouchAlpha);
+    m_Interface.GetTouchMoveLeft ()->SetAlpha(fTouchAlpha);
     m_Interface.GetTouchMoveRight()->SetAlpha(fTouchAlpha);
-    m_Interface.GetTouchJump()->SetAlpha(fTouchAlpha);
-    m_Interface.GetTouchPause()->SetAlpha(fTouchAlpha);
+    m_Interface.GetTouchJump     ()->SetAlpha(fTouchAlpha);
+    m_Interface.GetTouchPause    ()->SetAlpha(fTouchAlpha);
     m_Interface.GetLine(0)->SetAlpha(fTouchAlpha);
     m_Interface.GetLine(1)->SetAlpha(fTouchAlpha);
 
@@ -110,17 +110,17 @@ void cFirst::Move()
     m_iStatus = 0;
 
     // move touch objects
-    m_Interface.GetTouchMoveLeft()->Move();
+    m_Interface.GetTouchMoveLeft ()->Move();
     m_Interface.GetTouchMoveRight()->Move();
-    m_Interface.GetTouchJump()->Move();
-    m_Interface.GetTouchPause()->Move();
+    m_Interface.GetTouchJump     ()->Move();
+    m_Interface.GetTouchPause    ()->Move();
     m_Interface.GetLine(0)->Move();
     m_Interface.GetLine(1)->Move();
 
     // set transparency of control buttons
-    m_Start.SetAlpha(m_Start.GetAlpha() * MENU_ALPHA_IDLE_2); 
-    m_ControlType.GetArrow(0)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0) ? 0.5f : 1.0f));
-    m_ControlType.GetArrow(1)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 2) ? 0.5f : 1.0f));
+    m_Start.SetAlpha(m_Start.GetAlpha() * MENU_ALPHA_IDLE_2);
+    m_ControlType.GetArrow (0)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0) ? 0.5f : 1.0f));
+    m_ControlType.GetArrow (1)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 2) ? 0.5f : 1.0f));
     m_ControlType.GetCaption()->SetAlpha(m_ControlType.GetAlpha());
     ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0));
     ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1));
@@ -128,16 +128,17 @@ void cFirst::Move()
     // apply and save control changes
     if(m_ControlType.IsClicked())
     {
-        if(Core::Config->GetInt("Game", "Control", 0) != (int)m_ControlType.GetCurIndex())
+        if(Core::Config->GetInt("Game", "Control", 0) != int(m_ControlType.GetCurIndex()))
         {
             Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
             m_Interface.ChangeControlType(m_ControlType.GetCurIndex());
         }
+        g_pMenu->PlayClickSound();
     }
 
     // control current surface
-    if(!this->GetCurSurface()) this->ChangeSurface(1, 1.0f);
-    if(m_Start.IsClicked())    this->ChangeSurface(2, 1.0f);
+    if(!this->GetCurSurface())  this->ChangeSurface(1, 1.0f);
+    if(m_Start.IsClicked())    {this->ChangeSurface(2, 1.0f); g_pMenu->PlayHappySound();}
 
     // finish the first-time menu
     if(this->GetCurSurface() == 2 && !this->GetTransition().GetStatus())

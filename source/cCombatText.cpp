@@ -49,10 +49,10 @@ cCombatText::cCombatText()noexcept
     // create trophy symbol
     m_Trophy.DefineTexture(0, "icon_trophy.png");
     m_Trophy.DefineProgram(m_aText[0].GetProgram());
-    m_Trophy.SetSize(coreVector2(0.12f,0.12f));
-    m_Trophy.SetColor3(COLOR_YELLOW_F);
+    m_Trophy.SetSize      (coreVector2(0.12f,0.12f));
+    m_Trophy.SetColor3    (COLOR_YELLOW_F);
 
-    // creatr trophy label
+    // create trophy label
     m_TrophyLabel.Construct(FONT_ROCKS, 37, 32);
 }
 
@@ -101,13 +101,13 @@ void cCombatText::Move()
 
             // get next text data
             const sData& Data = m_aData.front();
-            
+
             // init label object
             coreLabel* pText = &m_aText[m_iCurText];
-            pText->SetText(Data.sText.c_str());
+            pText->SetText     (Data.sText.c_str());
             pText->SetDirection(coreVector2::Direction(Core::Rand->Float(-0.3f, 0.3f)));
-            pText->SetCenter(Data.vPosition);
-            pText->SetColor4(Data.vColor);
+            pText->SetCenter   (Data.vPosition);
+            pText->SetColor4   (Data.vColor);
 
             // save alpha value
             m_afAlpha[m_iCurText] = Data.vColor.a;
@@ -132,14 +132,13 @@ void cCombatText::Move()
             {
                 // update the combat text
                 m_aText[i].SetPosition(coreVector2(m_aText[i].GetCenter().x*1.5f, -1.0f) * -0.13333f * m_aFloat[i].GetValue(CORE_TIMER_GET_NORMAL));
-                m_aText[i].SetScale(fFlash);
-                m_aText[i].SetAlpha(m_aFloat[i].GetValue(CORE_TIMER_GET_REVERSED) * m_afAlpha[i]);
+                m_aText[i].SetScale   (fFlash);
+                m_aText[i].SetAlpha   (m_aFloat[i].GetValue(CORE_TIMER_GET_REVERSED) * m_afAlpha[i]);
                 m_aText[i].Move();
             }
         }
     }
 
-    
     if(m_TrophyTimer.GetStatus())
     {
         // update the trophy timer
@@ -147,15 +146,15 @@ void cCombatText::Move()
         else
         {
             // update the trophy symbol
-            m_Trophy.SetPosition(coreVector2(0.0f, 0.08f + 0.35f * m_TrophyTimer.GetValue(CORE_TIMER_GET_NORMAL)));
+            m_Trophy.SetPosition (coreVector2(0.0f, 0.08f + 0.35f * m_TrophyTimer.GetValue(CORE_TIMER_GET_NORMAL)));
             m_Trophy.SetDirection(coreVector2::Direction(m_TrophyTimer.GetValue(CORE_TIMER_GET_NORMAL) * 2.0f * PI));
-            m_Trophy.SetAlpha(m_TrophyTimer.GetValue(CORE_TIMER_GET_REVERSED) * 1.5f);
+            m_Trophy.SetAlpha    (m_TrophyTimer.GetValue(CORE_TIMER_GET_REVERSED) * 1.5f);
             m_Trophy.Move();
 
             // update the trophy label
             m_TrophyLabel.SetPosition(coreVector2(0.0f, 0.04f + 0.2f * m_TrophyTimer.GetValue(CORE_TIMER_GET_NORMAL)));
-            m_TrophyLabel.SetScale(fFlash);
-            m_TrophyLabel.SetAlpha(m_TrophyTimer.GetValue(CORE_TIMER_GET_REVERSED) * 1.5f);
+            m_TrophyLabel.SetScale   (fFlash);
+            m_TrophyLabel.SetAlpha   (m_TrophyTimer.GetValue(CORE_TIMER_GET_REVERSED) * 1.5f);
             m_TrophyLabel.Move();
         }
     }
@@ -168,7 +167,7 @@ void cCombatText::Reset()
 {
     // stop all timers
     m_Delay.Stop();
-    for(int i = 0; i < COMBAT_TEXT_NUM; ++i) 
+    for(int i = 0; i < COMBAT_TEXT_NUM; ++i)
         m_aFloat[i].Stop();
 
     // clear memory
@@ -194,10 +193,10 @@ void cCombatText::ShowTrophy(const char* pcText, const coreVector3& vPosition)
 {
     // calculate screen position
     const coreVector2 vScreenPos = (vPosition * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f);
-    
+
     // set trophy and trophy text
     m_Trophy.SetCenter(vScreenPos);
-    m_TrophyLabel.SetText(pcText);
+    m_TrophyLabel.SetText  (pcText);
     m_TrophyLabel.SetCenter(vScreenPos);
 
     // start trophy

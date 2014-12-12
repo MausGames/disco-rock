@@ -61,7 +61,7 @@ void cBackground::Render()
 {
     glDisable(GL_BLEND);
     {
-        // light flash (made in render-function to animate even in pause-mode)
+        // light flash (in render-function to animate even in pause-mode)
         {
             // get music speed (yes this is currently hardcoded, needs to be improved)
             float fSpeed = 0.0f;
@@ -70,7 +70,7 @@ void cBackground::Render()
             else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2)) fSpeed = 1.95f;
 
             // update light time
-            m_fLightTime += Core::System->GetTime() * fSpeed * (1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
+            m_fLightTime += Core::System->GetTime() * fSpeed * g_fMusicSpeed;
 
             // check for new tick
             const int iNewTick = F_TO_SI(m_fLightTime);
@@ -103,7 +103,9 @@ void cBackground::Render()
         }
 
         // render the filling background
+        glDepthMask(false);
         m_Fill.Render();
+        glDepthMask(true);
     }
     glEnable(GL_BLEND);
 }
@@ -156,7 +158,7 @@ void cBackground::UpdateHoles(const coreUint& iLine, const bool* pbIndex)
     }
 
     // unmap area
-    m_pModel->GetVertexBuffer(1)->Unmap(pfData);  
+    m_pModel->GetVertexBuffer(1)->Unmap(pfData);
 
     // reset current model object
     coreModel::Disable(false);
@@ -181,7 +183,7 @@ float cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPo
         const int iI10 = iI00 + 2;
         const int iI11 = iI00 + 3;
         ASSERT(iI11 < BACK_TOTAL_VERTICES);
-    
+
         // retrieve height values of the corners
         const float& fH00 = m_pfHeight[iI00];
         const float& fH01 = m_pfHeight[iI01];
@@ -209,15 +211,15 @@ void cBackground::LoadGeometry()
     SAFE_DELETE_ARRAY(m_pfHeight)
 
     // create base geometry
-    sVertex* pBaseVertex = new sVertex[BACK_WIDTH * BACK_HEIGHT];
+    sVertex aBaseVertex[BACK_WIDTH * BACK_HEIGHT];
     for(int i = 0; i < BACK_WIDTH * BACK_HEIGHT; i++)
     {
         const int x = i % BACK_WIDTH;
         const int y = i / BACK_WIDTH;
 
         // set positions and texture coordinates of the grid
-        pBaseVertex[i].vPosition = coreVector2(I_TO_F(x - BACK_WIDTH/2) * BACK_DETAIL_X, (I_TO_F(y) - BACK_OFFSET_Y) * BACK_DETAIL_Y);
-        pBaseVertex[i].vTexture  = coreVector2(I_TO_F(x), I_TO_F(-y));
+        aBaseVertex[i].vPosition = coreVector2(I_TO_F(x - BACK_WIDTH/2) * BACK_DETAIL_X, (I_TO_F(y) - BACK_OFFSET_Y) * BACK_DETAIL_Y);
+        aBaseVertex[i].vTexCoord = coreVector2(I_TO_F(x), I_TO_F(-y));
     }
 
     // create persistent array with mutable height data (the holes are just out of screen)
@@ -241,7 +243,7 @@ void cBackground::LoadGeometry()
         avColor.back().a = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
     }
 
-    // sync beginning and ending colors to create an infinit looking grid when resetting the position
+    // sync beginning and ending colors to create an infinite looking grid when resetting the position
     for(int y = 20; y < BACK_BLOCKS_Y; ++y)
     {
         for(int x = 0; x < BACK_BLOCKS_X; ++x)
@@ -257,14 +259,14 @@ void cBackground::LoadGeometry()
         {
             const coreUint j = x + y*BACK_WIDTH;
 
-            const coreVector4& vColor    = avColor[x + y*BACK_BLOCKS_X];
+            const coreUint   iColor      = avColor[x + y*BACK_BLOCKS_X].PackUnorm4x8();
             const coreUshort iStartIndex = pVertexData.size();
 
             // copy base vertices to create unique plates and add generated color values
-            pVertexData.push_back(pBaseVertex[j]);              pVertexData.back().vColor = vColor;
-            pVertexData.push_back(pBaseVertex[j+1]);            pVertexData.back().vColor = vColor;
-            pVertexData.push_back(pBaseVertex[j  +BACK_WIDTH]); pVertexData.back().vColor = vColor;
-            pVertexData.push_back(pBaseVertex[j+1+BACK_WIDTH]); pVertexData.back().vColor = vColor;
+            pVertexData.push_back(aBaseVertex[j]);              pVertexData.back().iColor = iColor;
+            pVertexData.push_back(aBaseVertex[j+1]);            pVertexData.back().iColor = iColor;
+            pVertexData.push_back(aBaseVertex[j  +BACK_WIDTH]); pVertexData.back().iColor = iColor;
+            pVertexData.push_back(aBaseVertex[j+1+BACK_WIDTH]); pVertexData.back().iColor = iColor;
 
             // add indices for the new plate
             pIndexData.push_back(iStartIndex + 0);
@@ -280,9 +282,9 @@ void cBackground::LoadGeometry()
 
     // create static vertex buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
-    pBuffer->DefineAttribute(0, 2, GL_FLOAT, 0);
-    pBuffer->DefineAttribute(1, 2, GL_FLOAT, 2*sizeof(float));
-    pBuffer->DefineAttribute(2, 4, GL_FLOAT, 4*sizeof(float));
+    pBuffer->DefineAttribute(0, 2, GL_FLOAT,         0);
+    pBuffer->DefineAttribute(1, 2, GL_FLOAT,         2*sizeof(float));
+    pBuffer->DefineAttribute(2, 4, GL_UNSIGNED_BYTE, 4*sizeof(float));
 
     // create dynamic height data buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
@@ -295,7 +297,6 @@ void cBackground::LoadGeometry()
     avColor.clear();
     pVertexData.clear();
     pIndexData.clear();
-    SAFE_DELETE_ARRAY(pBaseVertex)
 
     // cthulhu fhtagn cheezburger
     Core::Log->Info("Background loaded");
@@ -312,11 +313,11 @@ void cBackground::ModifyColor()
                                         else m_fCurColorHue =   0.0f/360.0f;
 
     // modify default colors
-         if(m_fCurColorHue  < 0.0f) for(int i = 0; i < 6; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HSVtoRGB();
-    else if(m_fCurColorHue == 0.0f) for(int i = 0; i < 6; ++i) m_avColor[i] = g_avColor[i];
+         if(m_fCurColorHue  < 0.0f) for(int i = 0; i < COLOR_NUM; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HSVtoRGB();
+    else if(m_fCurColorHue == 0.0f) for(int i = 0; i < COLOR_NUM; ++i) m_avColor[i] = g_avColor[i];
     else
     {
-        for(int i = 0; i < 6; ++i)
+        for(int i = 0; i < COLOR_NUM; ++i)
         {
             // change hue of all default colors
             coreVector3 vNewColor = g_avColor[i].RGBtoHSV();

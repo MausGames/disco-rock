@@ -21,11 +21,9 @@ protected:
     coreObject3D*  m_pGlass;         // optional separate glass object
     coreProgramPtr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
 
-    int m_iScore;                    // score value of the beverage
-
+    int   m_iScore;                  // score value of the beverage
     float m_fHeight;                 // Z position-offset on the dance floor
-    float m_fLiquidAlpha;            // alpha value of the drink
-    
+
     coreTimer   m_pDestroy;          // timer for the fly-animation
     coreVector3 m_vFlyRotation;      // rotation-parameter for the fly-animation
     coreVector3 m_vFlyImpact;        // impact-direction to throw the object into a specific direction
