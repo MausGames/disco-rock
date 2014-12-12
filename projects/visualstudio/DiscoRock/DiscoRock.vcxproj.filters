@@ -39,6 +39,7 @@
     <ClCompile Include="..\..\..\source\cOnline.cpp" />
     <ClCompile Include="..\..\..\source\cFirst.cpp" />
     <ClCompile Include="..\..\..\source\application.cpp" />
+    <ClCompile Include="..\..\..\source\cStage.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\source\cBackground.h" />

@@ -13,26 +13,19 @@
 
 // ****************************************************************
 // game definitions
-#define GAME_HEIGHT (-20.0f)   // logical height of the dance floor
+#define GAME_HEIGHT     (-20.0f)      // logical height of the dance floor (also inlined in floor-shaders)
+#define GAME_COOLA_RATE (100)         // number of lines between 2 successive Coola bottles (smaller = more often)
+#define GAME_COOLA_TIME (5.0f)        // duration of the Coola power
+#define GAME_SHOCK_TIME (6.3f)        // time when to increase speed with a shock-wave
+#define GAME_JUMP_WIDTH (6)           // regular distance for jumping with a trap
 
-// stage times
-#define STAGE_HOLES  (18.0f)
-#define STAGE_CANYON (30.0f)
-#define STAGE_TOGGLE (42.0f)
-#define STAGE_SIDE_1 (57.0f)
-#define STAGE_SIDE_2 (67.0f)
-#define STAGE_NET    (77.0f)
-#define STAGE_RANDOM (96.0f)
-#define STAGE_MASS   (100.0f)
-#define STAGE_FINAL  (110.0f)
-
-#define CANYON_DISTANCE (20)      // distance between two canyons (on stage STAGE_CANYON)
-#define CANYON_BEFORE   (1)       // full rows before a canyon
-#define CANYON_AFTER    (2)       // full rows after a canyon
-
-#define CANYON_BEGIN    (0)       // value to immediately start a canyon
-#define CANYON_PREVENT  (-1000)   // static value to prevent canyons
-#define CANYON_LIMIT    (-100)    // to compare for a canyon-status-switch (should be < -CANYON_DISTANCE)
+#define GAME_SPEED_SLOW      (1.5f)   // initial speed after starting a new game
+#define GAME_SPEED_FAST_REAL (2.2f)   // speed after the first shock-wave
+#if defined(_CORE_ANDROID_)
+    #define GAME_SPEED_FAST  (2.0f)
+#else
+    #define GAME_SPEED_FAST  GAME_SPEED_FAST_REAL
+#endif
 
 // macro function for calculating the current score multiplier
 #define COMBO_MAX   (18u)
@@ -75,8 +68,13 @@ private:
     std::deque<cRay*>   m_apRay;            // list with ray objects
 
     int m_iCurLine;                         // current processing line/row
-    int m_iCurSpawn;                        // current spawn column (beverages, triple-holes)
-                                            
+
+    std::vector<coreByte> m_aiAlgo;         // shuffled container with all algorithm identifiers
+    coreByte m_iAlgoCurIndex;               // current index to the algorithm in the container
+    coreUint m_iAlgoCurCount;               // current number of lines into the current algorithm
+    bool     m_bAlgoEmptyLines;             // algorithm has empty lines at the beginning and end of his stage (to prevent double-empty-lines)
+    int      m_aiAlgoStatus[4];             // different status values for individual use in each algorithm
+
     double   m_dScore;                      // score value
     coreFlow m_fTime;                       // time value
     coreUint m_iCombo;                      // current combo value (number of hit objects)
@@ -84,38 +82,31 @@ private:
     coreUint m_iMaxCombo;                   // best combo value
     coreFlow m_fComboTime;                  // time with max combo multiplier
     float    m_fComboDelay;                 // remaining time to the combo-reset
-                                            
+
     coreUint m_aiCollected[6];              // beverage statistic values (0 = all | 1-4 single | 5 = Franka)
     coreUint m_iCollectedTraps;             // trap statistic value
     coreUint m_iCollectedNoBlue;            // collected normal drinks in a row without a blue drink
-                                            
-    int m_iCoolaCounter;                    // counter for regular coola creation
+
+    int m_iCoolaCounter;                    // counter for regular Coola creation
     int m_iRayCounter;                      // counter for regular ray creation
-    int m_iCanyonCounter;                   // counter for regular canyon creation
     int m_iTrapChance;                      // chance value to create random but regular traps
 
-    int m_iThreeDrinks;                     // helper for at least three drinks in a row
-    int m_iFinalHoles;                      // helper for hole creation in the final stage
-                             
     int  m_iFirstJump;                      // handle first big air-jump (for trophy)
     bool m_bFirstLine;                      // process first row differently
-    bool m_bFirstMsg;                       // show message on the first jump
+    bool m_bFirstText;                      // show floating text on the first jump
     bool m_bTrapSpawn;                      // enable trap spawn
     bool m_bTrapJump;                       // current jump was triggered by a trap
-    bool m_bShakeEnable;                    // shake effect and upside-down only enabled with already saved scores
-    bool m_bChallenge;                      // coola challenge mode
+    bool m_bChallenge;                      // Coola challenge mode
 
-    int  m_iNarrow;                         // number of rows to remove from the dance floor (6 - m_iNarrow*2)
-    bool m_bSideOrder;                      // ordering for the side stage
-    int  m_iCamStatus;                      // current gameplay-specific camera status
-                                            
+    coreTimer m_PowerUpTimer;               // power-up timer (for Coola power)
+
     cInterface m_Interface;                 // interface object
     coreLabel  m_Message;                   // beginning message
-    coreTimer  m_ShowMessage;               // timer for the beginning message
+    coreTimer  m_MessageTimer;              // timer for the beginning message
 
     coreSoundPtr m_pTrapSound;              // sound effect for activated trap
     coreSoundPtr m_pTrophySound;            // sound effect for achieved trophy
-                                       
+
     bool m_bTrophyHelper[TROPHY_ITEMS];     // trophy cache
 
 
@@ -124,15 +115,23 @@ public:
     ~cGame();
 
     // render and move the game
+    void RenderPre();
     void Render();
     void Move();
+
+    // apply stage algorithms to the game (implemented in cStage.cpp)
+    void ProcessStage(const float &fSpawnY, bool* pbHole);
 
     // get game status
     inline int         GetStatus   ()const {return (m_Rock.GetPosition().z < -150.0f) ? 1 : 0;}
     inline const bool& GetChallenge()const {return m_bChallenge;}
 
     // add objects
-    void AddTrap(const int& iBlock, const float& fSpawn);
+    void AddBeverage(const float& fSpawnY, const int& iBlockX, bool* pbHole);
+    void AddTrap    (const float& fSpawnY, const int& iBlockX, bool* pbHole);
+    void AddPlate   (const float& fSpawnY, const int& iBlockX);
+    void AddRay     (const float& fSpawnY);
+    void AddStreet  (const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* pbHole);
 
     // get game properties
     inline const double&   GetScore   ()const                  {return m_dScore;}
@@ -146,7 +145,7 @@ public:
     inline cRock*      GetRock     () {return &m_Rock;}
     inline cInterface* GetInterface() {return &m_Interface;}
 
-    // achive a trophy
+    // achieve a trophy
     void AchieveTrophy        (const int& iID, const int& iNum);
     void AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData);
 
