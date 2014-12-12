@@ -16,72 +16,62 @@ cRock::cRock()noexcept
 , m_fWaveStrength      (60.0f)
 , m_WaveSmallTimer     (coreTimer(1.0f, 6.0f, 1))
 , m_fWaveSmallStrength (0.0f)
+, m_WaveShockTimer     (coreTimer(1.0f, 4.0f, 1))
+, m_fWaveShockSpeed    (1.0f)
 , m_fForce             (0.0f)
 , m_fHeight            (100.0f)
+, m_bColored           (false)
 , m_bFallen            (false)
 , m_bJumped            (true)
 , m_bReflected         (false)
 , m_iNumJumps          (0)
+, m_iNumAirJumps       (0)
 , m_fRotation          (0.0f)
 , m_Effect             (g_pParticleSystem)
-, m_fShake             (0.0f)
 {
     // load object resources
-    this->DefineModel("rock.md5mesh");
+    this->DefineModel  ("rock.md5mesh");
     this->DefineTexture(0, "rock.png");
     this->DefineProgram("rock_program");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*5.0f);
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*5.0f);
     this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
 
     // create shadow
-    m_Shadow.DefineModel("default_square.md5mesh");
+    m_Shadow.DefineModel  ("default_square.md5mesh");
     m_Shadow.DefineTexture(0, "effect_shadow.png");
     m_Shadow.DefineProgram("shadow_program");
-    m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    m_Shadow.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
 
     // create big wave
-    m_Wave.DefineModel("default_square.md5mesh");
+    m_Wave.DefineModel  ("default_square.md5mesh");
     m_Wave.DefineTexture(0, "effect_wave.png");
     m_Wave.DefineProgram("wave_program");
-    m_Wave.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    m_Wave.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
 
     // create small wave
-    m_WaveSmall.DefineModel("default_square.md5mesh");
+    m_WaveSmall.DefineModel  ("default_square.md5mesh");
     m_WaveSmall.DefineTexture(0, "effect_wave.png");
     m_WaveSmall.DefineProgram("wave_program");
-    m_WaveSmall.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    m_WaveSmall.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
+
+    // create shock-wave
+    m_WaveShock.DefineModel   ("default_square.md5mesh");
+    m_WaveShock.DefineTexture (0, "effect_wave.png");
+    m_WaveShock.DefineProgram ("wave_program");
+    m_WaveShock.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // load sound-effects
-    m_pUp   = Core::Manager::Resource->Get<coreSound>("dust.wav");
-    m_pDown = Core::Manager::Resource->Get<coreSound>("bump.wav");
+    m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.wav");
+    m_pDown  = Core::Manager::Resource->Get<coreSound>("bump.wav");
+    m_pWoosh = Core::Manager::Resource->Get<coreSound>("woosh.wav");
 }
 
 // ****************************************************************
 // destructor
 cRock::~cRock()
 {
-}
-
-
-// ****************************************************************
-// render the rock
-void cRock::Render()
-{
-    glDisable(GL_DEPTH_TEST);
-    {
-        // render shadow
-        m_Shadow.Render();
-
-        // render waves
-        if(m_WaveTimer.GetStatus())      m_Wave.Render();
-        if(m_WaveSmallTimer.GetStatus()) m_WaveSmall.Render();
-    }
-    glEnable(GL_DEPTH_TEST);
-
-    // render the object
-    coreObject3D::Render();
 }
 
 
@@ -128,10 +118,11 @@ void cRock::Move()
 
 #else
 
-    // jump with keyboard (W, UP, SPACE) and joystick
+    // jump with keyboard (W, UP, SPACE), mouse and joystick
     if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(W),     CORE_INPUT_PRESS) ||
        Core::Input->GetKeyboardButton(CORE_INPUT_KEY(UP),    CORE_INPUT_PRESS) ||
        Core::Input->GetKeyboardButton(CORE_INPUT_KEY(SPACE), CORE_INPUT_PRESS) ||
+       Core::Input->GetMouseButton   (CORE_INPUT_LEFT,       CORE_INPUT_PRESS) ||
        Core::Input->GetJoystickButton(0, 0,                  CORE_INPUT_PRESS) ||
        Core::Input->GetJoystickButton(1, 0,                  CORE_INPUT_PRESS))
 
@@ -146,7 +137,7 @@ void cRock::Move()
     if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-1.2f, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 1.2f, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f,-1.2f)) > 0.0f &&
-       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, 1.2f)) > 0.0f && 
+       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, 1.2f)) > 0.0f &&
        this->GetPosition().z < fGround && m_fForce <= 0.0f && !m_bFallen)
     {
         // see me falling
@@ -160,7 +151,7 @@ void cRock::Move()
     m_bReflected = false;
 
     if(this->GetPosition().z >= fGround || m_bFallen)
-        m_fForce -= Core::System->GetTime()*20.0f;   // fall down
+        m_fForce -= Core::System->GetTime(1)*20.0f;   // fall down
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
@@ -180,7 +171,7 @@ void cRock::Move()
             m_WaveSmall.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
             m_fWaveSmallStrength = CLAMP(-m_fForce*0.2f, 0.0f, 1.0f);
         }
-        
+
         // reverse and reduce force, re-enable jumping
         m_fForce    *= -0.5f;
         m_bJumped    = false;
@@ -192,9 +183,7 @@ void cRock::Move()
 
 #if defined(_CORE_ANDROID_)
 
-    const float fMove = 100.0f * Core::System->GetTime();
-
-    const float fPosDiff = (fNewPos + fMove * Core::Input->GetJoystickRelative(0).x) - this->GetPosition().x;
+    const float fMove = 100.0f * Core::System->GetTime(1);
 
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
@@ -220,9 +209,9 @@ void cRock::Move()
     }
 
 #else
-    
+
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
-    const float fMove = 100.0f * Core::System->GetTime();
+    const float fMove = 100.0f * Core::System->GetTime(1);
 
          if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
@@ -234,44 +223,36 @@ void cRock::Move()
             Core::Input->GetJoystickRelative(0).x > 0.0f                           ||
             Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
 
-    const float fPosDiff = fNewPos - this->GetPosition().x;
-
 #endif
 
-    // control shaking
-         if(m_fShake >= 0.0f) {if(fPosDiff > 0.0f) m_fShake = -m_fShake - ROCK_SHAKE_STRENGTH;}
-    else if(m_fShake <  0.0f) {if(fPosDiff < 0.0f) m_fShake = -m_fShake + ROCK_SHAKE_STRENGTH;}
-    m_fShake -= SIGN(m_fShake) * Core::System->GetTime() * 0.3f;
-
     // control the rock height
-    m_fHeight += m_fForce*Core::System->GetTime()*20.0f;
+    m_fHeight += m_fForce*Core::System->GetTime(1)*20.0f;
 
     // control the rock position
     this->SetPosition(coreVector3(CLAMP(fNewPos, -60.0f, 60.0f), 0.0f, m_fHeight+fGround));
 
-    if(g_pGame->GetTime() >= 30.0f)
+    if(g_pGame->GetTime() >= GAME_SHOCK_TIME)
     {
         // define smoke color
-        coreVector4 vSmokeColor = coreVector4((g_pGame->GetTime() < 100.0f) ? COLOR_WHITE_F : LERP(COLOR_WHITE_F, coreVector3(g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1))), MIN(g_pGame->GetTime() - 100.0f, 1.0f)), 1.0f);
-        vSmokeColor.a *= CLAMP((g_pGame->GetTime() - 30.0f) * 0.05f, 0.0f, 1.0f);
+        const coreVector4 vSmokeColor = (m_bColored && Core::Rand->Int(3)) ? coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 0.9f) : coreVector4(COLOR_WHITE_F, 0.6f);
 
         // create smoke trail
-        m_Effect.CreateParticle(2, 60.0f, [&](coreParticle* pParticle)
+        m_Effect.CreateParticle(2, 60.0f, [this, &vSmokeColor](coreParticle* pParticle)
         {
-            const coreVector2 vRand = coreVector2::Rand(0.0f, 10.0f);
+            const coreVector2 vRand = coreVector2::Rand(10.0f);
 
-            pParticle->SetPositionRel(this->GetPosition() + coreVector3::Rand(0.0f, 3.8f), coreVector3(vRand.x, -30.0f*g_fCurSpeed, vRand.y));
-            pParticle->SetScaleStc(6.2f);
-            pParticle->SetAngleStc(0.0f);
-            pParticle->SetColor4Stc(vSmokeColor);
-            pParticle->SetSpeed(2.0f);
+            pParticle->SetPositionRel(this->GetPosition() + coreVector3::Rand(3.8f), coreVector3(vRand.x, -30.0f*g_fCurSpeed, vRand.y));
+            pParticle->SetScaleStc   (6.2f);
+            pParticle->SetColor4Stc  (vSmokeColor);
+            pParticle->SetAngleStc   (0.0f);
+            pParticle->SetSpeed      (2.0f);
         });
     }
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-    m_Shadow.SetSize(this->GetSize() * 2.344f * MAX(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight)), 0.0f));
-    m_Shadow.SetAlpha(m_bFallen ? MIN(1.0f + m_fHeight*0.1f, 1.0f) : 1.0f);
+    m_Shadow.SetSize    (this->GetSize() * 2.344f * MAX(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight)), 0.0f));
+    m_Shadow.SetAlpha   (m_bFallen ? MIN(1.0f + m_fHeight*0.1f, 1.0f) : 1.0f);
     m_Shadow.Move();
 
     // calculate wave movement
@@ -282,8 +263,8 @@ void cRock::Move()
         // update big wave
         m_WaveTimer.Update(1.0f);
         m_Wave.SetPosition(m_Wave.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_Wave.SetSize(coreVector3(1.0f,1.0f,1.0f) * 0.781f * m_fWaveStrength * m_WaveTimer.GetValue(CORE_TIMER_GET_NORMAL));
-        m_Wave.SetAlpha(1.5f * m_WaveTimer.GetValue(CORE_TIMER_GET_REVERSED));
+        m_Wave.SetSize    (coreVector3(1.0f,1.0f,1.0f) * 0.781f * m_fWaveStrength * m_WaveTimer.GetValue(CORE_TIMER_GET_NORMAL));
+        m_Wave.SetAlpha   (1.5f * m_WaveTimer.GetValue(CORE_TIMER_GET_REVERSED));
         m_Wave.Move();
     }
     if(m_WaveSmallTimer.GetStatus())
@@ -291,9 +272,18 @@ void cRock::Move()
         // update small wave
         m_WaveSmallTimer.Update(1.0f);
         m_WaveSmall.SetPosition(m_WaveSmall.GetPosition() + coreVector3(0.0f, fWaveMove, 0.0f));
-        m_WaveSmall.SetSize(coreVector3(1.0f,1.0f,1.0f) * 23.44f * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_NORMAL));
-        m_WaveSmall.SetAlpha(m_fWaveSmallStrength * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_REVERSED));
+        m_WaveSmall.SetSize    (coreVector3(1.0f,1.0f,1.0f) * 23.44f * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_NORMAL));
+        m_WaveSmall.SetAlpha   (m_fWaveSmallStrength * m_WaveSmallTimer.GetValue(CORE_TIMER_GET_REVERSED));
         m_WaveSmall.Move();
+    }
+    if(m_WaveShockTimer.GetStatus())
+    {
+        // update shock-wave
+        m_WaveShockTimer.Update(1.0f);
+        m_WaveShock.SetPosition(m_WaveShock.GetPosition() + coreVector3(0.0f, fWaveMove * m_fWaveShockSpeed, 0.0f));
+        m_WaveShock.SetSize    (coreVector3(1.0f,1.0f,1.0f) * 70.0f * m_WaveShockTimer.GetValue(CORE_TIMER_GET_NORMAL));
+        m_WaveShock.SetAlpha   (1.5f * m_WaveShockTimer.GetValue(CORE_TIMER_GET_REVERSED));
+        m_WaveShock.Move();
     }
 
     // move the object
@@ -311,7 +301,10 @@ bool cRock::Jump(const float& fForce)
     m_fForce        = fForce;
     m_fWaveStrength = fForce * 10.0f;
     m_bJumped       = true;
+
+    // increase stats
     ++m_iNumJumps;
+    if(g_pBackground->GetHeight(this->GetPosition().xy()) > 0.0f) ++m_iNumAirJumps;
 
     // play jump sound-effect and start big wave animation
     m_pUp->PlayPosition(NULL, 0.4f, 1.8f, 0.05f, false, this->GetPosition());
@@ -319,4 +312,80 @@ bool cRock::Jump(const float& fForce)
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 
     return true;
+}
+
+
+// ****************************************************************
+// create shock-wave
+void cRock::CreateShockWave(const coreByte& iType)
+{
+    if(iType == 0)
+    {
+        // start shock-wave animation
+        m_WaveShockTimer.Play(CORE_TIMER_PLAY_RESET);
+        m_fWaveShockSpeed = 2.0f;
+
+        // adjust shock-wave object (to the back)
+        m_WaveShock.SetPosition (this->GetPosition() - coreVector3(0.0f,4.0f,0.0f));
+        m_WaveShock.SetDirection(coreVector3(0.0f,1.0f,0.0f));
+
+        // play sound-effect
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
+
+        // throw up some dust
+        m_Effect.CreateParticle(14, [this](coreParticle* pParticle)
+        {
+            const coreVector2 vRand = coreVector2::Rand(40.0f);
+
+            pParticle->SetPositionRel(this->GetPosition() + coreVector3::Rand(3.8f), coreVector3(vRand.x, -40.0f*g_fCurSpeed, vRand.y));
+            pParticle->SetScaleStc   (6.2f);
+            pParticle->SetColor4Stc  (coreVector4(COLOR_WHITE_F, 0.6f));
+            pParticle->SetAngleStc   (0.0f);
+            pParticle->SetSpeed      (2.0f);
+        });
+    }
+    else if(iType == 1)
+    {
+        const coreVector3 vToSide = coreVector3(SIGN(this->GetPosition().x), 0.0f, 0.0f);
+        const coreVector3 vToCam  = (this->GetPosition() - Core::Graphics->GetCamPosition()).Normalize();
+
+        // start shock-wave animation
+        m_WaveShockTimer.Play(CORE_TIMER_PLAY_RESET);
+        m_fWaveShockSpeed = 1.0f;
+
+        // adjust shock-wave object (to the side)
+        m_WaveShock.SetPosition (this->GetPosition());
+        m_WaveShock.SetDirection(LERP(vToSide, vToCam, 0.3f).Normalize());
+
+        // play sound-effect
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
+
+        // define smoke color
+        const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
+
+        // throw up some colored dust
+        m_Effect.CreateParticle(22, [this, &vSmokeColor](coreParticle* pParticle)
+        {
+            pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
+            pParticle->SetScaleStc   (6.2f);
+            pParticle->SetColor4Stc  (vSmokeColor);
+            pParticle->SetAngleStc   (0.0f);
+            pParticle->SetSpeed      (2.0f);
+        });
+    }
+    else
+    {
+        // play sound-effect
+        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, 0.0f, false, this->GetPosition());
+
+        // throw up some dust
+        m_Effect.CreateParticle(22, [this](coreParticle* pParticle)
+        {
+            pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
+            pParticle->SetScaleStc   (6.2f);
+            pParticle->SetColor4Stc  (coreVector4(COLOR_WHITE_F, 1.0f));
+            pParticle->SetAngleStc   (0.0f);
+            pParticle->SetSpeed      (2.0f);
+        });
+    }
 }

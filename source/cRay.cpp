@@ -17,12 +17,12 @@ cRay::cRay(const coreVector3& vStart)noexcept
 , m_fAnimation (Core::Rand->Float(0.0f, 2.0f*PI))
 {
     // load object resources
-    this->DefineModel("ray.md5mesh");
+    this->DefineModel  ("ray.md5mesh");
     this->DefineProgram("ray_program");
 
     // set object properties
-    this->SetPosition(vStart);
-    this->SetSize(coreVector3(RAY_WIDTH, RAY_WIDTH, RAY_LENGTH));
+    this->SetPosition (vStart);
+    this->SetSize     (coreVector3(RAY_WIDTH, RAY_WIDTH, RAY_LENGTH));
     this->SetDirection((vStart * coreVector3(1.0f,0.0f,1.0f)).Normalize());
 
     // set random plate color
@@ -48,7 +48,7 @@ void cRay::Move()
     // update the move-animation
     // m_fAnimation.Update(1.0f); #deactivated
 
-    // calculate direction 
+    // calculate direction
     const coreVector2 vNewDir = coreVector2::Direction(m_fAngle + 0.2f*sinf(m_fAnimation));
     this->SetDirection(coreVector3(vNewDir.x, 0.0f, -vNewDir.y));
 

@@ -26,7 +26,7 @@
 #define ADJUST_RIGHT(x)  {x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));}
 #define ADJUST_BORDER(x) {x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);}
 
-// macro function for changing object transparency                      
+// macro function for changing object transparency
 #define ALPHA_BUTTON_TEXT(b)                                                                                             \
     {                                                                                                                    \
         const float a = (b).IsFocused() ? MENU_ALPHA_ACTIVE_2 : MENU_ALPHA_IDLE_2;                                       \
@@ -174,7 +174,11 @@ private:
     coreMenu m_ScoreMenu;
     coreMenu m_LoginMenu;
 
-    coreTimer m_Intro;                          // intro timer
+    coreTimer    m_Intro;                       // intro timer
+    coreSoundPtr m_pClickSound;                 // click sound-effect for buttons
+    coreSoundPtr m_pHappySound;                 // happy sound-effect for special events
+    coreSoundPtr m_pRecordSound;                // sound-effect for highlighting a new record
+    coreSoundPtr m_pFlashSound;                 // sound-effect when flashing the screen
 
     float m_afSubmitValue[SCORE_TABLES];        // fetched values after loosing the game
     bool  m_bSubmited;                          // values where successfully submited
@@ -212,7 +216,13 @@ public:
 
     // update current control type
     inline void UpdateControl() {m_ControlType.Select(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
-    
+
+    // play sound-effects
+    inline void PlayClickSound()  {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, 0.0f, false);}
+    inline void PlayHappySound()  {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, 0.0f, false);}
+    inline void PlayRecordSound() {m_pRecordSound->PlayRelative(NULL, 0.15f, 1.0f, 0.0f, false);}
+    inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, 0.0f, false);}
+
     // invoke score table update
     inline void InvokeScoreUpdate(const int& iTableNum) {BIT_SET(m_iTableUpdate, iTableNum)}
 

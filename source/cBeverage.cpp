@@ -16,7 +16,6 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 , m_pGlass       (NULL)
 , m_iScore       (iScore)
 , m_fHeight      (fHeight)
-, m_fLiquidAlpha (fAlpha)
 , m_pDestroy     (coreTimer(30.0f, 20.0f, 1))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
@@ -26,11 +25,14 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
     // load drink shader
     this->DefineProgram("drink_program");
 
+    // set alpha value
+    this->SetAlpha(fAlpha);
+
     // create shadow
     m_Shadow.DefineTexture(0, "effect_shadow.png");
-    m_Shadow.DefineModel("default_square.md5mesh");
+    m_Shadow.DefineModel  ("default_square.md5mesh");
     m_Shadow.DefineProgram("shadow_program");
-    m_Shadow.SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    m_Shadow.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
 
     // load glass shader
     m_pGlasProgram = Core::Manager::Resource->Get<coreProgram>("glass_program");
@@ -61,12 +63,16 @@ void cBeverage::Move()
             m_iStatus = 1;   // mark as finished
 
         // calculate rotation matrix
-        const float fTime      = Core::System->GetTime() * PI * 5.0f;
-        const coreMatrix4 mRot = coreMatrix4::RotationX(fTime * m_vFlyRotation.x)*
-                                 coreMatrix4::RotationY(fTime * m_vFlyRotation.y);
+        const float       T    = Core::System->GetTime() * PI * 5.0f;
+        const coreVector2 A    = coreVector2::Direction(T * m_vFlyRotation.y);
+        const coreVector2 B    = coreVector2::Direction(T * m_vFlyRotation.x);
+        const coreMatrix4 mRot = coreMatrix4( A.y,  A.x*B.x, -A.x*B.y, 0.0f,
+                                             0.0f,      B.y,      B.x, 0.0f,
+                                              A.x, -A.y*B.x,  A.y*B.y, 0.0f,
+                                             0.0f,     0.0f,     0.0f, 1.0f);
 
         // rotate the object
-        this->SetDirection(this->GetDirection() * mRot);
+        this->SetDirection  (this->GetDirection()   * mRot);
         this->SetOrientation(this->GetOrientation() * mRot);
 
         // calculate horizontal position
@@ -77,10 +83,6 @@ void cBeverage::Move()
     const float fGround = m_pModel->GetRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
 
-    // fade in
-    const float fAlpha = MIN((BACK_SPAWN_Y - this->GetPosition().y) * 0.03f, 1.0f);
-    this->SetAlpha(fAlpha * m_fLiquidAlpha); // affects glass shading
-
     // mark as finished
     if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
@@ -89,25 +91,23 @@ void cBeverage::Move()
     m_Shadow.SetSize(this->GetSize() * 2.344f * MAX(1.0f - 0.018f*fGround, 0.0f));
     m_Shadow.Move();
 
-    if(m_pStraw) 
+    if(m_pStraw)
     {
         // update straw
-        m_pStraw->SetPosition(this->GetPosition());
-        m_pStraw->SetSize(this->GetSize());
-        m_pStraw->SetDirection(this->GetDirection());
+        m_pStraw->SetPosition   (this->GetPosition());
+        m_pStraw->SetSize       (this->GetSize());
+        m_pStraw->SetDirection  (this->GetDirection());
         m_pStraw->SetOrientation(this->GetOrientation());
-        m_pStraw->SetAlpha(fAlpha);
         m_pStraw->Move();
     }
 
-    if(m_pGlass) 
+    if(m_pGlass)
     {
         // update glass
-        m_pGlass->SetPosition(this->GetPosition());
-        m_pGlass->SetSize(this->GetSize());
-        m_pGlass->SetDirection(this->GetDirection());
+        m_pGlass->SetPosition   (this->GetPosition());
+        m_pGlass->SetSize       (this->GetSize());
+        m_pGlass->SetDirection  (this->GetDirection());
         m_pGlass->SetOrientation(this->GetOrientation());
-        m_pGlass->SetAlpha(fAlpha);
         m_pGlass->Move();
     }
 
@@ -122,17 +122,17 @@ cSunrise::cSunrise()noexcept
 : cBeverage (5, 0.5f, 0.91f, 0.2f, 1.0f)
 {
     // load object resources
-    this->DefineModel("drink_sunrise.md5mesh");
+    this->DefineModel  ("drink_sunrise.md5mesh");
     this->DefineTexture(0, "drink_sunrise.png");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
+    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel("drink_sunrise_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_sunrise_straw.md5mesh");
     m_pStraw->DefineTexture(0, "default_black.png");
     m_pStraw->DefineProgram("drink_program");
 }
@@ -151,17 +151,18 @@ cMojito::cMojito()noexcept
 : cBeverage (10, -0.2f, 0.85f, 0.4f, 1.2f)
 {
     // load object resources
-    this->DefineModel("drink_mojito.md5mesh");
+    this->DefineModel  ("drink_mojito.md5mesh");
     this->DefineTexture(0, "drink_mojito.png");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.0f);
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
+    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.125f),0.0f));
+    m_fCollisionRange = 1.3f;
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel("drink_mojito_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_mojito_straw.md5mesh");
     m_pStraw->DefineTexture(0, "default_black.png");
     m_pStraw->DefineProgram("drink_program");
 }
@@ -180,23 +181,23 @@ cBlue::cBlue()noexcept
 : cBeverage (30, 5.8f, 0.87f, 0.6f, 1.6f)
 {
     // load object resources
-    this->DefineModel("drink_blue.md5mesh");
+    this->DefineModel  ("drink_blue.md5mesh");
     this->DefineTexture(0, "drink_blue.png");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
+    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.375f),0.0f));
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel("drink_blue_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_blue_straw.md5mesh");
     m_pStraw->DefineTexture(0, "drink_citrus.png");
     m_pStraw->DefineProgram("drink_program");
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModel("drink_blue_glass.md5mesh");
+    m_pGlass->DefineModel  ("drink_blue_glass.md5mesh");
     m_pGlass->DefineTexture(0, "drink_blue.png");
     m_pGlass->DefineProgram("glass_program");
 }
@@ -212,20 +213,20 @@ cBlue::~cBlue()
 // ****************************************************************
 // constructor
 cCoola::cCoola()noexcept
-: cBeverage (500, -3.0f, 0.8f, 1.0f, 0.3f)
+: cBeverage (200, -3.0f, 0.8f, 0.5f, 0.9f)
 {
     // load object resources
-    this->DefineModel("drink_cola.md5mesh");
+    this->DefineModel  ("drink_cola.md5mesh");
     this->DefineTexture(0, "drink_cola.png");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*3.5f);
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
+    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.0f),0.0f));
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModel("drink_cola.md5mesh");
+    m_pGlass->DefineModel  ("drink_cola.md5mesh");
     m_pGlass->DefineTexture(0, "drink_cola_glass.png");
     m_pGlass->DefineProgram("glass_cola_program");
 }
@@ -244,12 +245,12 @@ cFranka::cFranka()noexcept
 : cBeverage (0, -2.6f, 1.0f, 1.0f, 1.2f)
 {
     // load object resources
-    this->DefineModel("bear.md5mesh");
+    this->DefineModel  ("bear.md5mesh");
     this->DefineTexture(0, "bear.png");
 
     // set object properties
-    this->SetSize(coreVector3(1.0f,1.0f,1.0f)*2.25f);
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
+    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*2.25f);
+    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
     this->SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
 
     // create glass

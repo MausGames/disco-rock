@@ -19,6 +19,8 @@ protected:
     coreFlow           m_pGlow;    // glowing animation timer
     coreParticleEffect m_Effect;   // particle effect object
 
+    bool m_bStatic;                // only for highlighting something
+
 
 public:
     cTrap()noexcept;
@@ -26,6 +28,10 @@ public:
 
     // move the trap
     void Move()override;
+
+    // check for static behavior
+    inline void        SetStatic(const bool& bStatic) {m_bStatic = bStatic;}
+    inline const bool& IsStatic ()const               {return m_bStatic;}
 };
 
 

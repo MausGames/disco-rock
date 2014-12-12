@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // combat text definitions
-#define COMBAT_TEXT_NUM (8)   // max number of simultenous texts
+#define COMBAT_TEXT_NUM (8)   // max number of simultaneous texts
 
 
 // ****************************************************************
@@ -35,9 +35,9 @@ private:
 
 
 private:
-    coreLabel m_aText[COMBAT_TEXT_NUM];    // labal objects to display the combat text
+    coreLabel m_aText[COMBAT_TEXT_NUM];    // label objects to display the combat text
     coreByte  m_iCurText;                  // current label object
-         
+
     coreTimer m_Delay;                     // delay between two created texts to increase visibility
     coreTimer m_aFloat[COMBAT_TEXT_NUM];   // timer for the float-animation
     float m_afAlpha[COMBAT_TEXT_NUM];      // saved initial alpha values for more dynamic fading
@@ -45,7 +45,7 @@ private:
     coreObject2D m_Trophy;                 // flying trophy symbol
     coreLabel    m_TrophyLabel;            // dedicated trophy label
     coreTimer    m_TrophyTimer;            // timer for the flying trophy symbol
-                            
+
     std::deque<sData> m_aData;             // text data deque
 
 
