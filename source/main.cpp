@@ -8,8 +8,6 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-cOnline*            g_pOnline         = NULL;
-
 cBackground*        g_pBackground     = NULL;
 cMenu*              g_pMenu           = NULL;
 cCombatText*        g_pCombatText     = NULL;
@@ -19,22 +17,18 @@ cFirst*             g_pFirst          = NULL;
 coreMusicPlayer*    g_pMusicPlayer    = NULL;
 coreParticleSystem* g_pParticleSystem = NULL;
 
+cOnline*            g_pOnline         = NULL;
+
 float               g_fTargetSpeed    = 1.0f;
 float               g_fCurSpeed       = 1.0f;
-float               g_fTargetCam      = 0.0f;
-float               g_fCurCam         = 0.0f;
+float               g_fMusicSpeed     = 1.0f;
 bool                g_bPause          = false;
-
-float               g_fCamSpeed       = 1.0f;
-float               g_fCamTime        = 0.0f;
-float               g_fOldCam         = 0.0f;
-bool                g_bCamMode        = false;
-bool                g_bUpsideDown     = false;
 
 int                 g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3 : 0;
 int                 g_iNumFails       = 0;
+bool                g_bCamUpsideDown  = false;
 
-coreObject3D* m_apSave[9];   // pre-allocation of required ressources, still need to implement a more efficient way
+static coreObject3D* m_apSave[8];   // pre-allocation of required resources, still need to implement a more efficient way
 
 
 // ****************************************************************
@@ -70,7 +64,8 @@ const std::string g_asTrap[] = {"TO THE SKY",
                                 "SHAKE YOUR GROOVE THING",
                                 "THEY SEE ME ROLLIN'",
                                 "ROCK 'N ROLL",
-                                "SHOW ME THE LIGHT"};
+                                "SHOW ME THE LIGHT",
+                                "BOY, YOU TURN ME"};
 sMsgList g_MsgTrap(g_asTrap, ARRAY_SIZE(g_asTrap));
 
 
@@ -97,7 +92,7 @@ void CoreApp::Init()
 
     // override sound and music volume
     float fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
-    if(fSoundVolume == 1.0f)
+    if(coreMath::InRange(fSoundVolume, 1.0f, CORE_MATH_PRECISION))
     {
         fSoundVolume = 7.0f;
         Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fSoundVolume);
@@ -109,13 +104,13 @@ void CoreApp::Init()
     {
         Core::Config->SetInt("Graphics", "Quality", 2);
 
-#if defined(_CORE_ANDROID_)
-
         // also create and show first-time menu
-        g_pFirst = new cFirst();
-
-#endif
+        if(DEFINED(_CORE_ANDROID_)) g_pFirst = new cFirst();
     }
+
+    // override context settings
+    Core::Config->SetInt (CORE_CONFIG_GRAPHICS_STENCILSIZE,  0);
+    Core::Config->SetBool(CORE_CONFIG_GRAPHICS_ALPHACHANNEL, false);
 
     // create main components
     g_pBackground = new cBackground();
@@ -131,14 +126,13 @@ void CoreApp::Init()
     g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
-
     g_pMusicPlayer->Shuffle();
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
 
     // start music delayed
     Core::Manager::Resource->AttachFunction([]()
     {
-        if(Core::System->GetTotalTime() > 0.5 && !g_pMusicPlayer->Control()->IsPlaying())
+        if((Core::System->GetTotalTime() > 0.5) && !g_pMusicPlayer->Control()->IsPlaying() && !g_pFirst)
         {
             g_pMusicPlayer->Control()->Play();
             return CORE_OK;
@@ -151,20 +145,15 @@ void CoreApp::Init()
     g_pParticleSystem->DefineTexture(0, "effect_particle.png");
     g_pParticleSystem->DefineProgram("particle_program");
 
-#if defined(_CORE_ANDROID_)
-
-    // pre-allocate all required ressources
+    // pre-allocate all required resources
     m_apSave[0] = new cSunrise();
     m_apSave[1] = new cMojito();
     m_apSave[2] = new cBlue();
     m_apSave[3] = new cCoola();
-    m_apSave[4] = new cFranka();
-    m_apSave[5] = new cRock();
-    m_apSave[6] = new cPlate(0.0f, coreVector2(1.0f,1.0f));
-    m_apSave[7] = new cRay(coreVector3(1.0f,1.0f,1.0f));
-    m_apSave[8] = new cTrap();
-
-#endif
+    m_apSave[4] = new cRock();
+    m_apSave[5] = new cPlate(0.0f, coreVector2(1.0f,1.0f));
+    m_apSave[6] = new cRay(coreVector3(1.0f,1.0f,1.0f));
+    m_apSave[7] = new cTrap();
 }
 
 
@@ -172,27 +161,23 @@ void CoreApp::Init()
 // exit the application
 void CoreApp::Exit()
 {
-    // delete network access
-    SAFE_DELETE(g_pOnline)
-
-#if defined(_CORE_ANDROID_)
-
     // delete all pre-allocated objects
     for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
         SAFE_DELETE(m_apSave[i])
 
-#endif
+    // delete network access
+    SAFE_DELETE(g_pOnline)
 
     // delete all main components
-    SAFE_DELETE(g_pBackground)
-    SAFE_DELETE(g_pMenu)
-    SAFE_DELETE(g_pGame)
     SAFE_DELETE(g_pFirst)
     SAFE_DELETE(g_pCombatText)
+    SAFE_DELETE(g_pGame)
+    SAFE_DELETE(g_pMenu)
+    SAFE_DELETE(g_pBackground)
 
     // delete all sub components
-    SAFE_DELETE(g_pMusicPlayer)
     SAFE_DELETE(g_pParticleSystem)
+    SAFE_DELETE(g_pMusicPlayer)
 }
 
 
@@ -208,6 +193,7 @@ void CoreApp::Render()
     }
 
     // render background and game
+    if(g_pGame) g_pGame->RenderPre();
     g_pBackground->Render();
     if(g_pGame) g_pGame->Render();
 
@@ -241,21 +227,18 @@ void CoreApp::Move()
     g_pMenu->Move();
     if(g_pMenu->GetStatus() == 1)
     {
-#if defined(_CORE_ANDROID_)
+        bool bChallenge = false;
 
         // check finger positions for Coola challenge
-        bool bChallenge = false;
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUint& i)
         {
             bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
                           (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);
         });
 
-#else
         // check C key for Coola challenge
-        const bool bChallenge = Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD);
+        bChallenge |= (Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD)) ? true : false;
 
-#endif
         // create/start a new game
         SAFE_DELETE(g_pGame)
         g_pGame = new cGame(bChallenge);
@@ -266,36 +249,24 @@ void CoreApp::Move()
         SAFE_DELETE(g_pGame)
 
         // reset game speed and camera
-        g_fCurSpeed    = 1.0f;
-        g_fTargetSpeed = 1.0f;
-        g_fCurCam      = 0.0f;
-        g_fTargetCam   = 0.0f;
-        g_fCamSpeed    = 1.0f;
-        g_fCamTime     = 0.0f;
-        g_fOldCam      = 0.0f;
-        g_bCamMode     = false;
-        g_bUpsideDown  = false;
+        g_fTargetSpeed   = 1.0f;
+        g_fCurSpeed      = 1.0f;
+        g_bCamUpsideDown = false;
 
         // reset all holes in the dance floor
         g_pBackground->ModifyColor();
         g_pBackground->LoadGeometry();
     }
 
-    // smoothly update the real game speed with an additional target value
+    // smoothly update the real game speed
     if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
-    Core::System->SetTimeSpeed(0, g_bPause ? 0.0f : g_fCurSpeed);
+    Core::System->SetTimeSpeed(0, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
+    Core::System->SetTimeSpeed(1, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
 
-    // smoothly move the camera
-    if(!g_bPause)
-    {
-        const float fSpeed = Core::System->GetTime() * 0.25f * g_fCamSpeed;
-        if(g_bCamMode) {g_fCurCam  = 4.0f * LERPS(g_fOldCam, g_fTargetCam, g_fCamTime); g_fCamTime = MIN(g_fCamTime + fSpeed, 1.0f);}
-                  else {g_fCurCam += (SIN(g_fTargetCam * PI) * 4.0f - g_fCurCam) * fSpeed;}
-    }
-
+    // set camera properties
     const coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
     const coreVector3 vCamDir = -vCamPos.Normalized();
-    const coreVector3 vCamOri =  coreVector3(g_fCurCam * 0.07f, 0.0f, g_bUpsideDown ? -1.0f : 1.0f).Normalize();
+    const coreVector3 vCamOri =  coreVector3(0.0f, 0.0f, g_bCamUpsideDown ? -1.0f : 1.0f);
     Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
 
     if(!g_bPause)
@@ -315,21 +286,11 @@ void CoreApp::Move()
     g_pOnline->Update();
 
     // adjust music speed/pitch and update music streaming
-    g_pMusicPlayer->Control()->SetPitch(1.0f + MAX((g_fCurSpeed - 1.5f) * 0.16667f, 0.0f));
+    g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 0.8f;
+    g_pMusicPlayer->Control()->SetPitch(g_fMusicSpeed);
     if(g_pMusicPlayer->Update())
     {
         // update music volume
         g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f));
     }
-
-#if !defined(_CORE_ANDROID_)
-
-    // wireframe mode for fun
-    if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LSHIFT), CORE_INPUT_HOLD))
-    {
-             if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(1), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-        else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(2), CORE_INPUT_PRESS)) glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    }
-
-#endif
 }

@@ -31,7 +31,7 @@
 
 #define COLOR_BRIGHTNESS (0.83f)
 
-static constexpr_var coreVector3 g_avColor[] = 
+static constexpr_var coreVector3 g_avColor[] =
 {
     COLOR_YELLOW_F,
     COLOR_ORANGE_F,
@@ -45,6 +45,28 @@ static constexpr_var coreVector3 g_avColor[] =
 #define CONTROL_CLASSIC    (0)
 #define CONTROL_MOTION     (1)
 #define CONTROL_FULLSCREEN (2)
+
+#define STAGE_DIAMOND      (0)
+#define STAGE_QUAD         (1)
+#define STAGE_ZIGZAG       (2)
+#define STAGE_CONCAVE      (3)
+#define STAGE_NET          (4)
+#define STAGE_JUMP         (5)
+#define STAGE_CHOICE       (6)
+#define STAGE_SHADING      (7)
+#define STAGE_SIDE         (8)
+#define STAGE_TRAP         (9)
+#define STAGE_PREVENT      (10)
+#define STAGE_BONUS        (11)
+#define STAGE_MIDDLE       (12)
+#define STAGE_LINES        (13)
+#define STAGE_GATEWAY      (14)
+#define STAGE_CHEESE       (15)
+#define STAGE_CANYON       (16)
+#define STAGE_DOUBLE       (17)
+#define STAGE_RAILS        (18)
+#define STAGE_SLALOM       (19)
+#define STAGE_TOTAL_NUM    (20)   // total number of game stages
 
 
 // ****************************************************************
@@ -65,8 +87,6 @@ static constexpr_var coreVector3 g_avColor[] =
 
 // ****************************************************************
 // global variables
-extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
-
 extern cBackground*        g_pBackground;       // background with dance floor
 extern cMenu*              g_pMenu;             // global menu object
 extern cCombatText*        g_pCombatText;       // global "combat" text object
@@ -76,20 +96,16 @@ extern cFirst*             g_pFirst;            // special menu displayed at the
 extern coreMusicPlayer*    g_pMusicPlayer;      // primary music player
 extern coreParticleSystem* g_pParticleSystem;   // primary particle system
 
+extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
+
 extern float               g_fTargetSpeed;      // new target speed
 extern float               g_fCurSpeed;         // current speed
-extern float               g_fTargetCam;        // new target camera position (sin(Y))
-extern float               g_fCurCam;           // current camera position
+extern float               g_fMusicSpeed;       // dedicated music speed
 extern bool                g_bPause;            // pause status
-
-extern float               g_fCamSpeed;         // helper value for camera movement calculations
-extern float               g_fCamTime;          // time value fpor interpolation
-extern float               g_fOldCam;           // old camera value for interpolation
-extern bool                g_bCamMode;          // false = move smooth to target, true = interpolate
-extern bool                g_bUpsideDown;       // upside-down camera status
 
 extern int                 g_iNumGames;         // number of started games
 extern int                 g_iNumFails;         // number of deaths below 10 seconds
+extern bool                g_bCamUpsideDown;    // upside-down camera status
 
 
 // ****************************************************************
@@ -105,9 +121,9 @@ struct sMsgList
         // add messages
         m_apsMsg.reserve(iSize);
         for(coreUint i = 0; i < iSize; ++i) m_apsMsg.push_back(&psMsg[i]);
-        
+
         // shuffle them
-        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine((int)std::time(NULL)));
+        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine(int(std::time(NULL))));
     }
 
     inline const char* Get()

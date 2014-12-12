@@ -11,7 +11,6 @@
 // setup all defined resources
 static void SetupResources()
 {
-    Core::Manager::Resource->Load<coreModel>  ("bear.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/bear.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("default_cube.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh");
@@ -24,10 +23,9 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh");
-    
+
     Core::Manager::Resource->Load<coreTexture>("background.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.png");
     Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png");
-    Core::Manager::Resource->Load<coreTexture>("bear.png",                    CORE_RESOURCE_UPDATE_AUTO,   "data/textures/bear.png");
     Core::Manager::Resource->Load<coreTexture>("button_full_score.png",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_score.png");
     Core::Manager::Resource->Load<coreTexture>("button_full_trophy.png",      CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_trophy.png");
     Core::Manager::Resource->Load<coreTexture>("button_ok.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_ok.png");
@@ -73,9 +71,8 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreShader> ("color.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color.frag");
     Core::Manager::Resource->Load<coreShader> ("color_bar.frag",              CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_bar.frag");
     Core::Manager::Resource->Load<coreShader> ("color_icon.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/color_icon.frag");
+    Core::Manager::Resource->Load<coreShader> ("simple_2d.vert",              CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/simple_2d.vert");
     Core::Manager::Resource->Load<coreShader> ("default_2d.frag",             CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.frag");
-    Core::Manager::Resource->Load<coreShader> ("default_2d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_2d.vert", CORE_SHADER_OPTION_NO_TEXPARAM);
-    Core::Manager::Resource->Load<coreShader> ("default_3d_simple.vert",      CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/default_3d.vert", CORE_SHADER_OPTION_NO_TEXPARAM CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("drink.vert",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.vert");
     Core::Manager::Resource->Load<coreShader> ("drink.frag",                  CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/drink.frag");
     Core::Manager::Resource->Load<coreShader> ("fill.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/fill.vert");
@@ -93,16 +90,22 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreShader> ("ray.frag",                    CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/ray.frag");
     Core::Manager::Resource->Load<coreShader> ("rock.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.vert");
     Core::Manager::Resource->Load<coreShader> ("rock.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/rock.frag");
+    Core::Manager::Resource->Load<coreShader> ("shadow.vert",                 CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/decal.vert", CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("shadow.frag",                 CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/shadow.frag");
     Core::Manager::Resource->Load<coreShader> ("trap.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.vert", CORE_SHADER_OPTION_NO_ROTATION);
     Core::Manager::Resource->Load<coreShader> ("trap.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/trap.frag");
+    Core::Manager::Resource->Load<coreShader> ("wave.vert",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/decal.vert");
     Core::Manager::Resource->Load<coreShader> ("wave.frag",                   CORE_RESOURCE_UPDATE_MANUAL, "data/shaders/wave.frag");
 
     Core::Manager::Resource->Load<coreSound>  ("achieve.wav",                 CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/achieve.wav");
     Core::Manager::Resource->Load<coreSound>  ("bump.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/bump.wav");
     Core::Manager::Resource->Load<coreSound>  ("clink.wav",                   CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/clink.wav");
     Core::Manager::Resource->Load<coreSound>  ("dust.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/dust.wav");
+    Core::Manager::Resource->Load<coreSound>  ("flash.wav",                   CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/flash.wav");
+    Core::Manager::Resource->Load<coreSound>  ("menu.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/menu.wav");
+    Core::Manager::Resource->Load<coreSound>  ("record.wav",                  CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/record.wav");
     Core::Manager::Resource->Load<coreSound>  ("trap.wav",                    CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/trap.wav");
+    Core::Manager::Resource->Load<coreSound>  ("woosh.wav",                   CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/woosh.wav");
 
     Core::Manager::Resource->Load<coreFont>   ("gomarice_rocks.ttf",          CORE_RESOURCE_UPDATE_AUTO,   "data/fonts/gomarice_rocks.ttf");
 
@@ -125,7 +128,7 @@ static void SetupResources()
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("shadow_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_3d_simple.vert")
+        ->AttachShader("shadow.vert")
         ->AttachShader("shadow.frag")
         ->Finish();
 
@@ -140,27 +143,27 @@ static void SetupResources()
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_simple_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("simple_2d.vert")
         ->AttachShader("default_2d.frag")
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("simple_2d.vert")
         ->AttachShader("color.frag")
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_border_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("simple_2d.vert")
         ->AttachShader("border.frag")
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_icon_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("simple_2d.vert")
         ->AttachShader("color_icon.frag")
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_bar_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_2d_simple.vert")
+        ->AttachShader("simple_2d.vert")
         ->AttachShader("color_bar.frag")
         ->Finish();
 
@@ -180,7 +183,7 @@ static void SetupResources()
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("wave_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
-        ->AttachShader("default_3d_simple.vert")
+        ->AttachShader("wave.vert")
         ->AttachShader("wave.frag")
         ->Finish();
 
@@ -211,10 +214,10 @@ void CoreApp::Setup()
     // set window title and icon
     Core::System->SetWindowTitle("Disco Rock");
     Core::System->SetWindowIcon("data/textures/game_icon.png");
-    
+
     // set view frustum
     Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
-    
+
     // set cursor
 #if defined(_CORE_LINUX_)
     Core::Input->DefineCursor("data/textures/default_cursor_low.png");

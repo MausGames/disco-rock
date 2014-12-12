@@ -47,6 +47,9 @@
         layout(early_fragment_tests) in;
     #endif
 #endif
+#if (__VERSION__) >= 440
+    #define std140 std140, align = 16
+#endif
 
 // compatibility adjustments
 #if defined(GL_ES) && (__VERSION__) < 300
@@ -209,6 +212,13 @@ mat4 coreInvert(const in mat4 m)
                 * (1.0 / (A*L - B*K + C*J + D*I - E*H + F*G));
 #endif
 }
+
+// matrix convert
+#if (__VERSION__) >= 120
+    #define coreToMat3(m) mat3(m)
+#else
+    #define coreToMat3(m) mat3(m[0].xyz, m[1].xyz, m[2].xyz)
+#endif
 
 // value pack and unpack
 #if (__VERSION__) >= 130
@@ -476,11 +486,12 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     vec3 coreParticleRange()
     {
     #if defined(_CORE_OPTION_NO_ROTATION_)
-        return coreTranspose(mat3(u_m4Camera)) * vec3(a_v3RawPosition.xy * a_v1DivScale, 0.0);
+    
+        return coreTranspose(coreToMat3(u_m4Camera)) * vec3(a_v3RawPosition.xy * a_v1DivScale, 0.0);
     #else
         float v1Sin = sin(a_v1DivAngle);
         float v1Cos = cos(a_v1DivAngle);
-        return coreTranspose(mat3(u_m4Camera)) * vec3(mat2(v1Cos, v1Sin, -v1Sin, v1Cos) * (a_v3RawPosition.xy * a_v1DivScale), 0.0);
+        return coreTranspose(coreToMat3(u_m4Camera)) * vec3(mat2(v1Cos, v1Sin, -v1Sin, v1Cos) * (a_v3RawPosition.xy * a_v1DivScale), 0.0);
     #endif
     }
 
@@ -502,14 +513,16 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     // texture coordinate transformation functions
     vec2 coreObject3DTexCoord()
     {
-    #if defined(_CORE_OPTION_NO_TEXPARAM_)
-        return a_v2RawTexCoord;
-    #else
         return a_v2RawTexCoord * u_v2TexSize + u_v2TexOffset;
-    #endif
     }
-    #define coreObject2DTexCoord() (coreObject3DTexCoord())
-    #define coreParticleTexCoord() (a_v2RawTexCoord)
+    vec2 coreObject2DTexCoord()
+    {
+        return vec2(0.5+a_v3RawPosition.x, 0.5-a_v3RawPosition.y) * u_v2TexSize + u_v2TexOffset;
+    }
+    vec2 coreParticleTexCoord()
+    {
+        return vec2(0.5+a_v3RawPosition.x, 0.5-a_v3RawPosition.y);
+    }
 
     // color value retrieval functions
     vec4 coreObject3DColor()

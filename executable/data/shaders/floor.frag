@@ -79,7 +79,7 @@ void FragmentMain()
         #if (_CORE_QUALITY_) > 1
         
             // add disco light effect
-            v3Diffuse += vec3(u_v4Color.a * v1TextureDisco * (0.5075 - 0.435 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x * 0.5 * PI)));
+            v3Diffuse += vec3(u_v4Color.a * v1TextureDisco * (0.48 - 0.48 * sin(v_av2TexCoord[0].y * 0.25 * PI) * sin(v_av2TexCoord[1].x * 0.5 * PI)));
 
         #endif
         
