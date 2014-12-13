@@ -14,7 +14,7 @@
 // ****************************************************************
 // online definitions
 #if defined(_CORE_ANDROID_)
-    #define _API_GOOGLE_PLAY_   // undefine to use Game Jolt on Android (but removes control configruation)
+    #define _API_GOOGLE_PLAY_   // undefine to use Game Jolt on Android (but removes control configuration)
 #endif
 #if !defined(_API_GOOGLE_PLAY_)
     #define _API_GAME_JOLT_
@@ -23,7 +23,7 @@
 #define SCORE_TABLES   (2)    // number of different score tables (leaderboards)
 #define SCORE_ENTRIES  (8)    // number of score entries to display at once
 #define SCORE_PAGES    (5)    // number of score pages
-                                 
+
 #define TROPHY_ITEMS   (15)   // number of implemented trophies
 #define TROPHY_SECRETS (4)    // number of secret trophies
 
@@ -33,26 +33,26 @@
 #include "gjAPI.h"
 static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!");
 
-#define GJ_KEY "aafea9f7350bdb9f3916326bf38cded1"
+#define GJ_KEY ""
 
-#define GJ_TROPHY_01 (4666)
-#define GJ_TROPHY_02 (4635)
-#define GJ_TROPHY_03 (8325)
-#define GJ_TROPHY_04 (8326)
-#define GJ_TROPHY_05 (8327)
-#define GJ_TROPHY_06 (4665)
-#define GJ_TROPHY_07 (4637)
-#define GJ_TROPHY_08 (8328)
-#define GJ_TROPHY_09 (8329)
-#define GJ_TROPHY_10 (4636)
-#define GJ_TROPHY_11 (4667)
-#define GJ_TROPHY_12 (8330)
-#define GJ_TROPHY_13 (4638)
-#define GJ_TROPHY_14 (8331)
-#define GJ_TROPHY_15 (4671)
+#define GJ_TROPHY_01 (0)
+#define GJ_TROPHY_02 (1)
+#define GJ_TROPHY_03 (2)
+#define GJ_TROPHY_04 (3)
+#define GJ_TROPHY_05 (4)
+#define GJ_TROPHY_06 (5)
+#define GJ_TROPHY_07 (6)
+#define GJ_TROPHY_08 (7)
+#define GJ_TROPHY_09 (8)
+#define GJ_TROPHY_10 (9)
+#define GJ_TROPHY_11 (10)
+#define GJ_TROPHY_12 (11)
+#define GJ_TROPHY_13 (12)
+#define GJ_TROPHY_14 (13)
+#define GJ_TROPHY_15 (14)
 
-#define GJ_LEADERBOARD_01 (19508)
-#define GJ_LEADERBOARD_02 (19695)
+#define GJ_LEADERBOARD_01 (0)
+#define GJ_LEADERBOARD_02 (1)
 
 
 // ****************************************************************
@@ -76,32 +76,32 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
     #include "gpg/score_page.h"
     #include "gpg/types.h"
 
-    extern JavaVM* g_pJNIJavaVM;          // Java Virtual Machine object
-    extern jobject g_pJNIActivity;        // reference to the singleton activity
+    extern JavaVM* g_pJNIJavaVM;     // Java Virtual Machine object
+    extern jobject g_pJNIActivity;   // reference to the singleton activity
 
 #endif
 
 // control ad banner transparency
 extern void SetBannerAlpha(float fAlpha);
 
-#define GPG_TROPHY_01 "CgkIoPX5nNEIEAIQAg"
-#define GPG_TROPHY_02 "CgkIoPX5nNEIEAIQAw"
-#define GPG_TROPHY_03 "CgkIoPX5nNEIEAIQBA"
-#define GPG_TROPHY_04 "CgkIoPX5nNEIEAIQBQ"
-#define GPG_TROPHY_05 "CgkIoPX5nNEIEAIQBg"
-#define GPG_TROPHY_06 "CgkIoPX5nNEIEAIQBw"
-#define GPG_TROPHY_07 "CgkIoPX5nNEIEAIQCA"
-#define GPG_TROPHY_08 "CgkIoPX5nNEIEAIQCQ"
-#define GPG_TROPHY_09 "CgkIoPX5nNEIEAIQCg"
-#define GPG_TROPHY_10 "CgkIoPX5nNEIEAIQCw"
-#define GPG_TROPHY_11 "CgkIoPX5nNEIEAIQDA"
-#define GPG_TROPHY_12 "CgkIoPX5nNEIEAIQDQ"
-#define GPG_TROPHY_13 "CgkIoPX5nNEIEAIQDg"
-#define GPG_TROPHY_14 "CgkIoPX5nNEIEAIQDw"
-#define GPG_TROPHY_15 "CgkIoPX5nNEIEAIQEA"
+#define GPG_TROPHY_01 ""
+#define GPG_TROPHY_02 ""
+#define GPG_TROPHY_03 ""
+#define GPG_TROPHY_04 ""
+#define GPG_TROPHY_05 ""
+#define GPG_TROPHY_06 ""
+#define GPG_TROPHY_07 ""
+#define GPG_TROPHY_08 ""
+#define GPG_TROPHY_09 ""
+#define GPG_TROPHY_10 ""
+#define GPG_TROPHY_11 ""
+#define GPG_TROPHY_12 ""
+#define GPG_TROPHY_13 ""
+#define GPG_TROPHY_14 ""
+#define GPG_TROPHY_15 ""
 
-#define GPG_LEADERBOARD_01 "CgkIoPX5nNEIEAIQAA" 
-#define GPG_LEADERBOARD_02 "CgkIoPX5nNEIEAIQAQ" 
+#define GPG_LEADERBOARD_01 ""
+#define GPG_LEADERBOARD_02 ""
 
 
 // ****************************************************************
@@ -141,8 +141,8 @@ public:
 #if defined(_API_GOOGLE_PLAY_)
 
     // open Google Play screens
-    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUI();}
-    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUI();}
+    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUIBlocking();}
+    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUIBlocking();}
 
 #endif
 
@@ -328,12 +328,12 @@ template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList)
                         }
                     }
                 }
-            }            
+            }
         }
 
         // call callback (trophy list is empty on error)
         (pOutputObj->*(OutputCallback))(apTrophy, pOutputData);
-    });   
+    });
 
     return GJ_OK;
 
@@ -366,7 +366,7 @@ template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::s
     m_pGooglePlay->Leaderboards().SubmitScore(sLeaderboardID, iSort);
 
     // create dummy pointers
-    gjData asEmpty; 
+    gjData asEmpty;
     asEmpty["sort"] = "0";
 
     gjScore Score(asEmpty, m_apScoreTable[(iTableID == GJ_LEADERBOARD_01) ? 0 : 1], m_pGameJolt);
@@ -494,14 +494,14 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
     {
         // fetch user score data
         ++this->m_iNumConnections;
-        m_pGooglePlay->Leaderboards().FetchScoreSummary(sLeaderboardID, gpg::LeaderboardTimeSpan::ALL_TIME, 
+        m_pGooglePlay->Leaderboards().FetchScoreSummary(sLeaderboardID, gpg::LeaderboardTimeSpan::ALL_TIME,
                                                         gpg::LeaderboardCollection::PUBLIC, [=](gpg::LeaderboardManager::FetchScoreSummaryResponse const &Response)
         {
             --this->m_iNumConnections;
 
             gjScoreList apScore;
             apScore.reserve(iLimit);
-            gjScore* pUserOnlyScore = NULL; 
+            gjScore* pUserOnlyScore = NULL;
 
             // check for valid response
             if(Response.status == gpg::ResponseStatus::VALID && Response.data.Valid())
@@ -565,14 +565,14 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
 
         // set authorization callback
         .SetOnAuthActionStarted ([&](gpg::AuthOperation op) {})
-        .SetOnAuthActionFinished([=](gpg::AuthOperation op, gpg::AuthStatus iStatus) 
+        .SetOnAuthActionFinished([=](gpg::AuthOperation op, gpg::AuthStatus iStatus)
         {
             // check status
             this->m_bAuthorized = false;
             switch(iStatus)
             {
             // successful
-            case gpg::AuthStatus::VALID:   
+            case gpg::AuthStatus::VALID:
                 this->__SetErrorMessage(coreVector3(), NULL, NULL, NULL);
                 this->m_bAuthorized = true;
                 break;
@@ -619,9 +619,9 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
 #else
 
     // login with Game Jolt
-    if(iLoginType == 0 && std::strlen(pcName) == 0 && std::strlen(pcToken) == 0) 
-        return m_pGameJolt->LoginCall(true, "../" GJ_API_CRED, GJ_NETWORK_OUTPUT_FW);
-    else return m_pGameJolt->LoginCall(true, pcName, pcToken, GJ_NETWORK_OUTPUT_FW);
+    if(iLoginType == 0 && std::strlen(pcName) == 0 && std::strlen(pcToken) == 0)
+        return  m_pGameJolt->LoginCall(true, "../" GJ_API_CRED, GJ_NETWORK_OUTPUT_FW);
+    else return m_pGameJolt->LoginCall(true, pcName, pcToken,   GJ_NETWORK_OUTPUT_FW);
 
 #endif
 }
