@@ -74,7 +74,7 @@
             }
         }
     }
-    
+
 #else
     void SetBannerAlpha(float fAlpha) {}
 #endif
@@ -96,7 +96,7 @@ cOnline::cOnline()noexcept
     const int aiTrophySort[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04, GJ_TROPHY_05, GJ_TROPHY_06, GJ_TROPHY_07, GJ_TROPHY_08, GJ_TROPHY_09, GJ_TROPHY_10, GJ_TROPHY_11, GJ_TROPHY_12, GJ_TROPHY_13, GJ_TROPHY_14, GJ_TROPHY_15};
     m_pGameJolt->InterTrophy()->SetSort(aiTrophySort, ARRAY_SIZE(aiTrophySort));
 
-    const int aiTrophySecret[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_05};
+    const int aiTrophySecret[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04};
     m_pGameJolt->InterTrophy()->SetSecret(aiTrophySecret, ARRAY_SIZE(aiTrophySecret));
 
     // Google Play Games access is created through QuickPlay routine
@@ -104,7 +104,7 @@ cOnline::cOnline()noexcept
 #if defined(_API_GOOGLE_PLAY_)
 
     // create dummy score tables
-    gjData asTable1, asTable2; 
+    gjData asTable1, asTable2;
     asTable1["id"] = m_pGameJolt->UtilIntToString(GJ_LEADERBOARD_01);
     asTable2["id"] = m_pGameJolt->UtilIntToString(GJ_LEADERBOARD_02);
 
