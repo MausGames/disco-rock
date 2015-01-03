@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configurationDescriptor version="94">
+<configurationDescriptor version="95">
   <logicalFolder name="root" displayName="root" projectFiles="true" kind="ROOT">
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
@@ -48,12 +48,13 @@
         <itemPath>../../source/cRay.h</itemPath>
         <itemPath>../../source/cRock.cpp</itemPath>
         <itemPath>../../source/cRock.h</itemPath>
+        <itemPath>../../source/cStage.cpp</itemPath>
         <itemPath>../../source/cTrap.cpp</itemPath>
         <itemPath>../../source/cTrap.h</itemPath>
-        <itemPath>../../source/main.h</itemPath>
       </logicalFolder>
       <itemPath>../../source/application.cpp</itemPath>
       <itemPath>../../source/main.cpp</itemPath>
+      <itemPath>../../source/main.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
@@ -73,7 +74,7 @@
   </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
-    <conf name="Debug_Windows_mingw" type="1">
+    <conf name="Debug_Windows_x86_mingw" type="1">
       <toolsSet>
         <compilerSet>MinGW|MinGW</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -97,14 +98,14 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>../../executable/bin/windows/DiscoRock_mingw_debug.exe</output>
+          <output>../../executable/bin/windows/x86/DiscoRock_mingw_debug.exe</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/windows</pElem>
-            <pElem>../../../CoreEngine/libraries/windows/mingw</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/windows</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/windows/x86</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/windows/x86/mingw</pElem>
+            <pElem>../../../CoreEngine/output/windows/x86</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/windows/x86</pElem>
           </linkerAddLib>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_mingw_debug.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/windows/x86/libCoreEngine_mingw_debug.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lMinGW32</linkerOptionItem>
             <linkerLibLibItem>SDL2main</linkerLibLibItem>
@@ -125,13 +126,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Debug_Windows_mingw"
-                        AC="true"
+                        CN="Debug_Windows_x86_mingw"
+                        AC="false"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Debug_Windows_mingw"
-                        CC="${MAKE}  -f Makefile CONF=Debug_Windows_mingw clean"
-                        OP="../libCoreEngine_mingw_debug.a">
+                        BC="${MAKE}  -f Makefile CONF=Debug_Windows_x86_mingw"
+                        CC="${MAKE}  -f Makefile CONF=Debug_Windows_x86_mingw clean"
+                        OP="../../output/windows/x86/libCoreEngine_mingw_debug.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -273,6 +274,8 @@
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
@@ -282,7 +285,7 @@
       <item path="../../source/main.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Debug_Linux_gcc" type="1">
+    <conf name="Debug_Linux_x64_gcc" type="1">
       <toolsSet>
         <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -305,13 +308,13 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>../../executable/bin/linux/RockParty_gcc_debug</output>
+          <output>../../executable/bin/linux/x64/DiscoRock_gcc_debug</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/linux</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/linux</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/linux/x64</pElem>
+            <pElem>../../../CoreEngine/output/linux/x64</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/linux/x64</pElem>
           </linkerAddLib>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_gcc_debug.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/linux/x64/libCoreEngine_gcc_debug.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lGL</linkerOptionItem>
             <linkerLibLibItem>CoreEngine_gcc_debug</linkerLibLibItem>
@@ -329,13 +332,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Debug_Linux_gcc"
+                        CN="Debug_Linux_x64_gcc"
                         AC="false"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Debug_Linux_gcc"
-                        CC="${MAKE}  -f Makefile CONF=Debug_Linux_gcc clean"
-                        OP="../libCoreEngine_gcc_debug.a">
+                        BC="${MAKE}  -f Makefile CONF=Debug_Linux_x64_gcc"
+                        CC="${MAKE}  -f Makefile CONF=Debug_Linux_x64_gcc clean"
+                        OP="../../output/linux/x64/libCoreEngine_gcc_debug.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -477,6 +480,8 @@
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
@@ -486,7 +491,7 @@
       <item path="../../source/main.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Debug_Linux_clang" type="1">
+    <conf name="Debug_Linux_x64_clang" type="1">
       <toolsSet>
         <compilerSet>CLang|CLang</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -509,13 +514,13 @@
           <warningLevel>2</warningLevel>
         </ccTool>
         <linkerTool>
-          <output>../../executable/bin/linux/RockParty_clang_debug</output>
+          <output>../../executable/bin/linux/x64/DiscoRock_clang_debug</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/linux</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/linux</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/linux/x64</pElem>
+            <pElem>../../../CoreEngine/output/linux/x64</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/linux/x64</pElem>
           </linkerAddLib>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_clang_debug.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/linux/x64/libCoreEngine_clang_debug.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lGL</linkerOptionItem>
             <linkerLibLibItem>CoreEngine_clang_debug</linkerLibLibItem>
@@ -533,13 +538,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Debug_Linux_clang"
+                        CN="Debug_Linux_x64_clang"
                         AC="false"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Debug_Linux_clang"
-                        CC="${MAKE}  -f Makefile CONF=Debug_Linux_clang clean"
-                        OP="../libCoreEngine_clang_debug.a">
+                        BC="${MAKE}  -f Makefile CONF=Debug_Linux_x64_clang"
+                        CC="${MAKE}  -f Makefile CONF=Debug_Linux_x64_clang clean"
+                        OP="../../output/linux/x64/libCoreEngine_clang_debug.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -681,6 +686,8 @@
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
@@ -690,7 +697,7 @@
       <item path="../../source/main.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Release_Windows_mingw" type="1">
+    <conf name="Release_Windows_x86_mingw" type="1">
       <toolsSet>
         <compilerSet>MinGW|MinGW</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -721,15 +728,15 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>../../executable/bin/windows/DiscoRock_mingw.exe</output>
+          <output>../../executable/bin/windows/x86/DiscoRock_mingw.exe</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/windows</pElem>
-            <pElem>../../../CoreEngine/libraries/windows/mingw</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/windows</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/windows/x86</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/windows/x86/mingw</pElem>
+            <pElem>../../../CoreEngine/output/windows/x86</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/windows/x86</pElem>
           </linkerAddLib>
           <stripSymbols>true</stripSymbols>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_mingw.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/windows/x86/libCoreEngine_mingw.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lMinGW32</linkerOptionItem>
             <linkerLibLibItem>SDL2main</linkerLibLibItem>
@@ -750,13 +757,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Release_Windows_mingw"
+                        CN="Release_Windows_x86_mingw"
                         AC="false"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Release_Windows_mingw"
-                        CC="${MAKE}  -f Makefile CONF=Release_Windows_mingw clean"
-                        OP="../libCoreEngine_mingw.a">
+                        BC="${MAKE}  -f Makefile CONF=Release_Windows_x86_mingw"
+                        CC="${MAKE}  -f Makefile CONF=Release_Windows_x86_mingw clean"
+                        OP="../../output/windows/x86/libCoreEngine_mingw.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -898,6 +905,8 @@
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
@@ -907,7 +916,7 @@
       <item path="../../source/main.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Release_Linux_gcc" type="1">
+    <conf name="Release_Linux_x64_gcc" type="1">
       <toolsSet>
         <compilerSet>GNU|GNU</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -938,14 +947,14 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>../../executable/bin/linux/DiscoRock_gcc</output>
+          <output>../../executable/bin/linux/x64/DiscoRock_gcc</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/linux</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/linux</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/linux/x64</pElem>
+            <pElem>../../../CoreEngine/output/linux/x64</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/linux/x64</pElem>
           </linkerAddLib>
           <stripSymbols>true</stripSymbols>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_gcc.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/linux/x64/libCoreEngine_gcc.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lGL</linkerOptionItem>
             <linkerLibLibItem>CoreEngine_gcc</linkerLibLibItem>
@@ -963,13 +972,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Release_Linux_gcc"
+                        CN="Release_Linux_x64_gcc"
                         AC="false"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Release_Linux_gcc"
-                        CC="${MAKE}  -f Makefile CONF=Release_Linux_gcc clean"
-                        OP="../libCoreEngine_gcc.a">
+                        BC="${MAKE}  -f Makefile CONF=Release_Linux_x64_gcc"
+                        CC="${MAKE}  -f Makefile CONF=Release_Linux_x64_gcc clean"
+                        OP="../../output/linux/x64/libCoreEngine_gcc.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -1111,6 +1120,8 @@
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
+      </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.h" ex="false" tool="3" flavor2="0">
@@ -1120,7 +1131,7 @@
       <item path="../../source/main.h" ex="false" tool="3" flavor2="0">
       </item>
     </conf>
-    <conf name="Release_Linux_clang" type="1">
+    <conf name="Release_Linux_x64_clang" type="1">
       <toolsSet>
         <compilerSet>CLang|CLang</compilerSet>
         <dependencyChecking>true</dependencyChecking>
@@ -1150,14 +1161,14 @@
           <developmentMode>5</developmentMode>
         </asmTool>
         <linkerTool>
-          <output>../../executable/bin/linux/DiscoRock_clang</output>
+          <output>../../executable/bin/linux/x64/DiscoRock_clang</output>
           <linkerAddLib>
-            <pElem>../../../CoreEngine/libraries/linux</pElem>
-            <pElem>../../../CoreEngine/projects</pElem>
-            <pElem>../../../GameJoltAPI/libraries/linux</pElem>
+            <pElem>../../../CoreEngine/libraries/bin/linux/x64</pElem>
+            <pElem>../../../CoreEngine/output/linux/x64</pElem>
+            <pElem>../../../GameJoltAPI/libraries/bin/linux/x64</pElem>
           </linkerAddLib>
           <stripSymbols>true</stripSymbols>
-          <additionalDep>../../../CoreEngine/projects/libCoreEngine_clang.a</additionalDep>
+          <additionalDep>../../../CoreEngine/output/linux/x64/libCoreEngine_clang.a</additionalDep>
           <linkerLibItems>
             <linkerOptionItem>-lGL</linkerOptionItem>
             <linkerLibLibItem>CoreEngine_clang</linkerLibLibItem>
@@ -1175,13 +1186,13 @@
         <requiredProjects>
           <makeArtifact PL="../../../CoreEngine/projects/netbeans"
                         CT="3"
-                        CN="Release_Linux_clang"
-                        AC="false"
+                        CN="Release_Linux_x64_clang"
+                        AC="true"
                         BL="true"
                         WD="../../../CoreEngine/projects/netbeans"
-                        BC="${MAKE}  -f Makefile CONF=Release_Linux_clang"
-                        CC="${MAKE}  -f Makefile CONF=Release_Linux_clang clean"
-                        OP="../libCoreEngine_clang.a">
+                        BC="${MAKE}  -f Makefile CONF=Release_Linux_x64_clang"
+                        CC="${MAKE}  -f Makefile CONF=Release_Linux_x64_clang clean"
+                        OP="../../output/linux/x64/libCoreEngine_clang.a">
           </makeArtifact>
         </requiredProjects>
       </compileType>
@@ -1322,6 +1333,8 @@
       <item path="../../source/cRock.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cRock.h" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="../../source/cStage.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="../../source/cTrap.cpp" ex="false" tool="1" flavor2="0">
       </item>
