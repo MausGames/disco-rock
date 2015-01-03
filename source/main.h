@@ -16,6 +16,9 @@
 #include "Core.h"
 #include <deque>
 
+#if !defined(_CORE_ANDROID_)
+    // #define _DR_EMULATE_MOBILE_ (1)
+#endif
 
 // ****************************************************************
 // global definitions

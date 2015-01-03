@@ -348,7 +348,7 @@ void cGame::Move()
     if(!m_Rock.GetJumped()) m_bTrapJump = false;
 
     // increase score over time
-    m_dScore += double(Core::System->GetTime() * 10.0f * (1.0f + m_fTime*0.022f));
+    m_dScore += double(Core::System->GetTime() * GAME_SCORE_TIME * (1.0f + m_fTime*0.023f));
 
     // update combo
     m_fComboDelay -= Core::System->GetTime() * (GAME_SPEED_FAST/GAME_SPEED_FAST_REAL);
@@ -443,7 +443,7 @@ void cGame::Move()
 
 // ****************************************************************
 // add beverage object
-void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* pbHole)
+void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < BACK_BLOCKS_X)
     cBeverage* pBeverage = NULL;
@@ -485,7 +485,7 @@ void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* pbHole)
 
 // ****************************************************************
 // add trap object
-void cGame::AddTrap(const float& fSpawnY, const int& iBlockX, bool* pbHole)
+void cGame::AddTrap(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < BACK_BLOCKS_X)
 
@@ -525,7 +525,7 @@ void cGame::AddRay(const float& fSpawnY)
 
 // ****************************************************************
 // prevent holes in the ground
-void cGame::AddStreet(const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* pbHole)
+void cGame::AddStreet(const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < BACK_BLOCKS_X)
 

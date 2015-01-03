@@ -35,8 +35,9 @@ cRock::cRock()noexcept
     this->DefineProgram("rock_program");
 
     // set object properties
-    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*5.0f);
-    this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
+    this->SetSize          (coreVector3(1.0f,1.0f,1.0f)*5.0f);
+    this->SetOrientation   (coreVector3(1.0f,0.0f,0.0f));
+    this->SetCollisionRange(ROCK_RANGE_OBJ);
 
     // create shadow
     m_Shadow.DefineModel  ("default_square.md5mesh");
@@ -108,7 +109,7 @@ void cRock::Move()
         {
             Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUint& i)
             {
-                if(Core::Input->GetTouchPosition(i).x > 0.1667f)
+                if(Core::Input->GetTouchPosition(i).x > 0.0f)
                     bJump = true;
             });
         }
@@ -134,10 +135,10 @@ void cRock::Move()
 
 #if !defined(_CORE_DEBUG_) || 0
 
-    if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-1.2f, 0.0f)) > 0.0f &&
-       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 1.2f, 0.0f)) > 0.0f &&
-       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f,-1.2f)) > 0.0f &&
-       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, 1.2f)) > 0.0f &&
+    if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-ROCK_RANGE_BACK, 0.0f)) > 0.0f &&
+       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( ROCK_RANGE_BACK, 0.0f)) > 0.0f &&
+       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f,-ROCK_RANGE_BACK)) > 0.0f &&
+       g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( 0.0f, ROCK_RANGE_BACK)) > 0.0f &&
        this->GetPosition().z < fGround && m_fForce <= 0.0f && !m_bFallen)
     {
         // see me falling
@@ -188,13 +189,13 @@ void cRock::Move()
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
     {
-             if(g_pGame->GetInterface()->GetTouchMoveLeft ()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos -= fMove;
-        else if(g_pGame->GetInterface()->GetTouchMoveRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
+             if(g_pGame->GetInterface()->GetOverlayLeft ()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos -= fMove;
+        else if(g_pGame->GetInterface()->GetOverlayRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
     }
 
     // move with device motion
     else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
-        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x;
+        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x * 1.1f;
 
     // move with screen space
     else // == CONTROL_FULLSCREEN)
@@ -203,8 +204,8 @@ void cRock::Move()
         {
             const float& fX = Core::Input->GetTouchPosition(i).x;
 
-                                   if(fX < -0.1667f) fNewPos -= fMove;
-            else if(-0.1667f <= fX && fX <= 0.1667f) fNewPos += fMove;
+                                 if(fX < -0.25f) fNewPos -= fMove;
+            else if(-0.25f <= fX && fX <=  0.0f) fNewPos += fMove;
         });
     }
 
@@ -222,6 +223,14 @@ void cRock::Move()
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
             Core::Input->GetJoystickRelative(0).x > 0.0f                           ||
             Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
+
+#endif
+
+#if defined(_DR_EMULATE_MOBILE_)
+
+    // emulate key presses
+    g_pGame->GetInterface()->GetOverlayLeft ()->SetFocus(fNewPos < this->GetPosition().x);
+    g_pGame->GetInterface()->GetOverlayRight()->SetFocus(fNewPos > this->GetPosition().x);
 
 #endif
 

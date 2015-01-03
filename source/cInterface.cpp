@@ -69,24 +69,24 @@ cInterface::cInterface()noexcept
     m_ComboBar.SetAlignment (coreVector2(0.0f,1.0f));
     m_ComboBar.SetColor3    (COLOR_BLUE_F);
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
     // create touch controls
     m_MoveLeft.Construct    ("button_move.png", "button_move.png");
     m_MoveLeft.DefineProgram("2d_simple_program"); // override
     m_MoveLeft.SetSize      (coreVector2(0.1f,0.15f));
-    m_MoveLeft.SetFocusRange(1.2f);
+    m_MoveLeft.SetFocusRange(1.3f);
 
     m_MoveRight.Construct    ("button_move.png", "button_move.png");
     m_MoveRight.DefineProgram("2d_simple_program"); // override
     m_MoveRight.SetSize      (coreVector2(0.1f,0.15f));
     m_MoveRight.SetDirection (coreVector2(0.0f,-1.0f));
-    m_MoveRight.SetFocusRange(1.2f);
+    m_MoveRight.SetFocusRange(1.3f);
 
     m_Jump.Construct    ("button_jump.png", "button_jump.png");
     m_Jump.DefineProgram("2d_simple_program"); // override
     m_Jump.SetSize      (coreVector2(0.15f,0.15f));
-    m_Jump.SetFocusRange(1.8f);
+    m_Jump.SetFocusRange(2.0f);
 
     m_Pause.Construct    ("button_pause.png", "button_pause.png");
     m_Pause.DefineProgram("2d_simple_program"); // override
@@ -95,10 +95,20 @@ cInterface::cInterface()noexcept
     // create separating lines
     for(int i = 0; i < 2; ++i)
     {
-        m_apLine[i].DefineProgram("2d_color_program");
-        m_apLine[i].SetPosition  (coreVector2((i ? 0.1667f : -0.1667f) * Core::System->GetResolution().AspectRatio(), 0.0f));
-        m_apLine[i].SetSize      (coreVector2(0.01f,1.01f));
-        m_apLine[i].SetColor3    (coreVector3(1.0f,1.0f,1.0f));
+        m_aLine[i].DefineProgram("2d_color_program");
+        m_aLine[i].SetPosition  (coreVector2((i ? 0.0f : -0.25f) * Core::System->GetResolution().AspectRatio(), 0.0f));
+        m_aLine[i].SetSize      (coreVector2(0.01f,1.01f));
+        m_aLine[i].SetColor3    (coreVector3(1.0f,1.0f,1.0f));
+    }
+
+    // create overlays
+    for(int i = 0; i < 2; ++i)
+    {
+        m_aOverlay[i].SetPosition (coreVector2(i ? 0.15f : -0.005f, -0.125f));
+        m_aOverlay[i].SetSize     (coreVector2(i ? 0.2f  :  0.145f,  0.3f));
+        m_aOverlay[i].SetCenter   (coreVector2(-0.5f, 0.5f));
+        m_aOverlay[i].SetAlignment(coreVector2( 1.0f,-1.0f));
+        m_aOverlay[i].Move();
     }
 
     // init control type
@@ -139,7 +149,7 @@ void cInterface::Render()
         m_ComboBar  .Render();
     }
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
     // render touch objects separately
     this->RenderTouch();
@@ -181,35 +191,39 @@ void cInterface::Move()
     m_ComboBar.SetAlpha(fAlpha);
     m_ComboBar.Move();
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
     // display jump status
     m_Jump.SetColor3(g_pGame->GetRock()->GetJumped() ? LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.25f) : COLOR_WHITE_F);
 
     // update touch controls
-    if(m_iControlType == CONTROL_FULLSCREEN)
+    if(m_iControlType != CONTROL_CLASSIC)
     {
         // fade out fullscreen objects
         if(m_fFadeOut) m_fFadeOut = MAX(m_fFadeOut - Core::System->GetTime() * ((g_pGame->GetTime() > 10.0f) ? 1.0f : 0.25f), 0.0f);
-        const float fFadeAlpha = 0.1f + 0.9f*m_fFadeOut;
+        const float fFadeAlpha1 = (0.20f + 0.80f*m_fFadeOut) * fAlpha;
+        const float fFadeAlpha2 = (0.35f + 0.65f*m_fFadeOut) * fAlpha;
 
-        m_MoveLeft.SetAlpha (fAlpha * fFadeAlpha);
-        m_MoveRight.SetAlpha(fAlpha * fFadeAlpha);
-        m_Jump.SetAlpha     (fAlpha * fFadeAlpha);
-
-        // also update separating lines
-        for(int i = 0; i < 2; ++i)
+        m_Jump.SetAlpha(fFadeAlpha1);
+        if(m_iControlType == CONTROL_FULLSCREEN)
         {
-            m_apLine[i].SetAlpha(fAlpha * fFadeAlpha);
-            m_apLine[i].Move();
+            m_MoveLeft .SetAlpha(fFadeAlpha1);
+            m_MoveRight.SetAlpha(fFadeAlpha1);
+
+            // also update separating lines
+            for(int i = 0; i < 2; ++i)
+            {
+                m_aLine[i].SetAlpha(fFadeAlpha2);
+                m_aLine[i].Move();
+            }
         }
     }
-    else
+    else // = CONTROL_CLASSIC
     {
         // simply set alpha value according to touch status
-        m_MoveLeft.SetAlpha (fAlpha * (m_MoveLeft.IsFocused()  ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
+        m_MoveLeft .SetAlpha(fAlpha * (m_MoveLeft.IsFocused()  ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
         m_MoveRight.SetAlpha(fAlpha * (m_MoveRight.IsFocused() ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
-        m_Jump.SetAlpha     (fAlpha * (m_Jump.IsFocused()      ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
+        m_Jump     .SetAlpha(fAlpha * (m_Jump.IsFocused()      ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
     }
     m_Pause.SetAlpha(fAlpha * (m_Pause.IsFocused() ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1));
 
@@ -247,7 +261,7 @@ void cInterface::Update(const float& fScore, const float& fTime, const float& fC
 }
 
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************
@@ -259,15 +273,15 @@ void cInterface::RenderTouch()
     {
         m_MoveLeft .Render();
         m_MoveRight.Render();
-        m_Jump     .Render();
     }
+    m_Jump .Render();
     m_Pause.Render();
 
     // render separating lines
     if(m_iControlType == CONTROL_FULLSCREEN)
     {
         for(int i = 0; i < 2; ++i)
-            m_apLine[i].Render();
+            m_aLine[i].Render();
     }
 }
 
@@ -287,7 +301,7 @@ void cInterface::ChangeControlType(const int& iControlType)
         m_MoveLeft.SetCenter   (coreVector2(-0.5f,0.5f));
         m_MoveLeft.SetAlignment(coreVector2(1.0f,-1.0f));
 
-        m_MoveRight.SetPosition (coreVector2(0.15f,-0.2f));
+        m_MoveRight.SetPosition (coreVector2(0.16f,-0.2f));
         m_MoveRight.SetCenter   (coreVector2(-0.5f,0.5f));
         m_MoveRight.SetAlignment(coreVector2(1.0f,-1.0f));
 
@@ -298,35 +312,41 @@ void cInterface::ChangeControlType(const int& iControlType)
         m_Pause.SetPosition  (coreVector2(-0.03f,-0.45f));
         m_Pause.SetCenter    (coreVector2(0.5f,0.5f));
         m_Pause.SetAlignment (coreVector2(-1.0f,-1.0f));
-        m_Pause.SetFocusRange(1.4f);
+        m_Pause.SetFocusRange(1.6f);
     }
     else if(m_iControlType == CONTROL_MOTION)
     {
         // most objects are not visible
 
-        m_Pause.SetPosition  (coreVector2(-0.03f,0.03f));
-        m_Pause.SetCenter    (coreVector2(0.5f,-0.5f));
-        m_Pause.SetAlignment (coreVector2(-1.0f,1.0f));
-        m_Pause.SetFocusRange(1.8f);
-    }
-    else // == CONTROL_FULLSCREEN
-    {
-        m_MoveLeft.SetPosition (coreVector2(-0.3333f * Core::System->GetResolution().AspectRatio(), -0.3f));
-        m_MoveLeft.SetCenter   (coreVector2(0.0f,0.0f));
-        m_MoveLeft.SetAlignment(coreVector2(0.0f,0.0f));
-
-        m_MoveRight.SetPosition (coreVector2(0.0f,-0.3f));
-        m_MoveRight.SetCenter   (coreVector2(0.0f,0.0f));
-        m_MoveRight.SetAlignment(coreVector2(0.0f,0.0f));
-
-        m_Jump.SetPosition (coreVector2(0.3333f * Core::System->GetResolution().AspectRatio(), -0.3f));
+        m_Jump.SetPosition (coreVector2(0.0f,-0.3f));
         m_Jump.SetCenter   (coreVector2(0.0f,0.0f));
         m_Jump.SetAlignment(coreVector2(0.0f,0.0f));
 
         m_Pause.SetPosition  (coreVector2(-0.03f,0.03f));
         m_Pause.SetCenter    (coreVector2(0.5f,-0.5f));
         m_Pause.SetAlignment (coreVector2(-1.0f,1.0f));
-        m_Pause.SetFocusRange(1.8f);
+        m_Pause.SetFocusRange(2.0f);
+    }
+    else // == CONTROL_FULLSCREEN
+    {
+        const float fRatio = Core::System->GetResolution().AspectRatio();
+
+        m_MoveLeft.SetPosition (coreVector2(-0.375f * fRatio, -0.3f));
+        m_MoveLeft.SetCenter   (coreVector2(0.0f,0.0f));
+        m_MoveLeft.SetAlignment(coreVector2(0.0f,0.0f));
+
+        m_MoveRight.SetPosition (coreVector2(-0.125f * fRatio, -0.3f));
+        m_MoveRight.SetCenter   (coreVector2(0.0f,0.0f));
+        m_MoveRight.SetAlignment(coreVector2(0.0f,0.0f));
+
+        m_Jump.SetPosition (coreVector2(0.25f * fRatio, -0.3f));
+        m_Jump.SetCenter   (coreVector2(0.0f,0.0f));
+        m_Jump.SetAlignment(coreVector2(0.0f,0.0f));
+
+        m_Pause.SetPosition  (coreVector2(-0.03f,0.03f));
+        m_Pause.SetCenter    (coreVector2(0.5f,-0.5f));
+        m_Pause.SetAlignment (coreVector2(-1.0f,1.0f));
+        m_Pause.SetFocusRange(2.0f);
     }
 
     // override alpha
@@ -352,6 +372,12 @@ void cInterface::InteractControl()
     m_MoveLeft .Interact();
     m_MoveRight.Interact();
     m_Jump     .Interact();
+
+    // forward overlay interaction (increased button range)
+    m_aOverlay[0].Interact();
+    m_aOverlay[1].Interact();
+    m_MoveLeft .SetFocus(m_MoveLeft .IsFocused() || m_aOverlay[0].IsFocused());
+    m_MoveRight.SetFocus(m_MoveRight.IsFocused() || m_aOverlay[1].IsFocused());
 }
 
 

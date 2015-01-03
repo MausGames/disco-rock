@@ -147,13 +147,13 @@ void CoreApp::Init()
 
     // pre-allocate all required resources
     m_apSave[0] = new cSunrise();
-    m_apSave[1] = new cMojito();
-    m_apSave[2] = new cBlue();
-    m_apSave[3] = new cCoola();
-    m_apSave[4] = new cRock();
-    m_apSave[5] = new cPlate(0.0f, coreVector2(1.0f,1.0f));
-    m_apSave[6] = new cRay(coreVector3(1.0f,1.0f,1.0f));
-    m_apSave[7] = new cTrap();
+    m_apSave[1] = new cMojito ();
+    m_apSave[2] = new cBlue   ();
+    m_apSave[3] = new cCoola  ();
+    m_apSave[4] = new cRock   ();
+    m_apSave[5] = new cPlate  (0.0f, coreVector2(1.0f,1.0f));
+    m_apSave[6] = new cRay    (coreVector3(1.0f,1.0f,1.0f));
+    m_apSave[7] = new cTrap   ();
 }
 
 
@@ -192,18 +192,26 @@ void CoreApp::Render()
         return;
     }
 
-    // render background and game
-    if(g_pGame) g_pGame->RenderPre();
-    g_pBackground->Render();
-    if(g_pGame) g_pGame->Render();
-
-    glDisable(GL_DEPTH_TEST);
+    Core::Debug->MeasureStart("Game");
     {
-        // render combat text and menu
-        g_pCombatText->Render();
-        g_pMenu->Render();
+        // render background and game
+        if(g_pGame) g_pGame->RenderPre();
+        g_pBackground->Render();
+        if(g_pGame) g_pGame->Render();
     }
-    glEnable(GL_DEPTH_TEST);
+    Core::Debug->MeasureEnd("Game");
+
+    Core::Debug->MeasureStart("Menu");
+    {
+        glDisable(GL_DEPTH_TEST);
+        {
+            // render combat text and menu
+            g_pCombatText->Render();
+            g_pMenu->Render();
+        }
+        glEnable(GL_DEPTH_TEST);
+    }
+    Core::Debug->MeasureEnd("Menu");
 }
 
 

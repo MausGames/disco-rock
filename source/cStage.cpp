@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // apply stage algorithms to the game
-void cGame::ProcessStage(const float &fSpawnY, bool* pbHole)
+void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 {
 #if defined(_CORE_DEBUG_)
     m_aiAlgo[m_iAlgoCurIndex] = STAGE_TRAP;
@@ -559,23 +559,20 @@ void cGame::ProcessStage(const float &fSpawnY, bool* pbHole)
 
         const int iFill = (m_iAlgoCurCount + 9) % 12;
 
-        if(m_iAlgoCurCount >= 0)
+        if((m_iAlgoCurCount <= 1) || (m_iAlgoCurCount >= iMaxCount-2))
         {
-            if((m_iAlgoCurCount <= 1) || (m_iAlgoCurCount >= iMaxCount-2))
-            {
-                this->AddBeverage(fSpawnY, 2, pbHole);
-                this->AddBeverage(fSpawnY, 3, pbHole);
-            }
-            else if(m_iAlgoCurCount == 2)
-            {
-                this->AddTrap(fSpawnY, 2, pbHole);
-                this->AddTrap(fSpawnY, 3, pbHole);
-            }
-            else if(iFill == 10) this->AddBeverage(fSpawnY, m_aiAlgoStatus[0] ? 1 : 4, pbHole);
-            else if(iFill == 11) this->AddTrap    (fSpawnY, m_aiAlgoStatus[0] ? 1 : 4, pbHole);
-            else if(iFill ==  0) m_aiAlgoStatus[0] = Core::Rand->Int(1);
-            else if(iFill >=  4) this->AddBeverage(fSpawnY, m_aiAlgoStatus[0] ? 0 : 5, pbHole);
+            this->AddBeverage(fSpawnY, 2, pbHole);
+            this->AddBeverage(fSpawnY, 3, pbHole);
         }
+        else if(m_iAlgoCurCount == 2)
+        {
+            this->AddTrap(fSpawnY, 2, pbHole);
+            this->AddTrap(fSpawnY, 3, pbHole);
+        }
+        else if(iFill == 10) this->AddBeverage(fSpawnY, m_aiAlgoStatus[0] ? 1 : 4, pbHole);
+        else if(iFill == 11) this->AddTrap    (fSpawnY, m_aiAlgoStatus[0] ? 1 : 4, pbHole);
+        else if(iFill ==  0) m_aiAlgoStatus[0] = Core::Rand->Int(1);
+        else if(iFill >=  4) this->AddBeverage(fSpawnY, m_aiAlgoStatus[0] ? 0 : 5, pbHole);
 
         if((iFill != 2) && (iFill != 3))
         {
@@ -730,7 +727,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* pbHole)
 
                 switch(m_aiAlgoStatus[1])
                 {
-                default: ASSERT(false);
+                default: WARN_IF(true) {}
                 case 0: m_aiAlgoStatus[0] = 0x05; break; // 01 01
                 case 1: m_aiAlgoStatus[0] = 0x09; break; // 10 01
                 case 2: m_aiAlgoStatus[0] = 0x0A; break; // 10 10

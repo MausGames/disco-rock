@@ -1020,7 +1020,7 @@ void cMenu::Move()
                 // check for game over
                 if(g_pGame->GetStatus() == 1)
                 {
-                    if(g_pGame->GetChallenge()) this->End();
+                    if(g_pGame->GetChallenge() || (g_pGame->GetTime() < 10.0f)) this->End();
                     else
                     {
                         g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 0.5f);
@@ -1564,14 +1564,14 @@ void cMenu::Move()
 
             if(m_LoginMenu.GetCurSurface() == 0)
             {
-                if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RETURN), CORE_INPUT_PRESS) || (Core::Input->GetKeyboardChar() == SDLK_RETURN))
+                if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RETURN), CORE_INPUT_PRESS) || (Core::Input->GetKeyboardChar() == CORE_INPUT_CHAR(RETURN)))
                 {
                     // switch input focus or start login with enter-key
                          if(!m_LoginName .GetText()[0]) m_LoginName .SetInput(true);
                     else if(!m_LoginToken.GetText()[0]) m_LoginToken.SetInput(true);
                     else bDoLogin = true;
                 }
-                else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(TAB), CORE_INPUT_PRESS) || (Core::Input->GetKeyboardChar() == SDLK_TAB))
+                else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(TAB), CORE_INPUT_PRESS) || (Core::Input->GetKeyboardChar() == CORE_INPUT_CHAR(TAB)))
                 {
                     // switch input focus with tab-key
                          if(m_LoginName .GetInput()) {m_LoginName.SetInput(false); m_LoginToken.SetInput(true);}
@@ -2008,7 +2008,7 @@ void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 
     // split trophy description into two even parts
     const char* pcDesc = PRINT("%s", (m_iTrophyStatus & BIT(iNum) || !apTrophy[iNum]->IsSecret()) ? apTrophy[iNum]->GetDescriptionTrue().c_str() : GJ_API_TEXT_SECRET);
-    coreUint iMid = std::strlen(pcDesc) / 2;
+    coreUint iMid = coreUint(std::strlen(pcDesc)) / 2u;
     while(iMid > 0 && pcDesc[iMid] != ' ') --iMid;
 
     // set trophy description

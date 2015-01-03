@@ -12,6 +12,17 @@
 
 
 // ****************************************************************
+// rock definitions
+#if defined(_CORE_ANDROID_) || defined(_DR_EMULATE_MOBILE_)
+    #define ROCK_RANGE_BACK (1.85f)   // collision-range for comparisons with the background
+    #define ROCK_RANGE_OBJ  (1.1f)    // collision-range for comparisons with other objects
+#else
+    #define ROCK_RANGE_BACK (1.25f)
+    #define ROCK_RANGE_OBJ  (1.0f)
+#endif
+
+
+// ****************************************************************
 // rock class
 class cRock final : public coreObject3D
 {

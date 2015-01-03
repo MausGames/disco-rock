@@ -22,7 +22,7 @@ cTrap::cTrap()noexcept
 
     // set object properties
     this->SetSize(coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));
-    this->SetCollisionRange(0.4f);
+    this->SetCollisionRange(0.44f);
 
     // attach sparkles to object
     m_Effect.SetOrigin(this);

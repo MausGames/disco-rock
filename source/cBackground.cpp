@@ -260,7 +260,7 @@ void cBackground::LoadGeometry()
             const coreUint j = x + y*BACK_WIDTH;
 
             const coreUint   iColor      = avColor[x + y*BACK_BLOCKS_X].PackUnorm4x8();
-            const coreUshort iStartIndex = pVertexData.size();
+            const coreUshort iStartIndex = coreUshort(pVertexData.size());
 
             // copy base vertices to create unique plates and add generated color values
             pVertexData.push_back(aBaseVertex[j]);              pVertexData.back().iColor = iColor;
@@ -313,11 +313,11 @@ void cBackground::ModifyColor()
                                         else m_fCurColorHue =   0.0f/360.0f;
 
     // modify default colors
-         if(m_fCurColorHue  < 0.0f) for(int i = 0; i < COLOR_NUM; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HSVtoRGB();
-    else if(m_fCurColorHue == 0.0f) for(int i = 0; i < COLOR_NUM; ++i) m_avColor[i] = g_avColor[i];
+         if(m_fCurColorHue  < 0.0f) for(coreUint i = 0; i < COLOR_NUM; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HSVtoRGB();
+    else if(m_fCurColorHue == 0.0f) for(coreUint i = 0; i < COLOR_NUM; ++i) m_avColor[i] = g_avColor[i];
     else
     {
-        for(int i = 0; i < COLOR_NUM; ++i)
+        for(coreUint i = 0; i < COLOR_NUM; ++i)
         {
             // change hue of all default colors
             coreVector3 vNewColor = g_avColor[i].RGBtoHSV();
