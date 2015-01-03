@@ -13,18 +13,22 @@
 
 // ****************************************************************
 // game definitions
-#define GAME_HEIGHT     (-20.0f)      // logical height of the dance floor (also inlined in floor-shaders)
-#define GAME_COOLA_RATE (100)         // number of lines between 2 successive Coola bottles (smaller = more often)
-#define GAME_COOLA_TIME (5.0f)        // duration of the Coola power
-#define GAME_SHOCK_TIME (6.3f)        // time when to increase speed with a shock-wave
-#define GAME_JUMP_WIDTH (6)           // regular distance for jumping with a trap
+#define GAME_HEIGHT          (-20.0f)   // logical height of the dance floor (also inlined in floor-shaders)
+#define GAME_SHOCK_TIME      (6.3f)     // time when to increase speed with a shock-wave
+#define GAME_JUMP_WIDTH      (6)        // regular distance for jumping with a trap
+#define GAME_SPEED_SLOW      (1.5f)     // initial speed after starting a new game
+#define GAME_SPEED_FAST_REAL (2.2f)     // speed after the first shock-wave (baseline)
 
-#define GAME_SPEED_SLOW      (1.5f)   // initial speed after starting a new game
-#define GAME_SPEED_FAST_REAL (2.2f)   // speed after the first shock-wave
-#if defined(_CORE_ANDROID_)
-    #define GAME_SPEED_FAST  (2.0f)
+#if defined(_CORE_ANDROID_) || defined(_DR_EMULATE_MOBILE_)
+    #define GAME_SPEED_FAST  (1.9f)     // speed after the first shock-wave (real value)
+    #define GAME_SCORE_TIME  (12.5f)    // modifier for score over time
+    #define GAME_COOLA_RATE  (95)       // number of lines between 2 successive Coola bottles (smaller = more often)
+    #define GAME_COOLA_TIME  (6.5f)     // duration of the Coola power
 #else
-    #define GAME_SPEED_FAST  GAME_SPEED_FAST_REAL
+    #define GAME_SPEED_FAST  (2.1f)
+    #define GAME_SCORE_TIME  (11.0f)
+    #define GAME_COOLA_RATE  (100)
+    #define GAME_COOLA_TIME  (5.5f)
 #endif
 
 // macro function for calculating the current score multiplier
@@ -120,18 +124,18 @@ public:
     void Move();
 
     // apply stage algorithms to the game (implemented in cStage.cpp)
-    void ProcessStage(const float &fSpawnY, bool* pbHole);
+    void ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole);
 
     // get game status
     inline int         GetStatus   ()const {return (m_Rock.GetPosition().z < -150.0f) ? 1 : 0;}
     inline const bool& GetChallenge()const {return m_bChallenge;}
 
     // add objects
-    void AddBeverage(const float& fSpawnY, const int& iBlockX, bool* pbHole);
-    void AddTrap    (const float& fSpawnY, const int& iBlockX, bool* pbHole);
+    void AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole);
+    void AddTrap    (const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole);
     void AddPlate   (const float& fSpawnY, const int& iBlockX);
     void AddRay     (const float& fSpawnY);
-    void AddStreet  (const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* pbHole);
+    void AddStreet  (const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* OUTPUT pbHole);
 
     // get game properties
     inline const double&   GetScore   ()const                  {return m_dScore;}

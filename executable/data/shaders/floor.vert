@@ -25,11 +25,8 @@ void VertexMain()
     if(a_v1Height > 1.0)
     {
         // ignore vertices in the air
-        gl_Position      = vec4(0.0);
-        v_v4VarColor     = vec4(0.0);
-        v_av2TexCoord[0] = vec2(0.0);
-        v_av4LightDir[0] = vec4(0.0);
-        v_v3Relative     = vec3(0.0);
+        gl_Position  = vec4(0.0);
+        v_v4VarColor = vec4(0.0);
     }
     else
     {
@@ -37,7 +34,7 @@ void VertexMain()
         float v1Sign = sign(u_m4Camera[2][1]);
 
         // transform position and texture coordinates
-        gl_Position      = u_m4ViewProj * vec4(coreObject3DTransform(vec3(a_v2Position.xy, 0.0)), 1.0);
+        gl_Position      = u_m4ViewProj * vec4(coreObject3DTransform(vec3(a_v2Position, 0.0)), 1.0);
         v_av2TexCoord[0] = a_v2RawTexCoord;
 
         // forward per-vertex color
@@ -45,13 +42,13 @@ void VertexMain()
         
 #if (_CORE_QUALITY_) < 1
 
-        float v1Distance = dot(vec4(u_m4Camera[0][1],
-                                    u_m4Camera[1][1],
-                                    u_m4Camera[2][1],
-                                    u_m4Camera[1][1]*u_v3Position.y + 
-                                    u_m4Camera[2][1]*c_v1GameHeight + 
-                                    u_m4Camera[3][1]), vec4(a_v2Position.xy, 0.0, 1.0)) * v1Sign;
-        v_v3Relative.y  = 1.15 - v1Distance * ((v1Distance > 0.0) ? 0.0045 : -0.0225);
+        // calculate only the distance for fast and simple lighting (invert at 0.0)
+        float v1Distance = (dot(vec2(u_m4Camera[0][1],
+                                     u_m4Camera[1][1]),  a_v2Position)  +
+                                     u_m4Camera[1][1]  * u_v3Position.y +
+                                     u_m4Camera[2][1]  * c_v1GameHeight + 
+                                     u_m4Camera[3][1]) * v1Sign;
+        v_v3Relative.y  = 1.15 - v1Distance * (step(0.0, v1Distance)*0.027 - 0.0225);
         
 #else
 

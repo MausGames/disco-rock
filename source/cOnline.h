@@ -60,21 +60,7 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 #if defined(_API_GOOGLE_PLAY_)
 
     #include <jni.h>
-    #include "gpg/android_initialization.h"
-    #include "gpg/game_services.h"
-
-    #include "gpg/achievement.h"
-    #include "gpg/achievement_manager.h"
-    #include "gpg/builder.h"
-    #include "gpg/debug.h"
-    #include "gpg/default_callbacks.h"
-    #include "gpg/game_services.h"
-    #include "gpg/leaderboard.h"
-    #include "gpg/leaderboard_manager.h"
-    #include "gpg/platform_configuration.h"
-    #include "gpg/player_manager.h"
-    #include "gpg/score_page.h"
-    #include "gpg/types.h"
+    #include "gpg/gpg.h"
 
     extern JavaVM* g_pJNIJavaVM;     // Java Virtual Machine object
     extern jobject g_pJNIActivity;   // reference to the singleton activity
@@ -141,8 +127,8 @@ public:
 #if defined(_API_GOOGLE_PLAY_)
 
     // open Google Play screens
-    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUIBlocking();}
-    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUIBlocking();}
+    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUI([](gpg::UIStatus const &iStatus){});}
+    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUI([](gpg::UIStatus const &iStatus){});}
 
 #endif
 
