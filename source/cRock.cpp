@@ -35,33 +35,33 @@ cRock::cRock()noexcept
     this->DefineProgram("rock_program");
 
     // set object properties
-    this->SetSize          (coreVector3(1.0f,1.0f,1.0f)*5.0f);
-    this->SetOrientation   (coreVector3(1.0f,0.0f,0.0f));
-    this->SetCollisionRange(ROCK_RANGE_OBJ);
+    this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*5.0f);
+    this->SetDirection        (coreVector3(1.0f,0.0f,0.0f));
+    this->SetCollisionModifier(coreVector3(1.0f,1.0f,1.0f)*ROCK_RANGE_OBJ);
 
     // create shadow
-    m_Shadow.DefineModel  ("default_square.md5mesh");
+    m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
     m_Shadow.DefineTexture(0, "effect_shadow.png");
     m_Shadow.DefineProgram("shadow_program");
-    m_Shadow.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
 
     // create big wave
-    m_Wave.DefineModel  ("default_square.md5mesh");
-    m_Wave.DefineTexture(0, "effect_wave.png");
-    m_Wave.DefineProgram("wave_program");
-    m_Wave.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
+    m_Wave.DefineModel   (Core::Manager::Object->GetLowModel());
+    m_Wave.DefineTexture (0, "effect_wave.png");
+    m_Wave.DefineProgram ("wave_program");
+    m_Wave.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
+    m_Wave.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create small wave
-    m_WaveSmall.DefineModel  ("default_square.md5mesh");
-    m_WaveSmall.DefineTexture(0, "effect_wave.png");
-    m_WaveSmall.DefineProgram("wave_program");
-    m_WaveSmall.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
+    m_WaveSmall.DefineModel   (Core::Manager::Object->GetLowModel());
+    m_WaveSmall.DefineTexture (0, "effect_wave.png");
+    m_WaveSmall.DefineProgram ("wave_program");
+    m_WaveSmall.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
+    m_WaveSmall.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create shock-wave
-    m_WaveShock.DefineModel   ("default_square.md5mesh");
-    m_WaveShock.DefineTexture (0, "effect_wave.png");
-    m_WaveShock.DefineProgram ("wave_program");
-    m_WaveShock.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
+    m_WaveShock.DefineModel  (Core::Manager::Object->GetLowModel());
+    m_WaveShock.DefineTexture(0, "effect_wave.png");
+    m_WaveShock.DefineProgram("wave_program");
 
     // load sound-effects
     m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.wav");
@@ -82,10 +82,10 @@ void cRock::Move()
 {
     // rotate the rock
     m_fRotation.Update(10.0f, 0);
-    this->SetDirection(coreVector3(0.0f, coreVector2::Direction(-m_fRotation)));
+    this->SetOrientation(coreVector3(0.0f, coreVector2::Direction(-m_fRotation)));
 
     // get minimum Z position above the ground
-    const float fGround = GAME_HEIGHT + m_pModel->GetRadius() * this->GetSize().x;
+    const float fGround = GAME_HEIGHT + m_pModel->GetBoundingRadius() * this->GetSize().x;
 
 #if defined(_CORE_ANDROID_)
 
@@ -335,8 +335,9 @@ void cRock::CreateShockWave(const coreByte& iType)
         m_fWaveShockSpeed = 2.0f;
 
         // adjust shock-wave object (to the back)
-        m_WaveShock.SetPosition (this->GetPosition() - coreVector3(0.0f,4.0f,0.0f));
-        m_WaveShock.SetDirection(coreVector3(0.0f,1.0f,0.0f));
+        m_WaveShock.SetPosition   (this->GetPosition() - coreVector3(0.0f,4.0f,0.0f));
+        m_WaveShock.SetDirection  (coreVector3(0.0f, 0.0f,1.0f));
+        m_WaveShock.SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
 
         // play sound-effect
         m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
@@ -355,16 +356,17 @@ void cRock::CreateShockWave(const coreByte& iType)
     }
     else if(iType == 1)
     {
-        const coreVector3 vToSide = coreVector3(SIGN(this->GetPosition().x), 0.0f, 0.0f);
-        const coreVector3 vToCam  = (this->GetPosition() - Core::Graphics->GetCamPosition()).Normalize();
+        const coreVector3 vToSide = coreVector3(-SIGN(this->GetPosition().x), 0.0f, 0.0f);
+        const coreVector3 vToCam  = (Core::Graphics->GetCamPosition() - this->GetPosition()).Normalize();
 
         // start shock-wave animation
         m_WaveShockTimer.Play(CORE_TIMER_PLAY_RESET);
         m_fWaveShockSpeed = 1.0f;
 
         // adjust shock-wave object (to the side)
-        m_WaveShock.SetPosition (this->GetPosition());
-        m_WaveShock.SetDirection(LERP(vToSide, vToCam, 0.3f).Normalize());
+        m_WaveShock.SetPosition   (this->GetPosition());
+        m_WaveShock.SetOrientation(LERP(vToSide, vToCam, 0.3f).Normalize());
+        m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalize());
 
         // play sound-effect
         m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());

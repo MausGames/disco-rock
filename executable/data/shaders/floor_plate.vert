@@ -21,9 +21,9 @@ void VertexMain()
     float v1Sign = sign(u_m4Camera[2][1]);
     
     // transform position and texture coordinates
-    vec4 v4NewPosition = vec4(coreObject3DTransform(), 1.0);
+    vec4 v4NewPosition = vec4(coreObject3DTransformLow(), 1.0);
     gl_Position        = u_m4ViewProj    * v4NewPosition;
-    v_av2TexCoord[0]   = a_v2RawTexCoord + u_v2TexSize;   // add size
+    v_av2TexCoord[0]   = a_v2LowTexCoord + u_v2TexSize;   // add size
     
 #if (_CORE_QUALITY_) < 1
 
@@ -33,7 +33,7 @@ void VertexMain()
                                 u_m4Camera[2][1],
                                 u_m4Camera[1][1]*u_v3Position.y + 
                                 u_m4Camera[2][1]*c_v1GameHeight + 
-                                u_m4Camera[3][1]), vec4(a_v3RawPosition, 1.0)) * v1Sign;
+                                u_m4Camera[3][1]), vec4(a_v3LowPosition, 1.0)) * v1Sign;
     v_v3Relative.y  = 1.15 - v1Distance * (step(0.0, v1Distance)*0.027 - 0.0225);
         
 #else
@@ -41,7 +41,7 @@ void VertexMain()
     #if (_CORE_QUALITY_) > 1
     
         // transform texture coordinates for disco light effect
-        v_av2TexCoord[1] = (a_v2RawTexCoord + u_v2TexOffset) * 0.6;
+        v_av2TexCoord[1] = (a_v2LowTexCoord + u_v2TexOffset) * 0.6;
         
     #endif
 

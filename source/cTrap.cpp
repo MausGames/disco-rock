@@ -21,8 +21,8 @@ cTrap::cTrap()noexcept
     this->DefineProgram("trap_program");
 
     // set object properties
-    this->SetSize(coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));
-    this->SetCollisionRange(0.44f);
+    this->SetSize             (coreVector3(BACK_DETAIL_X*0.9f, BACK_DETAIL_Y*0.9f, 10.0f));
+    this->SetCollisionModifier(coreVector3(0.7f,0.7f,0.7f));
 
     // attach sparkles to object
     m_Effect.SetOrigin(this);

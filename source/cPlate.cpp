@@ -19,15 +19,14 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vTexOffset)noexcept
     m_Animation.SetTimeID(0);
 
     // load object resources
-    this->DefineModel  ("default_square.md5mesh");
+    this->DefineModel  (Core::Manager::Object->GetLowModel());
     this->DefineTexture(0, "background.png");
     this->DefineTexture(1, "background_norm.png");
     this->DefineProgram("floor_plate_program");
 
     // set object properties
-    this->SetSize     (coreVector3(BACK_DETAIL_X, BACK_DETAIL_Y, 1.0f));
-    this->SetDirection(coreVector3(0.0f,0.0f,-1.0f));
-    this->SetTexSize  (m_vTexOffset);
+    this->SetSize   (coreVector3(BACK_DETAIL_X, BACK_DETAIL_Y, 1.0f));
+    this->SetTexSize(m_vTexOffset);
 
     // set random plate color
     const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));

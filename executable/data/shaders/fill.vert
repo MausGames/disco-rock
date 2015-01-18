@@ -17,7 +17,7 @@ void VertexMain()
 #if (_CORE_QUALITY_) > 1
 
     // transform texture coordinates
-    vec2 v2MapCoord  = vec2(0.5+a_v3RawPosition.x, 0.5-a_v3RawPosition.y) * u_v2TexSize;
+    vec2 v2MapCoord  = a_v2LowTexCoord * u_v2TexSize;
     v_av2TexCoord[0] =  v2MapCoord + u_v2TexOffset;
     v_av2TexCoord[1] = (v2MapCoord - u_v2TexOffset) * 0.8 * PI;
     
