@@ -35,24 +35,24 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 
 #define GJ_KEY "aafea9f7350bdb9f3916326bf38cded1"
 
-#define GJ_TROPHY_01 (4666)
-#define GJ_TROPHY_02 (4635)
-#define GJ_TROPHY_03 (8325)
-#define GJ_TROPHY_04 (8327)
-#define GJ_TROPHY_05 (8326)
-#define GJ_TROPHY_06 (4665)
-#define GJ_TROPHY_07 (4637)
-#define GJ_TROPHY_08 (8328)
-#define GJ_TROPHY_09 (8329)
-#define GJ_TROPHY_10 (4636)
-#define GJ_TROPHY_11 (4667)
-#define GJ_TROPHY_12 (8330)
-#define GJ_TROPHY_13 (4638)
-#define GJ_TROPHY_14 (8331)
-#define GJ_TROPHY_15 (4671)
+#define GJ_TROPHY_01 (0)
+#define GJ_TROPHY_02 (1)
+#define GJ_TROPHY_03 (2)
+#define GJ_TROPHY_04 (3)
+#define GJ_TROPHY_05 (4)
+#define GJ_TROPHY_06 (5)
+#define GJ_TROPHY_07 (6)
+#define GJ_TROPHY_08 (7)
+#define GJ_TROPHY_09 (8)
+#define GJ_TROPHY_10 (9)
+#define GJ_TROPHY_11 (10)
+#define GJ_TROPHY_12 (11)
+#define GJ_TROPHY_13 (12)
+#define GJ_TROPHY_14 (13)
+#define GJ_TROPHY_15 (14)
 
-#define GJ_LEADERBOARD_01 (19508)
-#define GJ_LEADERBOARD_02 (19695)
+#define GJ_LEADERBOARD_01 (0)
+#define GJ_LEADERBOARD_02 (1)
 
 
 // ****************************************************************
@@ -70,24 +70,24 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 // control ad banner transparency
 extern void SetBannerAlpha(float fAlpha);
 
-#define GPG_TROPHY_01 "CgkIoPX5nNEIEAIQAg"
-#define GPG_TROPHY_02 "CgkIoPX5nNEIEAIQAw"
-#define GPG_TROPHY_03 "CgkIoPX5nNEIEAIQBA"
-#define GPG_TROPHY_04 "CgkIoPX5nNEIEAIQBg"
-#define GPG_TROPHY_05 "CgkIoPX5nNEIEAIQBQ"
-#define GPG_TROPHY_06 "CgkIoPX5nNEIEAIQBw"
-#define GPG_TROPHY_07 "CgkIoPX5nNEIEAIQCA"
-#define GPG_TROPHY_08 "CgkIoPX5nNEIEAIQCQ"
-#define GPG_TROPHY_09 "CgkIoPX5nNEIEAIQCg"
-#define GPG_TROPHY_10 "CgkIoPX5nNEIEAIQCw"
-#define GPG_TROPHY_11 "CgkIoPX5nNEIEAIQDA"
-#define GPG_TROPHY_12 "CgkIoPX5nNEIEAIQDQ"
-#define GPG_TROPHY_13 "CgkIoPX5nNEIEAIQDg"
-#define GPG_TROPHY_14 "CgkIoPX5nNEIEAIQDw"
-#define GPG_TROPHY_15 "CgkIoPX5nNEIEAIQEA"
+#define GPG_TROPHY_01 ""
+#define GPG_TROPHY_02 ""
+#define GPG_TROPHY_03 ""
+#define GPG_TROPHY_04 ""
+#define GPG_TROPHY_05 ""
+#define GPG_TROPHY_06 ""
+#define GPG_TROPHY_07 ""
+#define GPG_TROPHY_08 ""
+#define GPG_TROPHY_09 ""
+#define GPG_TROPHY_10 ""
+#define GPG_TROPHY_11 ""
+#define GPG_TROPHY_12 ""
+#define GPG_TROPHY_13 ""
+#define GPG_TROPHY_14 ""
+#define GPG_TROPHY_15 ""
 
-#define GPG_LEADERBOARD_01 "CgkIoPX5nNEIEAIQAA"
-#define GPG_LEADERBOARD_02 "CgkIoPX5nNEIEAIQAQ"
+#define GPG_LEADERBOARD_01 ""
+#define GPG_LEADERBOARD_02 ""
 
 
 // ****************************************************************
