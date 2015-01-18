@@ -33,7 +33,7 @@
 #include "gjAPI.h"
 static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!");
 
-#define GJ_KEY "aafea9f7350bdb9f3916326bf38cded1"
+#define GJ_KEY ""
 
 #define GJ_TROPHY_01 (0)
 #define GJ_TROPHY_02 (1)
