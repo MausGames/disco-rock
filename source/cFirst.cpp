@@ -37,11 +37,11 @@ cFirst::cFirst()noexcept
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct    (NULL, NULL, FONT_ROCKS, 45, 2);
-        pArrow->DefineProgram("2d_border_program");
-        pArrow->SetColor3    (coreVector3(0.05f,0.05f,0.05f));
-        pArrow->SetTexSize   (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
-        pArrow->SetFocusRange(1.2f);
+        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45, 2);
+        pArrow->DefineProgram   ("2d_border_program");
+        pArrow->SetColor3       (coreVector3(0.05f,0.05f,0.05f));
+        pArrow->SetTexSize      (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
+        pArrow->SetFocusModifier(coreVector2(1.2f,1.2f));
         pArrow->GetCaption()->SetText(i ? ">" : "<");
     }
 

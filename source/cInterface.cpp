@@ -72,21 +72,21 @@ cInterface::cInterface()noexcept
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
     // create touch controls
-    m_MoveLeft.Construct    ("button_move.png", "button_move.png");
-    m_MoveLeft.DefineProgram("2d_simple_program"); // override
-    m_MoveLeft.SetSize      (coreVector2(0.1f,0.15f));
-    m_MoveLeft.SetFocusRange(1.3f);
+    m_MoveLeft.Construct       ("button_move.png", "button_move.png");
+    m_MoveLeft.DefineProgram   ("2d_simple_program"); // override
+    m_MoveLeft.SetSize         (coreVector2(0.1f,0.15f));
+    m_MoveLeft.SetFocusModifier(coreVector2(1.3f,1.3f));
 
-    m_MoveRight.Construct    ("button_move.png", "button_move.png");
-    m_MoveRight.DefineProgram("2d_simple_program"); // override
-    m_MoveRight.SetSize      (coreVector2(0.1f,0.15f));
-    m_MoveRight.SetDirection (coreVector2(0.0f,-1.0f));
-    m_MoveRight.SetFocusRange(1.3f);
+    m_MoveRight.Construct       ("button_move.png", "button_move.png");
+    m_MoveRight.DefineProgram   ("2d_simple_program"); // override
+    m_MoveRight.SetSize         (coreVector2(0.1f,0.15f));
+    m_MoveRight.SetDirection    (coreVector2(0.0f,-1.0f));
+    m_MoveRight.SetFocusModifier(coreVector2(1.3f,1.3f));
 
-    m_Jump.Construct    ("button_jump.png", "button_jump.png");
-    m_Jump.DefineProgram("2d_simple_program"); // override
-    m_Jump.SetSize      (coreVector2(0.15f,0.15f));
-    m_Jump.SetFocusRange(2.0f);
+    m_Jump.Construct       ("button_jump.png", "button_jump.png");
+    m_Jump.DefineProgram   ("2d_simple_program"); // override
+    m_Jump.SetSize         (coreVector2(0.15f,0.15f));
+    m_Jump.SetFocusModifier(coreVector2(2.0f,2.0f));
 
     m_Pause.Construct    ("button_pause.png", "button_pause.png");
     m_Pause.DefineProgram("2d_simple_program"); // override
@@ -309,10 +309,10 @@ void cInterface::ChangeControlType(const int& iControlType)
         m_Jump.SetCenter   (coreVector2(0.5f,0.5f));
         m_Jump.SetAlignment(coreVector2(-1.0f,-1.0f));
 
-        m_Pause.SetPosition  (coreVector2(-0.03f,-0.45f));
-        m_Pause.SetCenter    (coreVector2(0.5f,0.5f));
-        m_Pause.SetAlignment (coreVector2(-1.0f,-1.0f));
-        m_Pause.SetFocusRange(1.6f);
+        m_Pause.SetPosition     (coreVector2(-0.03f,-0.45f));
+        m_Pause.SetCenter       (coreVector2(0.5f,0.5f));
+        m_Pause.SetAlignment    (coreVector2(-1.0f,-1.0f));
+        m_Pause.SetFocusModifier(coreVector2(1.6f,1.6f));
     }
     else if(m_iControlType == CONTROL_MOTION)
     {
@@ -322,10 +322,10 @@ void cInterface::ChangeControlType(const int& iControlType)
         m_Jump.SetCenter   (coreVector2(0.0f,0.0f));
         m_Jump.SetAlignment(coreVector2(0.0f,0.0f));
 
-        m_Pause.SetPosition  (coreVector2(-0.03f,0.03f));
-        m_Pause.SetCenter    (coreVector2(0.5f,-0.5f));
-        m_Pause.SetAlignment (coreVector2(-1.0f,1.0f));
-        m_Pause.SetFocusRange(2.0f);
+        m_Pause.SetPosition     (coreVector2(-0.03f,0.03f));
+        m_Pause.SetCenter       (coreVector2(0.5f,-0.5f));
+        m_Pause.SetAlignment    (coreVector2(-1.0f,1.0f));
+        m_Pause.SetFocusModifier(coreVector2(2.0f,2.0f));
     }
     else // == CONTROL_FULLSCREEN
     {
@@ -343,10 +343,10 @@ void cInterface::ChangeControlType(const int& iControlType)
         m_Jump.SetCenter   (coreVector2(0.0f,0.0f));
         m_Jump.SetAlignment(coreVector2(0.0f,0.0f));
 
-        m_Pause.SetPosition  (coreVector2(-0.03f,0.03f));
-        m_Pause.SetCenter    (coreVector2(0.5f,-0.5f));
-        m_Pause.SetAlignment (coreVector2(-1.0f,1.0f));
-        m_Pause.SetFocusRange(2.0f);
+        m_Pause.SetPosition     (coreVector2(-0.03f,0.03f));
+        m_Pause.SetCenter       (coreVector2(0.5f,-0.5f));
+        m_Pause.SetAlignment    (coreVector2(-1.0f,1.0f));
+        m_Pause.SetFocusModifier(coreVector2(2.0f,2.0f));
     }
 
     // override alpha

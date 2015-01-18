@@ -265,7 +265,7 @@ void cGame::Move()
         else
         {
             // check for collision with beverages
-            if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || coreObject3D::Collision(*pBeverage, m_Rock)))
+            if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || Core::Manager::Object->TestCollision(pBeverage, &m_Rock)))
             {
                 const coreByte iSigID = pBeverage->GetSigID();
 
@@ -329,7 +329,7 @@ void cGame::Move()
         cTrap* pTrap = (*it);
 
         // check for collision with traps
-        if(pTrap->GetPosition().y < 10.0f && !pTrap->IsStatic() && coreObject3D::Collision(*pTrap, m_Rock))
+        if(pTrap->GetPosition().y < 10.0f && !pTrap->IsStatic() && Core::Manager::Object->TestCollision(pTrap, &m_Rock))
         {
             if(m_Rock.Jump(10.0f))
             {

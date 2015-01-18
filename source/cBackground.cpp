@@ -96,7 +96,7 @@ void cBackground::Render()
         }
 
         // enable all resources
-        if(this->Enable())
+        if(this->Prepare())
         {
             // draw the model
             glDrawRangeElements(m_pModel->GetPrimitiveType(), 0, BACK_TOTAL_VERTICES, BACK_RANGE, m_pModel->GetIndexType(), r_cast<const GLvoid*>(m_iOffset));

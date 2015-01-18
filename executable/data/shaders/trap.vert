@@ -15,7 +15,7 @@ varying vec3 v_v3Strength;   // alpha strength vector
 void VertexMain()
 {
     // transform position
-    gl_Position = coreObject3DPosition();
+    gl_Position = coreObject3DPositionRaw();
 
     // calculate alpha strength vector
     v_v3Strength.xy = 1.7 * a_v3RawPosition.xy;

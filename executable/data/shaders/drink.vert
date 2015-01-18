@@ -18,7 +18,7 @@ varying float v_v1Intensity;   // lighting intensity (Gouraud shading)
 void VertexMain()
 {
     // transform position and texture coordinates
-    gl_Position      = coreObject3DPosition();
+    gl_Position      = coreObject3DPositionRaw();
     v_av2TexCoord[0] = a_v2RawTexCoord;
 
     // calculate intensity value

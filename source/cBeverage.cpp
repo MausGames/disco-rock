@@ -30,9 +30,8 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 
     // create shadow
     m_Shadow.DefineTexture(0, "effect_shadow.png");
-    m_Shadow.DefineModel  ("default_square.md5mesh");
+    m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
     m_Shadow.DefineProgram("shadow_program");
-    m_Shadow.SetDirection (coreVector3(0.0f,0.0f,-1.0f));
 
     // load glass shader
     m_pGlasProgram = Core::Manager::Resource->Get<coreProgram>("glass_program");
@@ -80,7 +79,7 @@ void cBeverage::Move()
     }
 
     // calculate vertical position above the ground
-    const float fGround = m_pModel->GetRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
+    const float fGround = m_pModel->GetBoundingRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
 
     // mark as finished
@@ -127,8 +126,8 @@ cSunrise::cSunrise()noexcept
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
-    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
-    this->SetOrientation(coreVector3(1.0f,0.0f,0.0f));
+    this->SetDirection  (coreVector3(1.0f,0.0f,0.0f));
+    this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -155,10 +154,10 @@ cMojito::cMojito()noexcept
     this->DefineTexture(0, "drink_mojito.png");
 
     // set object properties
-    this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
-    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
-    this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.125f),0.0f));
-    m_fCollisionRange = 1.3f;
+    this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*3.0f);
+    this->SetDirection        (coreVector3(coreVector2::Direction(PI*0.125f),0.0f));
+    this->SetOrientation      (coreVector3(0.0f,0.0f,1.0f));
+    this->SetCollisionModifier(coreVector3(1.3f,1.3f,1.3f));
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -186,8 +185,8 @@ cBlue::cBlue()noexcept
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
-    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
-    this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.375f),0.0f));
+    this->SetDirection  (coreVector3(coreVector2::Direction(PI*0.375f),0.0f));
+    this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -221,8 +220,8 @@ cCoola::cCoola()noexcept
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
-    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
-    this->SetOrientation(coreVector3(coreVector2::Direction(PI*0.0f),0.0f));
+    this->SetDirection  (coreVector3(coreVector2::Direction(PI*0.0f),0.0f));
+    this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create glass
     m_pGlass = new coreObject3D();
@@ -250,8 +249,8 @@ cFranka::cFranka()noexcept
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*2.25f);
-    this->SetDirection  (coreVector3(0.0f,0.0f,-1.0f));
-    this->SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
+    this->SetDirection  (coreVector3(0.0f,-1.0f,0.0f));
+    this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create glass
     m_pGlass = new coreObject3D();

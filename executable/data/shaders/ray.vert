@@ -15,7 +15,7 @@ varying float v_v1Intensity;   // lighting intensity (semi-Gouraud shading)
 void VertexMain()
 {
     // transform position 
-    gl_Position = coreObject3DPosition();
+    gl_Position = coreObject3DPositionRaw();
 
     // calculate intensity value and transformed normal (in view direction)
     v_v1Intensity = a_v3RawPosition.z * 2.5 + 1.25;

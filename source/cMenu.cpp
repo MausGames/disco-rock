@@ -152,10 +152,10 @@ cMenu::cMenu()noexcept
     // create graphical buttons
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
 
-    m_Short.Construct    ("button_play.png", "button_play.png");
-    m_Short.SetPosition  (coreVector2(-0.06f,0.2425f));
-    m_Short.SetSize      (coreVector2(0.075f,0.075f));
-    m_Short.SetFocusRange(1.2f);
+    m_Short.Construct       ("button_play.png", "button_play.png");
+    m_Short.SetPosition     (coreVector2(-0.06f,0.2425f));
+    m_Short.SetSize         (coreVector2(0.075f,0.075f));
+    m_Short.SetFocusModifier(coreVector2(1.2f,1.2f));
     ADJUST_RIGHT(m_Short)
 
 #else
@@ -288,18 +288,18 @@ cMenu::cMenu()noexcept
     m_Question.SetText    ("Do you want to go out with me?");
     m_Question.Move();
 
-    m_Yes.Construct    ("button_ok.png", "button_ok.png");
-    m_Yes.SetPosition  (coreVector2(-0.2f,-0.08f));
-    m_Yes.SetSize      (coreVector2(0.075f,0.075f));
-    m_Yes.SetColor3    (LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
-    m_Yes.SetFocusRange(1.2f);
+    m_Yes.Construct       ("button_ok.png", "button_ok.png");
+    m_Yes.SetPosition     (coreVector2(-0.2f,-0.08f));
+    m_Yes.SetSize         (coreVector2(0.075f,0.075f));
+    m_Yes.SetColor3       (LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.75f));
+    m_Yes.SetFocusModifier(coreVector2(1.2f,1.2f));
     m_Yes.Move();
 
-    m_No.Construct    ("button_cancel.png", "button_cancel.png");
-    m_No.SetPosition  (coreVector2(0.2f,-0.08f));
-    m_No.SetSize      (m_Yes.GetSize());
-    m_No.SetColor3    (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
-    m_No.SetFocusRange(1.2f);
+    m_No.Construct       ("button_cancel.png", "button_cancel.png");
+    m_No.SetPosition     (coreVector2(0.2f,-0.08f));
+    m_No.SetSize         (m_Yes.GetSize());
+    m_No.SetColor3       (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
+    m_No.SetFocusModifier(coreVector2(1.2f,1.2f));
     m_No.Move();
 
     // create video configuration objects
@@ -363,24 +363,24 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_AudioDrag)
 
     m_AudioBar.DefineProgram("2d_color_bar_program");
-    m_AudioBar.SetSize    (coreVector2((m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x) * fCurVolume, 0.056f));
-    m_AudioBar.SetPosition(coreVector2(LEFT_CENTER + (m_AudioBar.GetSize().x - m_AudioBarBack.GetSize().x) * 0.5f, m_AudioBarBack.GetPosition().y));
-    m_AudioBar.SetCenter  (coreVector2(-0.5f,0.0f));
-    m_AudioBar.SetColor3  (COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
+    m_AudioBar.SetSize      (coreVector2((m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x) * fCurVolume, 0.056f));
+    m_AudioBar.SetPosition  (coreVector2(LEFT_CENTER + (m_AudioBar.GetSize().x - m_AudioBarBack.GetSize().x) * 0.5f, m_AudioBarBack.GetPosition().y));
+    m_AudioBar.SetCenter    (coreVector2(-0.5f,0.0f));
+    m_AudioBar.SetColor3    (COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
 
-    m_AudioIconHigh.DefineTexture(0, "icon_audio_1.png");
-    m_AudioIconHigh.DefineProgram("2d_color_icon_program");
-    m_AudioIconHigh.SetPosition  (coreVector2(LEFT_CENTER + 0.22f, m_AudioBarBack.GetPosition().y));
-    m_AudioIconHigh.SetSize      (coreVector2(0.05f,0.05f));
-    m_AudioIconHigh.SetCenter    (coreVector2(-0.5f,0.0f));
-    m_AudioIconHigh.SetFocusRange(0.0f);
+    m_AudioIconHigh.DefineTexture   (0, "icon_audio_1.png");
+    m_AudioIconHigh.DefineProgram   ("2d_color_icon_program");
+    m_AudioIconHigh.SetPosition     (coreVector2(LEFT_CENTER + 0.22f, m_AudioBarBack.GetPosition().y));
+    m_AudioIconHigh.SetSize         (coreVector2(0.05f,0.05f));
+    m_AudioIconHigh.SetCenter       (coreVector2(-0.5f,0.0f));
+    m_AudioIconHigh.SetFocusModifier(coreVector2(0.0f,0.0f));
 
-    m_AudioIconLow.DefineTexture(0, "icon_audio_2.png");
-    m_AudioIconLow.DefineProgram("2d_color_icon_program");
-    m_AudioIconLow.SetPosition  (coreVector2(LEFT_CENTER - 0.22f, m_AudioBarBack.GetPosition().y));
-    m_AudioIconLow.SetSize      (coreVector2(0.05f,0.05f));
-    m_AudioIconLow.SetCenter    (coreVector2(-0.5f,0.0f));
-    m_AudioIconLow.SetFocusRange(0.0f);
+    m_AudioIconLow.DefineTexture   (0, "icon_audio_2.png");
+    m_AudioIconLow.DefineProgram   ("2d_color_icon_program");
+    m_AudioIconLow.SetPosition     (coreVector2(LEFT_CENTER - 0.22f, m_AudioBarBack.GetPosition().y));
+    m_AudioIconLow.SetSize         (coreVector2(0.05f,0.05f));
+    m_AudioIconLow.SetCenter       (coreVector2(-0.5f,0.0f));
+    m_AudioIconLow.SetFocusModifier(coreVector2(0.0f,0.0f));
 
     // create login configuration objects
 #if !defined(_API_GOOGLE_PLAY_)
@@ -536,11 +536,11 @@ cMenu::cMenu()noexcept
 #endif
 
     // create successful submit object
-    m_Successful.DefineTexture(0, "icon_success.png");
-    m_Successful.DefineProgram(m_Made.GetProgram());
-    m_Successful.SetPosition  (m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
-    m_Successful.SetSize      (coreVector2(0.06f,0.06f));
-    m_Successful.SetFocusRange(0.0f);
+    m_Successful.DefineTexture   (0, "icon_success.png");
+    m_Successful.DefineProgram   (m_Made.GetProgram());
+    m_Successful.SetPosition     (m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
+    m_Successful.SetSize         (coreVector2(0.06f,0.06f));
+    m_Successful.SetFocusModifier(coreVector2(0.0f,0.0f));
     ADJUST_RIGHT(m_Successful)
 
     // create score objects
@@ -653,20 +653,20 @@ cMenu::cMenu()noexcept
         m_aTrophyImage[i].SetCenter    (coreVector2(-0.5f,0.0f));
         m_aTrophyImage[i].SetColor3    ((i % (COLOR_NUM+1)) ? g_avColor[(i-(1+i/7))%COLOR_NUM] : (COLOR_WHITE_F*0.9f));
 
-        m_aTrophyCheck[i].DefineTexture(0, "icon_success.png");
-        m_aTrophyCheck[i].DefineProgram(m_TrophyText.GetProgram());
-        m_aTrophyCheck[i].SetPosition  (coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
-        m_aTrophyCheck[i].SetSize      (coreVector2(0.06f,0.06f));
-        m_aTrophyCheck[i].SetCenter    (coreVector2(-0.5f,0.0f));
-        m_aTrophyCheck[i].SetFocusRange(0.0f);
+        m_aTrophyCheck[i].DefineTexture   (0, "icon_success.png");
+        m_aTrophyCheck[i].DefineProgram   (m_TrophyText.GetProgram());
+        m_aTrophyCheck[i].SetPosition     (coreVector2(LEFT_CENTER + ((i%5)-2)*0.105f, -0.075f - ((i/5)-2)*0.105f));
+        m_aTrophyCheck[i].SetSize         (coreVector2(0.06f,0.06f));
+        m_aTrophyCheck[i].SetCenter       (coreVector2(-0.5f,0.0f));
+        m_aTrophyCheck[i].SetFocusModifier(coreVector2(0.0f,0.0f));
     }
 
     for(int i = 0; i < TROPHY_SECRETS; ++i)
     {
-        m_aTrophySecret[i].Construct    (FONT_ROCKS, 45, 2);
-        m_aTrophySecret[i].SetCenter    (coreVector2(-0.5f,0.0f));
-        m_aTrophySecret[i].SetText      ("?");
-        m_aTrophySecret[i].SetFocusRange(0.0f);
+        m_aTrophySecret[i].Construct       (FONT_ROCKS, 45, 2);
+        m_aTrophySecret[i].SetCenter       (coreVector2(-0.5f,0.0f));
+        m_aTrophySecret[i].SetText         ("?");
+        m_aTrophySecret[i].SetFocusModifier(coreVector2(0.0f,0.0f));
 
         m_aTrophySecret[i].SetPosition(m_aTrophyImage[i].GetPosition());
     }
