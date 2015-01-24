@@ -28,7 +28,7 @@ int                 g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3 : 0;
 int                 g_iNumFails       = 0;
 bool                g_bCamUpsideDown  = false;
 
-static coreObject3D* m_apSave[8];   // pre-allocation of required resources, still need to implement a more efficient way
+static coreObject3D* m_apSave[8];   // pre-allocation of required resources
 
 
 // ****************************************************************
