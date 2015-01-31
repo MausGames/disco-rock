@@ -55,6 +55,8 @@ public:
     cInterface()noexcept;
     ~cInterface();
 
+    DISABLE_COPY(cInterface)
+
     // render and move the interface
     void Render();
     void Move();

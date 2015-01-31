@@ -26,6 +26,8 @@ public:
     cPlate(const float& fStartY, const coreVector2& vTexOffset)noexcept;
     ~cPlate();
 
+    DISABLE_COPY(cPlate)
+
     // move the plate
     void Move()override;
 };

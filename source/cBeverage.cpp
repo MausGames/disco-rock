@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept
+cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
 , m_iScore       (iScore)
@@ -24,9 +24,6 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fAlph
 {
     // load drink shader
     this->DefineProgram("drink_program");
-
-    // set alpha value
-    this->SetAlpha(fAlpha);
 
     // create shadow
     m_Shadow.DefineTexture(0, "effect_shadow.png");
@@ -118,7 +115,7 @@ void cBeverage::Move()
 // ****************************************************************
 // constructor
 cSunrise::cSunrise()noexcept
-: cBeverage (5, 0.5f, 0.91f, 0.2f, 1.0f)
+: cBeverage (5, 0.5f, 0.2f, 1.0f)
 {
     // load object resources
     this->DefineModel  ("drink_sunrise.md5mesh");
@@ -128,6 +125,7 @@ cSunrise::cSunrise()noexcept
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
     this->SetDirection  (coreVector3(1.0f,0.0f,0.0f));
     this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
+    this->SetAlpha      (0.91f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -147,7 +145,7 @@ cSunrise::~cSunrise()
 // ****************************************************************
 // constructor
 cMojito::cMojito()noexcept
-: cBeverage (10, -0.2f, 0.85f, 0.4f, 1.2f)
+: cBeverage (10, -0.2f, 0.4f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("drink_mojito.md5mesh");
@@ -158,6 +156,7 @@ cMojito::cMojito()noexcept
     this->SetDirection        (coreVector3(coreVector2::Direction(PI*0.125f),0.0f));
     this->SetOrientation      (coreVector3(0.0f,0.0f,1.0f));
     this->SetCollisionModifier(coreVector3(1.3f,1.3f,1.3f));
+    this->SetAlpha            (0.85f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -177,7 +176,7 @@ cMojito::~cMojito()
 // ****************************************************************
 // constructor
 cBlue::cBlue()noexcept
-: cBeverage (30, 5.8f, 0.87f, 0.6f, 1.6f)
+: cBeverage (30, 5.8f, 0.6f, 1.6f)
 {
     // load object resources
     this->DefineModel  ("drink_blue.md5mesh");
@@ -187,6 +186,7 @@ cBlue::cBlue()noexcept
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
     this->SetDirection  (coreVector3(coreVector2::Direction(PI*0.375f),0.0f));
     this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
+    this->SetAlpha      (0.87f);
 
     // create straw
     m_pStraw = new coreObject3D();
@@ -212,7 +212,7 @@ cBlue::~cBlue()
 // ****************************************************************
 // constructor
 cCoola::cCoola()noexcept
-: cBeverage (200, -3.0f, 0.8f, 0.5f, 0.9f)
+: cBeverage (200, -3.0f, 0.5f, 0.9f)
 {
     // load object resources
     this->DefineModel  ("drink_cola.md5mesh");
@@ -222,6 +222,7 @@ cCoola::cCoola()noexcept
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
     this->SetDirection  (coreVector3(coreVector2::Direction(PI*0.0f),0.0f));
     this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
+    this->SetAlpha      (0.8f);
 
     // create glass
     m_pGlass = new coreObject3D();
@@ -241,7 +242,7 @@ cCoola::~cCoola()
 // ****************************************************************
 // constructor
 cFranka::cFranka()noexcept
-: cBeverage (0, -2.6f, 1.0f, 1.0f, 1.2f)
+: cBeverage (0, -2.6f, 1.0f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("bear.md5mesh");
@@ -251,6 +252,7 @@ cFranka::cFranka()noexcept
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*2.25f);
     this->SetDirection  (coreVector3(0.0f,-1.0f,0.0f));
     this->SetOrientation(coreVector3(0.0f,0.0f,1.0f));
+    this->SetAlpha      (1.0f);
 
     // create glass
     m_pGlass = new coreObject3D();

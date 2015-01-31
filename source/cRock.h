@@ -64,6 +64,8 @@ public:
     cRock()noexcept;
     ~cRock();
 
+    DISABLE_COPY(cRock)
+
     // move the rock
     void Move()override;
 
