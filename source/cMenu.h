@@ -198,6 +198,8 @@ public:
     cMenu()noexcept;
     ~cMenu();
 
+    DISABLE_COPY(cMenu)
+
     // move the menu
     void Move()override;
 
@@ -252,10 +254,6 @@ public:
     inline void SetTrophyCurrent(const int& iCurrent) {m_iTrophyCurrent = iCurrent;}
     inline const int& GetTrophyStatus ()const         {return m_iTrophyStatus;}
     inline const int& GetTrophyCurrent()const         {return m_iTrophyCurrent;}
-
-
-private:
-    DISABLE_COPY(cMenu)
 };
 
 

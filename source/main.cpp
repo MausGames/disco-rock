@@ -200,7 +200,6 @@ void CoreApp::Render()
         if(g_pGame) g_pGame->Render();
     }
     Core::Debug->MeasureEnd("Game");
-
     Core::Debug->MeasureStart("Menu");
     {
         glDisable(GL_DEPTH_TEST);

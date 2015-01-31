@@ -115,6 +115,8 @@ public:
     cOnline()noexcept;
     ~cOnline();
 
+    DISABLE_COPY(cOnline)
+
     // update the network object
     void Update();
 
@@ -146,8 +148,6 @@ public:
 
 
 private:
-    DISABLE_COPY(cOnline)
-
     // forward error message to menu
     void __SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3);
 

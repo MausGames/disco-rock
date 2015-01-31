@@ -118,6 +118,8 @@ public:
     explicit cGame(const bool& bChallenge)noexcept;
     ~cGame();
 
+    DISABLE_COPY(cGame)
+
     // render and move the game
     void RenderPre();
     void Render();
@@ -152,10 +154,6 @@ public:
     // achieve a trophy
     void AchieveTrophy        (const int& iID, const int& iNum);
     void AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData);
-
-
-private:
-    DISABLE_COPY(cGame)
 };
 
 

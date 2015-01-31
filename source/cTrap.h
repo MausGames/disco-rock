@@ -26,6 +26,8 @@ public:
     cTrap()noexcept;
     ~cTrap();
 
+    DISABLE_COPY(cTrap)
+
     // move the trap
     void Move()override;
 

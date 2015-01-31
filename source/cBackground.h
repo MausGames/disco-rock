@@ -76,6 +76,8 @@ public:
     cBackground()noexcept;
     ~cBackground();
 
+    DISABLE_COPY(cBackground)
+
     // render and move the background
     void Render()override;
     void Move  ()override;
@@ -99,8 +101,6 @@ public:
 
 
 private:
-    DISABLE_COPY(cBackground)
-
     // reset with the resource manager
     void __Reset(const coreResourceReset& bInit)override;
 };

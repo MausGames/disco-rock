@@ -53,6 +53,8 @@ public:
     cCombatText()noexcept;
     ~cCombatText();
 
+    DISABLE_COPY(cCombatText)
+
     // render and move the combat text
     void Render();
     void Move();
@@ -66,10 +68,6 @@ public:
 
     // show trophy animation
     void ShowTrophy(const char* pcText, const coreVector3& vPosition);
-
-
-private:
-    DISABLE_COPY(cCombatText)
 };
 
 

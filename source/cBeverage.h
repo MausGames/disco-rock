@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // beverage interface
-class cBeverage : public coreObject3D
+class INTERFACE cBeverage : public coreObject3D
 {
 protected:
     coreObject3D   m_Shadow;         // shadow object
@@ -34,8 +34,10 @@ protected:
 
 
 public:
-    cBeverage(const int& iScore, const float& fHeight, const float& fAlpha, const float& fVolume, const float& fPitch)noexcept;
+    cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept;
     virtual ~cBeverage();
+
+    DISABLE_COPY(cBeverage)
 
     // move the beverage
     void Move()override;
@@ -59,8 +61,6 @@ public:
 
 
 private:
-    DISABLE_COPY(cBeverage)
-
     // hide default render function
     inline void Render()override {ASSERT(false)}
 };
@@ -73,6 +73,8 @@ class cSunrise final : public cBeverage
 public:
     cSunrise()noexcept;
     ~cSunrise();
+
+    DISABLE_COPY(cSunrise)
 
     // get object properties
     inline coreByte    GetSigID   ()const override {return 1;}
@@ -88,6 +90,8 @@ public:
     cMojito()noexcept;
     ~cMojito();
 
+    DISABLE_COPY(cMojito)
+
     // get object properties
     inline coreByte    GetSigID   ()const override {return 2;}
     inline coreVector3 GetSigColor()const override {return COLOR_GREEN_F;}
@@ -101,6 +105,8 @@ class cBlue final : public cBeverage
 public:
     cBlue()noexcept;
     ~cBlue();
+
+    DISABLE_COPY(cBlue)
 
     // get object properties
     inline coreByte    GetSigID   ()const override {return 3;}
@@ -116,6 +122,8 @@ public:
     cCoola()noexcept;
     ~cCoola();
 
+    DISABLE_COPY(cCoola)
+
     // get object properties
     inline coreByte    GetSigID   ()const override {return 4;}
     inline coreVector3 GetSigColor()const override {return COLOR_PURPLE_F;}
@@ -129,6 +137,8 @@ class cFranka final : public cBeverage
 public:
     cFranka()noexcept;
     ~cFranka();
+
+    DISABLE_COPY(cFranka)
 
     // get object properties
     inline coreByte    GetSigID   ()const override {return 5;}
