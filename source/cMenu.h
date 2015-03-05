@@ -226,7 +226,7 @@ public:
     inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, 0.0f, false);}
 
     // invoke score table update
-    inline void InvokeScoreUpdate(const int& iTableNum) {BIT_SET(m_iTableUpdate, iTableNum)}
+    inline void InvokeScoreUpdate(const int& iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}
 
     // submit score functions
     void SubmitScore        (const char* pcGuestName);

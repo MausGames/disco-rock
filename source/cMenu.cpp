@@ -981,7 +981,7 @@ void cMenu::Move()
 
 #if !defined(_CORE_ANDROID_)
 
-    // move mouse with joystick
+    // control mouse with joystick
     Core::Input->UseMouseWithJoystick(0, 0, 1, 0.4f);
     Core::Input->UseMouseWithJoystick(1, 0, 1, 0.4f);
 
@@ -1611,7 +1611,7 @@ void cMenu::Move()
         {
             if(m_iTableUpdate & BIT(i))
             {
-                BIT_RESET(m_iTableUpdate, i)
+                REMOVE_BIT(m_iTableUpdate, i)
                 this->RetrieveScoresCallback3(i);
             }
         }
@@ -2024,7 +2024,7 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
     // save trophy status
     m_iTrophyStatus = 0;
     for(int i = 0; i < MIN((int)apTrophy.size(), TROPHY_ITEMS); ++i)
-        if(apTrophy[i]->IsAchieved()) BIT_SET(m_iTrophyStatus, i)
+        if(apTrophy[i]->IsAchieved()) ADD_BIT(m_iTrophyStatus, i)
 
     // reset current trophy
     this->FetchTrophiesCallback1(apTrophy, I_TO_P(0));

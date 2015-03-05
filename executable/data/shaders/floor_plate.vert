@@ -33,7 +33,7 @@ void VertexMain()
                                 u_m4Camera[2][1],
                                 u_m4Camera[1][1]*u_v3Position.y + 
                                 u_m4Camera[2][1]*c_v1GameHeight + 
-                                u_m4Camera[3][1]), vec4(a_v3LowPosition, 1.0)) * v1Sign;
+                                u_m4Camera[3][1]), vec4(a_v2LowPosition, 0.0, 1.0)) * v1Sign;
     v_v3Relative.y  = 1.15 - v1Distance * (step(0.0, v1Distance)*0.027 - 0.0225);
         
 #else
