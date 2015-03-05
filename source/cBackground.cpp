@@ -282,21 +282,21 @@ void cBackground::LoadGeometry()
 
     // create static vertex buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
-    pBuffer->DefineAttribute(0, 2, GL_FLOAT,         0);
-    pBuffer->DefineAttribute(1, 2, GL_FLOAT,         2*sizeof(float));
-    pBuffer->DefineAttribute(2, 4, GL_UNSIGNED_BYTE, 4*sizeof(float));
+    pBuffer->DefineAttribute(0, 2, GL_FLOAT,         false, 0);
+    pBuffer->DefineAttribute(1, 2, GL_FLOAT,         false, 2*sizeof(float));
+    pBuffer->DefineAttribute(2, 4, GL_UNSIGNED_BYTE, false, 4*sizeof(float));
 
     // create dynamic height data buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(float), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
-    pBuffer->DefineAttribute(3, 1, GL_FLOAT, 0);
+    pBuffer->DefineAttribute(3, 1, GL_FLOAT, false, 0);
 
     // create index buffer
     m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUshort), pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
 
     // clear memory
-    avColor.clear();
+    avColor    .clear();
     pVertexData.clear();
-    pIndexData.clear();
+    pIndexData .clear();
 
     // cthulhu fhtagn cheezburger
     Core::Log->Info("Background loaded");
