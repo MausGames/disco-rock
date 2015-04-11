@@ -8,24 +8,24 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************
 // constructor
 cFirst::cFirst()noexcept
-: coreMenu (3, 0)
+: coreMenu (3u, 0u)
 {
     // reset configuration settings
     Core::Config->GetInt("Game", "Control", 0);
-    m_Interface.ChangeControlType(0);
+    m_Interface.ChangeControlType(0u);
 
     // create control configuration objects
-    m_ControlText.Construct  (FONT_ROCKS, 45, 0);
+    m_ControlText.Construct  (FONT_ROCKS, 45u, 0u);
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
     m_ControlText.SetText    ("CONTROLS");
 
-    m_ControlType.Construct  (FONT_ROCKS, 29, 16);
+    m_ControlType.Construct  (FONT_ROCKS, 29u, 16u);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
     m_ControlType.SetSize    (coreVector2(0.49f,0.075f));
     m_ControlType.GetCaption()->SetColor3(coreVector3(0.75f,0.75f,0.75f));
@@ -33,11 +33,11 @@ cFirst::cFirst()noexcept
     m_ControlType.AddEntry("MOTION",     CONTROL_MOTION);
     m_ControlType.AddEntry("FULLSCREEN", CONTROL_FULLSCREEN);
 
-    for(int i = 0; i < 2; ++i)
+    for(coreUintW i = 0u; i < 2u; ++i)
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45, 2);
+        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45u, 2u);
         pArrow->DefineProgram   ("2d_border_program");
         pArrow->SetColor3       (coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize      (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
@@ -46,7 +46,7 @@ cFirst::cFirst()noexcept
     }
 
     // create start button
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45, 0);
+    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, 0u);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(0.0f,0.0f));
     m_Start.SetSize      (coreVector2(0.49f,0.1f));
@@ -62,13 +62,13 @@ cFirst::cFirst()noexcept
     m_Interface.GetTouchMoveRight()->SetColor3(vTouchColor);
     m_Interface.GetTouchJump     ()->SetColor3(vTouchColor);
     m_Interface.GetTouchPause    ()->SetColor3(vTouchColor);
-    m_Interface.GetLine(0)->SetColor3(vTouchColor);
-    m_Interface.GetLine(1)->SetColor3(vTouchColor);
+    m_Interface.GetLine(0u)->SetColor3(vTouchColor);
+    m_Interface.GetLine(1u)->SetColor3(vTouchColor);
 
     // add menu objects
-    this->BindObject(1, &m_ControlText);
-    this->BindObject(1, &m_ControlType);
-    this->BindObject(1, &m_Start);
+    this->BindObject(1u, &m_ControlText);
+    this->BindObject(1u, &m_ControlType);
+    this->BindObject(1u, &m_Start);
 }
 
 
@@ -83,15 +83,15 @@ cFirst::~cFirst()
 // render the first-time menu
 void cFirst::Render()
 {
-    const float fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(float(Core::System->GetTotalTime()) * 12.0f));
+    const coreFloat fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(coreFloat(Core::System->GetTotalTime()) * 12.0f));
 
     // forward menu alpha value
     m_Interface.GetTouchMoveLeft ()->SetAlpha(fTouchAlpha);
     m_Interface.GetTouchMoveRight()->SetAlpha(fTouchAlpha);
     m_Interface.GetTouchJump     ()->SetAlpha(fTouchAlpha);
     m_Interface.GetTouchPause    ()->SetAlpha(fTouchAlpha);
-    m_Interface.GetLine(0)->SetAlpha(fTouchAlpha);
-    m_Interface.GetLine(1)->SetAlpha(fTouchAlpha);
+    m_Interface.GetLine(0u)->SetAlpha(fTouchAlpha);
+    m_Interface.GetLine(1u)->SetAlpha(fTouchAlpha);
 
     // render touch objects
     m_Interface.RenderTouch();
@@ -114,21 +114,21 @@ void cFirst::Move()
     m_Interface.GetTouchMoveRight()->Move();
     m_Interface.GetTouchJump     ()->Move();
     m_Interface.GetTouchPause    ()->Move();
-    m_Interface.GetLine(0)->Move();
-    m_Interface.GetLine(1)->Move();
+    m_Interface.GetLine(0u)->Move();
+    m_Interface.GetLine(1u)->Move();
 
     // set transparency of control buttons
     m_Start.SetAlpha(m_Start.GetAlpha() * MENU_ALPHA_IDLE_2);
-    m_ControlType.GetArrow (0)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0) ? 0.5f : 1.0f));
-    m_ControlType.GetArrow (1)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 2) ? 0.5f : 1.0f));
+    m_ControlType.GetArrow(0u)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0u) ? 0.5f : 1.0f));
+    m_ControlType.GetArrow(1u)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 2u) ? 0.5f : 1.0f));
     m_ControlType.GetCaption()->SetAlpha(m_ControlType.GetAlpha());
-    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0));
-    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1));
+    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0u));
+    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1u));
 
     // apply and save control changes
     if(m_ControlType.IsClicked())
     {
-        if(Core::Config->GetInt("Game", "Control", 0) != int(m_ControlType.GetCurIndex()))
+        if(Core::Config->GetInt("Game", "Control", 0) != coreInt32(m_ControlType.GetCurIndex()))
         {
             Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
             m_Interface.ChangeControlType(m_ControlType.GetCurIndex());
@@ -137,11 +137,11 @@ void cFirst::Move()
     }
 
     // control current surface
-    if(!this->GetCurSurface())  this->ChangeSurface(1, 1.0f);
-    if(m_Start.IsClicked())    {this->ChangeSurface(2, 1.0f); g_pMenu->PlayHappySound();}
+    if(!this->GetCurSurface())  this->ChangeSurface(1u, 1.0f);
+    if(m_Start.IsClicked())    {this->ChangeSurface(2u, 1.0f); g_pMenu->PlayHappySound();}
 
     // finish the first-time menu
-    if(this->GetCurSurface() == 2 && !this->GetTransition().GetStatus())
+    if(this->GetCurSurface() == 2u && !this->GetTransition().GetStatus())
     {
         g_pMenu->UpdateControl();
         m_iStatus = 1;

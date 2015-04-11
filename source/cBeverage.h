@@ -21,20 +21,20 @@ protected:
     coreObject3D*  m_pGlass;         // optional separate glass object
     coreProgramPtr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
 
-    int   m_iScore;                  // score value of the beverage
-    float m_fHeight;                 // Z position-offset on the dance floor
+    coreUint32 m_iScore;             // score value of the beverage
+    coreFloat  m_fHeight;            // Z position-offset on the dance floor
 
     coreTimer   m_pDestroy;          // timer for the fly-animation
     coreVector3 m_vFlyRotation;      // rotation-parameter for the fly-animation
     coreVector3 m_vFlyImpact;        // impact-direction to throw the object into a specific direction
 
     coreSoundPtr m_pClink;           // clink sound-effect
-    float m_fVolume;                 // sound-volume parameter
-    float m_fPitch;                  // sound-pitch parameter
+    coreFloat m_fVolume;             // sound-volume parameter
+    coreFloat m_fPitch;              // sound-pitch parameter
 
 
 public:
-    cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept;
+    cBeverage(const coreUint32& iScore, const coreFloat& fHeight, const coreFloat& fVolume, const coreFloat& fPitch)noexcept;
     virtual ~cBeverage();
 
     DISABLE_COPY(cBeverage)
@@ -55,9 +55,9 @@ public:
     inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}
 
     // get object properties
-    inline const int&   GetScore   ()const {return m_iScore;}
-    virtual coreByte    GetSigID   ()const = 0;
-    virtual coreVector3 GetSigColor()const = 0;
+    inline const coreUint32& GetScore   ()const {return m_iScore;}
+    virtual coreUintW        GetSigID   ()const = 0;
+    virtual coreVector3      GetSigColor()const = 0;
 
 
 private:
@@ -77,7 +77,7 @@ public:
     DISABLE_COPY(cSunrise)
 
     // get object properties
-    inline coreByte    GetSigID   ()const override {return 1;}
+    inline coreUintW   GetSigID   ()const override {return 1u;}
     inline coreVector3 GetSigColor()const override {return COLOR_YELLOW_F;}
 };
 
@@ -93,7 +93,7 @@ public:
     DISABLE_COPY(cMojito)
 
     // get object properties
-    inline coreByte    GetSigID   ()const override {return 2;}
+    inline coreUintW   GetSigID   ()const override {return 2u;}
     inline coreVector3 GetSigColor()const override {return COLOR_GREEN_F;}
 };
 
@@ -109,7 +109,7 @@ public:
     DISABLE_COPY(cBlue)
 
     // get object properties
-    inline coreByte    GetSigID   ()const override {return 3;}
+    inline coreUintW   GetSigID   ()const override {return 3u;}
     inline coreVector3 GetSigColor()const override {return COLOR_BLUE_F;}
 };
 
@@ -125,7 +125,7 @@ public:
     DISABLE_COPY(cCoola)
 
     // get object properties
-    inline coreByte    GetSigID   ()const override {return 4;}
+    inline coreUintW   GetSigID   ()const override {return 4u;}
     inline coreVector3 GetSigColor()const override {return COLOR_PURPLE_F;}
 };
 
@@ -141,7 +141,7 @@ public:
     DISABLE_COPY(cFranka)
 
     // get object properties
-    inline coreByte    GetSigID   ()const override {return 5;}
+    inline coreUintW   GetSigID   ()const override {return 5u;}
     inline coreVector3 GetSigColor()const override {return COLOR_RED_F;}
 };
 

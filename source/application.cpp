@@ -25,7 +25,7 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh");
 
     Core::Manager::Resource->Load<coreTexture>("background.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.png");
-    Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png");
+    Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png", false);
     Core::Manager::Resource->Load<coreTexture>("button_full_score.png",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_score.png");
     Core::Manager::Resource->Load<coreTexture>("button_full_trophy.png",      CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_full_trophy.png");
     Core::Manager::Resource->Load<coreTexture>("button_ok.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_ok.png");
@@ -48,9 +48,8 @@ static void SetupResources()
     Core::Manager::Resource->Load<coreTexture>("drink_blue.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_blue.png");
     Core::Manager::Resource->Load<coreTexture>("drink_cola.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola.png");
     Core::Manager::Resource->Load<coreTexture>("drink_cola_glass.png",        CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola_glass.png");
-    Core::Manager::Resource->Load<coreTexture>("effect_shadow.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_shadow.png");
-    Core::Manager::Resource->Load<coreTexture>("effect_particle.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_particle.png");
-    Core::Manager::Resource->Load<coreTexture>("effect_wave.png",             CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_wave.png");
+    Core::Manager::Resource->Load<coreTexture>("effect_ground.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_ground.png", false);
+    Core::Manager::Resource->Load<coreTexture>("effect_particle.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_particle.png", false);
     Core::Manager::Resource->Load<coreTexture>("game_logo.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/game_logo.png");
     Core::Manager::Resource->Load<coreTexture>("gamejolt_logo.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_logo.png");
     Core::Manager::Resource->Load<coreTexture>("gamejolt_jolt.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_jolt.png");
@@ -112,9 +111,9 @@ static void SetupResources()
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("floor_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
         ->AttachShader("floor.vert")
         ->AttachShader("floor.frag")
-        ->BindAttribute("a_v2Position", 0)
-        ->BindAttribute("a_v4Color",    2)
-        ->BindAttribute("a_v1Height",   3)
+        ->BindAttribute("a_v2Position", 0u)
+        ->BindAttribute("a_v4Color",    2u)
+        ->BindAttribute("a_v1Height",   3u)
         ->Finish();
 
     ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("fill_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())

@@ -19,7 +19,7 @@ protected:
     coreFlow           m_pGlow;    // glowing animation timer
     coreParticleEffect m_Effect;   // particle effect object
 
-    bool m_bStatic;                // only for highlighting something
+    coreBool m_bStatic;            // only for highlighting something
 
 
 public:
@@ -32,8 +32,8 @@ public:
     void Move()override;
 
     // check for static behavior
-    inline void        SetStatic(const bool& bStatic) {m_bStatic = bStatic;}
-    inline const bool& IsStatic ()const               {return m_bStatic;}
+    inline void            SetStatic(const coreBool& bStatic) {m_bStatic = bStatic;}
+    inline const coreBool& IsStatic ()const                   {return m_bStatic;}
 };
 
 

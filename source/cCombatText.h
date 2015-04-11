@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // combat text definitions
-#define COMBAT_TEXT_NUM (8)   // max number of simultaneous texts
+#define COMBAT_TEXT_NUM (8u)   // max number of simultaneous texts
 
 
 // ****************************************************************
@@ -29,24 +29,24 @@ private:
         coreVector4 vColor;      // RGBA color-value
 
         sData()noexcept;
-        sData(const char* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept;
+        sData(const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept;
         sData(sData&& m)noexcept;
     };
 
 
 private:
-    coreLabel m_aText[COMBAT_TEXT_NUM];    // label objects to display the combat text
-    coreByte  m_iCurText;                  // current label object
+    coreLabel m_aText[COMBAT_TEXT_NUM];     // label objects to display the combat text
+    coreUintW m_iCurText;                   // current label object
 
-    coreTimer m_Delay;                     // delay between two created texts to increase visibility
-    coreTimer m_aFloat[COMBAT_TEXT_NUM];   // timer for the float-animation
-    float m_afAlpha[COMBAT_TEXT_NUM];      // saved initial alpha values for more dynamic fading
+    coreTimer m_Delay;                      // delay between two created texts to increase visibility
+    coreTimer m_aFloat [COMBAT_TEXT_NUM];   // timer for the float-animation
+    coreFloat m_afAlpha[COMBAT_TEXT_NUM];   // saved initial alpha values for more dynamic fading
 
-    coreObject2D m_Trophy;                 // flying trophy symbol
-    coreLabel    m_TrophyLabel;            // dedicated trophy label
-    coreTimer    m_TrophyTimer;            // timer for the flying trophy symbol
+    coreObject2D m_Trophy;                  // flying trophy symbol
+    coreLabel    m_TrophyLabel;             // dedicated trophy label
+    coreTimer    m_TrophyTimer;             // timer for the flying trophy symbol
 
-    std::deque<sData> m_aData;             // text data deque
+    std::deque<sData> m_aData;              // text data deque
 
 
 public:
@@ -63,11 +63,11 @@ public:
     void Reset();
 
     // add new combat text data
-    inline void AddText           (const char* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
-    void        AddTextTransformed(const char* pcText, const coreVector3& vPosition, const coreVector4& vColor);
+    inline void AddText           (const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
+    void        AddTextTransformed(const coreChar* pcText, const coreVector3& vPosition, const coreVector4& vColor);
 
     // show trophy animation
-    void ShowTrophy(const char* pcText, const coreVector3& vPosition);
+    void ShowTrophy(const coreChar* pcText, const coreVector3& vPosition);
 };
 
 

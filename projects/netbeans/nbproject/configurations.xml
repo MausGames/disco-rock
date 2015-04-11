@@ -4,7 +4,7 @@
     <logicalFolder name="SourceFiles"
                    displayName="Source Files"
                    projectFiles="true">
-      <logicalFolder name="source" displayName="source" projectFiles="true">
+      <logicalFolder name="f4" displayName="additional" projectFiles="true">
         <logicalFolder name="source" displayName="GameJoltAPI" projectFiles="true">
           <itemPath>../../../GameJoltAPI/source/Base64.cpp</itemPath>
           <itemPath>../../../GameJoltAPI/source/Base64.h</itemPath>
@@ -26,31 +26,37 @@
           <itemPath>../../../GameJoltAPI/source/gjUser.cpp</itemPath>
           <itemPath>../../../GameJoltAPI/source/gjUser.h</itemPath>
         </logicalFolder>
-        <itemPath>../../source/cBackground.cpp</itemPath>
-        <itemPath>../../source/cBackground.h</itemPath>
-        <itemPath>../../source/cBeverage.cpp</itemPath>
-        <itemPath>../../source/cBeverage.h</itemPath>
-        <itemPath>../../source/cCombatText.cpp</itemPath>
-        <itemPath>../../source/cCombatText.h</itemPath>
         <itemPath>../../source/cFirst.cpp</itemPath>
         <itemPath>../../source/cFirst.h</itemPath>
-        <itemPath>../../source/cGame.cpp</itemPath>
-        <itemPath>../../source/cGame.h</itemPath>
-        <itemPath>../../source/cInterface.cpp</itemPath>
-        <itemPath>../../source/cInterface.h</itemPath>
-        <itemPath>../../source/cMenu.cpp</itemPath>
-        <itemPath>../../source/cMenu.h</itemPath>
         <itemPath>../../source/cOnline.cpp</itemPath>
         <itemPath>../../source/cOnline.h</itemPath>
-        <itemPath>../../source/cPlate.cpp</itemPath>
-        <itemPath>../../source/cPlate.h</itemPath>
-        <itemPath>../../source/cRay.cpp</itemPath>
-        <itemPath>../../source/cRay.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f1" displayName="game" projectFiles="true">
+        <itemPath>../../source/cBeverage.cpp</itemPath>
+        <itemPath>../../source/cBeverage.h</itemPath>
+        <itemPath>../../source/cGame.cpp</itemPath>
+        <itemPath>../../source/cGame.h</itemPath>
         <itemPath>../../source/cRock.cpp</itemPath>
         <itemPath>../../source/cRock.h</itemPath>
         <itemPath>../../source/cStage.cpp</itemPath>
         <itemPath>../../source/cTrap.cpp</itemPath>
         <itemPath>../../source/cTrap.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f2" displayName="interface" projectFiles="true">
+        <itemPath>../../source/cCombatText.cpp</itemPath>
+        <itemPath>../../source/cCombatText.h</itemPath>
+        <itemPath>../../source/cInterface.cpp</itemPath>
+        <itemPath>../../source/cInterface.h</itemPath>
+        <itemPath>../../source/cMenu.cpp</itemPath>
+        <itemPath>../../source/cMenu.h</itemPath>
+      </logicalFolder>
+      <logicalFolder name="f3" displayName="visual" projectFiles="true">
+        <itemPath>../../source/cBackground.cpp</itemPath>
+        <itemPath>../../source/cBackground.h</itemPath>
+        <itemPath>../../source/cPlate.cpp</itemPath>
+        <itemPath>../../source/cPlate.h</itemPath>
+        <itemPath>../../source/cRay.cpp</itemPath>
+        <itemPath>../../source/cRay.h</itemPath>
       </logicalFolder>
       <itemPath>../../source/application.cpp</itemPath>
       <itemPath>../../source/main.cpp</itemPath>

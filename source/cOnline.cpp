@@ -10,11 +10,11 @@
 
 #if defined(_API_GOOGLE_PLAY_)
 
-    jmethodID iSetBannerAlpha = 0;   // function ID to set ad banner visibility
-    pthread_key_t iThreadKey  = 0;   // thread key
+    static jmethodID iSetBannerAlpha = NULL;   // function ID to set ad banner visibility
+    static pthread_key_t iThreadKey  = 0u;     // thread key
 
-    float fCurAlpha = 0.0f;          // current banner transparency
-    double dCurTime = 0.0;           // current time to reduce the update frequency
+    static coreFloat fCurAlpha = 0.0f;         // current banner transparency
+    static coreDouble dCurTime = 0.0;          // current time to reduce the update frequency
 
 
     // ****************************************************************
@@ -55,7 +55,7 @@
 
 
     // ****************************************************************
-    void SetBannerAlpha(float fAlpha)
+    void SetBannerAlpha(coreFloat fAlpha)
     {
         // check current time value
         if(dCurTime + 0.033333 <= Core::System->GetTotalTime())
@@ -76,7 +76,7 @@
     }
 
 #else
-    void SetBannerAlpha(float fAlpha) {}
+    void SetBannerAlpha(coreFloat fAlpha) {}
 #endif
 
 
@@ -86,17 +86,17 @@ cOnline::cOnline()noexcept
 #if defined(_API_GOOGLE_PLAY_)
 : m_sUserName       ("")
 , m_bAuthorized     (false)
-, m_iNumConnections (0)
+, m_iNumConnections (0u)
 #endif
 {
     // create Game Jolt API access
     m_pGameJolt = new gjAPI(18996, GJ_KEY);
 
     // sort and hide trophies
-    const int aiTrophySort[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04, GJ_TROPHY_05, GJ_TROPHY_06, GJ_TROPHY_07, GJ_TROPHY_08, GJ_TROPHY_09, GJ_TROPHY_10, GJ_TROPHY_11, GJ_TROPHY_12, GJ_TROPHY_13, GJ_TROPHY_14, GJ_TROPHY_15};
+    const coreInt32 aiTrophySort[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04, GJ_TROPHY_05, GJ_TROPHY_06, GJ_TROPHY_07, GJ_TROPHY_08, GJ_TROPHY_09, GJ_TROPHY_10, GJ_TROPHY_11, GJ_TROPHY_12, GJ_TROPHY_13, GJ_TROPHY_14, GJ_TROPHY_15};
     m_pGameJolt->InterTrophy()->SetSort(aiTrophySort, ARRAY_SIZE(aiTrophySort));
 
-    const int aiTrophySecret[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04};
+    const coreInt32 aiTrophySecret[] = {GJ_TROPHY_01, GJ_TROPHY_02, GJ_TROPHY_03, GJ_TROPHY_04};
     m_pGameJolt->InterTrophy()->SetSecret(aiTrophySecret, ARRAY_SIZE(aiTrophySecret));
 
     // Google Play Games access is created through QuickPlay routine
@@ -136,7 +136,7 @@ cOnline::~cOnline()
     SAFE_DELETE(m_apScoreTable[1])
 
     // clear score list
-    for(int i = 0; i < SCORE_TABLES; ++i)
+    for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
         FOR_EACH(it, m_aapScoreList[i])
             SAFE_DELETE(*it)
@@ -162,7 +162,7 @@ void cOnline::Update()
 
 // ****************************************************************
 // forward error message to menu
-void cOnline::__SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3)
+void cOnline::__SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3)
 {
     g_pMenu->SetErrorMessage(vColor, pcMessage1, pcMessage2, pcMessage3);
 }
@@ -170,7 +170,7 @@ void cOnline::__SetErrorMessage(const coreVector3& vColor, const char* pcMessage
 
 // ****************************************************************
 // forward score table update to menu
-void cOnline::__InvokeScoreUpdate(const int& iTableNum)
+void cOnline::__InvokeScoreUpdate(const coreUintW& iTableNum)
 {
     g_pMenu->InvokeScoreUpdate(iTableNum);
 }

@@ -11,14 +11,14 @@
 
 // ****************************************************************
 // apply stage algorithms to the game
-void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
+void cGame::ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole)
 {
 #if defined(_CORE_DEBUG_)
     m_aiAlgo[m_iAlgoCurIndex] = STAGE_TRAP;
 #endif
 
     // prevent double-empty-lines
-    auto nHasEmptyLines = [this](const bool& bEmptyLines)
+    auto nHasEmptyLines = [this](const coreBool& bEmptyLines)
     {
         if((m_iAlgoCurCount == 0) && m_bAlgoEmptyLines && bEmptyLines)
             ++m_iAlgoCurCount;
@@ -26,7 +26,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
     };
 
     // select algorithm
-    coreUint iMaxCount = 0;
+    coreInt32 iMaxCount = 0;
     switch(m_aiAlgo[m_iAlgoCurIndex])
     {
 
@@ -43,9 +43,9 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         //  ### //
         // #####//
 
-        const int iCol = (m_iAlgoCurCount / 6) % 2 + 2;
-        const int iAlt =  m_iAlgoCurCount % 6;
-        const int iNum = (iAlt > 3) ? (5 - iAlt) : (iAlt - 1);
+        const coreInt32 iCol = (m_iAlgoCurCount / 6) % 2 + 2;
+        const coreInt32 iAlt =  m_iAlgoCurCount % 6;
+        const coreInt32 iNum = (iAlt > 3) ? (5 - iAlt) : (iAlt - 1);
 
         if(iNum >= 0) this->AddStreet(iCol, true, iNum, iNum, pbHole);
         if(iNum >= 1)
@@ -72,11 +72,11 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         // ###  //
         // ###  //
 
-        const int iAlt =  m_iAlgoCurCount % 5;
-        const int iNum = (iAlt > 1) ? (3 - iAlt) : (iAlt - 1);
+        const coreInt32 iAlt =  m_iAlgoCurCount % 5;
+        const coreInt32 iNum = (iAlt > 1) ? (3 - iAlt) : (iAlt - 1);
 
         if(!iAlt) m_aiAlgoStatus[0] = (m_aiAlgoStatus[0] + Core::Rand->Int(1,3)) % 4;
-        const int iCol = (m_aiAlgoStatus[0] > 1) ? (2*m_aiAlgoStatus[0] - 2) : (2*m_aiAlgoStatus[0] + 1);
+        const coreInt32 iCol = (m_aiAlgoStatus[0] > 1) ? (2*m_aiAlgoStatus[0] - 2) : (2*m_aiAlgoStatus[0] + 1);
 
         if(iNum >= 0)
         {
@@ -108,12 +108,12 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if((0 < m_iAlgoCurCount) && (m_iAlgoCurCount < iMaxCount-1))
         {
-            const int iHalf = (m_iAlgoCurCount-1) / 2 + 2;
-            const int iCol  = ((iHalf % 8) >= 4) ? (4 - (iHalf-4) % 4) : (iHalf % 4);
+            const coreInt32 iHalf = (m_iAlgoCurCount-1) / 2 + 2;
+            const coreInt32 iCol  = ((iHalf % 8) >= 4) ? (4 - (iHalf-4) % 4) : (iHalf % 4);
 
             if((iCol == 2) && (m_iAlgoCurCount % 2 == 1))
             {
-                const int iNew = Core::Rand->Int(2);
+                const coreInt32 iNew = Core::Rand->Int(2);
                 if((!!iNew) != (!!m_aiAlgoStatus[0])) m_aiAlgoStatus[0] = iNew;
             }
 
@@ -150,8 +150,8 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         {
             if(m_iAlgoCurCount == 1) m_aiAlgoStatus[0] = Core::Rand->Int(1) * 5;
 
-            const int iHalf = (m_iAlgoCurCount + m_aiAlgoStatus[0] + 1) % 10;
-            const int iCol  = (iHalf >= 5) ? (1 - (iHalf-5) % 5) : (-2 + iHalf % 5);
+            const coreInt32 iHalf = (m_iAlgoCurCount + m_aiAlgoStatus[0] + 1) % 10;
+            const coreInt32 iCol  = (iHalf >= 5) ? (1 - (iHalf-5) % 5) : (-2 + iHalf % 5);
 
             if((iHalf == 1) || (iHalf == 6)) m_aiAlgoStatus[0] = Core::Rand->Int(1) * 5;
 
@@ -192,8 +192,8 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         {
             if(!m_aiAlgoStatus[0]) m_aiAlgoStatus[0] = Core::Rand->Int(1,2) * 3;
 
-            const int iHalf = (m_iAlgoCurCount - 1) / 6 + 1 + m_aiAlgoStatus[0];
-            const int iAlt  = (iHalf + 1) % 2;
+            const coreInt32 iHalf = (m_iAlgoCurCount - 1) / 6 + 1 + m_aiAlgoStatus[0];
+            const coreInt32 iAlt  = (iHalf + 1) % 2;
 
             if(m_aiAlgoStatus[1] != iAlt)
             {
@@ -240,12 +240,12 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         }
         else
         {
-            const int iRed  = m_iAlgoCurCount - 3;
-            const int iFill = MAX((iRed % GAME_JUMP_WIDTH) - (GAME_JUMP_WIDTH-3), 0);
+            const coreInt32 iRed  = m_iAlgoCurCount - 3;
+            const coreInt32 iFill = MAX((iRed % GAME_JUMP_WIDTH) - (GAME_JUMP_WIDTH-3), 0);
 
             if(iFill)
             {
-                const int iCol = ((iRed / GAME_JUMP_WIDTH) % 2) * 3 + 1;
+                const coreInt32 iCol = ((iRed / GAME_JUMP_WIDTH) % 2) * 3 + 1;
 
                 this->AddStreet(iCol, true, 1, 1, pbHole);
                 if(iFill == 1)
@@ -273,7 +273,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         //  **  //
         //  ##  //
 
-        const int iAlt = m_iAlgoCurCount % (GAME_JUMP_WIDTH*2);
+        const coreInt32 iAlt = m_iAlgoCurCount % (GAME_JUMP_WIDTH*2);
 
         if(((iAlt <= 2) || (iAlt >= GAME_JUMP_WIDTH*2+1)) && (iAlt || !m_iAlgoCurCount))
         {
@@ -293,11 +293,11 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         }
         else
         {
-            const int iFill = MAX(((iAlt-3) % GAME_JUMP_WIDTH) - (GAME_JUMP_WIDTH-3), 0);
+            const coreInt32 iFill = MAX(((iAlt-3) % GAME_JUMP_WIDTH) - (GAME_JUMP_WIDTH-3), 0);
 
             if(iFill)
             {
-                for(int i = 0; i < 6; i+=5)
+                for(coreUintW i = 0u; i < 6u; i += 5u)
                 {
                     this->AddStreet(i, true, 0, 0, pbHole);
                          if((iFill == 1) && (m_aiAlgoStatus[0] == i+1)) this->AddBeverage(fSpawnY, i, pbHole);
@@ -326,8 +326,8 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         {
             if(!m_aiAlgoStatus[0]) m_aiAlgoStatus[0] = Core::Rand->Int(1,2);
 
-            const int iCol = ((m_iAlgoCurCount-1) % 6);
-            const int iAlt = (m_aiAlgoStatus[0] == 1) ? (5 - iCol) : iCol;
+            const coreInt32 iCol = ((m_iAlgoCurCount-1) % 6);
+            const coreInt32 iAlt = (m_aiAlgoStatus[0] == 1) ? (5 - iCol) : iCol;
 
             this->AddBeverage(fSpawnY, iAlt, pbHole);
             this->AddStreet  (iAlt, true, 1, 1, pbHole);
@@ -356,8 +356,8 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         {
             if(!m_aiAlgoStatus[0]) m_aiAlgoStatus[0] = Core::Rand->Int(1,2);
 
-            const int iCol = (((m_iAlgoCurCount-1) / 2) % 6);
-            const int iAlt = (m_aiAlgoStatus[0] == 1) ? (5 - iCol) : iCol;
+            const coreInt32 iCol = (((m_iAlgoCurCount-1) / 2) % 6);
+            const coreInt32 iAlt = (m_aiAlgoStatus[0] == 1) ? (5 - iCol) : iCol;
 
             this->AddBeverage(fSpawnY, iAlt, pbHole);
             this->AddStreet  (iAlt, true, 1, 1, pbHole);
@@ -381,7 +381,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if((0 < m_iAlgoCurCount) && (m_iAlgoCurCount < iMaxCount-1))
         {
-            const int iNum = (m_iAlgoCurCount-1) % (GAME_JUMP_WIDTH+4);
+            const coreInt32 iNum = (m_iAlgoCurCount-1) % (GAME_JUMP_WIDTH+4);
 
             if(!m_aiAlgoStatus[0])
                 m_aiAlgoStatus[0] = Core::Rand->Int(2,3);
@@ -390,7 +390,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
             if(iNum == 3)
             {
-                for(int i = 1; i < 5; ++i)
+                for(coreUintW i = 1; i < 5; ++i)
                     this->AddTrap(fSpawnY, i, pbHole);
             }
             else if((iNum != GAME_JUMP_WIDTH+2) && (iNum != GAME_JUMP_WIDTH+3))
@@ -419,7 +419,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if((0 < m_iAlgoCurCount) && (m_iAlgoCurCount < iMaxCount-1))
         {
-            const int iAlt = (m_iAlgoCurCount + 3) % 5;
+            const coreInt32 iAlt = (m_iAlgoCurCount + 3) % 5;
 
             if(iAlt == 4)
             {
@@ -457,7 +457,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         //  **  //
         //  ##  //
 
-        const int iAlt = m_iAlgoCurCount % 9;
+        const coreInt32 iAlt = m_iAlgoCurCount % 9;
 
         if(!m_aiAlgoStatus[1])
         {
@@ -523,7 +523,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if(!m_iAlgoCurCount) m_aiAlgoStatus[0] = Core::Rand->Int(1);
 
-        const int iFill = (m_iAlgoCurCount + 10) % 12;
+        const coreInt32 iFill = (m_iAlgoCurCount + 10) % 12;
 
         if(iFill >= 10)
         {
@@ -557,7 +557,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if(!m_iAlgoCurCount) m_aiAlgoStatus[0] = Core::Rand->Int(1);
 
-        const int iFill = (m_iAlgoCurCount + 9) % 12;
+        const coreInt32 iFill = (m_iAlgoCurCount + 9) % 12;
 
         if((m_iAlgoCurCount <= 1) || (m_iAlgoCurCount >= iMaxCount-2))
         {
@@ -633,7 +633,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if((0 < m_iAlgoCurCount) && (m_iAlgoCurCount < iMaxCount-1))
         {
-            const int iFill = (m_iAlgoCurCount-1) % 8;
+            const coreInt32 iFill = (m_iAlgoCurCount-1) % 8;
 
             if( m_iAlgoCurCount == 1) m_aiAlgoStatus[0] = Core::Rand->Int(1,2);
             if((m_iAlgoCurCount >= 3) && (m_iAlgoCurCount <= iMaxCount-3))
@@ -666,7 +666,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         // #### //
         // #### //
 
-        const int iFill = m_iAlgoCurCount % 9;
+        const coreInt32 iFill = m_iAlgoCurCount % 9;
 
         if(m_iAlgoCurCount == 1) m_aiAlgoStatus[0] = Core::Rand->Int(1,2);
 
@@ -708,7 +708,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
 
         if((0 < m_iAlgoCurCount) && (m_iAlgoCurCount < iMaxCount-1))
         {
-            const int iFill = (m_iAlgoCurCount + 4) % 5;
+            const coreInt32 iFill = (m_iAlgoCurCount + 4) % 5;
 
             if(!iFill)
             {
@@ -734,7 +734,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
                 }
             }
 
-            for(int i = 0; i < 4; ++i)
+            for(coreUintW i = 0; i < 4; ++i)
             {
                 if((m_aiAlgoStatus[0] & BIT(i)) && ((m_aiAlgoStatus[2]+1) & BIT(i/2)))
                 {
@@ -760,7 +760,7 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
         //   ###//
         //   #*#//
 
-        const int iFill = (m_iAlgoCurCount + 7+GAME_JUMP_WIDTH) % (8+GAME_JUMP_WIDTH);
+        const coreInt32 iFill = (m_iAlgoCurCount + 7+GAME_JUMP_WIDTH) % (8+GAME_JUMP_WIDTH);
 
         if(m_iAlgoCurCount >= iMaxCount-3)
         {
@@ -820,23 +820,23 @@ void cGame::ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole)
     {
         if(++m_iAlgoCurIndex >= m_aiAlgo.size())
         {
-            m_iAlgoCurIndex = 0;
+            m_iAlgoCurIndex = 0u;
 
             // further increase speed (and difficulty) with shock-wave
             g_fTargetSpeed += GAME_SPEED_FAST * 0.15f;
             g_fCurSpeed     = g_fTargetSpeed  + 0.2f;
-            m_Rock.CreateShockWave(0);
+            m_Rock.CreateShockWave(0u);
 
             // create speed-up message
             g_pCombatText->AddTextTransformed("+BOOST", m_Rock.GetPosition(), coreVector4(COLOR_RED_F, 1.0f));
 
             // shuffle everything again (don't let the last stage come twice, put at least two others in-between)
-            auto oEngine = std::default_random_engine(int(std::time(NULL)));
+            auto oEngine = std::default_random_engine(CORE_RAND_TIME);
             std::shuffle(    m_aiAlgo.begin(), --m_aiAlgo.end(), oEngine);
             std::shuffle(++++m_aiAlgo.begin(),   m_aiAlgo.end(), oEngine);
 
             // achieve speed-trophy
-            if(!this->GetStatus()) this->AchieveTrophy(GJ_TROPHY_13, 12);
+            if(!this->GetStatus()) this->AchieveTrophy(GJ_TROPHY_13, 12u);
         }
 
         // reset count and status
