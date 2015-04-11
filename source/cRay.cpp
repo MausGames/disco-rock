@@ -61,7 +61,7 @@ void cRay::Move()
     if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
     // fade out the ray when near the camera and flash it with the beat
-    const float fAlpha = MIN((this->GetPosition().y + 45.0f) * 0.02f, 1.0f) * g_pBackground->GetFlash(0.2f);
+    const coreFloat fAlpha = MIN((this->GetPosition().y + 45.0f) * 0.02f, 1.0f) * g_pBackground->GetFlash(0.2f);
     this->SetAlpha(fAlpha*0.4f);
 
     // move the object

@@ -24,14 +24,14 @@ cRock::cRock()noexcept
 , m_bFallen            (false)
 , m_bJumped            (true)
 , m_bReflected         (false)
-, m_iNumJumps          (0)
-, m_iNumAirJumps       (0)
+, m_iNumJumps          (0u)
+, m_iNumAirJumps       (0u)
 , m_fRotation          (0.0f)
 , m_Effect             (g_pParticleSystem)
 {
     // load object resources
     this->DefineModel  ("rock.md5mesh");
-    this->DefineTexture(0, "rock.png");
+    this->DefineTexture(0u, "rock.png");
     this->DefineProgram("rock_program");
 
     // set object properties
@@ -41,26 +41,26 @@ cRock::cRock()noexcept
 
     // create shadow
     m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
-    m_Shadow.DefineTexture(0, "effect_shadow.png");
+    m_Shadow.DefineTexture(0u, "effect_ground.png");
     m_Shadow.DefineProgram("shadow_program");
 
     // create big wave
     m_Wave.DefineModel   (Core::Manager::Object->GetLowModel());
-    m_Wave.DefineTexture (0, "effect_wave.png");
+    m_Wave.DefineTexture (0u, "effect_ground.png");
     m_Wave.DefineProgram ("wave_program");
     m_Wave.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_Wave.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create small wave
     m_WaveSmall.DefineModel   (Core::Manager::Object->GetLowModel());
-    m_WaveSmall.DefineTexture (0, "effect_wave.png");
+    m_WaveSmall.DefineTexture (0u, "effect_ground.png");
     m_WaveSmall.DefineProgram ("wave_program");
     m_WaveSmall.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_WaveSmall.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create shock-wave
     m_WaveShock.DefineModel  (Core::Manager::Object->GetLowModel());
-    m_WaveShock.DefineTexture(0, "effect_wave.png");
+    m_WaveShock.DefineTexture(0u, "effect_ground.png");
     m_WaveShock.DefineProgram("wave_program");
 
     // load sound-effects
@@ -85,11 +85,11 @@ void cRock::Move()
     this->SetOrientation(coreVector3(0.0f, coreVector2::Direction(-m_fRotation)));
 
     // get minimum Z position above the ground
-    const float fGround = GAME_HEIGHT + m_pModel->GetBoundingRadius() * this->GetSize().x;
+    const coreFloat fGround = GAME_HEIGHT + m_pModel->GetBoundingRadius() * this->GetSize().x;
 
 #if defined(_CORE_ANDROID_)
 
-    bool bJump = false;
+    coreBool bJump = false;
 
     // jump with right touch button
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
@@ -99,7 +99,7 @@ void cRock::Move()
     else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
     {
         if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
-            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUint& i) {bJump = true;});
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW& i) {bJump = true;});
     }
 
     // jump then touching the right third of the screen
@@ -107,7 +107,7 @@ void cRock::Move()
     {
         if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
         {
-            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUint& i)
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW& i)
             {
                 if(Core::Input->GetTouchPosition(i).x > 0.0f)
                     bJump = true;
@@ -124,8 +124,8 @@ void cRock::Move()
        Core::Input->GetKeyboardButton(CORE_INPUT_KEY(UP),    CORE_INPUT_PRESS) ||
        Core::Input->GetKeyboardButton(CORE_INPUT_KEY(SPACE), CORE_INPUT_PRESS) ||
        Core::Input->GetMouseButton   (CORE_INPUT_LEFT,       CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(0, 0,                  CORE_INPUT_PRESS) ||
-       Core::Input->GetJoystickButton(1, 0,                  CORE_INPUT_PRESS))
+       Core::Input->GetJoystickButton(0u, 0u,                CORE_INPUT_PRESS) ||
+       Core::Input->GetJoystickButton(1u, 0u,                CORE_INPUT_PRESS))
 
 #endif
     {
@@ -180,11 +180,11 @@ void cRock::Move()
     }
 
     // init new X position
-    float fNewPos = this->GetPosition().x;
+    coreFloat fNewPos = this->GetPosition().x;
 
 #if defined(_CORE_ANDROID_)
 
-    const float fMove = 100.0f * Core::System->GetTime(1);
+    const coreFloat fMove = 100.0f * Core::System->GetTime(1);
 
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
@@ -195,14 +195,14 @@ void cRock::Move()
 
     // move with device motion
     else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
-        fNewPos += fMove * Core::Input->GetJoystickRelative(0).x * 1.1f;
+        fNewPos += fMove * Core::Input->GetJoystickRelative(0u).x * 1.1f;
 
     // move with screen space
     else // == CONTROL_FULLSCREEN)
     {
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint& i)
         {
-            const float& fX = Core::Input->GetTouchPosition(i).x;
+            const coreFloat& fX = Core::Input->GetTouchPosition(i).x;
 
                                  if(fX < -0.25f) fNewPos -= fMove;
             else if(-0.25f <= fX && fX <=  0.0f) fNewPos += fMove;
@@ -212,17 +212,17 @@ void cRock::Move()
 #else
 
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
-    const float fMove = 100.0f * Core::System->GetTime(1);
+    const coreFloat fMove = 100.0f * Core::System->GetTime(1);
 
          if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x < 0.0f                           ||
-            Core::Input->GetJoystickRelative(1).x < 0.0f) fNewPos -= fMove;
+            Core::Input->GetJoystickRelative(0u).x < 0.0f                          ||
+            Core::Input->GetJoystickRelative(1u).x < 0.0f) fNewPos -= fMove;
 
     else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(D),     CORE_INPUT_HOLD) ||
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0).x > 0.0f                           ||
-            Core::Input->GetJoystickRelative(1).x > 0.0f) fNewPos += fMove;
+            Core::Input->GetJoystickRelative(0u).x > 0.0f                          ||
+            Core::Input->GetJoystickRelative(1u).x > 0.0f) fNewPos += fMove;
 
 #endif
 
@@ -265,7 +265,7 @@ void cRock::Move()
     m_Shadow.Move();
 
     // calculate wave movement
-    const float fWaveMove = -Core::System->GetTime(0) * 1.25f * BACK_DETAIL_Y;
+    const coreFloat fWaveMove = -Core::System->GetTime(0) * 1.25f * BACK_DETAIL_Y;
 
     if(m_WaveTimer.GetStatus())
     {
@@ -302,7 +302,7 @@ void cRock::Move()
 
 // ****************************************************************
 // just jump
-bool cRock::Jump(const float& fForce)
+coreBool cRock::Jump(const coreFloat& fForce)
 {
     if(m_bFallen || m_bJumped) return false;
 
@@ -326,9 +326,9 @@ bool cRock::Jump(const float& fForce)
 
 // ****************************************************************
 // create shock-wave
-void cRock::CreateShockWave(const coreByte& iType)
+void cRock::CreateShockWave(const coreUint8& iType)
 {
-    if(iType == 0)
+    if(iType == 0u)
     {
         // start shock-wave animation
         m_WaveShockTimer.Play(CORE_TIMER_PLAY_RESET);
@@ -343,7 +343,7 @@ void cRock::CreateShockWave(const coreByte& iType)
         m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
 
         // throw up some dust
-        m_Effect.CreateParticle(14, [this](coreParticle* pParticle)
+        m_Effect.CreateParticle(14u, [this](coreParticle* pParticle)
         {
             const coreVector2 vRand = coreVector2::Rand(40.0f);
 
@@ -354,7 +354,7 @@ void cRock::CreateShockWave(const coreByte& iType)
             pParticle->SetSpeed      (2.0f);
         });
     }
-    else if(iType == 1)
+    else if(iType == 1u)
     {
         const coreVector3 vToSide = coreVector3(-SIGN(this->GetPosition().x), 0.0f, 0.0f);
         const coreVector3 vToCam  = (Core::Graphics->GetCamPosition() - this->GetPosition()).Normalize();
@@ -375,7 +375,7 @@ void cRock::CreateShockWave(const coreByte& iType)
         const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
 
         // throw up some colored dust
-        m_Effect.CreateParticle(22, [this, &vSmokeColor](coreParticle* pParticle)
+        m_Effect.CreateParticle(22u, [this, &vSmokeColor](coreParticle* pParticle)
         {
             pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
             pParticle->SetScaleStc   (6.2f);
@@ -390,7 +390,7 @@ void cRock::CreateShockWave(const coreByte& iType)
         m_pUp->PlayPosition(NULL, 0.45f, 0.9f, 0.0f, false, this->GetPosition());
 
         // throw up some dust
-        m_Effect.CreateParticle(22, [this](coreParticle* pParticle)
+        m_Effect.CreateParticle(22u, [this](coreParticle* pParticle)
         {
             pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
             pParticle->SetScaleStc   (6.2f);

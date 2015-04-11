@@ -27,20 +27,20 @@
 #define ADJUST_BORDER(x) {x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);}
 
 // macro function for changing object transparency
-#define ALPHA_BUTTON_TEXT(b)                                                                                             \
-    {                                                                                                                    \
-        const float a = (b).IsFocused() ? MENU_ALPHA_ACTIVE_2 : MENU_ALPHA_IDLE_2;                                       \
-        (b).SetAlpha(b.GetAlpha() * a);                                                                                  \
+#define ALPHA_BUTTON_TEXT(b)                                                                                                   \
+    {                                                                                                                          \
+        const coreFloat a = (b).IsFocused() ? MENU_ALPHA_ACTIVE_2 : MENU_ALPHA_IDLE_2;                                         \
+        (b).SetAlpha(b.GetAlpha() * a);                                                                                        \
     }
-#define ALPHA_BUTTON_SCORE(b,i)                                                                                          \
-    {                                                                                                                    \
-        const float a = ((b).IsFocused() || m_ScoreMenu.GetCurSurface() == i) ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1; \
-        (b).SetAlpha((b).GetAlpha() * a);                                                                                \
+#define ALPHA_BUTTON_SCORE(b,i)                                                                                                \
+    {                                                                                                                          \
+        const coreFloat a = ((b).IsFocused() || m_ScoreMenu.GetCurSurface() == (i)) ? MENU_ALPHA_ACTIVE_1 : MENU_ALPHA_IDLE_1; \
+        (b).SetAlpha((b).GetAlpha() * a);                                                                                      \
     }
-#define ALPHA_BUTTON_INSIDE(b)                                                                                           \
-    {                                                                                                                    \
-        const float a = (b).IsFocused() ? MENU_ALPHA_IDLE_1 : MENU_ALPHA_ACTIVE_1;                                       \
-        (b).SetAlpha((b).GetAlpha() * a);                                                                                \
+#define ALPHA_BUTTON_INSIDE(b)                                                                                                 \
+    {                                                                                                                          \
+        const coreFloat a = (b).IsFocused() ? MENU_ALPHA_IDLE_1 : MENU_ALPHA_ACTIVE_1;                                         \
+        (b).SetAlpha((b).GetAlpha() * a);                                                                                      \
     }
 
 // static texts
@@ -50,8 +50,8 @@
 #define LOGIN_ERROR_CREDENTIALS "WRONG USER NAME OR TOKEN"
 
 #define QUESTION_EXIT   "EXIT GAME?"
-#define QUESTION_ABORT  "ABORT CURRENT GAME?"
-#define QUESTION_RETURN "RETURN WITHOUT SUBMITTING?"
+#define QUESTION_ABORT  "ABORT GAME?"
+#define QUESTION_RETURN "RETURN WITHOUT SENDING SCORE?"
 
 // update displayed score and time value
 #define SHOW_BEST_SCORE(x) {m_aScoreBestValue[0].SetText(PRINT("%06d", (x)));}
@@ -116,7 +116,7 @@ private:
 
     coreLabel    m_AudioText;
     coreObject2D m_AudioBar;
-    coreObject2D m_AudioBarBack;   // (no, not bareback)
+    coreObject2D m_AudioBarBack;
     coreObject2D m_AudioIconHigh;
     coreObject2D m_AudioIconLow;
     coreButton   m_AudioDrag;
@@ -125,8 +125,8 @@ private:
     coreObject2D m_LoginConfigLogo;
     coreButton   m_LoginConfigStart;
 
-    coreLabel          m_ControlText;
-    coreSwitchBox<int> m_ControlType;
+    coreLabel                m_ControlText;
+    coreSwitchBox<coreUint8> m_ControlType;
 
     coreObject2D m_LoginBlack;
     coreObject2D m_LoginPopup;
@@ -147,21 +147,21 @@ private:
     coreObject2D m_Successful;
     coreLabel    m_TopUpdating;
 
-    coreLabel  m_aScoreTable[SCORE_TABLES];
-    coreLabel  m_aaScoreEntry[SCORE_TABLES][SCORE_ENTRIES][3];
-    coreLabel  m_aScoreBest[SCORE_TABLES];
+    coreLabel  m_aScoreTable    [SCORE_TABLES];
+    coreLabel  m_aaScoreEntry   [SCORE_TABLES][SCORE_ENTRIES][3];
+    coreLabel  m_aScoreBest     [SCORE_TABLES];
     coreLabel  m_aScoreBestValue[SCORE_TABLES];
-    coreLabel  m_aScoreRecord[SCORE_TABLES];
-    coreLabel  m_aScoreRank[SCORE_TABLES];
+    coreLabel  m_aScoreRecord   [SCORE_TABLES];
+    coreLabel  m_aScoreRank     [SCORE_TABLES];
     coreButton m_PageChange;
 
-    coreLabel m_aAfterBest[SCORE_TABLES];
+    coreLabel m_aAfterBest     [SCORE_TABLES];
     coreLabel m_aAfterBestValue[SCORE_TABLES];
-    coreLabel m_aAfterRecord[SCORE_TABLES];
+    coreLabel m_aAfterRecord   [SCORE_TABLES];
 
     coreLabel    m_TrophyText;
-    coreObject2D m_aTrophyImage[TROPHY_ITEMS];
-    coreObject2D m_aTrophyCheck[TROPHY_ITEMS];
+    coreObject2D m_aTrophyImage [TROPHY_ITEMS];
+    coreObject2D m_aTrophyCheck [TROPHY_ITEMS];
     coreLabel    m_aTrophySecret[TROPHY_SECRETS];
     coreLabel    m_TrophyName;
     coreLabel    m_aTrophyDesc[2];
@@ -180,23 +180,22 @@ private:
     coreSoundPtr m_pRecordSound;                // sound-effect for highlighting a new record
     coreSoundPtr m_pFlashSound;                 // sound-effect when flashing the screen
 
-    float m_afSubmitValue[SCORE_TABLES];        // fetched values after loosing the game
-    bool  m_bSubmited;                          // values where successfully submited
-    bool  m_bInLeaderboard;                     // current values would be in the visible leaderboard (ask to submit before leaving)
+    coreFloat m_afSubmitValue[SCORE_TABLES];    // fetched values after loosing the game
+    coreBool  m_bSubmited;                      // values where successfully submited
+    coreBool  m_bInLeaderboard;                 // current values would be in the visible leaderboard (ask to submit before leaving)
 
     gjScoreList m_aapCurScores[SCORE_TABLES];   // saved score pointers for better leaderboard paging
-    int m_iCurPage;                             // current page in the leaderboards
-    int m_iTableUpdate;                         // status to update the current score table display synchronous
+    coreUint8 m_iCurPage;                       // current page in the leaderboards
+    coreUint8 m_iTableUpdate;                   // status to update the current score table display synchronous
 
-    int m_iTrophyStatus;                        // achieve-status of all trophies (per bit)
-    int m_iTrophyCurrent;                       // current selected trophy
+    coreUint32 m_iTrophyStatus;                 // achieve-status of all trophies (per bit)
+    coreInt8   m_iTrophyCurrent;                // current selected trophy
 
-    bool m_bFromGuest;                          // login-menu has to go back to guest-login on cancel
+    coreBool m_bFromGuest;                      // login-menu has to go back to guest-login on cancel
 
 
 public:
     cMenu()noexcept;
-    ~cMenu();
 
     DISABLE_COPY(cMenu)
 
@@ -210,11 +209,11 @@ public:
     void ResetShaders();
 
     // control notification for new record
-    void NewRecord(const coreByte& iIndex);
+    void NewRecord(const coreUintW& iIndex);
     void ResetRecord();
 
     // control connection error notification
-    void SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3);
+    void SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3);
 
     // update current control type
     inline void UpdateControl() {m_ControlType.Select(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
@@ -226,17 +225,17 @@ public:
     inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, 0.0f, false);}
 
     // invoke score table update
-    inline void InvokeScoreUpdate(const int& iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}
+    inline void InvokeScoreUpdate(const coreUintW& iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}
 
     // submit score functions
-    void SubmitScore        (const char* pcGuestName);
+    void SubmitScore        (const coreChar* pcGuestName);
     void SubmitScoreCallback(const gjScorePtr& pScore, void* pData);
 
     // retrieve score functions
     void RetrieveScores();
     void RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData);
     void RetrieveScoresCallback2(const gjScoreList&     apScore, void* pData);
-    void RetrieveScoresCallback3(const int& iTableNum);
+    void RetrieveScoresCallback3(const coreUintW&       iTableNum);
 
     // fetch trophies functions
     void FetchTrophies();
@@ -244,16 +243,16 @@ public:
     void FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData);
 
     // login functions
-    int  QuickPlay();
-    int  Login(const char* pcName, const char* pcToken);
-    void LoginCallback(const int& iStatus, void* pData);
+    coreInt32 QuickPlay();
+    coreInt32 Login(const coreChar* pcName, const coreChar* pcToken);
+    void LoginCallback(const coreInt32& iStatus, void* pData);
     void Logout();
 
     // control trophy parameters
-    inline void SetTrophyStatus (const int& iStatus)  {m_iTrophyStatus  = iStatus;}
-    inline void SetTrophyCurrent(const int& iCurrent) {m_iTrophyCurrent = iCurrent;}
-    inline const int& GetTrophyStatus ()const         {return m_iTrophyStatus;}
-    inline const int& GetTrophyCurrent()const         {return m_iTrophyCurrent;}
+    inline void SetTrophyStatus (const coreUint32& iStatus)  {m_iTrophyStatus  = iStatus;}
+    inline void SetTrophyCurrent(const coreInt8&   iCurrent) {m_iTrophyCurrent = iCurrent;}
+    inline const coreUint32& GetTrophyStatus ()const         {return m_iTrophyStatus;}
+    inline const coreInt8&   GetTrophyCurrent()const         {return m_iTrophyCurrent;}
 };
 
 

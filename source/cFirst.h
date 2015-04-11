@@ -10,7 +10,7 @@
 #ifndef _DR_GUARD_FIRST_H_
 #define _DR_GUARD_FIRST_H_
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************

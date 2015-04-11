@@ -29,27 +29,27 @@ class cRock final : public coreObject3D
 private:
     coreObject3D m_Wave;                 // big wave effect
     coreTimer    m_WaveTimer;            // timer for the big wave
-    float        m_fWaveStrength;        // size of the big wave
+    coreFloat    m_fWaveStrength;        // size of the big wave
 
     coreObject3D m_WaveSmall;            // small wave effect
     coreTimer    m_WaveSmallTimer;       // timer for the small wave
-    float        m_fWaveSmallStrength;   // visual strength of the small wave (not size)
+    coreFloat    m_fWaveSmallStrength;   // visual strength of the small wave (not size)
 
     coreObject3D m_WaveShock;            // shock-wave effect coming from the back
     coreTimer    m_WaveShockTimer;       // timer for the shock-wave
-    float        m_fWaveShockSpeed;      // movement speed modifier of the shock-wave
+    coreFloat    m_fWaveShockSpeed;      // movement speed modifier of the shock-wave
 
     coreObject3D m_Shadow;               // shadow object
 
-    float m_fForce;                      // jump/fall force in Z direction
-    float m_fHeight;                     // current Z position
-    bool  m_bColored;                    // colored smoke trail
+    coreFloat m_fForce;                  // jump/fall force in Z direction
+    coreFloat m_fHeight;                 // current Z position
+    coreBool  m_bColored;                // colored smoke trail
 
-    bool m_bFallen;                      // touched a hole in the floor and starts to fall
-    bool m_bJumped;                      // jumped recently and cannot jump again
-    bool m_bReflected;                   // force was reflected from the ground in this frame
-    int  m_iNumJumps;                    // number of successful jumps
-    int  m_iNumAirJumps;                 // number of successful air-jumps (but only not over solid ground)
+    coreBool   m_bFallen;                // touched a hole in the floor and starts to fall
+    coreBool   m_bJumped;                // jumped recently and cannot jump again
+    coreBool   m_bReflected;             // force was reflected from the ground in this frame
+    coreUint16 m_iNumJumps;              // number of successful jumps
+    coreUint16 m_iNumAirJumps;           // number of successful air-jumps (but only not over solid ground)
 
     coreFlow m_fRotation;                // rotation-timer
 
@@ -75,20 +75,20 @@ public:
     inline void RenderRock()   {coreObject3D::Render();}
 
     // just jump
-    bool Jump(const float& fForce);
+    coreBool Jump(const coreFloat& fForce);
 
     // create shock-wave
-    void CreateShockWave(const coreByte& iType);
+    void CreateShockWave(const coreUint8& iType);
 
     // set object properties
-    inline void SetColored(const bool& bColored) {m_bColored = bColored;}
+    inline void SetColored(const coreBool& bColored) {m_bColored = bColored;}
 
     // get object properties
-    inline const bool& GetFallen      ()const {return m_bFallen;}
-    inline const bool& GetJumped      ()const {return m_bJumped;}
-    inline const bool& GetReflected   ()const {return m_bReflected;}
-    inline const int&  GetNumJumps    ()const {return m_iNumJumps;}
-    inline const int&  GetNumAirJumps ()const {return m_iNumAirJumps;}
+    inline const coreBool&   GetFallen     ()const {return m_bFallen;}
+    inline const coreBool&   GetJumped     ()const {return m_bJumped;}
+    inline const coreBool&   GetReflected  ()const {return m_bReflected;}
+    inline const coreUint16& GetNumJumps   ()const {return m_iNumJumps;}
+    inline const coreUint16& GetNumAirJumps()const {return m_iNumAirJumps;}
 
 
 private:

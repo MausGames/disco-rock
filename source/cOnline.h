@@ -20,12 +20,12 @@
     #define _API_GAME_JOLT_
 #endif
 
-#define SCORE_TABLES   (2)    // number of different score tables (leaderboards)
-#define SCORE_ENTRIES  (8)    // number of score entries to display at once
-#define SCORE_PAGES    (5)    // number of score pages
+#define SCORE_TABLES   (2u)    // number of different score tables (leaderboards)
+#define SCORE_ENTRIES  (8u)    // number of score entries to display at once
+#define SCORE_PAGES    (5u)    // number of score pages
 
-#define TROPHY_ITEMS   (15)   // number of implemented trophies
-#define TROPHY_SECRETS (4)    // number of secret trophies
+#define TROPHY_ITEMS   (15u)   // number of implemented trophies
+#define TROPHY_SECRETS (4u)    // number of secret trophies
 
 
 // ****************************************************************
@@ -68,7 +68,7 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 #endif
 
 // control ad banner transparency
-extern void SetBannerAlpha(float fAlpha);
+extern void SetBannerAlpha(coreFloat fAlpha);
 
 #define GPG_TROPHY_01 ""
 #define GPG_TROPHY_02 ""
@@ -102,8 +102,8 @@ private:
     std::unique_ptr<gpg::GameServices> m_pGooglePlay;   // Google Play Games API access
 
     std::string m_sUserName;                            // current user name
-    bool m_bAuthorized;                                 // current authorization status
-    int m_iNumConnections;                              // current number of active connections
+    coreBool  m_bAuthorized;                            // current authorization status
+    coreInt32 m_iNumConnections;                        // current number of active connections
 
     gjScoreTable* m_apScoreTable[SCORE_TABLES];         // dummy score tables for the score list
     gjScoreList m_aapScoreList[SCORE_TABLES];           // managed list with score objects
@@ -121,10 +121,10 @@ public:
     void Update();
 
     // get status data
-    inline const char* GetUserName      ()const;
-    inline const char* GetUserToken     ()const;
-    inline int         GetNumConnections()const;
-    inline const bool& IsUserConnected  ()const;
+    inline const coreChar* GetUserName      ()const;
+    inline const coreChar* GetUserToken     ()const;
+    inline coreInt32       GetNumConnections()const;
+    inline const coreBool& IsUserConnected  ()const;
 
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -135,12 +135,12 @@ public:
 #endif
 
     // layered request functions to support both APIs
-    template <typename T> int AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
-    template <typename T> int FetchTrophies    (GJ_NETWORK_OUTPUT(gjTrophyList));
-    template <typename T> int SubmitScore      (const int& iTableID, const std::string& sScore, const int& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
-    template <typename T> int FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap));
-    template <typename T> int FetchScores      (const int& iTableID, const bool& bOnlyUser, const int& iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
-    template <typename T> int Login            (const char* pcName, const char* pcToken, GJ_NETWORK_OUTPUT(int));
+    template <typename T> coreInt32 AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
+    template <typename T> coreInt32 FetchTrophies    (GJ_NETWORK_OUTPUT(gjTrophyList));
+    template <typename T> coreInt32 SubmitScore      (const coreUintW& iTableID, const std::string& sScore, const coreUintW& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
+    template <typename T> coreInt32 FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap));
+    template <typename T> coreInt32 FetchScores      (const coreUintW& iTableID, const coreBool& bOnlyUser, const coreUintW& iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
+    template <typename T> coreInt32 Login            (const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32));
     inline void Logout();
 
     // access Game Jolt directly
@@ -149,16 +149,16 @@ public:
 
 private:
     // forward error message to menu
-    void __SetErrorMessage(const coreVector3& vColor, const char* pcMessage1, const char* pcMessage2, const char* pcMessage3);
+    void __SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3);
 
     // forward score table update to menu
-    void __InvokeScoreUpdate(const int& iTableNum);
+    void __InvokeScoreUpdate(const coreUintW& iTableNum);
 };
 
 
 // ****************************************************************
 // get user name
-inline const char* cOnline::GetUserName()const
+inline const coreChar* cOnline::GetUserName()const
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -176,7 +176,7 @@ inline const char* cOnline::GetUserName()const
 
 // ****************************************************************
 // get user token
-inline const char* cOnline::GetUserToken()const
+inline const coreChar* cOnline::GetUserToken()const
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -194,7 +194,7 @@ inline const char* cOnline::GetUserToken()const
 
 // ****************************************************************
 // get current network load
-inline int cOnline::GetNumConnections()const
+inline coreInt32 cOnline::GetNumConnections()const
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -204,7 +204,7 @@ inline int cOnline::GetNumConnections()const
 #else
 
     // return Game Jolt connections
-    return (int)m_pGameJolt->AccessNetwork()->GetNumSessions();
+    return coreInt32(m_pGameJolt->AccessNetwork()->GetNumSessions());
 
 #endif
 }
@@ -212,7 +212,7 @@ inline int cOnline::GetNumConnections()const
 
 // ****************************************************************
 // check for connected user
-inline const bool& cOnline::IsUserConnected()const
+inline const coreBool& cOnline::IsUserConnected()const
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -230,32 +230,32 @@ inline const bool& cOnline::IsUserConnected()const
 
 // ****************************************************************
 // achieve trophy
-template <typename T> int cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr))
+template <typename T> coreInt32 cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
     // get trophy number
-    const int   iTrophyID = P_TO_I(pOutputData);
+    const coreUintW iTrophyID = P_TO_I(pOutputData);
     std::string sTrophyID = "";
 
     // map trophy number to achievement ID
     switch(iTrophyID)
     {
-    case  0: sTrophyID = GPG_TROPHY_01; break;
-    case  1: sTrophyID = GPG_TROPHY_02; break;
-    case  2: sTrophyID = GPG_TROPHY_03; break;
-    case  3: sTrophyID = GPG_TROPHY_04; break;
-    case  4: sTrophyID = GPG_TROPHY_05; break;
-    case  5: sTrophyID = GPG_TROPHY_06; break;
-    case  6: sTrophyID = GPG_TROPHY_07; break;
-    case  7: sTrophyID = GPG_TROPHY_08; break;
-    case  8: sTrophyID = GPG_TROPHY_09; break;
-    case  9: sTrophyID = GPG_TROPHY_10; break;
-    case 10: sTrophyID = GPG_TROPHY_11; break;
-    case 11: sTrophyID = GPG_TROPHY_12; break;
-    case 12: sTrophyID = GPG_TROPHY_13; break;
-    case 13: sTrophyID = GPG_TROPHY_14; break;
-    case 14: sTrophyID = GPG_TROPHY_15; break;
+    case  0u: sTrophyID = GPG_TROPHY_01; break;
+    case  1u: sTrophyID = GPG_TROPHY_02; break;
+    case  2u: sTrophyID = GPG_TROPHY_03; break;
+    case  3u: sTrophyID = GPG_TROPHY_04; break;
+    case  4u: sTrophyID = GPG_TROPHY_05; break;
+    case  5u: sTrophyID = GPG_TROPHY_06; break;
+    case  6u: sTrophyID = GPG_TROPHY_07; break;
+    case  7u: sTrophyID = GPG_TROPHY_08; break;
+    case  8u: sTrophyID = GPG_TROPHY_09; break;
+    case  9u: sTrophyID = GPG_TROPHY_10; break;
+    case 10u: sTrophyID = GPG_TROPHY_11; break;
+    case 11u: sTrophyID = GPG_TROPHY_12; break;
+    case 12u: sTrophyID = GPG_TROPHY_13; break;
+    case 13u: sTrophyID = GPG_TROPHY_14; break;
+    case 14u: sTrophyID = GPG_TROPHY_15; break;
     default: Core::Log->Warning("Trophy (%d) not found", iTrophyID); return GJ_REQUEST_FAILED;
     }
 
@@ -277,7 +277,7 @@ template <typename T> int cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK
 
 // ****************************************************************
 // fetch trophies
-template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList))
+template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -334,7 +334,7 @@ template <typename T> int cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList)
 
 // ****************************************************************
 // submit score
-template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::string& sScore, const int& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
+template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW& iTableID, const std::string& sScore, const coreUintW& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -355,7 +355,7 @@ template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::s
     gjData asEmpty;
     asEmpty["sort"] = "0";
 
-    gjScore Score(asEmpty, m_apScoreTable[(iTableID == GJ_LEADERBOARD_01) ? 0 : 1], m_pGameJolt);
+    gjScore Score(asEmpty, m_apScoreTable[(iTableID == GJ_LEADERBOARD_01) ? 0u : 1u], m_pGameJolt);
 
      // call callback
     (pOutputObj->*(OutputCallback))(&Score, pOutputData);
@@ -372,7 +372,7 @@ template <typename T> int cOnline::SubmitScore(const int& iTableID, const std::s
 
 // ****************************************************************
 // fetch leaderboards
-template <typename T> int cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap))
+template <typename T> coreInt32 cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -396,12 +396,12 @@ template <typename T> int cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTa
 
 // ****************************************************************
 // fetch scores
-template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& bOnlyUser, const int& iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
+template <typename T> coreInt32 cOnline::FetchScores(const coreUintW& iTableID, const coreBool& bOnlyUser, const coreUintW& iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
     std::string sLeaderboardID = "";
-    const int iTableNum = (iTableID == GJ_LEADERBOARD_01) ? 0 : 1;
+    const coreUintW iTableNum = (iTableID == GJ_LEADERBOARD_01) ? 0u : 1u;
 
     // map score table number to leaderboard ID
     switch(iTableID)
@@ -412,17 +412,17 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
     }
 
     // get fetch type (0 = all, 1 = user only)
-    const int iType = P_TO_I(pOutputData);
+    const coreUintW iType = P_TO_I(pOutputData);
 
-    if(iType == 0)
+    if(iType == 0u)
     {
         // get score page token
-        gpg::ScorePage::ScorePageToken Token = m_pGooglePlay->Leaderboards().ScorePageToken(sLeaderboardID, gpg::LeaderboardStart::TOP_SCORES,
-                                                                                            gpg::LeaderboardTimeSpan::ALL_TIME, gpg::LeaderboardCollection::PUBLIC);
+        gpg::ScorePage::ScorePageToken oToken = m_pGooglePlay->Leaderboards().ScorePageToken(sLeaderboardID, gpg::LeaderboardStart::TOP_SCORES,
+                                                                                             gpg::LeaderboardTimeSpan::ALL_TIME, gpg::LeaderboardCollection::PUBLIC);
 
         // fetch global best score data
         ++this->m_iNumConnections;
-        m_pGooglePlay->Leaderboards().FetchScorePage(Token, iLimit, [=](gpg::LeaderboardManager::FetchScorePageResponse const &Response)
+        m_pGooglePlay->Leaderboards().FetchScorePage(oToken, iLimit, [=](gpg::LeaderboardManager::FetchScorePageResponse const &Response)
         {
             --this->m_iNumConnections;
 
@@ -445,7 +445,7 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
                         // create persistent score pointer
                         gjData asScoreData;
                         asScoreData["user"] = "-";   // placeholder
-                        asScoreData["sort"] = m_pGameJolt->UtilIntToString((int)it->Score().Value());
+                        asScoreData["sort"] = m_pGameJolt->UtilIntToString(coreInt32(it->Score().Value()));
 
                         gjScore* pScore = new gjScore(asScoreData, m_apScoreTable[iTableNum], this->m_pGameJolt);
 
@@ -498,10 +498,10 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
                     // create dummy score pointer
                     gjData asScoreData;
                     asScoreData["user"]       = this->m_sUserName;
-                    asScoreData["sort"]       = m_pGameJolt->UtilIntToString((int)Score.Value());
-                    asScoreData["extra_data"] = m_pGameJolt->UtilIntToString((int)Score.Rank()) + "."; // also get rank
+                    asScoreData["sort"]       = m_pGameJolt->UtilIntToString(coreInt32(Score.Value()));
+                    asScoreData["extra_data"] = m_pGameJolt->UtilIntToString(coreInt32(Score.Rank())) + "."; // also get rank
 
-                    pUserOnlyScore = new gjScore(asScoreData, m_apScoreTable[(iTableID == GJ_LEADERBOARD_01) ? 0 : 1], this->m_pGameJolt);
+                    pUserOnlyScore = new gjScore(asScoreData, m_apScoreTable[(iTableID == GJ_LEADERBOARD_01) ? 0u : 1u], this->m_pGameJolt);
 
                     // add user score to list
                     apScore.push_back(pUserOnlyScore);
@@ -527,14 +527,14 @@ template <typename T> int cOnline::FetchScores(const int& iTableID, const bool& 
 
 // ****************************************************************
 // login
-template <typename T> int cOnline::Login(const char* pcName, const char* pcToken, GJ_NETWORK_OUTPUT(int))
+template <typename T> coreInt32 cOnline::Login(const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32))
 {
     // get login type (0 = QuickPlay or Google Play Games setup)
-    const int iLoginType = P_TO_I(pOutputData);
+    const coreUintW iLoginType = P_TO_I(pOutputData);
 
 #if defined(_API_GOOGLE_PLAY_)
 
-    if(iLoginType == 0)
+    if(iLoginType == 0u)
     {
         // init Google Play Games with Java Virtual Machine object
         gpg::AndroidInitialization::JNI_OnLoad(g_pJNIJavaVM);
@@ -605,8 +605,8 @@ template <typename T> int cOnline::Login(const char* pcName, const char* pcToken
 #else
 
     // login with Game Jolt
-    if(iLoginType == 0 && std::strlen(pcName) == 0 && std::strlen(pcToken) == 0)
-        return  m_pGameJolt->LoginCall(true, "../" GJ_API_CRED, GJ_NETWORK_OUTPUT_FW);
+    if(iLoginType == 0u && std::strlen(pcName) == 0u && std::strlen(pcToken) == 0u)
+         return m_pGameJolt->LoginCall(true, "../" GJ_API_CRED, GJ_NETWORK_OUTPUT_FW);
     else return m_pGameJolt->LoginCall(true, pcName, pcToken,   GJ_NETWORK_OUTPUT_FW);
 
 #endif

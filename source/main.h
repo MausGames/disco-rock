@@ -45,7 +45,7 @@
 #include <deque>
 
 #if !defined(_CORE_ANDROID_)
-    // #define _DR_EMULATE_MOBILE_ (1)
+     //#define _DR_EMULATE_MOBILE_ (1)
 #endif
 
 
@@ -74,31 +74,31 @@ static constexpr_var coreVector3 g_avColor[] =
 };
 #define COLOR_NUM ARRAY_SIZE(g_avColor)
 
-#define CONTROL_CLASSIC    (0)
-#define CONTROL_MOTION     (1)
-#define CONTROL_FULLSCREEN (2)
+#define CONTROL_CLASSIC    (0u)
+#define CONTROL_MOTION     (1u)
+#define CONTROL_FULLSCREEN (2u)
 
-#define STAGE_DIAMOND      (0)
-#define STAGE_QUAD         (1)
-#define STAGE_ZIGZAG       (2)
-#define STAGE_CONCAVE      (3)
-#define STAGE_NET          (4)
-#define STAGE_JUMP         (5)
-#define STAGE_CHOICE       (6)
-#define STAGE_SHADING      (7)
-#define STAGE_SIDE         (8)
-#define STAGE_TRAP         (9)
-#define STAGE_PREVENT      (10)
-#define STAGE_BONUS        (11)
-#define STAGE_MIDDLE       (12)
-#define STAGE_LINES        (13)
-#define STAGE_GATEWAY      (14)
-#define STAGE_CHEESE       (15)
-#define STAGE_CANYON       (16)
-#define STAGE_DOUBLE       (17)
-#define STAGE_RAILS        (18)
-#define STAGE_SLALOM       (19)
-#define STAGE_TOTAL_NUM    (20)   // total number of game stages
+#define STAGE_DIAMOND      (0u)
+#define STAGE_QUAD         (1u)
+#define STAGE_ZIGZAG       (2u)
+#define STAGE_CONCAVE      (3u)
+#define STAGE_NET          (4u)
+#define STAGE_JUMP         (5u)
+#define STAGE_CHOICE       (6u)
+#define STAGE_SHADING      (7u)
+#define STAGE_SIDE         (8u)
+#define STAGE_TRAP         (9u)
+#define STAGE_PREVENT      (10u)
+#define STAGE_BONUS        (11u)
+#define STAGE_MIDDLE       (12u)
+#define STAGE_LINES        (13u)
+#define STAGE_GATEWAY      (14u)
+#define STAGE_CHEESE       (15u)
+#define STAGE_CANYON       (16u)
+#define STAGE_DOUBLE       (17u)
+#define STAGE_RAILS        (18u)
+#define STAGE_SLALOM       (19u)
+#define STAGE_TOTAL_NUM    (20u)   // total number of game stages
 
 
 // ****************************************************************
@@ -130,14 +130,14 @@ extern coreParticleSystem* g_pParticleSystem;   // primary particle system
 
 extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
 
-extern float               g_fTargetSpeed;      // new target speed
-extern float               g_fCurSpeed;         // current speed
-extern float               g_fMusicSpeed;       // dedicated music speed
-extern bool                g_bPause;            // pause status
+extern coreFloat           g_fTargetSpeed;      // new target speed
+extern coreFloat           g_fCurSpeed;         // current speed
+extern coreFloat           g_fMusicSpeed;       // dedicated music speed
+extern coreBool            g_bPause;            // pause status
 
-extern int                 g_iNumGames;         // number of started games
-extern int                 g_iNumFails;         // number of deaths below 10 seconds
-extern bool                g_bCamUpsideDown;    // upside-down camera status
+extern coreUint16          g_iNumGames;         // number of started games
+extern coreUint16          g_iNumFails;         // number of deaths below 10 seconds
+extern coreBool            g_bCamUpsideDown;    // upside-down camera status
 
 
 // ****************************************************************
@@ -145,23 +145,23 @@ extern bool                g_bCamUpsideDown;    // upside-down camera status
 struct sMsgList
 {
     std::vector<const std::string*> m_apsMsg;   // shuffled messages
-    coreUint m_iCur;                            // current message index
+    coreUintW m_iCur;                           // current message index
 
-    inline sMsgList(const std::string* psMsg, const coreUint& iSize)noexcept
-    : m_iCur (0)
+    inline sMsgList(const std::string* psMsg, const coreUintW& iSize)noexcept
+    : m_iCur (0u)
     {
         // add messages
         m_apsMsg.reserve(iSize);
-        for(coreUint i = 0; i < iSize; ++i) m_apsMsg.push_back(&psMsg[i]);
+        for(coreUintW i = 0u; i < iSize; ++i) m_apsMsg.push_back(&psMsg[i]);
 
         // shuffle them
-        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine(int(std::time(NULL))));
+        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine(CORE_RAND_TIME));
     }
 
-    inline const char* Get()
+    inline const coreChar* Get()
     {
         // get next message
-        if(++m_iCur >= m_apsMsg.size()) m_iCur = 0;
+        if(++m_iCur >= m_apsMsg.size()) m_iCur = 0u;
         return m_apsMsg[m_iCur]->c_str();
     }
 };

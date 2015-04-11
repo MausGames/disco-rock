@@ -23,7 +23,7 @@ class cRay final : public coreObject3D
 {
 private:
     coreVector3 m_vStart;    // starting-position of the ray
-    float       m_fAngle;    // calculated starting-angle of the ray
+    coreFloat   m_fAngle;    // calculated starting-angle of the ray
 
     coreFlow m_fAnimation;   // timer for move-animation
 

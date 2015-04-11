@@ -19,14 +19,14 @@ coreParticleSystem* g_pParticleSystem = NULL;
 
 cOnline*            g_pOnline         = NULL;
 
-float               g_fTargetSpeed    = 1.0f;
-float               g_fCurSpeed       = 1.0f;
-float               g_fMusicSpeed     = 1.0f;
-bool                g_bPause          = false;
+coreFloat           g_fTargetSpeed    = 1.0f;
+coreFloat           g_fCurSpeed       = 1.0f;
+coreFloat           g_fMusicSpeed     = 1.0f;
+coreBool            g_bPause          = false;
 
-int                 g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3 : 0;
-int                 g_iNumFails       = 0;
-bool                g_bCamUpsideDown  = false;
+coreUint16          g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3u : 0u;
+coreUint16          g_iNumFails       = 0u;
+coreBool            g_bCamUpsideDown  = false;
 
 static coreObject3D* m_apSave[8];   // pre-allocation of required resources
 
@@ -86,12 +86,12 @@ void CoreApp::Init()
 {
     // set audio listener (for 3d sound)
     const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
-    const coreVector3 vCamDir = coreVector3(0.0f,70.0f,-51.0f).Normalize();
-    const coreVector3 vCamOri = coreVector3(0.0f,0.0f,1.0f);
+    const coreVector3 vCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalize();
+    const coreVector3 vCamOri = coreVector3(0.0f,  0.0f,  1.0f);
     Core::Audio->SetListener(vCamPos, coreVector3(0.0f,0.0f,0.0f), vCamDir, vCamOri);
 
     // override sound and music volume
-    float fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
+    coreFloat fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
     if(coreMath::InRange(fSoundVolume, 1.0f, CORE_MATH_PRECISION))
     {
         fSoundVolume = 7.0f;
@@ -141,8 +141,8 @@ void CoreApp::Init()
     });
 
     // create particle system
-    g_pParticleSystem = new coreParticleSystem(128);
-    g_pParticleSystem->DefineTexture(0, "effect_particle.png");
+    g_pParticleSystem = new coreParticleSystem(128u);
+    g_pParticleSystem->DefineTexture(0u, "effect_particle.png");
     g_pParticleSystem->DefineProgram("particle_program");
 
     // pre-allocate all required resources
@@ -162,7 +162,7 @@ void CoreApp::Init()
 void CoreApp::Exit()
 {
     // delete all pre-allocated objects
-    for(coreUint i = 0; i < ARRAY_SIZE(m_apSave); ++i)
+    for(coreUintW i = 0u; i < ARRAY_SIZE(m_apSave); ++i)
         SAFE_DELETE(m_apSave[i])
 
     // delete network access
@@ -234,10 +234,10 @@ void CoreApp::Move()
     g_pMenu->Move();
     if(g_pMenu->GetStatus() == 1)
     {
-        bool bChallenge = false;
+        coreBool bChallenge = false;
 
         // check finger positions for Coola challenge
-        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUint& i)
+        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW& i)
         {
             bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
                           (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);
@@ -267,8 +267,8 @@ void CoreApp::Move()
 
     // smoothly update the real game speed
     if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
-    Core::System->SetTimeSpeed(0, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
-    Core::System->SetTimeSpeed(1, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
+    Core::System->SetTimeSpeed(0u, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
+    Core::System->SetTimeSpeed(1u, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
 
     // set camera properties
     const coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);

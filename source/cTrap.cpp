@@ -46,7 +46,7 @@ void cTrap::Move()
     if(m_bStatic)
     {
         // animate object (and fade out)
-        const float fFall = FRACT(m_pGlow * 0.29f);
+        const coreFloat fFall = FRACT(m_pGlow * 0.29f);
         this->SetSize (coreVector3(BACK_DETAIL_X*0.9f * fFall, BACK_DETAIL_Y*0.9f * fFall, 10.0f));
         this->SetAlpha((1.0f - fFall) * CLAMP(this->GetPosition().y * 0.02f, 0.0f, 1.0f));
     }
@@ -58,7 +58,7 @@ void cTrap::Move()
         // create light sparkles
         if(this->GetPosition().y < 380.0f)
         {
-            m_Effect.CreateParticle(1, 10.0f, [](coreParticle* pParticle)
+            m_Effect.CreateParticle(1u, 10.0f, [](coreParticle* pParticle)
             {
                 pParticle->SetPositionRel(coreVector3(coreVector2::Rand(1.0f, BACK_DETAIL_X*0.37f), -5.0f), coreVector3(0.0f, 0.0f, 25.0f));
                 pParticle->SetScaleStc   (4.0f);

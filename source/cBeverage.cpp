@@ -11,12 +11,12 @@
 
 // ****************************************************************
 // constructor
-cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolume, const float& fPitch)noexcept
+cBeverage::cBeverage(const coreUint32& iScore, const coreFloat& fHeight, const coreFloat& fVolume, const coreFloat& fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
 , m_iScore       (iScore)
 , m_fHeight      (fHeight)
-, m_pDestroy     (coreTimer(30.0f, 20.0f, 1))
+, m_pDestroy     (coreTimer(30.0f, 20.0f, 1u))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
 , m_fVolume      (fVolume*0.6f)
@@ -26,7 +26,7 @@ cBeverage::cBeverage(const int& iScore, const float& fHeight, const float& fVolu
     this->DefineProgram("drink_program");
 
     // create shadow
-    m_Shadow.DefineTexture(0, "effect_shadow.png");
+    m_Shadow.DefineTexture(0u, "effect_ground.png");
     m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
     m_Shadow.DefineProgram("shadow_program");
 
@@ -51,7 +51,7 @@ cBeverage::~cBeverage()
 // move the beverage
 void cBeverage::Move()
 {
-    float fSideSet = 0.0f;
+    coreFloat fSideSet = 0.0f;
     if(m_pDestroy.GetStatus())
     {
         // update the fly-animation
@@ -59,7 +59,7 @@ void cBeverage::Move()
             m_iStatus = 1;   // mark as finished
 
         // calculate rotation matrix
-        const float       T    = Core::System->GetTime() * PI * 5.0f;
+        const coreFloat   T    = Core::System->GetTime() * PI * 5.0f;
         const coreVector2 A    = coreVector2::Direction(T * m_vFlyRotation.y);
         const coreVector2 B    = coreVector2::Direction(T * m_vFlyRotation.x);
         const coreMatrix4 mRot = coreMatrix4( A.y,  A.x*B.x, -A.x*B.y, 0.0f,
@@ -76,7 +76,7 @@ void cBeverage::Move()
     }
 
     // calculate vertical position above the ground
-    const float fGround = m_pModel->GetBoundingRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
+    const coreFloat fGround = m_pModel->GetBoundingRadius()*this->GetSize().x + m_pDestroy.GetValue(CORE_TIMER_GET_NORMAL)*10.0f + m_fHeight + GAME_HEIGHT;
     this->SetPosition(coreVector3(this->GetPosition().xy(), fGround) + coreVector3(fSideSet,0.0f,0.0f));
 
     // mark as finished
@@ -115,7 +115,7 @@ void cBeverage::Move()
 // ****************************************************************
 // constructor
 cSunrise::cSunrise()noexcept
-: cBeverage (5, 0.5f, 0.2f, 1.0f)
+: cBeverage (5u, 0.5f, 0.2f, 1.0f)
 {
     // load object resources
     this->DefineModel  ("drink_sunrise.md5mesh");
@@ -130,7 +130,7 @@ cSunrise::cSunrise()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_sunrise_straw.md5mesh");
-    m_pStraw->DefineTexture(0, "default_black.png");
+    m_pStraw->DefineTexture(0u, "default_black.png");
     m_pStraw->DefineProgram("drink_program");
 }
 
@@ -145,11 +145,11 @@ cSunrise::~cSunrise()
 // ****************************************************************
 // constructor
 cMojito::cMojito()noexcept
-: cBeverage (10, -0.2f, 0.4f, 1.2f)
+: cBeverage (10u, -0.2f, 0.4f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("drink_mojito.md5mesh");
-    this->DefineTexture(0, "drink_mojito.png");
+    this->DefineTexture(0u, "drink_mojito.png");
 
     // set object properties
     this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*3.0f);
@@ -161,7 +161,7 @@ cMojito::cMojito()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_mojito_straw.md5mesh");
-    m_pStraw->DefineTexture(0, "default_black.png");
+    m_pStraw->DefineTexture(0u, "default_black.png");
     m_pStraw->DefineProgram("drink_program");
 }
 
@@ -176,11 +176,11 @@ cMojito::~cMojito()
 // ****************************************************************
 // constructor
 cBlue::cBlue()noexcept
-: cBeverage (30, 5.8f, 0.6f, 1.6f)
+: cBeverage (30u, 5.8f, 0.6f, 1.6f)
 {
     // load object resources
     this->DefineModel  ("drink_blue.md5mesh");
-    this->DefineTexture(0, "drink_blue.png");
+    this->DefineTexture(0u, "drink_blue.png");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -191,13 +191,13 @@ cBlue::cBlue()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_blue_straw.md5mesh");
-    m_pStraw->DefineTexture(0, "drink_citrus.png");
+    m_pStraw->DefineTexture(0u, "drink_citrus.png");
     m_pStraw->DefineProgram("drink_program");
 
     // create glass
     m_pGlass = new coreObject3D();
     m_pGlass->DefineModel  ("drink_blue_glass.md5mesh");
-    m_pGlass->DefineTexture(0, "drink_blue.png");
+    m_pGlass->DefineTexture(0u, "drink_blue.png");
     m_pGlass->DefineProgram("glass_program");
 }
 
@@ -212,11 +212,11 @@ cBlue::~cBlue()
 // ****************************************************************
 // constructor
 cCoola::cCoola()noexcept
-: cBeverage (200, -3.0f, 0.5f, 0.9f)
+: cBeverage (200u, -3.0f, 0.5f, 0.9f)
 {
     // load object resources
     this->DefineModel  ("drink_cola.md5mesh");
-    this->DefineTexture(0, "drink_cola.png");
+    this->DefineTexture(0u, "drink_cola.png");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -227,7 +227,7 @@ cCoola::cCoola()noexcept
     // create glass
     m_pGlass = new coreObject3D();
     m_pGlass->DefineModel  ("drink_cola.md5mesh");
-    m_pGlass->DefineTexture(0, "drink_cola_glass.png");
+    m_pGlass->DefineTexture(0u, "drink_cola_glass.png");
     m_pGlass->DefineProgram("glass_cola_program");
 }
 
@@ -242,11 +242,11 @@ cCoola::~cCoola()
 // ****************************************************************
 // constructor
 cFranka::cFranka()noexcept
-: cBeverage (0, -2.6f, 1.0f, 1.2f)
+: cBeverage (0u, -2.6f, 1.0f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("bear.md5mesh");
-    this->DefineTexture(0, "bear.png");
+    this->DefineTexture(0u, "bear.png");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*2.25f);

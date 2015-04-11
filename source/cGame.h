@@ -22,12 +22,12 @@
 #if defined(_CORE_ANDROID_) || defined(_DR_EMULATE_MOBILE_)
     #define GAME_SPEED_FAST  (1.9f)     // speed after the first shock-wave (real value)
     #define GAME_SCORE_TIME  (12.5f)    // modifier for score over time
-    #define GAME_COOLA_RATE  (95)       // number of lines between 2 successive Coola bottles (smaller = more often)
+    #define GAME_COOLA_RATE  (95u)      // number of lines between 2 successive Coola bottles (smaller = more often)
     #define GAME_COOLA_TIME  (6.5f)     // duration of the Coola power
 #else
     #define GAME_SPEED_FAST  (2.1f)
     #define GAME_SCORE_TIME  (11.0f)
-    #define GAME_COOLA_RATE  (100)
+    #define GAME_COOLA_RATE  (100u)
     #define GAME_COOLA_TIME  (5.5f)
 #endif
 
@@ -61,61 +61,60 @@
 class cGame final
 {
 private:
-    cRock m_Rock;                           // rock object
+    cRock m_Rock;                             // rock object
 
-    std::deque<cBeverage*> m_apBeverage;    // list with active beverages
-    std::deque<cBeverage*> m_apDestroyed;   // list with inactive beverages
+    std::deque<cBeverage*> m_apBeverage;      // list with active beverages
+    std::deque<cBeverage*> m_apDestroyed;     // list with inactive beverages
 
-    std::deque<cTrap*> m_apTrap;            // list with trap plates
+    std::deque<cTrap*> m_apTrap;              // list with trap plates
 
-    std::deque<cPlate*> m_apPlate;          // list with plate objects
-    std::deque<cRay*>   m_apRay;            // list with ray objects
+    std::deque<cPlate*> m_apPlate;            // list with plate objects
+    std::deque<cRay*>   m_apRay;              // list with ray objects
 
-    int m_iCurLine;                         // current processing line/row
+    coreInt32 m_iCurLine;                     // current processing line/row
 
-    std::vector<coreByte> m_aiAlgo;         // shuffled container with all algorithm identifiers
-    coreByte m_iAlgoCurIndex;               // current index to the algorithm in the container
-    coreUint m_iAlgoCurCount;               // current number of lines into the current algorithm
-    bool     m_bAlgoEmptyLines;             // algorithm has empty lines at the beginning and end of his stage (to prevent double-empty-lines)
-    int      m_aiAlgoStatus[4];             // different status values for individual use in each algorithm
+    std::vector<coreUint8> m_aiAlgo;          // shuffled container with all algorithm identifiers
+    coreUintW m_iAlgoCurIndex;                // current index to the algorithm in the container
+    coreInt32 m_iAlgoCurCount;                // current number of lines into the current algorithm
+    coreBool  m_bAlgoEmptyLines;              // algorithm has empty lines at the beginning and end of his stage (to prevent double-empty-lines)
+    coreInt32 m_aiAlgoStatus[4];              // different status values for individual use in each algorithm
 
-    double   m_dScore;                      // score value
-    coreFlow m_fTime;                       // time value
-    coreUint m_iCombo;                      // current combo value (number of hit objects)
+    coreDouble m_dScore;                      // score value
+    coreFlow   m_fTime;                       // time value
+    coreUint8  m_iCombo;                      // current combo value (number of hit objects)
 
-    coreUint m_iMaxCombo;                   // best combo value
-    coreFlow m_fComboTime;                  // time with max combo multiplier
-    float    m_fComboDelay;                 // remaining time to the combo-reset
+    coreUint8 m_iMaxCombo;                    // best combo value
+    coreFlow  m_fComboTime;                   // time with max combo multiplier
+    coreFloat m_fComboDelay;                  // remaining time to the combo-reset
 
-    coreUint m_aiCollected[6];              // beverage statistic values (0 = all | 1-4 single | 5 = Franka)
-    coreUint m_iCollectedTraps;             // trap statistic value
-    coreUint m_iCollectedNoBlue;            // collected normal drinks in a row without a blue drink
+    coreUint16 m_aiCollected[6];              // beverage statistic values (0 = all | 1-4 single | 5 = Franka)
+    coreUint16 m_iCollectedTraps;             // trap statistic value
+    coreUint16 m_iCollectedNoBlue;            // collected normal drinks in a row without a blue drink
 
-    int m_iCoolaCounter;                    // counter for regular Coola creation
-    int m_iRayCounter;                      // counter for regular ray creation
-    int m_iTrapChance;                      // chance value to create random but regular traps
+    coreUint8 m_iCoolaCounter;                // counter for regular Coola creation
+    coreUint8 m_iRayCounter;                  // counter for regular ray creation
 
-    int  m_iFirstJump;                      // handle first big air-jump (for trophy)
-    bool m_bFirstLine;                      // process first row differently
-    bool m_bFirstText;                      // show floating text on the first jump
-    bool m_bTrapSpawn;                      // enable trap spawn
-    bool m_bTrapJump;                       // current jump was triggered by a trap
-    bool m_bChallenge;                      // Coola challenge mode
+    coreUint8 m_iFirstJump;                   // handle first big air-jump (for trophy)
+    coreBool  m_bFirstLine;                   // process first row differently
+    coreBool  m_bFirstText;                   // show floating text on the first jump
+    coreBool  m_bTrapSpawn;                   // enable trap spawn
+    coreBool  m_bTrapJump;                    // current jump was triggered by a trap
+    coreBool  m_bChallenge;                   // Coola challenge mode
 
-    coreTimer m_PowerUpTimer;               // power-up timer (for Coola power)
+    coreTimer m_PowerUpTimer;                 // power-up timer (for Coola power)
 
-    cInterface m_Interface;                 // interface object
-    coreLabel  m_Message;                   // beginning message
-    coreTimer  m_MessageTimer;              // timer for the beginning message
+    cInterface m_Interface;                   // interface object
+    coreLabel  m_Message;                     // beginning message
+    coreTimer  m_MessageTimer;                // timer for the beginning message
 
-    coreSoundPtr m_pTrapSound;              // sound effect for activated trap
-    coreSoundPtr m_pTrophySound;            // sound effect for achieved trophy
+    coreSoundPtr m_pTrapSound;                // sound effect for activated trap
+    coreSoundPtr m_pTrophySound;              // sound effect for achieved trophy
 
-    bool m_bTrophyHelper[TROPHY_ITEMS];     // trophy cache
+    coreBool m_bTrophyHelper[TROPHY_ITEMS];   // trophy cache
 
 
 public:
-    explicit cGame(const bool& bChallenge)noexcept;
+    explicit cGame(const coreBool& bChallenge)noexcept;
     ~cGame();
 
     DISABLE_COPY(cGame)
@@ -126,33 +125,33 @@ public:
     void Move();
 
     // apply stage algorithms to the game (implemented in cStage.cpp)
-    void ProcessStage(const float &fSpawnY, bool* OUTPUT pbHole);
+    void ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole);
 
     // get game status
-    inline int         GetStatus   ()const {return (m_Rock.GetPosition().z < -150.0f) ? 1 : 0;}
-    inline const bool& GetChallenge()const {return m_bChallenge;}
+    inline coreUint8       GetStatus   ()const {return (m_Rock.GetPosition().z < -150.0f) ? 1u : 0u;}
+    inline const coreBool& GetChallenge()const {return m_bChallenge;}
 
     // add objects
-    void AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole);
-    void AddTrap    (const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole);
-    void AddPlate   (const float& fSpawnY, const int& iBlockX);
-    void AddRay     (const float& fSpawnY);
-    void AddStreet  (const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* OUTPUT pbHole);
+    void AddBeverage(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole);
+    void AddTrap    (const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole);
+    void AddPlate   (const coreFloat& fSpawnY, const coreInt32& iBlockX);
+    void AddRay     (const coreFloat& fSpawnY);
+    void AddStreet  (const coreInt32& iBlockX, const coreBool& bCenter, const coreUintW& iLeft, const coreUintW& iRight, coreBool* OUTPUT pbHole);
 
     // get game properties
-    inline const double&   GetScore   ()const                  {return m_dScore;}
-    inline const float&    GetTime    ()const                  {return m_fTime;}
-    inline const coreUint& GetCombo   ()const                  {return m_iCombo;}
-    inline const coreUint& GetMaxCombo()const                  {return m_iMaxCombo;}
-    inline const coreUint& GetStat    (const int& iIndex)const {return m_aiCollected[iIndex];}
-    inline const coreUint& GetTraps   ()const                  {return m_iCollectedTraps;}
+    inline const coreDouble& GetScore   ()const                        {return m_dScore;}
+    inline const coreFloat&  GetTime    ()const                        {return m_fTime;}
+    inline const coreUint8&  GetCombo   ()const                        {return m_iCombo;}
+    inline const coreUint8&  GetMaxCombo()const                        {return m_iMaxCombo;}
+    inline const coreUint16& GetStat    (const coreUintW& iIndex)const {return m_aiCollected[iIndex];}
+    inline const coreUint16& GetTraps   ()const                        {return m_iCollectedTraps;}
 
     // access sub objects
     inline cRock*      GetRock     () {return &m_Rock;}
     inline cInterface* GetInterface() {return &m_Interface;}
 
     // achieve a trophy
-    void AchieveTrophy        (const int& iID, const int& iNum);
+    void AchieveTrophy        (const coreUintW& iID, const coreUintW& iNum);
     void AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData);
 };
 

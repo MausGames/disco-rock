@@ -11,36 +11,35 @@
 
 // ****************************************************************
 // constructor
-cGame::cGame(const bool& bChallenge)noexcept
+cGame::cGame(const coreBool& bChallenge)noexcept
 : m_iCurLine         (g_pBackground->GetCurLine())
-, m_iAlgoCurIndex    (0)
+, m_iAlgoCurIndex    (0u)
 , m_iAlgoCurCount    (0)
 , m_bAlgoEmptyLines  (true)
 , m_dScore           (0.0)
 , m_fTime            (0.0f)
-, m_iCombo           (0)
-, m_iMaxCombo        (0)
+, m_iCombo           (0u)
+, m_iMaxCombo        (0u)
 , m_fComboTime       (0.0f)
 , m_fComboDelay      (0.0f)
-, m_iCollectedTraps  (0)
-, m_iCollectedNoBlue (0)
-, m_iCoolaCounter    (0)
-, m_iRayCounter      (0)
-, m_iTrapChance      (1)
-, m_iFirstJump       (0)
+, m_iCollectedTraps  (0u)
+, m_iCollectedNoBlue (0u)
+, m_iCoolaCounter    (0u)
+, m_iRayCounter      (0u)
+, m_iFirstJump       (0u)
 , m_bFirstLine       (true)
 , m_bFirstText       (true)
 , m_bTrapSpawn       (false)
 , m_bTrapJump        (false)
 , m_bChallenge       (bChallenge)
-, m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1))
-, m_Message          (FONT_ROCKS, 45, 0)
-, m_MessageTimer     (coreTimer(1.0f, 0.333f, 1))
+, m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1u))
+, m_Message          (FONT_ROCKS, 45u, 0u)
+, m_MessageTimer     (coreTimer(1.0f, 0.333f, 1u))
 {
     // add and shuffle all algorithms
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
-    for(int i = 0; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
-    std::shuffle(m_aiAlgo.begin(), m_aiAlgo.end(), std::default_random_engine(int(std::time(NULL))));
+    for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
+    std::shuffle(m_aiAlgo.begin(), m_aiAlgo.end(), std::default_random_engine(CORE_RAND_TIME));
     std::memset (m_aiAlgoStatus, 0, sizeof(m_aiAlgoStatus));
 
     // create beginning message
@@ -50,8 +49,8 @@ cGame::cGame(const bool& bChallenge)noexcept
     m_MessageTimer.SetValue(-0.333f);
 
     // reset statistics and trophy cache
-    for(int i = 0; i < int(ARRAY_SIZE(m_aiCollected)); ++i) m_aiCollected  [i] = 0;
-    for(int i = 0; i < TROPHY_ITEMS;                   ++i) m_bTrophyHelper[i] = false;
+    for(coreUintW i = 0u; i < ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected  [i] = 0u;
+    for(coreUintW i = 0u; i < TROPHY_ITEMS;              ++i) m_bTrophyHelper[i] = false;
     ++g_iNumGames;
 
     // load sound-effects
@@ -64,8 +63,8 @@ cGame::cGame(const bool& bChallenge)noexcept
     if(m_bChallenge)
     {
         // flash screen and turn camera
-        g_pMenu->ChangeSurface(5,  0.0f);
-        g_pMenu->ChangeSurface(10, 1.0f);
+        g_pMenu->ChangeSurface(5u,  0.0f);
+        g_pMenu->ChangeSurface(10u, 1.0f);
         g_bCamUpsideDown = true;
 
         // play sound-effect
@@ -184,21 +183,21 @@ void cGame::Move()
     m_fTime.Update(1.0f);
 
     // calculate movement values
-    const float fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;   // speed-modified
-    const float fMove30 = Core::System->GetTime()  * 3.0f * BACK_DETAIL_Y;   // normal
+    const coreFloat fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;   // speed-modified
+    const coreFloat fMove30 = Core::System->GetTime()  * 3.0f * BACK_DETAIL_Y;   // normal
 
     // check for the next line on the horizon
-    const int iNewCurLine = g_pBackground->GetCurLine();
+    const coreInt32 iNewCurLine = g_pBackground->GetCurLine();
     if(m_iCurLine != iNewCurLine)   // start line processing magic
     {
         m_iCurLine = iNewCurLine;
 
         // array used to create holes in the dance floor (true = hole, false = no hole)
-        bool abHole[BACK_BLOCKS_X];
-        for(int i = 0; i < BACK_BLOCKS_X; ++i) abHole[i] = true;
+        coreBool abHole[BACK_BLOCKS_X];
+        for(coreUintW i = 0u; i < BACK_BLOCKS_X; ++i) abHole[i] = true;
 
         // calculate spawn position (compensate framerate (background position) and movement when spawning objects)
-        const float fSpawnY = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * FRACT(g_pBackground->GetPositionTime());
+        const coreFloat fSpawnY = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * FRACT(g_pBackground->GetPositionTime());
 
         // increment Cool bottle counter
         ++m_iCoolaCounter;
@@ -214,23 +213,23 @@ void cGame::Move()
 #if !defined(_CORE_DEBUG_) || 0
 
         // randomly create moving plates inside of holes (only connected to solid plates)
-        const float fPlateCmp = MAX(1.0f - (m_fTime / 10.0f), 0.1f) * 3.0f;
-        for(int i = 1; i < BACK_BLOCKS_X-1; ++i)
+        const coreFloat fPlateCmp = MAX(1.0f - (m_fTime / 10.0f), 0.1f) * 3.0f;
+        for(coreUintW i = 1u; i < BACK_BLOCKS_X-1u; ++i)
         {
-            if(abHole[i] && (Core::Rand->Float(1.0f) < fPlateCmp) && (!abHole[MAX(i-1, 1)] || !abHole[MIN(i+1, BACK_BLOCKS_X-2)]))
+            if(abHole[i] && (Core::Rand->Float(1.0f) < fPlateCmp) && (!abHole[MAX(i-1u, 1u)] || !abHole[MIN(i+1u, BACK_BLOCKS_X-2u)]))
                 this->AddPlate(fSpawnY, i);
         }
 
         // regularly create rays
-        if(++m_iRayCounter >= 2)
+        if(++m_iRayCounter >= 2u)
         {
-            m_iRayCounter = 0;
+            m_iRayCounter = 0u;
             this->AddRay(fSpawnY);
         }
 
 #endif
         // always remove both outer blocks
-        abHole[0] = abHole[BACK_BLOCKS_X-1] = true;
+        abHole[0] = abHole[BACK_BLOCKS_X-1u] = true;
 
         // update the holes in the dance floor (sometimes twice to sync for the infinite look)
         g_pBackground->UpdateHoles(m_iCurLine + BACK_VIEW, abHole);
@@ -267,42 +266,42 @@ void cGame::Move()
             // check for collision with beverages
             if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || Core::Manager::Object->TestCollision(pBeverage, &m_Rock)))
             {
-                const coreByte iSigID = pBeverage->GetSigID();
+                const coreUintW iSigID = pBeverage->GetSigID();
 
                 // calculate and increase score
-                const float fValue = I_TO_F(pBeverage->GetScore()) * COMBO_MULTI;
-                m_dScore += double(fValue);
+                const coreFloat fValue = I_TO_F(pBeverage->GetScore()) * COMBO_MULTI;
+                m_dScore += coreDouble(fValue);
 
                 // increase statistics
                 ++m_aiCollected[0];
                 ++m_aiCollected[iSigID];
-                     if(iSigID == 3) m_iCollectedNoBlue = 0;
-                else if(iSigID <  3) ++m_iCollectedNoBlue;
+                     if(iSigID == 3u) m_iCollectedNoBlue = 0u;
+                else if(iSigID <  3u) ++m_iCollectedNoBlue;
 
                 // increase combo
                 ++m_iCombo;
                 m_fComboDelay = 1.0f;
 
-                const float fTextAlpha = 1.0f - m_fTime * 0.008f;
-                if((iSigID == 4) || (fTextAlpha > 0.2f))
+                const coreFloat fTextAlpha = 1.0f - m_fTime * 0.008f;
+                if((iSigID == 4u) || (fTextAlpha > 0.2f))
                 {
                     // get and modify beverage color
                     coreVector4 vColor = coreVector4(pBeverage->GetSigColor(), 1.0f);
-                    if(iSigID != 4) vColor.a *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
+                    if(iSigID != 4u) vColor.a *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
 
                     // create floating score text
                     g_pCombatText->AddTextTransformed(fValue ? PRINT("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);
                 }
 
                 // create max combo text (after score text)
-                if(m_iCombo == 18) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), coreVector4(COLOR_ORANGE_F, 1.0f));
+                if(m_iCombo == 18u) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), coreVector4(COLOR_ORANGE_F, 1.0f));
 
                 // start power-up (remove all beverages in the rock-line)
-                if((iSigID == 4) && !m_bChallenge)
+                if((iSigID == 4u) && !m_bChallenge)
                 {
                     m_PowerUpTimer.Play(CORE_TIMER_PLAY_RESET);
                     m_Rock.SetColored(true);
-                    m_Rock.CreateShockWave(1);
+                    m_Rock.CreateShockWave(1u);
                 }
 
                 // send beverage into the air, try not to spill it
@@ -348,7 +347,7 @@ void cGame::Move()
     if(!m_Rock.GetJumped()) m_bTrapJump = false;
 
     // increase score over time
-    m_dScore += double(Core::System->GetTime() * GAME_SCORE_TIME * (1.0f + m_fTime*0.023f));
+    m_dScore += coreDouble(Core::System->GetTime() * GAME_SCORE_TIME * (1.0f + m_fTime*0.023f));
 
     // update combo
     m_fComboDelay -= Core::System->GetTime() * (GAME_SPEED_FAST/GAME_SPEED_FAST_REAL);
@@ -356,7 +355,7 @@ void cGame::Move()
     {
         // reset combo
         g_pCombatText->AddTextTransformed("-COMBO", m_Rock.GetPosition(), coreVector4(COLOR_RED_F, 1.0f));
-        m_iCombo     = 0;
+        m_iCombo     = 0u;
         m_fComboTime = 0.0f;
     }
 
@@ -368,12 +367,12 @@ void cGame::Move()
     if(m_PowerUpTimer.Update(1.0f))
     {
         m_Rock.SetColored(false);
-        m_Rock.CreateShockWave(2);
+        m_Rock.CreateShockWave(2u);
     }
 
     // update the interface object
     if(this->GetStatus()) m_Interface.Hide();
-    m_Interface.Update(float(m_dScore), m_fTime, COMBO_MULTI, MIN(m_fComboDelay, 0.7f) * 1.4286f);
+    m_Interface.Update(coreFloat(m_dScore), m_fTime, COMBO_MULTI, MIN(m_fComboDelay, 0.7f) * 1.4286f);
     m_Interface.Move();
 
     if(m_MessageTimer.GetStatus())
@@ -396,26 +395,26 @@ void cGame::Move()
         // also increase speed with shock-wave
         g_fTargetSpeed = GAME_SPEED_FAST;
         g_fCurSpeed    = GAME_SPEED_FAST + 0.2f;
-        m_Rock.CreateShockWave(0);
+        m_Rock.CreateShockWave(0u);
     }
 
     if(!this->GetStatus())
     {
         // handle first big air-jump
-        if(m_iFirstJump < 2 && m_Rock.GetReflected()) ++m_iFirstJump;
+        if(m_iFirstJump < 2u && m_Rock.GetReflected()) ++m_iFirstJump;
 
         // check for achievements/trophies/whatever
-        if(m_iFirstJump == 1 && m_Rock.GetJumped())                        {this->AchieveTrophy(GJ_TROPHY_01,  0);}
-        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5 && !DEFINED(_CORE_ANDROID_)) coreData::OpenURL(Core::Rand->Int(1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
+        if(m_iFirstJump == 1u && m_Rock.GetJumped())                       {this->AchieveTrophy(GJ_TROPHY_01,  0);}
+        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5u && !DEFINED(_CORE_ANDROID_)) coreData::OpenURL(Core::Rand->Int(1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
         if(m_Rock.GetFallen() && m_bTrapJump)                              {this->AchieveTrophy(GJ_TROPHY_03,  2);}
         if(m_Rock.GetFallen() && m_PowerUpTimer.GetStatus())               {this->AchieveTrophy(GJ_TROPHY_04,  3);}
         if(m_fComboTime >= 20.0f)                                          {this->AchieveTrophy(GJ_TROPHY_06,  5);}
-        if(m_aiCollected[4] >= 3 && !m_bChallenge)                         {this->AchieveTrophy(GJ_TROPHY_07,  6);}
+        if(m_aiCollected[4] >= 3u && !m_bChallenge)                        {this->AchieveTrophy(GJ_TROPHY_07,  6);}
         if(m_iCollectedNoBlue >= 100 && !m_bChallenge)                     {this->AchieveTrophy(GJ_TROPHY_08,  7);}
         if(m_Rock.GetNumJumps() >= 150)                                    {this->AchieveTrophy(GJ_TROPHY_09,  8);}
         if(m_dScore < 1000.0 && m_fTime >= 30.0f)                          {this->AchieveTrophy(GJ_TROPHY_10,  9);}
         if(m_dScore >= 50000.0 && !m_bChallenge)                           {this->AchieveTrophy(GJ_TROPHY_11, 10);}
-        if(m_Rock.GetNumAirJumps() >= 10)                                  {this->AchieveTrophy(GJ_TROPHY_12, 11);}
+        if(m_Rock.GetNumAirJumps() >= 10u)                                 {this->AchieveTrophy(GJ_TROPHY_12, 11);}
         if(m_dScore >= 5000.0 && !m_bChallenge && m_iMaxCombo < COMBO_MAX) {this->AchieveTrophy(GJ_TROPHY_14, 13);}
         if(m_dScore >= 500000.0 && m_bChallenge)                           {this->AchieveTrophy(GJ_TROPHY_15, 14);}
 
@@ -443,15 +442,15 @@ void cGame::Move()
 
 // ****************************************************************
 // add beverage object
-void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole)
+void cGame::AddBeverage(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole)
 {
-    ASSERT((iBlockX+1) < BACK_BLOCKS_X)
+    ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
     cBeverage* pBeverage = NULL;
 
     if((m_iCoolaCounter >= GAME_COOLA_RATE) || m_bChallenge)
     {
         // reset counter (incremented in row-processing body)
-        m_iCoolaCounter = 0;
+        m_iCoolaCounter = 0u;
 
         // create Coola bottle
         pBeverage = new cCoola();
@@ -466,12 +465,12 @@ void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT p
     else
     {
         // define the next thing to spawn
-        const int iSelection = Core::Rand->Int(10);
+        const coreUintW iSelection = Core::Rand->Int(10);
 
         // create new beverage
-             if( 0 <= iSelection && iSelection <=  5) pBeverage = new cSunrise();
-        else if( 6 <= iSelection && iSelection <=  9) pBeverage = new cMojito();
-        else if(10 <= iSelection && iSelection <= 10) pBeverage = new cBlue();
+             if( 0u <= iSelection && iSelection <=  5u) pBeverage = new cSunrise();
+        else if( 6u <= iSelection && iSelection <=  9u) pBeverage = new cMojito();
+        else if(10u <= iSelection && iSelection <= 10u) pBeverage = new cBlue();
     }
 
     // prepare beverage and add to list
@@ -485,9 +484,9 @@ void cGame::AddBeverage(const float& fSpawnY, const int& iBlockX, bool* OUTPUT p
 
 // ****************************************************************
 // add trap object
-void cGame::AddTrap(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHole)
+void cGame::AddTrap(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole)
 {
-    ASSERT((iBlockX+1) < BACK_BLOCKS_X)
+    ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
     // create new trap and add to list
     cTrap* pTrap = new cTrap();
@@ -501,7 +500,7 @@ void cGame::AddTrap(const float& fSpawnY, const int& iBlockX, bool* OUTPUT pbHol
 
 // ****************************************************************
 // add plate object
-void cGame::AddPlate(const float& fSpawnY, const int& iBlockX)
+void cGame::AddPlate(const coreFloat& fSpawnY, const coreInt32& iBlockX)
 {
     // create plate and add to list
     cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(120.0f), coreVector2(I_TO_F(iBlockX), -FLOOR(g_pBackground->GetPositionTime())));
@@ -512,7 +511,7 @@ void cGame::AddPlate(const float& fSpawnY, const int& iBlockX)
 
 // ****************************************************************
 // add ray object
-void cGame::AddRay(const float& fSpawnY)
+void cGame::AddRay(const coreFloat& fSpawnY)
 {
      // calculate start-position
     const coreVector2 vAround = coreVector2(Core::Rand->Float(-2.0f, 2.0f), 1.0f).Normalize() * 90.0f;
@@ -525,22 +524,22 @@ void cGame::AddRay(const float& fSpawnY)
 
 // ****************************************************************
 // prevent holes in the ground
-void cGame::AddStreet(const int& iBlockX, const bool& bCenter, const coreByte& iLeft, const coreByte& iRight, bool* OUTPUT pbHole)
+void cGame::AddStreet(const coreInt32& iBlockX, const coreBool& bCenter, const coreUintW& iLeft, const coreUintW& iRight, coreBool* OUTPUT pbHole)
 {
-    ASSERT((iBlockX+1) < BACK_BLOCKS_X)
+    ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
     // prevent center hole
     if(bCenter) pbHole[iBlockX+1] = false;
 
     // prevent left and right holes
-    for(coreByte i = 0; i < iLeft;  ++i) pbHole[CLAMP(iBlockX  -i, 0, BACK_BLOCKS_X-1)] = false;
-    for(coreByte i = 0; i < iRight; ++i) pbHole[CLAMP(iBlockX+2+i, 0, BACK_BLOCKS_X-1)] = false;
+    for(coreUintW i = 0u; i < iLeft;  ++i) pbHole[CLAMP(iBlockX  -i, 0u, BACK_BLOCKS_X-1u)] = false;
+    for(coreUintW i = 0u; i < iRight; ++i) pbHole[CLAMP(iBlockX+2+i, 0u, BACK_BLOCKS_X-1u)] = false;
 }
 
 
 // ****************************************************************
 // achieve a trophy
-void cGame::AchieveTrophy(const int& iID, const int& iNum)
+void cGame::AchieveTrophy(const coreUintW& iID, const coreUintW& iNum)
 {
     // update helper
     if(m_bTrophyHelper[iNum]) return;
@@ -561,7 +560,7 @@ void cGame::AchieveTrophy(const int& iID, const int& iNum)
 // callback for trophy achievements
 void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
-    const int iNum = P_TO_I(pData);
+    const coreUintW iNum = P_TO_I(pData);
 
     if(pTrophy)
     {

@@ -1,96 +1,158 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="..\..\..\source\cBackground.cpp" />
-    <ClCompile Include="..\..\..\source\cBeverage.cpp" />
-    <ClCompile Include="..\..\..\source\cCombatText.cpp" />
-    <ClCompile Include="..\..\..\source\cGame.cpp" />
-    <ClCompile Include="..\..\..\source\cInterface.cpp" />
-    <ClCompile Include="..\..\..\source\cMenu.cpp" />
-    <ClCompile Include="..\..\..\source\cPlate.cpp" />
-    <ClCompile Include="..\..\..\source\cRay.cpp" />
-    <ClCompile Include="..\..\..\source\cRock.cpp" />
     <ClCompile Include="..\..\..\source\main.cpp" />
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\Base64.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjAPI.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjDataItem.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjNetwork.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjScore.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjTrophy.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjUser.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\GameJoltAPI\source\MD5.cpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\source\cTrap.cpp" />
-    <ClCompile Include="..\..\..\source\cOnline.cpp" />
-    <ClCompile Include="..\..\..\source\cFirst.cpp" />
     <ClCompile Include="..\..\..\source\application.cpp" />
-    <ClCompile Include="..\..\..\source\cStage.cpp" />
+    <ClCompile Include="..\..\..\source\cTrap.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cStage.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cRock.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cBeverage.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cGame.cpp">
+      <Filter>game</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cCombatText.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cInterface.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cMenu.cpp">
+      <Filter>interface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cBackground.cpp">
+      <Filter>visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cPlate.cpp">
+      <Filter>visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cRay.cpp">
+      <Filter>visual</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cFirst.cpp">
+      <Filter>additional</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\source\cOnline.cpp">
+      <Filter>additional</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\source\cBackground.h" />
-    <ClInclude Include="..\..\..\source\cBeverage.h" />
-    <ClInclude Include="..\..\..\source\cCombatText.h" />
-    <ClInclude Include="..\..\..\source\cGame.h" />
-    <ClInclude Include="..\..\..\source\cInterface.h" />
-    <ClInclude Include="..\..\..\source\cMenu.h" />
-    <ClInclude Include="..\..\..\source\cPlate.h" />
-    <ClInclude Include="..\..\..\source\cRay.h" />
-    <ClInclude Include="..\..\..\source\cRock.h" />
     <ClInclude Include="..\..\..\source\main.h" />
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\Base64.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjAPI.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjDataItem.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjInline.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjLookup.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.hpp">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjScore.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjTrophy.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjUser.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\MD5.h">
-      <Filter>GameJoltAPI</Filter>
+      <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\source\cTrap.h" />
-    <ClInclude Include="..\..\..\source\cOnline.h" />
-    <ClInclude Include="..\..\..\source\cFirst.h" />
+    <ClInclude Include="..\..\..\source\cTrap.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cRock.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cBeverage.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cGame.h">
+      <Filter>game</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cCombatText.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cInterface.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cMenu.h">
+      <Filter>interface</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cBackground.h">
+      <Filter>visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cPlate.h">
+      <Filter>visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cRay.h">
+      <Filter>visual</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cFirst.h">
+      <Filter>additional</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\source\cOnline.h">
+      <Filter>additional</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="GameJoltAPI">
+    <Filter Include="interface">
+      <UniqueIdentifier>{ee60e6fa-a81c-4050-a181-a3c93bf68a48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="game">
+      <UniqueIdentifier>{c54b6098-957e-4de3-88d3-1e37bad8b5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="visual">
+      <UniqueIdentifier>{16b93eb2-d0e8-4dca-887f-cdf73c8a7a09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="additional">
+      <UniqueIdentifier>{11a572fd-4216-4a93-a18a-9d0e6c377d5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="additional\GameJoltAPI">
       <UniqueIdentifier>{c91c5612-a6a2-4ca3-b65a-f6804360117d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>

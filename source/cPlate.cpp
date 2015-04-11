@@ -11,8 +11,8 @@
 
 // ****************************************************************
 // constructor
-cPlate::cPlate(const float& fStartY, const coreVector2& vTexOffset)noexcept
-: m_Animation  (coreTimer(1.0f, Core::Rand->Float(0.45f,0.55f), 1))
+cPlate::cPlate(const coreFloat& fStartY, const coreVector2& vTexOffset)noexcept
+: m_Animation  (coreTimer(1.0f, Core::Rand->Float(0.45f,0.55f), 1u))
 , m_fStartY    (fStartY)
 , m_vTexOffset (vTexOffset)
 {
@@ -20,8 +20,8 @@ cPlate::cPlate(const float& fStartY, const coreVector2& vTexOffset)noexcept
 
     // load object resources
     this->DefineModel  (Core::Manager::Object->GetLowModel());
-    this->DefineTexture(0, "background.png");
-    this->DefineTexture(1, "background_norm.png");
+    this->DefineTexture(0u, "background.png");
+    this->DefineTexture(1u, "background_norm.png");
     this->DefineProgram("floor_plate_program");
 
     // set object properties
