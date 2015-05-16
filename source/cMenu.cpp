@@ -536,7 +536,7 @@ cMenu::cMenu()noexcept
 #endif
 
     // create successful submit object
-    m_Successful.DefineTexture   (0u, "icon_success.png");
+    m_Successful.DefineTexture   (1u, "icon_success.png");
     m_Successful.DefineProgram   (m_Made.GetProgram());
     m_Successful.SetPosition     (m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
     m_Successful.SetSize         (coreVector2(0.06f,0.06f));
@@ -653,7 +653,7 @@ cMenu::cMenu()noexcept
         m_aTrophyImage[i].SetCenter    (coreVector2(-0.5f,0.0f));
         m_aTrophyImage[i].SetColor3    ((i % (COLOR_NUM+1u)) ? g_avColor[(i-(1u+i/7u))%COLOR_NUM] : (COLOR_WHITE_F*0.9f));
 
-        m_aTrophyCheck[i].DefineTexture   (0u, "icon_success.png");
+        m_aTrophyCheck[i].DefineTexture   (1u, "icon_success.png");
         m_aTrophyCheck[i].DefineProgram   (m_TrophyText.GetProgram());
         m_aTrophyCheck[i].SetPosition     (coreVector2(LEFT_CENTER + I_TO_F((i%5u)-2u)*0.105f, -0.075f - I_TO_F((i/5u)-2u)*0.105f));
         m_aTrophyCheck[i].SetSize         (coreVector2(0.06f,0.06f));
@@ -975,8 +975,8 @@ void cMenu::Move()
 #if !defined(_CORE_ANDROID_)
 
     // control mouse with joystick
-    Core::Input->UseMouseWithJoystick(0u, 0u, 1u, 0.4f);
-    Core::Input->UseMouseWithJoystick(1u, 0u, 1u, 0.4f);
+    for(coreUintW i = 0u, ie = Core::Input->GetJoystickNum(); i < ie; ++i)
+        Core::Input->UseMouseWithJoystick(i, 0u, 1u, 0.4f);
 
 #endif
 
