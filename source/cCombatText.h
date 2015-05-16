@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // combat text definitions
-#define COMBAT_TEXT_NUM (8u)   // max number of simultaneous texts
+#define COMBAT_TEXT_NUM (8u)   // number of label objects
 
 
 // ****************************************************************
@@ -35,7 +35,7 @@ private:
 
 
 private:
-    coreLabel m_aText[COMBAT_TEXT_NUM];     // label objects to display the combat text
+    coreLabel m_aText[COMBAT_TEXT_NUM];     // label objects to display combat text
     coreUintW m_iCurText;                   // current label object
 
     coreTimer m_Delay;                      // delay between two created texts to increase visibility
@@ -59,7 +59,7 @@ public:
     void Render();
     void Move();
 
-    // reset all active texts
+    // reset all active labels
     void Reset();
 
     // add new combat text data

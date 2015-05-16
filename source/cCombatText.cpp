@@ -47,7 +47,7 @@ cCombatText::cCombatText()noexcept
     }
 
     // create trophy symbol
-    m_Trophy.DefineTexture(0u, "icon_trophy.png");
+    m_Trophy.DefineTexture(1u, "icon_trophy.png");
     m_Trophy.DefineProgram(m_aText[0].GetProgram());
     m_Trophy.SetSize      (coreVector2(0.12f,0.12f));
     m_Trophy.SetColor3    (COLOR_YELLOW_F);
@@ -100,17 +100,17 @@ void cCombatText::Move()
             if(++m_iCurText >= COMBAT_TEXT_NUM) m_iCurText = 0u;
 
             // get next text data
-            const sData& Data = m_aData.front();
+            const sData& oData = m_aData.front();
 
             // init label object
             coreLabel* pText = &m_aText[m_iCurText];
-            pText->SetText     (Data.sText.c_str());
+            pText->SetText     (oData.sText.c_str());
             pText->SetDirection(coreVector2::Direction(Core::Rand->Float(-0.3f, 0.3f)));
-            pText->SetCenter   (Data.vPosition);
-            pText->SetColor4   (Data.vColor);
+            pText->SetCenter   (oData.vPosition);
+            pText->SetColor4   (oData.vColor);
 
             // save alpha value
-            m_afAlpha[m_iCurText] = Data.vColor.a;
+            m_afAlpha[m_iCurText] = oData.vColor.a;
 
             // start timers
             m_aFloat[m_iCurText].Play(CORE_TIMER_PLAY_RESET);
