@@ -104,8 +104,8 @@ void cGame::RenderPre()
     FOR_EACH(it, m_apPlate) (*it)->Render();
 
     // render beverage straws (not reversed)
-    FOR_EACH(it, m_apBeverage)  (*it)->RenderStraw();
-    FOR_EACH(it, m_apDestroyed) (*it)->RenderStraw();
+    RENDER_BATCH(m_apBeverage,  RenderStraw)
+    RENDER_BATCH(m_apDestroyed, RenderStraw)
 }
 
 
@@ -125,8 +125,8 @@ void cGame::Render()
     glDepthMask(true);
 
     // render beverage drinks
-    FOR_EACH_REV(it, m_apBeverage)  (*it)->RenderDrink();
-    FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderDrink();
+    RENDER_BATCH_REV(m_apBeverage,  RenderDrink)
+    RENDER_BATCH_REV(m_apDestroyed, RenderDrink)
 
     glDepthMask(false);
     {
@@ -141,12 +141,12 @@ void cGame::Render()
 
     // render beverage glasses
     glCullFace(GL_FRONT);
-    FOR_EACH_REV(it, m_apBeverage)  (*it)->RenderGlass();
-    FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderGlass();
+    RENDER_BATCH_REV(m_apBeverage,  RenderGlass)
+    RENDER_BATCH_REV(m_apDestroyed, RenderGlass)
 
     glCullFace(GL_BACK);
-    FOR_EACH_REV(it, m_apBeverage)  (*it)->RenderGlass();
-    FOR_EACH_REV(it, m_apDestroyed) (*it)->RenderGlass();
+    RENDER_BATCH_REV(m_apBeverage,  RenderGlass)
+    RENDER_BATCH_REV(m_apDestroyed, RenderGlass)
 
     glDepthMask(false);
     {

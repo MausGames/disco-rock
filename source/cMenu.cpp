@@ -904,14 +904,11 @@ cMenu::cMenu()noexcept
 
     m_ScoreMenu.BindObject(4u, &m_TrophyText);
     for(coreUintW i = 0u; i < TROPHY_ITEMS; ++i)
-    {
         m_ScoreMenu.BindObject(4u, &m_aTrophyImage[i]);
+    for(coreUintW i = 0u; i < TROPHY_ITEMS; ++i)
         m_ScoreMenu.BindObject(4u, &m_aTrophyCheck[i]);
-    }
     for(coreUintW i = 0u; i < TROPHY_SECRETS; ++i)
-    {
         m_ScoreMenu.BindObject(4u, &m_aTrophySecret[i]);
-    }
     m_ScoreMenu.BindObject(4u, &m_TrophyName);
     m_ScoreMenu.BindObject(4u, &m_aTrophyDesc[0]);
     m_ScoreMenu.BindObject(4u, &m_aTrophyDesc[1]);

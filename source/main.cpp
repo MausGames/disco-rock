@@ -230,74 +230,78 @@ void CoreApp::Move()
         return;
     }
 
-    // move menu
-    g_pMenu->Move();
-    if(g_pMenu->GetStatus() == 1)
+    Core::Debug->MeasureStart("Move");
     {
-        coreBool bChallenge = false;
-
-        // check finger positions for Coola challenge
-        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW& i)
+        // move menu
+        g_pMenu->Move();
+        if(g_pMenu->GetStatus() == 1)
         {
-            bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
-                          (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);
-        });
+            coreBool bChallenge = false;
 
-        // check C key for Coola challenge
-        bChallenge |= (Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD)) ? true : false;
+            // check finger positions for Coola challenge
+            Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW& i)
+            {
+                bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
+                              (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);
+            });
 
-        // create/start a new game
-        SAFE_DELETE(g_pGame)
-        g_pGame = new cGame(bChallenge);
+            // check C key for Coola challenge
+            bChallenge |= (Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD)) ? true : false;
+
+            // create/start a new game
+            SAFE_DELETE(g_pGame)
+            g_pGame = new cGame(bChallenge);
+        }
+        else if(g_pMenu->GetStatus() == 2)
+        {
+            // delete/exit the current game
+            SAFE_DELETE(g_pGame)
+
+            // reset game speed and camera
+            g_fTargetSpeed   = 1.0f;
+            g_fCurSpeed      = 1.0f;
+            g_bCamUpsideDown = false;
+
+            // reset all holes in the dance floor
+            g_pBackground->ModifyColor();
+            g_pBackground->LoadGeometry();
+        }
+
+        // smoothly update the real game speed
+        if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
+        Core::System->SetTimeSpeed(0u, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
+        Core::System->SetTimeSpeed(1u, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
+
+        // set camera properties
+        const coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
+        const coreVector3 vCamDir = -vCamPos.Normalized();
+        const coreVector3 vCamOri =  coreVector3(0.0f, 0.0f, g_bCamUpsideDown ? -1.0f : 1.0f);
+        Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
+
+        if(!g_bPause)
+        {
+            // move background and game
+            g_pBackground->Move();
+            if(g_pGame) g_pGame->Move();
+
+            // move particle system (render is in the game object)
+            g_pParticleSystem->Move();
+
+            // move combat text
+            g_pCombatText->Move();
+        }
+
+        // update the network object
+        g_pOnline->Update();
+
+        // adjust music speed/pitch and update music streaming
+        g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 0.8f;
+        g_pMusicPlayer->Control()->SetPitch(g_fMusicSpeed);
+        if(g_pMusicPlayer->Update())
+        {
+            // update music volume
+            g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f));
+        }
     }
-    else if(g_pMenu->GetStatus() == 2)
-    {
-        // delete/exit the current game
-        SAFE_DELETE(g_pGame)
-
-        // reset game speed and camera
-        g_fTargetSpeed   = 1.0f;
-        g_fCurSpeed      = 1.0f;
-        g_bCamUpsideDown = false;
-
-        // reset all holes in the dance floor
-        g_pBackground->ModifyColor();
-        g_pBackground->LoadGeometry();
-    }
-
-    // smoothly update the real game speed
-    if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
-    Core::System->SetTimeSpeed(0u, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
-    Core::System->SetTimeSpeed(1u, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
-
-    // set camera properties
-    const coreVector3 vCamPos =  coreVector3(0.0f,-70.0f,51.0f);
-    const coreVector3 vCamDir = -vCamPos.Normalized();
-    const coreVector3 vCamOri =  coreVector3(0.0f, 0.0f, g_bCamUpsideDown ? -1.0f : 1.0f);
-    Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
-
-    if(!g_bPause)
-    {
-        // move background and game
-        g_pBackground->Move();
-        if(g_pGame) g_pGame->Move();
-
-        // move particle system (render is in the game object)
-        g_pParticleSystem->Move();
-
-        // move combat text
-        g_pCombatText->Move();
-    }
-
-    // update the network object
-    g_pOnline->Update();
-
-    // adjust music speed/pitch and update music streaming
-    g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 0.8f;
-    g_pMusicPlayer->Control()->SetPitch(g_fMusicSpeed);
-    if(g_pMusicPlayer->Update())
-    {
-        // update music volume
-        g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f));
-    }
+    Core::Debug->MeasureEnd("Move");
 }
