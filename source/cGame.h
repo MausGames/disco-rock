@@ -55,6 +55,10 @@
         }                                                     \
     }
 
+// macro functions for rendering beverages with improved batching (alpha blending not correct anymore)
+#define RENDER_BATCH(a,f)     for(coreUintW __i = 1u; __i <= 4u; ++__i) FOR_EACH    (it, a) {if((*it)->GetSigID() == __i) (*it)->f();}
+#define RENDER_BATCH_REV(a,f) for(coreUintW __i = 1u; __i <= 4u; ++__i) FOR_EACH_REV(it, a) {if((*it)->GetSigID() == __i) (*it)->f();}
+
 
 // ****************************************************************
 // game class
