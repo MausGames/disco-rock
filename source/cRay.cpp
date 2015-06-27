@@ -51,7 +51,7 @@ void cRay::Move()
 
     // calculate orientation
     const coreVector2 vNewDir = coreVector2::Direction(m_fAngle + 0.2f*SIN(m_fAnimation));
-    this->SetOrientation(coreVector3(-vNewDir.x, 0.0f, vNewDir.y));
+    this->SetOrientation(coreVector3(vNewDir.x, 0.0f, vNewDir.y));
 
     // calculate position
     const coreVector3 vNewPos = m_vStart - this->GetOrientation() * RAY_LENGTH * 0.2f;

@@ -33,7 +33,7 @@ cGame::cGame(const coreBool& bChallenge)noexcept
 , m_bTrapJump        (false)
 , m_bChallenge       (bChallenge)
 , m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1u))
-, m_Message          (FONT_ROCKS, 45u, 0u)
+, m_Message          (FONT_ROCKS, 45u, true, 0u)
 , m_MessageTimer     (coreTimer(1.0f, 0.333f, 1u))
 {
     // add and shuffle all algorithms
@@ -210,7 +210,7 @@ void cGame::Move()
             this->ProcessStage(fSpawnY, abHole);
         }
 
-#if !defined(_CORE_DEBUG_) || 0
+#if !defined(_CORE_DEBUG_) || 1
 
         // randomly create moving plates inside of holes (only connected to solid plates)
         const coreFloat fPlateCmp = MAX(1.0f - (m_fTime / 10.0f), 0.1f) * 3.0f;
