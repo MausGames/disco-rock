@@ -21,11 +21,11 @@ cFirst::cFirst()noexcept
     m_Interface.ChangeControlType(0u);
 
     // create control configuration objects
-    m_ControlText.Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_ControlText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
     m_ControlText.SetText    ("CONTROLS");
 
-    m_ControlType.Construct  (FONT_ROCKS, 29u, true, 16u);
+    m_ControlType.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 16u);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
     m_ControlType.SetSize    (coreVector2(0.49f,0.075f));
     m_ControlType.GetCaption()->SetColor3(coreVector3(0.75f,0.75f,0.75f));
@@ -37,7 +37,7 @@ cFirst::cFirst()noexcept
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45u, true, 2u);
+        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45u, OUTLINE_SIZE, 2u);
         pArrow->DefineProgram   ("2d_border_program");
         pArrow->SetColor3       (coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize      (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
@@ -46,7 +46,7 @@ cFirst::cFirst()noexcept
     }
 
     // create start button
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(0.0f,0.0f));
     m_Start.SetSize      (coreVector2(0.49f,0.1f));

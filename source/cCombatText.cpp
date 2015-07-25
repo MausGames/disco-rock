@@ -41,7 +41,7 @@ cCombatText::cCombatText()noexcept
     for(coreUintW i = 0u; i < COMBAT_TEXT_NUM; ++i)
     {
         // create labels and reset all missing properties
-        m_aText  [i].Construct(FONT_ROCKS, 37u, true, 32u);
+        m_aText  [i].Construct(FONT_ROCKS, 37u, OUTLINE_SIZE, 32u);
         m_aFloat [i].Set(1.0f, 1.0f, 1);
         m_afAlpha[i] = 0.0f;
     }
@@ -53,7 +53,7 @@ cCombatText::cCombatText()noexcept
     m_Trophy.SetColor3    (COLOR_YELLOW_F);
 
     // create trophy label
-    m_TrophyLabel.Construct(FONT_ROCKS, 37u, true, 32u);
+    m_TrophyLabel.Construct(FONT_ROCKS, 37u, OUTLINE_SIZE, 32u);
 }
 
 

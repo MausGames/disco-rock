@@ -52,6 +52,7 @@
 // ****************************************************************
 // global definitions
 #define FONT_ROCKS       "gomarice_rocks.ttf"
+#define OUTLINE_SIZE     (1u)
 
 #define COLOR_WHITE_F    coreVector3(1.000f, 1.000f, 1.000f)
 #define COLOR_YELLOW_F   coreVector3(1.000f, 0.824f, 0.392f)
