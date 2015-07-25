@@ -27,11 +27,11 @@ cMenu::cMenu()noexcept
     STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS);
 
     // create intro objects
-    m_Made.Construct  (FONT_ROCKS, 29u, true, 0u);
+    m_Made.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_Made.SetPosition(coreVector2(0.0f,0.176f));
     m_Made.SetText    ("MADE BY");
 
-    m_For.Construct  (FONT_ROCKS, 29u, true, 0u);
+    m_For.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_For.SetPosition(coreVector2(0.0f,-0.06667f));
     m_For.SetText    ("FOR");
 
@@ -80,13 +80,13 @@ cMenu::cMenu()noexcept
     m_Logo.SetPosition  (coreVector2(vRightCenter.x, 0.129f));
     m_Logo.SetCenter    (coreVector2(0.5f,0.0f));
 
-    m_Pause.Construct  (FONT_ROCKS, 80u, true, 0u);
+    m_Pause.Construct  (FONT_ROCKS, 80u, OUTLINE_SIZE, 0u);
     m_Pause.SetPosition(m_Logo.GetPosition());
     m_Pause.SetCenter  (coreVector2(0.5f,0.0f));
     m_Pause.SetText    ("PAUSE");
 
     // create labeled buttons
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(-0.06f,-0.092f));
     m_Start.SetSize      (coreVector2(m_BackgroundRight.GetSize().x - 0.06f,0.1f));
@@ -96,7 +96,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Start)
     ADJUST_BORDER(m_Start)
 
-    m_Exit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Exit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Exit.DefineProgram("2d_border_program"); // override
     m_Exit.SetPosition  (coreVector2(-0.06f,-0.222f));
     m_Exit.SetSize      (m_Start.GetSize());
@@ -109,7 +109,7 @@ cMenu::cMenu()noexcept
     const coreBool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
     const coreBool bTooSmall    = Core::System->GetResolution().AspectRatio() < 1.3f;
 
-    m_Resume.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Resume.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Resume.DefineProgram("2d_border_program"); // override
     m_Resume.SetPosition  (m_Start.GetPosition());
     m_Resume.SetSize      (m_Start.GetSize());
@@ -119,7 +119,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Resume)
     ADJUST_BORDER(m_Resume)
 
-    m_Abort.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Abort.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Abort.DefineProgram("2d_border_program"); // override
     m_Abort.SetPosition  (m_Exit.GetPosition());
     m_Abort.SetSize      (m_Start.GetSize());
@@ -129,7 +129,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Abort)
     ADJUST_BORDER(m_Abort)
 
-    m_Submit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Submit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Submit.DefineProgram("2d_border_program"); // override
     m_Submit.SetPosition  (m_Start.GetPosition());
     m_Submit.SetSize      (m_Start.GetSize());
@@ -139,7 +139,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Submit)
     ADJUST_BORDER(m_Submit)
 
-    m_Finish.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, true, 0u);
+    m_Finish.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_Finish.DefineProgram("2d_border_program"); // override
     m_Finish.SetPosition  (m_Exit.GetPosition());
     m_Finish.SetSize      (m_Start.GetSize());
@@ -196,7 +196,7 @@ cMenu::cMenu()noexcept
     m_TopBatteryBolt.SetAlignment (coreVector2(1.0f,-1.0f));
     m_TopBatteryBolt.SetColor3    (COLOR_BLUE_F);
 
-    m_TopBatteryValue.Construct   (FONT_ROCKS, 29u, true, 8u);
+    m_TopBatteryValue.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 8u);
     m_TopBatteryValue.SetPosition (coreVector2(0.048f,-0.015f));
     m_TopBatteryValue.SetCenter   (coreVector2(-0.5f,0.5f));
     m_TopBatteryValue.SetAlignment(coreVector2(1.0f,-1.0f));
@@ -211,19 +211,19 @@ cMenu::cMenu()noexcept
     m_TopFPSTacho.SetCenter    (coreVector2(0.5f,0.5f));
     m_TopFPSTacho.SetAlignment (coreVector2(-1.0f,-1.0f));
 
-    m_TopFPSSec.Construct   (FONT_ROCKS, 29u, true, 8u);
+    m_TopFPSSec.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 8u);
     m_TopFPSSec.SetPosition (coreVector2(-0.075f - 0.0187f,-0.015f));
     m_TopFPSSec.SetCenter   (coreVector2(0.5f,0.5f));
     m_TopFPSSec.SetAlignment(coreVector2(-1.0f,-1.0f));
 
-    m_TopFPSMil.Construct   (FONT_ROCKS, 29u, true, 4u);
+    m_TopFPSMil.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 4u);
     m_TopFPSMil.SetPosition (coreVector2(-0.075f,-0.015f));
     m_TopFPSMil.SetCenter   (coreVector2(0.5f,0.5f));
     m_TopFPSMil.SetAlignment(coreVector2(-1.0f,-1.0f));
 
 #if defined(_CORE_DEBUG_)
 
-    m_TopUpdating.Construct   (FONT_ROCKS, 21u, true, 0u);
+    m_TopUpdating.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE, 0u);
     m_TopUpdating.SetPosition (coreVector2(0.0f,-0.015f));
     m_TopUpdating.SetCenter   (coreVector2(0.0f,0.5f));
     m_TopUpdating.SetAlignment(coreVector2(0.0f,-1.0f));
@@ -231,19 +231,19 @@ cMenu::cMenu()noexcept
 #endif
 
     // create objects on the lower screen
-    m_BottomInfo.Construct   (FONT_ROCKS, 21u, true, 0u);
+    m_BottomInfo.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE, 0u);
     m_BottomInfo.SetPosition (coreVector2(0.01333f,0.00933f));
     m_BottomInfo.SetCenter   (coreVector2(-0.5f,-0.5f));
     m_BottomInfo.SetAlignment(coreVector2(1.0f,1.0f));
-    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013-2014 Maus Games - v1.3 - %s %.5s", __DATE__, __TIME__)));
+    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.3 - %s %.5s", __DATE__, __TIME__)));
 
-    m_BottomCredit.Construct   (FONT_ROCKS, 21u, true, 0u);
+    m_BottomCredit.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE, 0u);
     m_BottomCredit.SetPosition (coreVector2(-0.01333f,0.00933f));
     m_BottomCredit.SetCenter   (coreVector2(0.5f,-0.5f));
     m_BottomCredit.SetAlignment(coreVector2(-1.0f,1.0f));
     m_BottomCredit.SetText     (coreData::StrUpper("Music by Kevin MacLeod"));
 
-    m_BottomLoginName.Construct   (FONT_ROCKS, 29u, true, 0u);
+    m_BottomLoginName.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_BottomLoginName.SetPosition (coreVector2(-0.01333f,0.00667f));
     m_BottomLoginName.SetCenter   (coreVector2(0.5f,-0.5f));
     m_BottomLoginName.SetAlignment(coreVector2(-1.0f,1.0f));
@@ -283,7 +283,7 @@ cMenu::cMenu()noexcept
     m_QuestionBlack.FitToScreen();
     m_QuestionBlack.Move();
 
-    m_Question.Construct  (FONT_ROCKS, bBitTooSmall ? 35u : 45u, true, 0u);
+    m_Question.Construct  (FONT_ROCKS, bBitTooSmall ? 35u : 45u, OUTLINE_SIZE, 0u);
     m_Question.SetPosition(coreVector2(0.0f,0.08f));
     m_Question.SetText    ("Do you want to go out with me?");
     m_Question.Move();
@@ -303,14 +303,14 @@ cMenu::cMenu()noexcept
     m_No.Move();
 
     // create video configuration objects
-    m_VideoText.Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_VideoText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_VideoText.SetPosition(coreVector2(LEFT_CENTER,0.235f));
     m_VideoText.SetCenter  (coreVector2(-0.5f,0.0f));
     m_VideoText.SetText    ("VIDEO");
 
     const coreUintW iCurQuality = CLAMP(Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY), 0, 2);
 
-    m_VideoLow.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 0u);
+    m_VideoLow.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_VideoLow.DefineProgram("2d_border_program"); // override
     m_VideoLow.SetPosition  (coreVector2(LEFT_CENTER - 0.17f,0.15f)); // old Y: 0.13f
     m_VideoLow.SetSize      (coreVector2(0.15f,0.075f));
@@ -320,7 +320,7 @@ cMenu::cMenu()noexcept
     m_VideoLow.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoLow)
 
-    m_VideoMedium.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 0u);
+    m_VideoMedium.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_VideoMedium.DefineProgram("2d_border_program"); // override
     m_VideoMedium.SetPosition  (coreVector2(LEFT_CENTER, m_VideoLow.GetPosition().y));
     m_VideoMedium.SetSize      (m_VideoLow.GetSize());
@@ -330,7 +330,7 @@ cMenu::cMenu()noexcept
     m_VideoMedium.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoMedium)
 
-    m_VideoHigh.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 0u);
+    m_VideoHigh.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_VideoHigh.DefineProgram("2d_border_program"); // override
     m_VideoHigh.SetPosition  (coreVector2(LEFT_CENTER + 0.17f, m_VideoLow.GetPosition().y));
     m_VideoHigh.SetSize      (m_VideoLow.GetSize());
@@ -341,7 +341,7 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_VideoHigh)
 
     // create audio configuration objects
-    m_AudioText.Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_AudioText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_AudioText.SetPosition(coreVector2(LEFT_CENTER,0.04f)); // old Y: 0.02f
     m_AudioText.SetCenter  (coreVector2(-0.5f,0.0f));
     m_AudioText.SetText    ("AUDIO");
@@ -385,7 +385,7 @@ cMenu::cMenu()noexcept
     // create login configuration objects
 #if !defined(_API_GOOGLE_PLAY_)
 
-    m_LoginConfigOr.Construct  (FONT_ROCKS, 21u, true, 0u);
+    m_LoginConfigOr.Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 0u);
     m_LoginConfigOr.SetPosition(coreVector2(LEFT_CENTER - 0.047f, -0.195f));
     m_LoginConfigOr.SetCenter  (coreVector2(-0.5f,0.0f));
     m_LoginConfigOr.SetText    ("LOG INTO");
@@ -414,14 +414,14 @@ cMenu::cMenu()noexcept
     // create control configuration objects
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
 
-    m_ControlText.Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_ControlText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_ControlText.SetPosition(coreVector2(LEFT_CENTER,-0.141f));
     m_ControlText.SetCenter  (coreVector2(-0.5f,0.0f));
     m_ControlText.SetText    ("CONTROLS");
 
     const coreUintW iCurControl = CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2);
 
-    m_ControlType.Construct  (FONT_ROCKS, 29u, true, 16u);
+    m_ControlType.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 16u);
     m_ControlType.SetPosition(coreVector2(LEFT_CENTER,-0.221f));
     m_ControlType.SetSize    (coreVector2(0.49f,0.075f));
     m_ControlType.SetCenter  (coreVector2(-0.5f,0.0f));
@@ -429,13 +429,13 @@ cMenu::cMenu()noexcept
     m_ControlType.AddEntry("CLASSIC",    CONTROL_CLASSIC);
     m_ControlType.AddEntry("MOTION",     CONTROL_MOTION);
     m_ControlType.AddEntry("FULLSCREEN", CONTROL_FULLSCREEN);
-    m_ControlType.Select(iCurControl);
+    m_ControlType.SelectIndex(iCurControl);
 
     for(coreUintW i = 0u; i < 2u; ++i)
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct    (NULL, NULL, FONT_ROCKS, 45u, true, 2u);
+        pArrow->Construct    (NULL, NULL, FONT_ROCKS, 45u, OUTLINE_SIZE, 2u);
         pArrow->DefineProgram("2d_border_program");  // override
         pArrow->SetColor3    (coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize   (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
@@ -458,29 +458,29 @@ cMenu::cMenu()noexcept
     m_LoginPopup.SetColor3    (coreVector3(0.05f,0.05f,0.05f));
     ADJUST_BORDER(m_LoginPopup)
 
-    m_aLoginText[0].Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_aLoginText[0].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_aLoginText[0].SetPosition(m_LoginPopup.GetPosition() + coreVector2(0.0f,0.11f));
     m_aLoginText[0].SetText    ("LOGIN");
-    m_aLoginText[1].Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_aLoginText[1].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_aLoginText[1].SetPosition(m_aLoginText[0].GetPosition());
     m_aLoginText[1].SetText    ("SUBMIT");
 
-    m_LoginEnterName.Construct   (FONT_ROCKS, 29u, true, 0u);
+    m_LoginEnterName.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_LoginEnterName.SetPosition (m_LoginPopup.GetPosition() + coreVector2(-0.27f,0.02f));
     m_LoginEnterName.SetAlignment(coreVector2(1.0f,0.0f));
     m_LoginEnterName.SetText     ("USER NAME");
 
-    m_LoginEnterToken.Construct   (FONT_ROCKS, 29u, true, 0u);
+    m_LoginEnterToken.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_LoginEnterToken.SetPosition (m_LoginPopup.GetPosition() + coreVector2(-0.27f,-0.05f));
     m_LoginEnterToken.SetAlignment(coreVector2(1.0f,0.0f));
     m_LoginEnterToken.SetText     ("TOKEN");
 
-    m_LoginEnterGuest.Construct   (FONT_ROCKS, 29u, true, 0u);
+    m_LoginEnterGuest.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
     m_LoginEnterGuest.SetPosition (m_LoginPopup.GetPosition() + coreVector2(-0.27f,0.02f));
     m_LoginEnterGuest.SetAlignment(coreVector2(1.0f,0.0f));
     m_LoginEnterGuest.SetText     ("NAME");
 
-    m_LoginName.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 32u);
+    m_LoginName.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
     m_LoginName.DefineProgram("2d_color_program"); // override
     m_LoginName.SetPosition  (m_LoginEnterName.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginName.SetSize      (coreVector2(0.35f,0.05f));
@@ -488,7 +488,7 @@ cMenu::cMenu()noexcept
     m_LoginName.SetColor3    (coreVector3(0.25f,0.25f,0.25f));
     m_LoginName.SetCursor    ('<');
 
-    m_LoginToken.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 64u);
+    m_LoginToken.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 64u);
     m_LoginToken.DefineProgram("2d_color_program"); // override
     m_LoginToken.SetPosition  (m_LoginEnterToken.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginToken.SetSize      (m_LoginName.GetSize());
@@ -497,7 +497,7 @@ cMenu::cMenu()noexcept
     m_LoginToken.SetCursor    ('<');
     m_LoginToken.SetReplace   ('*');
 
-    m_LoginGuest.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, true, 32u);
+    m_LoginGuest.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
     m_LoginGuest.DefineProgram("2d_color_program"); // override
     m_LoginGuest.SetPosition  (m_LoginEnterGuest.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginGuest.SetSize      (m_LoginName.GetSize() + coreVector2(0.085f,0.0f));
@@ -515,11 +515,11 @@ cMenu::cMenu()noexcept
     m_LoginCancel.SetSize    (coreVector2(0.075f,0.075f));
     m_LoginCancel.SetColor3  (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.75f));
 
-    m_LoginError.Construct  (FONT_ROCKS, 21u, true, 32u);
+    m_LoginError.Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 32u);
     m_LoginError.SetPosition(m_LoginPopup.GetPosition() + coreVector2(0.0f,-0.122f));
     m_LoginError.SetText    ("All your base are belong to us!");
 
-    m_LoginJoltOr.Construct  (FONT_ROCKS, 21u, true, 0u);
+    m_LoginJoltOr.Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 0u);
     m_LoginJoltOr.SetPosition(m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.067f));
     m_LoginJoltOr.SetText    ("OR LOG INTO");
 
@@ -549,28 +549,28 @@ cMenu::cMenu()noexcept
         constexpr_var coreVector2 vPos = coreVector2(LEFT_CENTER,0.115f);
         constexpr_var coreVector2 vCen = coreVector2(-0.5f,0.0f);
 
-        m_aScoreTable[i].Construct  (FONT_ROCKS, 45u, true, 0u);
+        m_aScoreTable[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
         m_aScoreTable[i].SetPosition(vPos + coreVector2(0.0f,0.12f));
         m_aScoreTable[i].SetCenter  (vCen);
         m_aScoreTable[i].SetText    (i ? "TIME" : "SCORE");
 
         for(coreUintW j = 0u; j < SCORE_ENTRIES; ++j)
         {
-            m_aaScoreEntry[i][j][0].Construct   (FONT_ROCKS, 23u, true, 4u);
+            m_aaScoreEntry[i][j][0].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 4u);
             m_aaScoreEntry[i][j][0].SetPosition (vPos + coreVector2(-0.208f, 0.045f - j*0.04f));
             m_aaScoreEntry[i][j][0].SetCenter   (vCen);
             m_aaScoreEntry[i][j][0].SetAlignment(coreVector2(-1.0f,0.0f));
             m_aaScoreEntry[i][j][0].SetColor3   (coreVector3(0.75f,0.75f,0.75f));
             m_aaScoreEntry[i][j][0].SetText     (PRINT("%d.", j+1));
 
-            m_aaScoreEntry[i][j][1].Construct   (FONT_ROCKS, 23u, true, 24u);
+            m_aaScoreEntry[i][j][1].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 24u);
             m_aaScoreEntry[i][j][1].SetPosition (coreVector2(vPos.x - 0.19466f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][1].SetCenter   (vCen);
             m_aaScoreEntry[i][j][1].SetAlignment(coreVector2(1.0f,0.0f));
             m_aaScoreEntry[i][j][1].SetColor3   (LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(j, 3u) / 3u)));
             m_aaScoreEntry[i][j][1].SetText     ("-");
 
-            m_aaScoreEntry[i][j][2].Construct   (FONT_ROCKS, 23u, true, 16u);
+            m_aaScoreEntry[i][j][2].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 16u);
             m_aaScoreEntry[i][j][2].SetPosition (coreVector2(vPos.x + 0.232f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][2].SetCenter   (vCen);
             m_aaScoreEntry[i][j][2].SetAlignment(coreVector2(-1.0f,0.0f));
@@ -578,25 +578,25 @@ cMenu::cMenu()noexcept
             m_aaScoreEntry[i][j][2].SetText     ("-");
         }
 
-        m_aScoreBest[i].Construct  (FONT_ROCKS, 29u, true, 0u);
+        m_aScoreBest[i].Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 0u);
         m_aScoreBest[i].SetPosition(vPos + coreVector2(0.0f,-0.31f));
         m_aScoreBest[i].SetCenter  (vCen);
         m_aScoreBest[i].SetText    ("YOUR BEST");
 
-        m_aScoreBestValue[i].Construct  (FONT_ROCKS, 29u, true, 16u);
+        m_aScoreBestValue[i].Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 16u);
         m_aScoreBestValue[i].SetPosition(coreVector2(vPos.x, m_aScoreBest[i].GetPosition().y - 0.04667f));
         m_aScoreBestValue[i].SetCenter  (vCen);
         m_aScoreBestValue[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
         m_aScoreBestValue[i].SetText    ("-");
 
-        m_aScoreRecord[i].Construct  (FONT_ROCKS, 21u, true, 16u);
+        m_aScoreRecord[i].Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 16u);
         m_aScoreRecord[i].SetPosition(coreVector2(vPos.x - 0.18f, m_aScoreBestValue[i].GetPosition().y));
         m_aScoreRecord[i].SetCenter  (vCen);
         m_aScoreRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
 
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
 
-        m_aScoreRank[i].Construct   (FONT_ROCKS, 23u, true, 16u);
+        m_aScoreRank[i].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 16u);
         m_aScoreRank[i].SetPosition (coreVector2(vPos.x - 0.228f, m_aScoreBestValue[i].GetPosition().y));
         m_aScoreRank[i].SetCenter   (vCen);
         m_aScoreRank[i].SetAlignment(coreVector2(1.0f,0.0f));
@@ -619,18 +619,18 @@ cMenu::cMenu()noexcept
         const         coreVector2 vPos = coreVector2(vRightCenter.x, 0.235f - i*0.14f);
         constexpr_var coreVector2 vCen = coreVector2(0.5f,0.0f);
 
-        m_aAfterBest[i].Construct  (FONT_ROCKS, 45u, true, 0u);
+        m_aAfterBest[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
         m_aAfterBest[i].SetPosition(vPos);
         m_aAfterBest[i].SetCenter  (vCen);
         m_aAfterBest[i].SetText    (i ? "YOUR TIME" : "YOUR SCORE");
 
-        m_aAfterBestValue[i].Construct  (FONT_ROCKS, 45u, true, 16u);
+        m_aAfterBestValue[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 16u);
         m_aAfterBestValue[i].SetPosition(coreVector2(vPos.x, m_aAfterBest[i].GetPosition().y - 0.06f));
         m_aAfterBestValue[i].SetCenter  (vCen);
         m_aAfterBestValue[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
         m_aAfterBestValue[i].SetText    ("-");
 
-        m_aAfterRecord[i].Construct  (FONT_ROCKS, 21u, true, 16u);
+        m_aAfterRecord[i].Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 16u);
         m_aAfterRecord[i].SetPosition(coreVector2(vPos.x - m_BackgroundRight.GetSize().x*0.5f + 0.13f, m_aAfterBestValue[i].GetPosition().y));
         m_aAfterRecord[i].SetCenter  (vCen);
         m_aAfterRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
@@ -639,7 +639,7 @@ cMenu::cMenu()noexcept
     }
 
     // create trophy objects
-    m_TrophyText.Construct  (FONT_ROCKS, 45u, true, 0u);
+    m_TrophyText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
     m_TrophyText.SetPosition(coreVector2(LEFT_CENTER,0.235f));
     m_TrophyText.SetCenter  (coreVector2(-0.5f,0.0f));
     m_TrophyText.SetText    ("TROPHIES");
@@ -663,7 +663,7 @@ cMenu::cMenu()noexcept
 
     for(coreUintW i = 0u; i < TROPHY_SECRETS; ++i)
     {
-        m_aTrophySecret[i].Construct       (FONT_ROCKS, 45u, true, 2u);
+        m_aTrophySecret[i].Construct       (FONT_ROCKS, 45u, OUTLINE_SIZE, 2u);
         m_aTrophySecret[i].SetCenter       (coreVector2(-0.5f,0.0f));
         m_aTrophySecret[i].SetText         ("?");
         m_aTrophySecret[i].SetFocusModifier(coreVector2(0.0f,0.0f));
@@ -671,14 +671,14 @@ cMenu::cMenu()noexcept
         m_aTrophySecret[i].SetPosition(m_aTrophyImage[i].GetPosition());
     }
 
-    m_TrophyName.Construct  (FONT_ROCKS, 29u, true, 32u);
+    m_TrophyName.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
     m_TrophyName.SetPosition(coreVector2(LEFT_CENTER,-0.172f));
     m_TrophyName.SetCenter  (coreVector2(-0.5f,0.0f));
     m_TrophyName.SetText    ("-");
 
     for(coreUintW i = 0u; i < 2u; ++i)
     {
-        m_aTrophyDesc[i].Construct  (FONT_ROCKS, 21u, true, 64u);
+        m_aTrophyDesc[i].Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 64u);
         m_aTrophyDesc[i].SetPosition(coreVector2(LEFT_CENTER, m_TrophyName.GetPosition().y - 0.04667f - i*0.03f));
         m_aTrophyDesc[i].SetCenter  (coreVector2(-0.5f,0.0f));
         m_aTrophyDesc[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
@@ -688,7 +688,7 @@ cMenu::cMenu()noexcept
     // create connection objects
     for(coreUintW i = 0u; i < 3u; ++i)
     {
-        m_aConnectionError[i].Construct  (FONT_ROCKS, 29u, true, 24u);
+        m_aConnectionError[i].Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 24u);
         m_aConnectionError[i].SetPosition(coreVector2(LEFT_CENTER, 0.095f - i*0.05f));
         m_aConnectionError[i].SetCenter  (coreVector2(-0.5f,0.0f));
     }
@@ -1362,15 +1362,15 @@ void cMenu::Move()
         for(coreUintW i = 0u; i < TROPHY_ITEMS; ++i)
         {
             // update trophy description
-            if(((m_aTrophyImage[i].IsFocused() && m_iTrophyCurrent != i) || m_iTrophyCurrent < 0) && bInNormalMenu)
+            if(((m_aTrophyImage[i].IsFocused() && m_iTrophyCurrent != coreInt8(i)) || m_iTrophyCurrent < 0) && bInNormalMenu)
             {
                 m_iTrophyCurrent = i;
                 g_pOnline->GameJolt()->InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, this, &cMenu::FetchTrophiesCallback1, I_TO_P(i));
             }
 
             // set transparency of trophies
-            m_aTrophyImage[i].SetAlpha(m_aTrophyImage[i].GetAlpha() * ((m_iTrophyCurrent == i)    ? 0.5f : 1.0f));
-            m_aTrophyCheck[i].SetAlpha(m_aTrophyCheck[i].GetAlpha() * ((m_iTrophyStatus & BIT(i)) ? 1.0f : 0.0f));
+            m_aTrophyImage[i].SetAlpha(m_aTrophyImage[i].GetAlpha() * ((m_iTrophyCurrent == coreInt8(i)) ? 0.5f : 1.0f));
+            m_aTrophyCheck[i].SetAlpha(m_aTrophyCheck[i].GetAlpha() * ((m_iTrophyStatus & BIT(i))        ? 1.0f : 0.0f));
         }
 
         // set question marks

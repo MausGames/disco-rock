@@ -216,7 +216,7 @@ public:
     void SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3);
 
     // update current control type
-    inline void UpdateControl() {m_ControlType.Select(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
+    inline void UpdateControl() {m_ControlType.SelectIndex(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
 
     // play sound-effects
     inline void PlayClickSound()  {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, 0.0f, false);}
