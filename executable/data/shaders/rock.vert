@@ -18,7 +18,7 @@ void VertexMain()
     gl_Position      = coreObject3DPositionRaw();
     v_av2TexCoord[0] = a_v2RawTexCoord;
     
-    // dot-3 transform lighting vectors
-    coreDot3VertexInit();
-    v_av4LightDir[0].xyz = coreDot3VertexTransform(c_v3CamDir);
+    // transform lighting properties
+    mat3 TBN = coreTangentSpaceMatrix();
+    v_av4LightDir[0].xyz = TBN * c_v3CamDir;
 }

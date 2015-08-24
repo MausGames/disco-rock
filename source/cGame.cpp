@@ -16,6 +16,7 @@ cGame::cGame(const coreBool& bChallenge)noexcept
 , m_iAlgoCurIndex    (0u)
 , m_iAlgoCurCount    (0)
 , m_bAlgoEmptyLines  (true)
+, m_aiAlgoStatus     {}
 , m_dScore           (0.0)
 , m_fTime            (0.0f)
 , m_iCombo           (0u)
@@ -40,7 +41,6 @@ cGame::cGame(const coreBool& bChallenge)noexcept
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
     for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
     std::shuffle(m_aiAlgo.begin(), m_aiAlgo.end(), std::default_random_engine(CORE_RAND_TIME));
-    std::memset (m_aiAlgoStatus, 0, sizeof(m_aiAlgoStatus));
 
     // create beginning message
     m_Message.SetPosition(coreVector2(0.0f,0.2f));
@@ -199,7 +199,7 @@ void cGame::Move()
         // calculate spawn position (compensate framerate (background position) and movement when spawning objects)
         const coreFloat fSpawnY = BACK_SPAWN_Y + fMove10 - BACK_DETAIL_Y * FRACT(g_pBackground->GetPositionTime());
 
-        // increment Cool bottle counter
+        // increment Coola bottle counter
         ++m_iCoolaCounter;
 
         // completely remove first block line to force players to jump

@@ -13,12 +13,13 @@ const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);   // normalized camera vecto
 
 // shader input
 varying float v_v1Intensity;   // lighting intensity (semi-Gouraud shading)
+varying vec3  v_v3ViewNorm;    // view normal
 
 
 void FragmentMain()
 {
     // calculate smooth alpha offset
-    float v1Alpha = dot(v_v3ViewDir, c_v3CamDir);
+    float v1Alpha = dot(v_v3ViewNorm, c_v3CamDir);
     v1Alpha *= v1Alpha;   // 2
     v1Alpha *= v1Alpha;   // 4
     

@@ -48,8 +48,6 @@ private:
         coreVector2 vPosition;   // vertex position
         coreVector2 vTexCoord;   // texture coordinate
         coreUint32  iColor;      // RGBA color-value
-
-        constexpr_func sVertex()noexcept;
     };
 
 
@@ -104,16 +102,6 @@ private:
     // reset with the resource manager
     void __Reset(const coreResourceReset& bInit)override;
 };
-
-
-// ****************************************************************
-// constructor
-constexpr_func cBackground::sVertex::sVertex()noexcept
-: vPosition (coreVector2(0.0f,0.0f))
-, vTexCoord (coreVector2(0.0f,0.0f))
-, iColor    (0u)
-{
-}
 
 
 #endif // _DR_GUARD_BACKGROUND_H_

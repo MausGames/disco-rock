@@ -11,7 +11,7 @@
 // setup all defined resources
 static void SetupResources()
 {
-    Core::Manager::Resource->Load<coreModel>  ("default_cube.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3");
     Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh");
     Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh");

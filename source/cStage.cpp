@@ -297,10 +297,10 @@ void cGame::ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole)
 
             if(iFill)
             {
-                for(coreUintW i = 0u; i < 6u; i += 5u)
+                for(coreInt32 i = 0; i < 6; i += 5)
                 {
                     this->AddStreet(i, true, 0, 0, pbHole);
-                         if((iFill == 1) && (m_aiAlgoStatus[0] == coreInt32(i+1))) this->AddBeverage(fSpawnY, i, pbHole);
+                         if((iFill == 1) && (m_aiAlgoStatus[0] == (i+1))) this->AddBeverage(fSpawnY, i, pbHole);
                     else if( iFill == 2) this->AddTrap(fSpawnY, i, pbHole);
                 }
             }
@@ -390,7 +390,7 @@ void cGame::ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole)
 
             if(iNum == 3)
             {
-                for(coreUintW i = 1; i < 5; ++i)
+                for(coreInt32 i = 1; i < 5; ++i)
                     this->AddTrap(fSpawnY, i, pbHole);
             }
             else if((iNum != GAME_JUMP_WIDTH+2) && (iNum != GAME_JUMP_WIDTH+3))
@@ -734,11 +734,11 @@ void cGame::ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole)
                 }
             }
 
-            for(coreUintW i = 0; i < 4; ++i)
+            for(coreInt32 i = 0; i < 4; ++i)
             {
                 if((m_aiAlgoStatus[0] & BIT(i)) && ((m_aiAlgoStatus[2]+1) & BIT(i/2)))
                 {
-                    if((m_aiAlgoStatus[2] < 2) || (m_aiAlgoStatus[3] == coreInt32(i/2)))
+                    if((m_aiAlgoStatus[2] < 2) || (m_aiAlgoStatus[3] == (i/2)))
                         this->AddBeverage(fSpawnY, i+1, pbHole);
                     else this->AddStreet(i+1, true, 0, 0, pbHole);
                 }
