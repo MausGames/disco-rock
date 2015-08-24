@@ -28,7 +28,6 @@ private:
         coreVector2 vPosition;   // screen position
         coreVector4 vColor;      // RGBA color-value
 
-        sData()noexcept;
         sData(const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept;
         sData(sData&& m)noexcept;
     };

@@ -17,7 +17,7 @@ cTrap::cTrap()noexcept
 , m_bStatic (false)
 {
     // load object resources
-    this->DefineModel  ("default_cube.md5mesh");
+    this->DefineModel  ("default_cube.md3");
     this->DefineProgram("trap_program");
 
     // set object properties

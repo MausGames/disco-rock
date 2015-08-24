@@ -20,11 +20,10 @@ cBackground::cBackground()noexcept
 , m_fLightStrength  (0.0f)
 , m_iLightTick      (0u)
 , m_fLightTime      (0.0f)
+, m_avColor         {}
 , m_fCurColorHue    (-1.0f)
 , m_fLightDirection (-1.0f)
 {
-    std::memset(m_avColor, 0, sizeof(m_avColor));
-
     // load dance floor geometry
     m_pModel = Core::Manager::Resource->LoadNew<coreModel>();
     this->ModifyColor();

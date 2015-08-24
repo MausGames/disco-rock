@@ -11,11 +11,6 @@
 
 // ****************************************************************
 // constructor
-cCombatText::sData::sData()noexcept
-: sData ("", coreVector2(0.0f,0.0f), coreVector4(0.0f,0.0f,0.0f,0.0f))
-{
-}
-
 cCombatText::sData::sData(const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept
 : sText     (pcText)
 , vPosition (vPosition)
