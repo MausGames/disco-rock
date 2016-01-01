@@ -77,13 +77,13 @@ public:
     inline void RenderRock()   {coreObject3D::Render();}
 
     // just jump
-    coreBool Jump(const coreFloat& fForce);
+    coreBool Jump(const coreFloat fForce);
 
     // create shock-wave
-    void CreateShockWave(const coreUint8& iType);
+    void CreateShockWave(const coreUint8 iType);
 
     // set object properties
-    inline void SetColored(const coreBool& bColored) {m_bColored = bColored;}
+    inline void SetColored(const coreBool bColored) {m_bColored = bColored;}
 
     // get object properties
     inline const coreBool&   GetFallen     ()const {return m_bFallen;}

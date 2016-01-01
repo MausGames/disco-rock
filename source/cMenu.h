@@ -209,7 +209,7 @@ public:
     void ResetShaders();
 
     // control notification for new record
-    void NewRecord(const coreUintW& iIndex);
+    void NewRecord(const coreUintW iIndex);
     void ResetRecord();
 
     // control connection error notification
@@ -225,7 +225,7 @@ public:
     inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, 0.0f, false);}
 
     // invoke score table update
-    inline void InvokeScoreUpdate(const coreUintW& iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}
+    inline void InvokeScoreUpdate(const coreUintW iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}
 
     // submit score functions
     void SubmitScore        (const coreChar* pcGuestName);
@@ -235,7 +235,7 @@ public:
     void RetrieveScores();
     void RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData);
     void RetrieveScoresCallback2(const gjScoreList&     apScore, void* pData);
-    void RetrieveScoresCallback3(const coreUintW&       iTableNum);
+    void RetrieveScoresCallback3(const coreUintW        iTableNum);
 
     // fetch trophies functions
     void FetchTrophies();
@@ -249,10 +249,10 @@ public:
     void Logout();
 
     // control trophy parameters
-    inline void SetTrophyStatus (const coreUint32& iStatus)  {m_iTrophyStatus  = iStatus;}
-    inline void SetTrophyCurrent(const coreInt8&   iCurrent) {m_iTrophyCurrent = iCurrent;}
-    inline const coreUint32& GetTrophyStatus ()const         {return m_iTrophyStatus;}
-    inline const coreInt8&   GetTrophyCurrent()const         {return m_iTrophyCurrent;}
+    inline void SetTrophyStatus (const coreUint32 iStatus)  {m_iTrophyStatus  = iStatus;}
+    inline void SetTrophyCurrent(const coreInt8   iCurrent) {m_iTrophyCurrent = iCurrent;}
+    inline const coreUint32& GetTrophyStatus ()const        {return m_iTrophyStatus;}
+    inline const coreInt8&   GetTrophyCurrent()const        {return m_iTrophyCurrent;}
 };
 
 

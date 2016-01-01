@@ -62,7 +62,7 @@ public:
     void Reset();
 
     // add new combat text data
-    inline void AddText           (const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.push_back(sData(pcText, vPosition, vColor));}
+    inline void AddText           (const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.emplace_back(pcText, vPosition, vColor);}
     void        AddTextTransformed(const coreChar* pcText, const coreVector3& vPosition, const coreVector4& vColor);
 
     // show trophy animation

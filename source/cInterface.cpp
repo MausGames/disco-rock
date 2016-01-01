@@ -239,7 +239,7 @@ void cInterface::Move()
 
 // ****************************************************************
 // update all interface values
-void cInterface::Update(const coreFloat& fScore, const coreFloat& fTime, const coreFloat& fCombo, const coreFloat& fDelay)
+void cInterface::Update(const coreFloat fScore, const coreFloat fTime, const coreFloat fCombo, const coreFloat fDelay)
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
@@ -288,7 +288,7 @@ void cInterface::RenderTouch()
 
 // ****************************************************************
 // change current control type
-void cInterface::ChangeControlType(const coreUint8& iControlType)
+void cInterface::ChangeControlType(const coreUint8 iControlType)
 {
     // save control type value
     m_iControlType = CLAMP(iControlType, 0u, 2u);

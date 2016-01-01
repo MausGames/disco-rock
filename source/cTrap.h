@@ -32,8 +32,8 @@ public:
     void Move()override;
 
     // check for static behavior
-    inline void            SetStatic(const coreBool& bStatic) {m_bStatic = bStatic;}
-    inline const coreBool& IsStatic ()const                   {return m_bStatic;}
+    inline void            SetStatic(const coreBool bStatic) {m_bStatic = bStatic;}
+    inline const coreBool& IsStatic ()const                  {return m_bStatic;}
 };
 
 

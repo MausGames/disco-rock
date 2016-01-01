@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cGame::cGame(const coreBool& bChallenge)noexcept
+cGame::cGame(const coreBool bChallenge)noexcept
 : m_iCurLine         (g_pBackground->GetCurLine())
 , m_iAlgoCurIndex    (0u)
 , m_iAlgoCurCount    (0)
@@ -442,7 +442,7 @@ void cGame::Move()
 
 // ****************************************************************
 // add beverage object
-void cGame::AddBeverage(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole)
+void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
     cBeverage* pBeverage = NULL;
@@ -484,7 +484,7 @@ void cGame::AddBeverage(const coreFloat& fSpawnY, const coreInt32& iBlockX, core
 
 // ****************************************************************
 // add trap object
-void cGame::AddTrap(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole)
+void cGame::AddTrap(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
@@ -500,7 +500,7 @@ void cGame::AddTrap(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool
 
 // ****************************************************************
 // add plate object
-void cGame::AddPlate(const coreFloat& fSpawnY, const coreInt32& iBlockX)
+void cGame::AddPlate(const coreFloat fSpawnY, const coreInt32 iBlockX)
 {
     // create plate and add to list
     cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(120.0f), coreVector2(I_TO_F(iBlockX), -FLOOR(g_pBackground->GetPositionTime())));
@@ -511,7 +511,7 @@ void cGame::AddPlate(const coreFloat& fSpawnY, const coreInt32& iBlockX)
 
 // ****************************************************************
 // add ray object
-void cGame::AddRay(const coreFloat& fSpawnY)
+void cGame::AddRay(const coreFloat fSpawnY)
 {
      // calculate start-position
     const coreVector2 vAround = coreVector2(Core::Rand->Float(-2.0f, 2.0f), 1.0f).Normalize() * 90.0f;
@@ -524,7 +524,7 @@ void cGame::AddRay(const coreFloat& fSpawnY)
 
 // ****************************************************************
 // prevent holes in the ground
-void cGame::AddStreet(const coreInt32& iBlockX, const coreBool& bCenter, const coreUintW& iLeft, const coreUintW& iRight, coreBool* OUTPUT pbHole)
+void cGame::AddStreet(const coreInt32 iBlockX, const coreBool bCenter, const coreUintW iLeft, const coreUintW iRight, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
@@ -539,7 +539,7 @@ void cGame::AddStreet(const coreInt32& iBlockX, const coreBool& bCenter, const c
 
 // ****************************************************************
 // achieve a trophy
-void cGame::AchieveTrophy(const coreUintW& iID, const coreUintW& iNum)
+void cGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
 {
     // update helper
     if(m_bTrophyHelper[iNum]) return;

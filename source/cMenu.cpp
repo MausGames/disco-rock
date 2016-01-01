@@ -1424,7 +1424,7 @@ void cMenu::Move()
 
             // control volume with last finger position
             coreFloat fMove = 0.0f;
-            Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW& i)
+            Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW i)
             {
                 fMove = Core::Input->GetTouchPosition(i).x; // overwrite
             });
@@ -1749,7 +1749,7 @@ void cMenu::ResetShaders()
 
 // ****************************************************************
 // activate notification for new record
-void cMenu::NewRecord(const coreUintW& iIndex)
+void cMenu::NewRecord(const coreUintW iIndex)
 {
     ASSERT(iIndex < SCORE_TABLES);
 
@@ -1938,7 +1938,7 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 
 // ****************************************************************
 // callback for score retrieval (update leaderboards)
-void cMenu::RetrieveScoresCallback3(const coreUintW& iTableNum)
+void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
 {
     ASSERT(iTableNum  < SCORE_TABLES);
     ASSERT(m_iCurPage < SCORE_PAGES);

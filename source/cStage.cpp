@@ -11,14 +11,14 @@
 
 // ****************************************************************
 // apply stage algorithms to the game
-void cGame::ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole)
+void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
 {
 #if defined(_CORE_DEBUG_) && 0
     m_aiAlgo[m_iAlgoCurIndex] = STAGE_TRAP;
 #endif
 
     // prevent double-empty-lines
-    auto nHasEmptyLines = [this](const coreBool& bEmptyLines)
+    auto nHasEmptyLines = [this](const coreBool bEmptyLines)
     {
         if((m_iAlgoCurCount == 0) && m_bAlgoEmptyLines && bEmptyLines)
             ++m_iAlgoCurCount;

@@ -170,7 +170,7 @@ void cOnline::__SetErrorMessage(const coreVector3& vColor, const coreChar* pcMes
 
 // ****************************************************************
 // forward score table update to menu
-void cOnline::__InvokeScoreUpdate(const coreUintW& iTableNum)
+void cOnline::__InvokeScoreUpdate(const coreUintW iTableNum)
 {
     g_pMenu->InvokeScoreUpdate(iTableNum);
 }

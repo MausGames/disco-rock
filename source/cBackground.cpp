@@ -141,7 +141,7 @@ void cBackground::Move()
 
 // ****************************************************************
 // make or remove holes
-void cBackground::UpdateHoles(const coreUintW& iLine, const coreBool* pbIndex)
+void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 {
     constexpr_var coreUintW iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
     constexpr_var coreUintW iSize = iNum * sizeof(coreFloat);
@@ -216,7 +216,7 @@ void cBackground::LoadGeometry()
         }
         while(i >= BACK_BLOCKS_X && (m_avColor[iCurColor] == avColor[i-BACK_BLOCKS_X].xyz() ||
                                      m_avColor[iCurColor] == avColor[i-1u]           .xyz()));
-        avColor.push_back(coreVector4(m_avColor[iCurColor], 1.0f));
+        avColor.emplace_back(m_avColor[iCurColor], 1.0f);
 
         // add additional random parameter for the shader
         avColor.back().a = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
@@ -313,7 +313,7 @@ void cBackground::ModifyColor()
 
 // ****************************************************************
 // reset with the resource manager
-void cBackground::__Reset(const coreResourceReset& bInit)
+void cBackground::__Reset(const coreResourceReset bInit)
 {
     if(bInit) this->LoadGeometry();
     else m_pModel->Unload();

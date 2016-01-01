@@ -129,17 +129,17 @@ public:
 #if defined(_API_GOOGLE_PLAY_)
 
     // open Google Play screens
-    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUI([](gpg::UIStatus const &iStatus){});}
-    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUI([](gpg::UIStatus const &iStatus){});}
+    inline void OpenTrophy() {m_pGooglePlay->Achievements().ShowAllUI([](const gpg::UIStatus &iStatus){});}
+    inline void OpenScore () {m_pGooglePlay->Leaderboards().ShowAllUI([](const gpg::UIStatus &iStatus){});}
 
 #endif
 
     // layered request functions to support both APIs
     template <typename T> coreInt32 AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
     template <typename T> coreInt32 FetchTrophies    (GJ_NETWORK_OUTPUT(gjTrophyList));
-    template <typename T> coreInt32 SubmitScore      (const coreUintW& iTableID, const std::string& sScore, const coreUintW& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
+    template <typename T> coreInt32 SubmitScore      (const coreUintW iTableID, const std::string& sScore, const coreUintW iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
     template <typename T> coreInt32 FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap));
-    template <typename T> coreInt32 FetchScores      (const coreUintW& iTableID, const coreBool& bOnlyUser, const coreUintW& iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
+    template <typename T> coreInt32 FetchScores      (const coreUintW iTableID, const coreBool bOnlyUser, const coreUintW iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
     template <typename T> coreInt32 Login            (const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32));
     inline void Logout();
 
@@ -152,7 +152,7 @@ private:
     void __SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3);
 
     // forward score table update to menu
-    void __InvokeScoreUpdate(const coreUintW& iTableNum);
+    void __InvokeScoreUpdate(const coreUintW iTableNum);
 };
 
 
@@ -283,7 +283,7 @@ template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTroph
 
     // fetch trophy data
     ++this->m_iNumConnections;
-    m_pGooglePlay->Achievements().FetchAll([=](gpg::AchievementManager::FetchAllResponse const &Response)
+    m_pGooglePlay->Achievements().FetchAll([=](const gpg::AchievementManager::FetchAllResponse& Response)
     {
         --this->m_iNumConnections;
 
@@ -334,7 +334,7 @@ template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTroph
 
 // ****************************************************************
 // submit score
-template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW& iTableID, const std::string& sScore, const coreUintW& iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
+template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const std::string& sScore, const coreUintW iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -396,7 +396,7 @@ template <typename T> coreInt32 cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjS
 
 // ****************************************************************
 // fetch scores
-template <typename T> coreInt32 cOnline::FetchScores(const coreUintW& iTableID, const coreBool& bOnlyUser, const coreUintW& iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
+template <typename T> coreInt32 cOnline::FetchScores(const coreUintW iTableID, const coreBool bOnlyUser, const coreUintW iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
 {
 #if defined(_API_GOOGLE_PLAY_)
 
@@ -422,7 +422,7 @@ template <typename T> coreInt32 cOnline::FetchScores(const coreUintW& iTableID, 
 
         // fetch global best score data
         ++this->m_iNumConnections;
-        m_pGooglePlay->Leaderboards().FetchScorePage(oToken, iLimit, [=](gpg::LeaderboardManager::FetchScorePageResponse const &Response)
+        m_pGooglePlay->Leaderboards().FetchScorePage(oToken, iLimit, [=](const gpg::LeaderboardManager::FetchScorePageResponse& Response)
         {
             --this->m_iNumConnections;
 
@@ -452,7 +452,7 @@ template <typename T> coreInt32 cOnline::FetchScores(const coreUintW& iTableID, 
                         // invoke asynchronous user-name replace (this is possible (though the score list clear) because the Google library calls everything consecutively)
                         std::string* psName = const_cast<std::string*>(&pScore->GetUserName());
                         ++this->m_iNumConnections;
-                        this->m_pGooglePlay->Players().Fetch(it->PlayerId(), [=](gpg::PlayerManager::FetchResponse const &Response)
+                        this->m_pGooglePlay->Players().Fetch(it->PlayerId(), [=](const gpg::PlayerManager::FetchResponse& Response)
                         {
                             --this->m_iNumConnections;
 
@@ -481,7 +481,7 @@ template <typename T> coreInt32 cOnline::FetchScores(const coreUintW& iTableID, 
         // fetch user score data
         ++this->m_iNumConnections;
         m_pGooglePlay->Leaderboards().FetchScoreSummary(sLeaderboardID, gpg::LeaderboardTimeSpan::ALL_TIME,
-                                                        gpg::LeaderboardCollection::PUBLIC, [=](gpg::LeaderboardManager::FetchScoreSummaryResponse const &Response)
+                                                        gpg::LeaderboardCollection::PUBLIC, [=](const gpg::LeaderboardManager::FetchScoreSummaryResponse&Response)
         {
             --this->m_iNumConnections;
 
@@ -574,7 +574,7 @@ template <typename T> coreInt32 cOnline::Login(const coreChar* pcName, const cor
             {
                 // fetch player data
                 ++this->m_iNumConnections;
-                this->m_pGooglePlay->Players().FetchSelf([=](gpg::PlayerManager::FetchSelfResponse const &Response)
+                this->m_pGooglePlay->Players().FetchSelf([=](const gpg::PlayerManager::FetchSelfResponse& Response)
                 {
                     --this->m_iNumConnections;
 
