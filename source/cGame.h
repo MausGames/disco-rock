@@ -118,7 +118,7 @@ private:
 
 
 public:
-    explicit cGame(const coreBool& bChallenge)noexcept;
+    explicit cGame(const coreBool bChallenge)noexcept;
     ~cGame();
 
     DISABLE_COPY(cGame)
@@ -129,33 +129,33 @@ public:
     void Move();
 
     // apply stage algorithms to the game (implemented in cStage.cpp)
-    void ProcessStage(const coreFloat &fSpawnY, coreBool* OUTPUT pbHole);
+    void ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole);
 
     // get game status
     inline coreUint8       GetStatus   ()const {return (m_Rock.GetPosition().z < -150.0f) ? 1u : 0u;}
     inline const coreBool& GetChallenge()const {return m_bChallenge;}
 
     // add objects
-    void AddBeverage(const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole);
-    void AddTrap    (const coreFloat& fSpawnY, const coreInt32& iBlockX, coreBool* OUTPUT pbHole);
-    void AddPlate   (const coreFloat& fSpawnY, const coreInt32& iBlockX);
-    void AddRay     (const coreFloat& fSpawnY);
-    void AddStreet  (const coreInt32& iBlockX, const coreBool& bCenter, const coreUintW& iLeft, const coreUintW& iRight, coreBool* OUTPUT pbHole);
+    void AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole);
+    void AddTrap    (const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole);
+    void AddPlate   (const coreFloat fSpawnY, const coreInt32 iBlockX);
+    void AddRay     (const coreFloat fSpawnY);
+    void AddStreet  (const coreInt32 iBlockX, const coreBool bCenter, const coreUintW iLeft, const coreUintW iRight, coreBool* OUTPUT pbHole);
 
     // get game properties
-    inline const coreDouble& GetScore   ()const                        {return m_dScore;}
-    inline const coreFloat&  GetTime    ()const                        {return m_fTime;}
-    inline const coreUint8&  GetCombo   ()const                        {return m_iCombo;}
-    inline const coreUint8&  GetMaxCombo()const                        {return m_iMaxCombo;}
-    inline const coreUint16& GetStat    (const coreUintW& iIndex)const {return m_aiCollected[iIndex];}
-    inline const coreUint16& GetTraps   ()const                        {return m_iCollectedTraps;}
+    inline const coreDouble& GetScore   ()const                       {return m_dScore;}
+    inline const coreFloat&  GetTime    ()const                       {return m_fTime;}
+    inline const coreUint8&  GetCombo   ()const                       {return m_iCombo;}
+    inline const coreUint8&  GetMaxCombo()const                       {return m_iMaxCombo;}
+    inline const coreUint16& GetStat    (const coreUintW iIndex)const {return m_aiCollected[iIndex];}
+    inline const coreUint16& GetTraps   ()const                       {return m_iCollectedTraps;}
 
     // access sub objects
     inline cRock*      GetRock     () {return &m_Rock;}
     inline cInterface* GetInterface() {return &m_Interface;}
 
     // achieve a trophy
-    void AchieveTrophy        (const coreUintW& iID, const coreUintW& iNum);
+    void AchieveTrophy        (const coreUintW iID, const coreUintW iNum);
     void AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData);
 };
 

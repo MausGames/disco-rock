@@ -23,6 +23,8 @@
     #extension GL_EXT_shadow_samplers : enable
 #else
     #extension GL_ARB_uniform_buffer_object : enable
+    #extension GL_ARB_enhanced_layouts      : enable
+    #extension GL_ARB_shader_group_vote     : enable
     #extension GL_AMD_shader_trinary_minmax : enable
 #endif
 #pragma optimize(on)
@@ -89,6 +91,15 @@ struct coreLight
     vec4 v4Value;
 };
 
+// condition across group of shader invocations
+#if defined(GL_ARB_shader_group_vote)
+    #define coreAnyInvocation(x)  (anyInvocationARB (x))
+    #define coreAllInvocations(x) (allInvocationsARB(x))
+#else
+    #define coreAnyInvocation(x)  (x)
+    #define coreAllInvocations(x) (x)
+#endif
+
 // trinary min and max
 #if defined(GL_AMD_shader_trinary_minmax)
     #define coreMin3(a,b,c) (min3(a, b, c))
@@ -97,6 +108,16 @@ struct coreLight
     #define coreMin3(a,b,c) (min(a, min(b, c)))
     #define coreMax3(a,b,c) (max(a, max(b, c)))
 #endif
+
+// modulo operator
+int coreMod(const in int a, const in int b)
+{
+#if (__VERSION__) >= 130
+    return (a % b);
+#else
+    return (a - (a / b) * b);
+#endif
+} 
 
 // color convert
 vec3 coreHSVtoRGB(const in vec3 v3HSV)
@@ -511,6 +532,12 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     }
 
 #endif // _CORE_FRAGMENT_SHADER_
+
+
+// ****************************************************************
+#if defined(_CORE_COMPUTE_SHADER_)
+
+#endif // _CORE_COMPUTE_SHADER_
 
 
 // ****************************************************************

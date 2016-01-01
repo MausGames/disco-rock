@@ -239,7 +239,7 @@ void CoreApp::Move()
             coreBool bChallenge = false;
 
             // check finger positions for Coola challenge
-            Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW& i)
+            Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&](const coreUintW i)
             {
                 bChallenge |= (ABS(Core::Input->GetTouchPosition(i).x) > 0.4f) &&
                               (ABS(Core::Input->GetTouchPosition(i).y) > 0.4f);

@@ -35,6 +35,7 @@ cRock::cRock()noexcept
     this->DefineProgram("rock_program");
 
     // set object properties
+    this->SetPosition         (coreVector3(0.0f,0.0f,0.0f));
     this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*5.0f);
     this->SetDirection        (coreVector3(1.0f,0.0f,0.0f));
     this->SetCollisionModifier(coreVector3(1.0f,1.0f,1.0f)*ROCK_RANGE_OBJ);
@@ -99,7 +100,7 @@ void cRock::Move()
     else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
     {
         if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
-            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW& i) {bJump = true;});
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW i) {bJump = true;});
     }
 
     // jump then touching the right third of the screen
@@ -107,7 +108,7 @@ void cRock::Move()
     {
         if(!g_pGame->GetInterface()->GetTouchPause()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD))
         {
-            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW& i)
+            Core::Input->ForEachFinger(CORE_INPUT_PRESS, [&bJump](const coreUintW i)
             {
                 if(Core::Input->GetTouchPosition(i).x > 0.0f)
                     bJump = true;
@@ -200,7 +201,7 @@ void cRock::Move()
     // move with screen space
     else // == CONTROL_FULLSCREEN)
     {
-        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint& i)
+        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint i)
         {
             const coreFloat& fX = Core::Input->GetTouchPosition(i).x;
 
@@ -302,7 +303,7 @@ void cRock::Move()
 
 // ****************************************************************
 // just jump
-coreBool cRock::Jump(const coreFloat& fForce)
+coreBool cRock::Jump(const coreFloat fForce)
 {
     if(m_bFallen || m_bJumped) return false;
 
@@ -326,7 +327,7 @@ coreBool cRock::Jump(const coreFloat& fForce)
 
 // ****************************************************************
 // create shock-wave
-void cRock::CreateShockWave(const coreUint8& iType)
+void cRock::CreateShockWave(const coreUint8 iType)
 {
     if(iType == 0u)
     {

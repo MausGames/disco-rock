@@ -64,7 +64,7 @@
 
 #define COLOR_BRIGHTNESS (0.83f)
 
-static constexpr_var coreVector3 g_avColor[] =
+constexpr coreVector3 g_avColor[] =
 {
     COLOR_YELLOW_F,
     COLOR_ORANGE_F,
@@ -148,7 +148,7 @@ struct sMsgList
     std::vector<const std::string*> m_apsMsg;   // shuffled messages
     coreUintW m_iCur;                           // current message index
 
-    inline sMsgList(const std::string* psMsg, const coreUintW& iSize)noexcept
+    inline sMsgList(const std::string* psMsg, const coreUintW iSize)noexcept
     : m_iCur (0u)
     {
         // add messages

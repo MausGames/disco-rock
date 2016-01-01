@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cPlate::cPlate(const coreFloat& fStartY, const coreVector2& vTexOffset)noexcept
+cPlate::cPlate(const coreFloat fStartY, const coreVector2& vTexOffset)noexcept
 : m_Animation  (coreTimer(1.0f, Core::Rand->Float(0.45f,0.55f), 1u))
 , m_fStartY    (fStartY)
 , m_vTexOffset (vTexOffset)

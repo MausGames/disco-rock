@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cBeverage::cBeverage(const coreUint32& iScore, const coreFloat& fHeight, const coreFloat& fVolume, const coreFloat& fPitch)noexcept
+cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
 , m_iScore       (iScore)

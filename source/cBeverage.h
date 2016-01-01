@@ -34,7 +34,7 @@ protected:
 
 
 public:
-    cBeverage(const coreUint32& iScore, const coreFloat& fHeight, const coreFloat& fVolume, const coreFloat& fPitch)noexcept;
+    cBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept;
     virtual ~cBeverage();
 
     DISABLE_COPY(cBeverage)

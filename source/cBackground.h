@@ -81,9 +81,9 @@ public:
     void Move  ()override;
 
     // make or remove holes, get current horizon line, do other fancy stuff
-    void UpdateHoles(const coreUintW& iLine, const coreBool* pbIndex);
-    inline coreInt32 GetCurLine()const                           {return F_TO_SI(m_fPositionTime);}
-    inline coreFloat GetFlash  (const coreFloat& fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
+    void UpdateHoles(const coreUintW iLine, const coreBool* pbIndex);
+    inline coreInt32 GetCurLine()const                          {return F_TO_SI(m_fPositionTime);}
+    inline coreFloat GetFlash  (const coreFloat fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
 
     // get height value at specific position
     coreFloat        GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const;
@@ -94,13 +94,13 @@ public:
     void ModifyColor();
 
     // get object properties
-    inline const coreFloat&   GetPositionTime()const                        {return m_fPositionTime;}
-    inline const coreVector3& GetColor       (const coreUintW& iIndex)const {ASSERT(iIndex < COLOR_NUM); return m_avColor[iIndex];}
+    inline const coreFloat&   GetPositionTime()const                       {return m_fPositionTime;}
+    inline const coreVector3& GetColor       (const coreUintW iIndex)const {ASSERT(iIndex < COLOR_NUM); return m_avColor[iIndex];}
 
 
 private:
     // reset with the resource manager
-    void __Reset(const coreResourceReset& bInit)override;
+    void __Reset(const coreResourceReset bInit)override;
 };
 
 
