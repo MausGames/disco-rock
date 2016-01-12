@@ -22,6 +22,7 @@ cMenu::cMenu()noexcept
 , m_iTableUpdate   (0u)
 , m_iTrophyStatus  (0u)
 , m_iTrophyCurrent (-1)
+, m_aiPower        {}
 , m_bFromGuest     (false)
 {
     STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS);
@@ -546,8 +547,8 @@ cMenu::cMenu()noexcept
     // create score objects
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
-        constexpr_var coreVector2 vPos = coreVector2(LEFT_CENTER,0.115f);
-        constexpr_var coreVector2 vCen = coreVector2(-0.5f,0.0f);
+        constexpr coreVector2 vPos = coreVector2(LEFT_CENTER,0.115f);
+        constexpr coreVector2 vCen = coreVector2(-0.5f,0.0f);
 
         m_aScoreTable[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
         m_aScoreTable[i].SetPosition(vPos + coreVector2(0.0f,0.12f));
@@ -616,8 +617,8 @@ cMenu::cMenu()noexcept
     // create submit objects
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
-        const         coreVector2 vPos = coreVector2(vRightCenter.x, 0.235f - i*0.14f);
-        constexpr_var coreVector2 vCen = coreVector2(0.5f,0.0f);
+        const     coreVector2 vPos = coreVector2(vRightCenter.x, 0.235f - i*0.14f);
+        constexpr coreVector2 vCen = coreVector2(0.5f,0.0f);
 
         m_aAfterBest[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
         m_aAfterBest[i].SetPosition(vPos);
@@ -728,6 +729,13 @@ cMenu::cMenu()noexcept
     m_pHappySound  = Core::Manager::Resource->Get<coreSound>("achieve.wav");
     m_pRecordSound = Core::Manager::Resource->Get<coreSound>("record.wav");
     m_pFlashSound  = Core::Manager::Resource->Get<coreSound>("flash.wav");
+
+#if defined(_CORE_ANDROID_)
+
+    // init current battery status
+    SDL_GetPowerInfo(&m_aiPower[0], &m_aiPower[1]);
+
+#endif
 
     // main menu
     // 0  black
@@ -1617,20 +1625,17 @@ void cMenu::Move()
 
 #if defined(_CORE_ANDROID_)
 
-    // update current battery status
-    coreInt32 aiPower[2];
-    SDL_GetPowerInfo(&aiPower[0], &aiPower[1]);
-    if(aiPower[0] >= 0)
+    if(m_aiPower[0] >= 0)
     {
         // show remaining time if available
-        const coreInt32 iHour =  aiPower[0] / 3600;
-        const coreInt32 iMin  = (aiPower[0] % 3600) / 60;
+        const coreInt32 iHour =  m_aiPower[0] / 3600;
+        const coreInt32 iMin  = (m_aiPower[0] % 3600) / 60;
         m_TopBatteryValue.SetText(PRINT("%d:%02d", iHour, iMin));
     }
-    else if(aiPower[1] >= 0)
+    else if(m_aiPower[1] >= 0)
     {
         // show remaining percent
-        m_TopBatteryValue.SetText(PRINT("%d%%", aiPower[1]));
+        m_TopBatteryValue.SetText(PRINT("%d%%", m_aiPower[1]));
     }
 
 #elif defined(_CORE_DEBUG_)
@@ -1729,6 +1734,13 @@ void cMenu::End()
     m_bSubmited = true;
     if(!g_pGame->GetStatus() && (g_pGame->GetTime() >= 10.0f))
         this->RetrieveScores();
+
+#if defined(_CORE_ANDROID_)
+
+    // update current battery status
+    SDL_GetPowerInfo(&m_aiPower[0], &m_aiPower[1]);
+
+#endif
 }
 
 

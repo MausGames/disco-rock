@@ -8,7 +8,7 @@
 /////////////////////////////////////////////////////
 #include "main.h"
 
-#if defined(_API_GOOGLE_PLAY_)
+#if defined(_API_GOOGLE_PLAY_) && 0   // # disabled
 
     static jmethodID iSetBannerAlpha = NULL;   // function ID to set ad banner visibility
     static pthread_key_t iThreadKey  = 0u;     // thread key
@@ -76,6 +76,7 @@
     }
 
 #else
+    void InitBanner()                     {}
     void SetBannerAlpha(coreFloat fAlpha) {}
 #endif
 

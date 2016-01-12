@@ -55,7 +55,7 @@ cFirst::cFirst()noexcept
     m_Start.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_Start)
 
-    constexpr_var coreVector3 vTouchColor = LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.75f);
+    constexpr coreVector3 vTouchColor = LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.75f);
 
     // overload touch object color
     m_Interface.GetTouchMoveLeft ()->SetColor3(vTouchColor);

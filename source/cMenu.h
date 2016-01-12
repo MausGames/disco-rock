@@ -191,7 +191,8 @@ private:
     coreUint32 m_iTrophyStatus;                 // achieve-status of all trophies (per bit)
     coreInt8   m_iTrophyCurrent;                // current selected trophy
 
-    coreBool m_bFromGuest;                      // login-menu has to go back to guest-login on cancel
+    coreInt32 m_aiPower[2];                     // current battery status
+    coreBool  m_bFromGuest;                     // login-menu has to go back to guest-login on cancel
 
 
 public:

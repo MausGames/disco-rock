@@ -163,7 +163,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions>SDL2main.lib CoreEngine_msvc_debug.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>CoreEngine_msvc_debug.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
@@ -188,7 +188,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <IgnoreSpecificDefaultLibraries>msvcrt.lib</IgnoreSpecificDefaultLibraries>
-      <AdditionalOptions>SDL2main.lib CoreEngine_msvc_debug.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>CoreEngine_msvc_debug.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>Debug</GenerateDebugInformation>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
@@ -211,7 +211,7 @@
       <EnableEnhancedInstructionSet>StreamingSIMDExtensions2</EnableEnhancedInstructionSet>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalOptions>/Zc:strictStrings /Qfast_transcendentals /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Gw /Zc:strictStrings /Qfast_transcendentals /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
       <StringPooling>true</StringPooling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -219,7 +219,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
-      <AdditionalOptions>SDL2main.lib CoreEngine_msvc.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>CoreEngine_msvc.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <OptimizeReferences>true</OptimizeReferences>
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
@@ -248,7 +248,7 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <RuntimeTypeInfo>false</RuntimeTypeInfo>
       <EnableParallelCodeGeneration>true</EnableParallelCodeGeneration>
-      <AdditionalOptions>/Zc:strictStrings /Qfast_transcendentals /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/Gw /Zc:strictStrings /Qfast_transcendentals /Qpar-report:1 /Qvec-report:1 %(AdditionalOptions)</AdditionalOptions>
       <StringPooling>true</StringPooling>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <EnforceTypeConversionRules>true</EnforceTypeConversionRules>
@@ -256,7 +256,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
-      <AdditionalOptions>SDL2main.lib CoreEngine_msvc.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>CoreEngine_msvc.lib SDL2.lib SDL2_ttf.lib SDL2_image.lib OpenGL32.lib GLew32mx.lib OpenAL32.lib LibOGG.lib LibVorbis.lib LibVorbisFile.lib libcurl.lib %(AdditionalOptions)</AdditionalOptions>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <OptimizeReferences>true</OptimizeReferences>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
