@@ -201,7 +201,7 @@ void cRock::Move()
     // move with screen space
     else // == CONTROL_FULLSCREEN)
     {
-        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUint i)
+        Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUintW i)
         {
             const coreFloat& fX = Core::Input->GetTouchPosition(i).x;
 

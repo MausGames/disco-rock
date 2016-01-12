@@ -143,8 +143,8 @@ void cBackground::Move()
 // make or remove holes
 void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 {
-    constexpr_var coreUintW iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
-    constexpr_var coreUintW iSize = iNum * sizeof(coreFloat);
+    constexpr coreUintW iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
+    constexpr coreUintW iSize = iNum * sizeof(coreFloat);
 
     // map required area
     coreFloat* pfData = m_pModel->GetVertexBuffer(1u)->Map<coreFloat>(iLine*iSize, iSize, CORE_DATABUFFER_MAP_INVALIDATE_RANGE);

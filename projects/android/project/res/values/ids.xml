@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Google Play game services IDs.
+-->
+<resources>
+  <string name="app_id"></string>
+  <string name="achievement_get_the_party_started"></string>
+  <string name="achievement_i_dont_like_disco"></string>
+  <string name="achievement_too_much_too_soon"></string>
+  <string name="achievement_show_me_your_moves"></string>
+  <string name="achievement_party_animal"></string>
+  <string name="achievement_binge_drinker"></string>
+  <string name="achievement_designated_driver"></string>
+  <string name="achievement_before_there_was_any_blue"></string>
+  <string name="achievement_the_floor_is_lava"></string>
+  <string name="achievement_sober_in_the_70s"></string>
+  <string name="achievement_shagadelic"></string>
+  <string name="achievement_boy_you_turn_me"></string>
+  <string name="achievement_you_should_be_dancing"></string>
+  <string name="achievement_get_up_and_boogie"></string>
+  <string name="achievement_the_coola_challenge"></string>
+  <string name="leaderboard_score"></string>
+  <string name="leaderboard_time"></string>
+</resources>
