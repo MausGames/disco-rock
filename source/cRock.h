@@ -64,12 +64,12 @@ private:
 
 public:
     cRock()noexcept;
-    ~cRock();
+    ~cRock()final;
 
     DISABLE_COPY(cRock)
 
     // move the rock
-    void Move()override;
+    void Move()final;
 
     // render different parts of the object separately for batched rendering
     inline void RenderShadow() {m_Shadow.Render();}
@@ -95,7 +95,7 @@ public:
 
 private:
     // hide default render function
-    inline void Render()override {ASSERT(false)}
+    inline void Render()final {ASSERT(false)}
 };
 
 

@@ -2,6 +2,8 @@ backup/
 projects/visualstudio/DiscoRock/Debug/
 projects/visualstudio/DiscoRock/Release/
 projects/visualstudio/DiscoRock/x64/
+projects/visualstudio/*.VC.opendb
+projects/visualstudio/*.VC.db
 projects/visualstudio/*.opensdf
 projects/visualstudio/*.sdf
 projects/visualstudio/*.suo

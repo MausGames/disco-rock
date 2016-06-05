@@ -35,12 +35,12 @@ protected:
 
 public:
     cBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept;
-    virtual ~cBeverage();
+    virtual ~cBeverage()override;
 
     DISABLE_COPY(cBeverage)
 
     // move the beverage
-    void Move()override;
+    void Move()final;
 
     // render different parts of the object separately for batched rendering
     inline void RenderShadow() {m_Shadow.Render();}
@@ -62,7 +62,7 @@ public:
 
 private:
     // hide default render function
-    inline void Render()override {ASSERT(false)}
+    inline void Render()final {ASSERT(false)}
 };
 
 
@@ -72,13 +72,13 @@ class cSunrise final : public cBeverage
 {
 public:
     cSunrise()noexcept;
-    ~cSunrise();
+    ~cSunrise()final;
 
     DISABLE_COPY(cSunrise)
 
     // get object properties
-    inline coreUintW   GetSigID   ()const override {return 1u;}
-    inline coreVector3 GetSigColor()const override {return COLOR_YELLOW_F;}
+    inline coreUintW   GetSigID   ()const final {return 1u;}
+    inline coreVector3 GetSigColor()const final {return COLOR_YELLOW_F;}
 };
 
 
@@ -88,13 +88,13 @@ class cMojito final : public cBeverage
 {
 public:
     cMojito()noexcept;
-    ~cMojito();
+    ~cMojito()final;
 
     DISABLE_COPY(cMojito)
 
     // get object properties
-    inline coreUintW   GetSigID   ()const override {return 2u;}
-    inline coreVector3 GetSigColor()const override {return COLOR_GREEN_F;}
+    inline coreUintW   GetSigID   ()const final {return 2u;}
+    inline coreVector3 GetSigColor()const final {return COLOR_GREEN_F;}
 };
 
 
@@ -104,13 +104,13 @@ class cBlue final : public cBeverage
 {
 public:
     cBlue()noexcept;
-    ~cBlue();
+    ~cBlue()final;
 
     DISABLE_COPY(cBlue)
 
     // get object properties
-    inline coreUintW   GetSigID   ()const override {return 3u;}
-    inline coreVector3 GetSigColor()const override {return COLOR_BLUE_F;}
+    inline coreUintW   GetSigID   ()const final {return 3u;}
+    inline coreVector3 GetSigColor()const final {return COLOR_BLUE_F;}
 };
 
 
@@ -120,13 +120,13 @@ class cCoola final : public cBeverage
 {
 public:
     cCoola()noexcept;
-    ~cCoola();
+    ~cCoola()final;
 
     DISABLE_COPY(cCoola)
 
     // get object properties
-    inline coreUintW   GetSigID   ()const override {return 4u;}
-    inline coreVector3 GetSigColor()const override {return COLOR_PURPLE_F;}
+    inline coreUintW   GetSigID   ()const final {return 4u;}
+    inline coreVector3 GetSigColor()const final {return COLOR_PURPLE_F;}
 };
 
 
@@ -136,13 +136,13 @@ class cFranka final : public cBeverage
 {
 public:
     cFranka()noexcept;
-    ~cFranka();
+    ~cFranka()final;
 
     DISABLE_COPY(cFranka)
 
     // get object properties
-    inline coreUintW   GetSigID   ()const override {return 5u;}
-    inline coreVector3 GetSigColor()const override {return COLOR_RED_F;}
+    inline coreUintW   GetSigID   ()const final {return 5u;}
+    inline coreVector3 GetSigColor()const final {return COLOR_RED_F;}
 };
 
 

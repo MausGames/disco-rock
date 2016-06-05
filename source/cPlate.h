@@ -24,12 +24,12 @@ private:
 
 public:
     cPlate(const coreFloat fStartY, const coreVector2& vTexOffset)noexcept;
-    ~cPlate();
+    ~cPlate()final;
 
     DISABLE_COPY(cPlate)
 
     // move the plate
-    void Move()override;
+    void Move()final;
 };
 
 

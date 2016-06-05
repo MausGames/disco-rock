@@ -22,7 +22,7 @@ class cCombatText final   // actually there is no "combat" in the game
 {
 private:
     // text data structure
-    struct sData
+    struct sData final
     {
         std::string sText;       // actual text to display
         coreVector2 vPosition;   // screen position
