@@ -27,13 +27,13 @@ private:
 
 public:
     cFirst()noexcept;
-    ~cFirst();
+    ~cFirst()final;
 
     DISABLE_COPY(cFirst)
 
     // render and move the first-time menu
-    void Render()override;
-    void Move  ()override;
+    void Render()final;
+    void Move  ()final;
 };
 
 

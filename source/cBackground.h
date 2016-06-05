@@ -43,7 +43,7 @@
 class cBackground final : public coreObject3D, public coreResourceRelation
 {
 private:
-    struct sVertex
+    struct sVertex final
     {
         coreVector2 vPosition;   // vertex position
         coreVector2 vTexCoord;   // texture coordinate
@@ -72,13 +72,13 @@ private:
 
 public:
     cBackground()noexcept;
-    ~cBackground();
+    ~cBackground()final;
 
     DISABLE_COPY(cBackground)
 
     // render and move the background
-    void Render()override;
-    void Move  ()override;
+    void Render()final;
+    void Move  ()final;
 
     // make or remove holes, get current horizon line, do other fancy stuff
     void UpdateHoles(const coreUintW iLine, const coreBool* pbIndex);
@@ -100,7 +100,7 @@ public:
 
 private:
     // reset with the resource manager
-    void __Reset(const coreResourceReset bInit)override;
+    void __Reset(const coreResourceReset bInit)final;
 };
 
 

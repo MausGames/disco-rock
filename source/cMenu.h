@@ -201,7 +201,7 @@ public:
     DISABLE_COPY(cMenu)
 
     // move the menu
-    void Move()override;
+    void Move()final;
 
     // end current game and return to main menu
     void End();

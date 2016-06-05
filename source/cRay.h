@@ -30,12 +30,12 @@ private:
 
 public:
     cRay(const coreVector3& vStart)noexcept;
-    ~cRay();
+    ~cRay()final;
 
     DISABLE_COPY(cRay)
 
     // move the ray
-    void Move()override;
+    void Move()final;
 };
 
 

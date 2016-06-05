@@ -24,12 +24,12 @@ private:
 
 public:
     cTrap()noexcept;
-    ~cTrap();
+    ~cTrap()final;
 
     DISABLE_COPY(cTrap)
 
     // move the trap
-    void Move()override;
+    void Move()final;
 
     // check for static behavior
     inline void            SetStatic(const coreBool bStatic) {m_bStatic = bStatic;}

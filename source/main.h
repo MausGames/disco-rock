@@ -143,7 +143,7 @@ extern coreBool            g_bCamUpsideDown;    // upside-down camera status
 
 // ****************************************************************
 // message container structure
-struct sMsgList
+struct sMsgList final
 {
     std::vector<const std::string*> m_apsMsg;   // shuffled messages
     coreUintW m_iCur;                           // current message index
