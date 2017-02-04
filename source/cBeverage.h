@@ -16,21 +16,21 @@
 class INTERFACE cBeverage : public coreObject3D
 {
 protected:
-    coreObject3D   m_Shadow;         // shadow object
-    coreObject3D*  m_pStraw;         // optional straw object
-    coreObject3D*  m_pGlass;         // optional separate glass object
-    coreProgramPtr m_pGlasProgram;   // glass shader-program used with the drink-model when no separate glass object was created
+    coreObject3D   m_Shadow;            // shadow object
+    coreObject3D*  m_pStraw;            // optional straw object
+    coreObject3D*  m_pGlass;            // optional separate glass object
+    coreProgramPtr m_pGlasProgram;      // glass shader-program used with the drink-model when no separate glass object was created
 
-    coreUint32 m_iScore;             // score value of the beverage
-    coreFloat  m_fHeight;            // Z position-offset on the dance floor
+    coreProtect<coreUint32> m_iScore;   // score value of the beverage
+    coreFloat  m_fHeight;               // Z position-offset on the dance floor
 
-    coreTimer   m_pDestroy;          // timer for the fly-animation
-    coreVector3 m_vFlyRotation;      // rotation-parameter for the fly-animation
-    coreVector3 m_vFlyImpact;        // impact-direction to throw the object into a specific direction
+    coreTimer   m_pDestroy;             // timer for the fly-animation
+    coreVector3 m_vFlyRotation;         // rotation-parameter for the fly-animation
+    coreVector3 m_vFlyImpact;           // impact-direction to throw the object into a specific direction
 
-    coreSoundPtr m_pClink;           // clink sound-effect
-    coreFloat m_fVolume;             // sound-volume parameter
-    coreFloat m_fPitch;              // sound-pitch parameter
+    coreSoundPtr m_pClink;              // clink sound-effect
+    coreFloat m_fVolume;                // sound-volume parameter
+    coreFloat m_fPitch;                 // sound-pitch parameter
 
 
 public:

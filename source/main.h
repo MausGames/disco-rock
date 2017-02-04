@@ -64,7 +64,7 @@
 
 #define COLOR_BRIGHTNESS (0.83f)
 
-constexpr coreVector3 g_avColor[] =
+static constexpr coreVector3 g_avColor[] =
 {
     COLOR_YELLOW_F,
     COLOR_ORANGE_F,

@@ -174,25 +174,25 @@ private:
     coreMenu m_ScoreMenu;
     coreMenu m_LoginMenu;
 
-    coreTimer    m_Intro;                       // intro timer
-    coreSoundPtr m_pClickSound;                 // click sound-effect for buttons
-    coreSoundPtr m_pHappySound;                 // happy sound-effect for special events
-    coreSoundPtr m_pRecordSound;                // sound-effect for highlighting a new record
-    coreSoundPtr m_pFlashSound;                 // sound-effect when flashing the screen
+    coreTimer    m_Intro;                                   // intro timer
+    coreSoundPtr m_pClickSound;                             // click sound-effect for buttons
+    coreSoundPtr m_pHappySound;                             // happy sound-effect for special events
+    coreSoundPtr m_pRecordSound;                            // sound-effect for highlighting a new record
+    coreSoundPtr m_pFlashSound;                             // sound-effect when flashing the screen
 
-    coreFloat m_afSubmitValue[SCORE_TABLES];    // fetched values after loosing the game
-    coreBool  m_bSubmited;                      // values where successfully submited
-    coreBool  m_bInLeaderboard;                 // current values would be in the visible leaderboard (ask to submit before leaving)
+    coreProtect<coreFloat> m_afSubmitValue[SCORE_TABLES];   // fetched values after loosing the game
+    coreBool m_bSubmitted;                                  // values where successfully submitted
+    coreBool m_bInLeaderboard;                              // current values would be in the visible leaderboard (ask to submit before leaving)
 
-    gjScoreList m_aapCurScores[SCORE_TABLES];   // saved score pointers for better leaderboard paging
-    coreUint8 m_iCurPage;                       // current page in the leaderboards
-    coreUint8 m_iTableUpdate;                   // status to update the current score table display synchronous
+    gjScoreList m_aapCurScores[SCORE_TABLES];               // saved score pointers for better leaderboard paging
+    coreUint8 m_iCurPage;                                   // current page in the leaderboards
+    coreUint8 m_iTableUpdate;                               // status to update the current score table display synchronous
 
-    coreUint32 m_iTrophyStatus;                 // achieve-status of all trophies (per bit)
-    coreInt8   m_iTrophyCurrent;                // current selected trophy
+    coreUint32 m_iTrophyStatus;                             // achieve-status of all trophies (per bit)
+    coreInt8   m_iTrophyCurrent;                            // current selected trophy
 
-    coreInt32 m_aiPower[2];                     // current battery status
-    coreBool  m_bFromGuest;                     // login-menu has to go back to guest-login on cancel
+    coreInt32 m_aiPower[2];                                 // current battery status
+    coreBool  m_bFromGuest;                                 // login-menu has to go back to guest-login on cancel
 
 
 public:
