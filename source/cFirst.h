@@ -44,6 +44,6 @@ public:
 typedef coreObject2D cFirst;
 
 
-#endif // _CORE_ANDROID_ || _CORE_DEBUG_
+#endif // _CORE_ANDROID_ || _CORE_DEBUG_ || _DR_EMULATE_MOBILE_
 
 #endif // _DR_GUARD_FIRST_H_

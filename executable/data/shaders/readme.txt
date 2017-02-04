@@ -48,6 +48,9 @@ vec3 a_v3RawPosition     // raw vertex position
 vec2 a_v2RawTexCoord     // raw texture coordinate
 vec3 a_v3RawNormal       // normal vector 
 vec4 a_v4RawTangent      // tangent vector (xyz = tangent, w = binormal sign)
+vec3 u_v3Position        // position offset
+vec3 u_v3Size            // non-uniform size factor
+vec4 u_v4Rotation        // rotation quaternion (can also be used for normal rotation)
 vec2 u_v2TexSize         // texture size
 vec2 u_v2TexOffset       // texture offset
 vec2 (a_v2LowPosition)   // raw vertex position    (only with low-memory model, recommended)
@@ -56,6 +59,7 @@ vec2 (a_v2LowTexCoord)   // raw texture coordinate (only with low-memory model, 
 // object2D attributes
 vec2 a_v2LowPosition     // raw vertex position
 vec2 a_v2LowTexCoord     // raw texture coordinate
+mat3 u_m3ScreenView      // full screen-view matrix
 vec2 u_v2TexSize         // texture size
 vec2 u_v2TexOffset       // texture offset
 
@@ -92,8 +96,12 @@ vec3 v_v3TangentCam
 
 vec3 v_v3ViewDir       // pre-calculated view direction (not normalized)
 
-vec2 (u_v2TexSize)     // texture size   (not with particles or on instancing)
-vec2 (u_v2TexOffset)   // texture offset (not with particles or on instancing)
+// not with particles or on instancing
+vec3 (u_v3Position)    // position offset
+vec3 (u_v3Size)        // non-uniform size factor
+vec4 (u_v4Rotation)    // rotation quaternion (can also be used for normal rotation)
+vec2 (u_v2TexSize)     // texture size
+vec2 (u_v2TexOffset)   // texture offset
 
 
 // ****************************************************************
@@ -102,13 +110,20 @@ vec2 (u_v2TexOffset)   // texture offset (not with particles or on instancing)
 
 ## Functions ##
 
-bool  coreAnyInvocation       (in bool)            // condition across group of shader invocations
-bool  coreAllInvocations      (in bool)
 T     coreMin3                (in T, in T, in T)   // trinary minimum
 T     coreMax3                (in T, in T, in T)   // trinary maximum
-int   coreMod                 (in int, in int)     // modulo operator
-vec3  coreHSVtoRGB            (in vec3)            // HSV to RGB conversion
-vec3  coreRGBtoHSV            (in vec3)            // RGB to HSV conversion
+T     coreMed3                (in T, in T, in T)   // trinary median
+bool  coreAnyInvocation       (in bool)            // condition across group of shader invocations
+bool  coreAllInvocations      (in bool)
+vec3  coreRgbToHsv            (in vec3)            // RGB to HSV conversion
+vec3  coreHsvToRgb            (in vec3)            // HSV to RGB conversion
+vec3  coreRgbToYiq            (in vec3)            // RGB to YIQ conversion   (BT.601, NTSC)
+vec3  coreYiqToRgb            (in vec3)            // YIQ to RGB conversion   (BT.601, NTSC)
+vec3  coreRgbToYuv            (in vec3)            // RGB to YUV conversion   (BT.709)
+vec3  coreYuvToRgb            (in vec3)            // YUV to RGB conversion   (BT.709)
+vec3  coreRgbToYcbcr          (in vec3)            // RGB to YCbCr conversion (BT.601, JPEG)
+vec3  coreYcbcrToRgb          (in vec3)            // YCbCr to RGB conversion (BT.601, JPEG)
+float coreLuminance           (in vec3)            // luminance value         (BT.709)
 float coreLengthSq            (in vec2)            // vector square length
 float coreLengthSq            (in vec3)
 vec2  corePackNormalSphere    (in vec3)            // vector normal pack   (with Lambert azimuthal equal-area projection)
@@ -122,15 +137,18 @@ mat3  coreInvert              (in mat3)            // matrix invert
 mat4  coreInvert              (in mat4)
 mat3  coreMat4to3             (in mat4)            // matrix convert
 mat2  coreMat3to2             (in mat3)
+mat2  coreMat4to2             (in mat4)
 uint  corePackUnorm4x8        (in vec4)            // value pack   (4x 8bit float -> 1x 32bit uint)
 vec4  coreUnpackUnorm4x8      (in uint)            // value unpack (1x 32bit uint -> 4x 8bit float)
 
 vec4  coreTexture2D    (in int v1Unit, in vec2 v2TexCoord)    // normal texture lookup
 float coreTextureShadow(in int v1Unit, in vec4 v4ProjCoord)   // PCF depth-compare for shadow textures
 
-#define PI (3.1415926535897932384626433832795)
-#define EU (2.7182818284590452353602874713527)
+CORE_SAMPLE_SHADING   // evaluate shader per sample (just place it somewhere in FragmentMain)
 
+#define PI    (3.1415926535897932384626433832795)
+#define EU    (2.7182818284590452353602874713527)
+#define SQRT2 (1.4142135623730950488016887242097)
 
 ## In ##
 
@@ -149,11 +167,3 @@ struct
     vec4 v4Direction
     vec4 v4Value
 } u_aLight[CORE_NUM_LIGHTS]   // light data directly from the application
-
-// object3D attributes
-vec3 u_v3Position             // position offset
-vec3 u_v3Size                 // non-uniform size factor
-vec4 u_v4Rotation             // rotation quaternion (can also be used for normal rotation)
-
-// object2D attributes
-mat3 u_m3ScreenView           // full screen-view matrix

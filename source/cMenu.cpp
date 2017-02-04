@@ -16,7 +16,7 @@ cMenu::cMenu()noexcept
 , m_ScoreMenu      (8u,  0u)
 , m_LoginMenu      (4u,  0u)
 , m_Intro          (coreTimer(10.0f, 1.0f, 1u))
-, m_bSubmited      (true)
+, m_bSubmitted     (true)
 , m_bInLeaderboard (false)
 , m_iCurPage       (0u)
 , m_iTableUpdate   (0u)
@@ -558,11 +558,11 @@ cMenu::cMenu()noexcept
         for(coreUintW j = 0u; j < SCORE_ENTRIES; ++j)
         {
             m_aaScoreEntry[i][j][0].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 4u);
-            m_aaScoreEntry[i][j][0].SetPosition (vPos + coreVector2(-0.208f, 0.045f - j*0.04f));
+            m_aaScoreEntry[i][j][0].SetPosition (vPos + coreVector2(-0.208f, 0.045f - I_TO_F(j)*0.04f));
             m_aaScoreEntry[i][j][0].SetCenter   (vCen);
             m_aaScoreEntry[i][j][0].SetAlignment(coreVector2(-1.0f,0.0f));
             m_aaScoreEntry[i][j][0].SetColor3   (coreVector3(0.75f,0.75f,0.75f));
-            m_aaScoreEntry[i][j][0].SetText     (PRINT("%d.", j+1));
+            m_aaScoreEntry[i][j][0].SetText     (PRINT("%zu.", j + 1u));
 
             m_aaScoreEntry[i][j][1].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 24u);
             m_aaScoreEntry[i][j][1].SetPosition (coreVector2(vPos.x - 0.19466f, m_aaScoreEntry[i][j][0].GetPosition().y));
@@ -571,7 +571,7 @@ cMenu::cMenu()noexcept
             m_aaScoreEntry[i][j][1].SetColor3   (LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(j, 3u) / 3u)));
             m_aaScoreEntry[i][j][1].SetText     ("-");
 
-            m_aaScoreEntry[i][j][2].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 16u);
+            m_aaScoreEntry[i][j][2].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE, 10u);
             m_aaScoreEntry[i][j][2].SetPosition (coreVector2(vPos.x + 0.232f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][2].SetCenter   (vCen);
             m_aaScoreEntry[i][j][2].SetAlignment(coreVector2(-1.0f,0.0f));
@@ -617,7 +617,7 @@ cMenu::cMenu()noexcept
     // create submit objects
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
-        const     coreVector2 vPos = coreVector2(vRightCenter.x, 0.235f - i*0.14f);
+        const     coreVector2 vPos = coreVector2(vRightCenter.x, 0.235f - I_TO_F(i)*0.14f);
         constexpr coreVector2 vCen = coreVector2(0.5f,0.0f);
 
         m_aAfterBest[i].Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
@@ -664,7 +664,7 @@ cMenu::cMenu()noexcept
 
     for(coreUintW i = 0u; i < TROPHY_SECRETS; ++i)
     {
-        m_aTrophySecret[i].Construct       (FONT_ROCKS, 45u, OUTLINE_SIZE, 2u);
+        m_aTrophySecret[i].Construct       (FONT_ROCKS, 45u, OUTLINE_SIZE, 1u);
         m_aTrophySecret[i].SetCenter       (coreVector2(-0.5f,0.0f));
         m_aTrophySecret[i].SetText         ("?");
         m_aTrophySecret[i].SetFocusModifier(coreVector2(0.0f,0.0f));
@@ -680,7 +680,7 @@ cMenu::cMenu()noexcept
     for(coreUintW i = 0u; i < 2u; ++i)
     {
         m_aTrophyDesc[i].Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE, 64u);
-        m_aTrophyDesc[i].SetPosition(coreVector2(LEFT_CENTER, m_TrophyName.GetPosition().y - 0.04667f - i*0.03f));
+        m_aTrophyDesc[i].SetPosition(coreVector2(LEFT_CENTER, m_TrophyName.GetPosition().y - 0.04667f - I_TO_F(i)*0.03f));
         m_aTrophyDesc[i].SetCenter  (coreVector2(-0.5f,0.0f));
         m_aTrophyDesc[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
         m_aTrophyDesc[i].SetText    ("-");
@@ -690,7 +690,7 @@ cMenu::cMenu()noexcept
     for(coreUintW i = 0u; i < 3u; ++i)
     {
         m_aConnectionError[i].Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 24u);
-        m_aConnectionError[i].SetPosition(coreVector2(LEFT_CENTER, 0.095f - i*0.05f));
+        m_aConnectionError[i].SetPosition(coreVector2(LEFT_CENTER, 0.095f - I_TO_F(i)*0.05f));
         m_aConnectionError[i].SetCenter  (coreVector2(-0.5f,0.0f));
     }
 
@@ -1087,9 +1087,9 @@ void cMenu::Move()
                         }
 
                         // set submit status
-                        m_bSubmited      = (m_afSubmitValue[1] < 10.0f) ? true : false;
+                        m_bSubmitted     = (m_afSubmitValue[1] < 10.0f) ? true : false;
                         m_bInLeaderboard = false;
-                        if(!m_bSubmited)
+                        if(!m_bSubmitted)
                         {
                             // already submit when connected
                             if(g_pOnline->IsUserConnected()) this->SubmitScore(NULL);
@@ -1192,7 +1192,7 @@ void cMenu::Move()
         // check for submit menu
         if(m_Submit.IsClicked())
         {
-            if(!m_bSubmited)
+            if(!m_bSubmitted)
             {
                 if(g_pOnline->IsUserConnected()) this->SubmitScore(NULL); // re-send (should only be able on connection problems)
                 else
@@ -1344,10 +1344,10 @@ void cMenu::Move()
 #endif
 
     // set transparency of highscore related objects
-    if(m_bSubmited) m_Submit.SetAlpha(m_Submit.GetAlpha() * MENU_ALPHA_ACTIVE_2 * 0.5f);
+    if(m_bSubmitted) m_Submit.SetAlpha(m_Submit.GetAlpha() * MENU_ALPHA_ACTIVE_2 * 0.5f);
     else ALPHA_BUTTON_TEXT(m_Submit);
 
-    if(!m_bSubmited || (m_afSubmitValue[1] < 10.0f))
+    if(!m_bSubmitted || (m_afSubmitValue[1] < 10.0f))
         m_Successful.SetAlpha(0.0f);
 
     if((this->GetCurSurface() >= 14u) && (this->GetCurSurface() <= 16u) && m_bInLeaderboard)
@@ -1731,7 +1731,7 @@ void cMenu::End()
     this->PlayFlashSound();
 
     // update leaderboards
-    m_bSubmited = true;
+    m_bSubmitted = true;
     if(!g_pGame->GetStatus() && (g_pGame->GetTime() >= 10.0f))
         this->RetrieveScores();
 
@@ -1823,7 +1823,7 @@ void cMenu::SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage
 void cMenu::SubmitScore(const coreChar* pcGuestName)
 {
     ASSERT(g_pGame);
-    if(m_bSubmited) return;
+    if(m_bSubmitted) return;
 
     // convert values
     const coreInt32 aiValue[2] = {F_TO_SI(m_afSubmitValue[0]),
@@ -1849,7 +1849,7 @@ void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
     if(!pScore) return;   // error submitting
 
     // update status
-    m_bSubmited      = true;
+    m_bSubmitted     = true;
     m_bInLeaderboard = false;
 
     if(g_pGame)
@@ -1919,13 +1919,13 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
             {
                 // check for score
                 const coreBool bInLeaderboard = m_afSubmitValue[0] > I_TO_F((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1u]->GetSort() : 0);
-                if(!m_bSubmited) m_bInLeaderboard |= bInLeaderboard;
+                if(!m_bSubmitted) m_bInLeaderboard |= bInLeaderboard;
             }
             else // == GJ_LEADERBOARD_02
             {
                 // check for time
                 const coreBool bInLeaderboard = FLOOR(m_afSubmitValue[1]*100.0f) > I_TO_F((apScore.size() >= SCORE_ENTRIES * SCORE_PAGES) ? apScore[(SCORE_ENTRIES * SCORE_PAGES) - 1u]->GetSort() : 0);
-                if(!m_bSubmited) m_bInLeaderboard |= bInLeaderboard;
+                if(!m_bSubmitted) m_bInLeaderboard |= bInLeaderboard;
             }
         }
     }
@@ -1968,7 +1968,7 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
         if(iTableNum == 0u) // == GJ_LEADERBOARD_01
         {
             // fill score leaderboard
-            m_aaScoreEntry[0][i][0].SetText(PRINT("%d.", i+1u + iScoreStart));
+            m_aaScoreEntry[0][i][0].SetText(PRINT("%zu.", i+1u + iScoreStart));
             m_aaScoreEntry[0][i][1].SetText(pScore ? (pScore->GetUserName().substr(0u, 16u) + (bOver ? ">" : "")).c_str() : "-");
             m_aaScoreEntry[0][i][2].SetText(pScore ? PRINT("%06d", pScore->GetSort()) : "-");
 
@@ -1978,7 +1978,7 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
         else // == GJ_LEADERBOARD_02
         {
             // fill time leaderboard
-            m_aaScoreEntry[1][i][0].SetText(PRINT("%d.", i+1u + iScoreStart));
+            m_aaScoreEntry[1][i][0].SetText(PRINT("%zu.", i+1u + iScoreStart));
             m_aaScoreEntry[1][i][1].SetText(pScore ? (pScore->GetUserName().substr(0u, 16u) + (bOver ? ">" : "")).c_str() : "-");
             m_aaScoreEntry[1][i][2].SetText(pScore ? PRINT("%03d.%01d", pScore->GetSort() / 100, ((pScore->GetSort() % 100) / 10)) : "-");
 
@@ -2090,8 +2090,8 @@ void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
 
         // submit or check scores
         this->ResetRecord();
-        if(!m_bSubmited) this->SubmitScore(NULL);
-                    else this->RetrieveScores();
+        if(!m_bSubmitted) this->SubmitScore(NULL);
+                     else this->RetrieveScores();
 
         // fetch trophies
         this->FetchTrophies();

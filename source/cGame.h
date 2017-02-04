@@ -83,9 +83,9 @@ private:
     coreBool  m_bAlgoEmptyLines;              // algorithm has empty lines at the beginning and end of his stage (to prevent double-empty-lines)
     coreInt32 m_aiAlgoStatus[4];              // different status values for individual use in each algorithm
 
-    coreDouble m_dScore;                      // score value
-    coreFlow   m_fTime;                       // time value
-    coreUint8  m_iCombo;                      // current combo value (number of hit objects)
+    coreProtect<coreDouble> m_dScore;         // score value
+    coreProtect<coreFlow>   m_fTime;          // time value
+    coreProtect<coreUint8>  m_iCombo;         // current combo value (number of hit objects)
 
     coreUint8 m_iMaxCombo;                    // best combo value
     coreFlow  m_fComboTime;                   // time with max combo multiplier

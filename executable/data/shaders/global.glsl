@@ -20,12 +20,21 @@
 
 // compiler configuration
 #if defined(GL_ES)
-    #extension GL_EXT_shadow_samplers : enable
+    #extension GL_EXT_shadow_samplers          : enable
 #else
-    #extension GL_ARB_uniform_buffer_object : enable
-    #extension GL_ARB_enhanced_layouts      : enable
-    #extension GL_ARB_shader_group_vote     : enable
-    #extension GL_AMD_shader_trinary_minmax : enable
+    #extension GL_AMD_shader_trinary_minmax    : enable
+    #extension GL_ARB_conservative_depth       : enable
+    #extension GL_ARB_enhanced_layouts         : enable
+    #extension GL_ARB_sample_shading           : enable
+    #extension GL_ARB_shader_group_vote        : enable
+    #extension GL_ARB_shader_image_load_store  : enable
+    #extension GL_ARB_shading_language_packing : enable
+    #extension GL_ARB_uniform_buffer_object    : enable
+    #extension GL_EXT_gpu_shader4              : enable
+#endif
+#if (__VERSION__) < 130
+    #undef GL_ARB_conservative_depth
+    #undef GL_ARB_shader_image_load_store
 #endif
 #pragma optimize(on)
 #pragma debug(off)
@@ -45,13 +54,18 @@
 #endif
 
 // layout qualifiers
-#if defined(_CORE_FRAGMENT_SHADER_)
-    #if (__VERSION__) >= 420 || (defined(GL_ES) && (__VERSION__) >= 310)
+#if defined(_CORE_FRAGMENT_SHADER_) && !defined(_CORE_OPTION_NO_EARLY_DEPTH_)
+    #if defined(GL_ARB_conservative_depth)
+        layout(depth_unchanged) out float gl_FragDepth;
+    #endif
+    #if defined(GL_ARB_shader_image_load_store) || (defined(GL_ES) && (__VERSION__) >= 310)
         layout(early_fragment_tests) in;
     #endif
 #endif
-#if (__VERSION__) >= 440
-    #define std140 std140, align = 16
+#if defined(GL_ARB_enhanced_layouts)
+    #define align(x) layout(align = x)
+#else
+    #define align(x)
 #endif
 
 // compatibility adjustments
@@ -60,7 +74,7 @@
         #define shadow2DProj(t,v) (shadow2DProjEXT(t, v))
     #else
         #define sampler2DShadow   sampler2D
-        #define shadow2DProj(t,v) ((texture2DProj(t, v).r < (v.z/v.w)) ? 1.0 : 0.0)
+        #define shadow2DProj(t,v) ((texture2DProj(t, v).r < (v.z / v.w)) ? 1.0 : 0.0)
     #endif
 #endif
 #if (__VERSION__) >= 130
@@ -77,11 +91,18 @@
     #define noperspective
     #define smooth
 #endif
+#if !defined(GL_EXT_gpu_shader4)
+    #define uint  int
+    #define uvec2 ivec2
+    #define uvec3 ivec3
+    #define uvec4 ivec4
+#endif
 
 
 // ****************************************************************
-#define PI (3.1415926535897932384626433832795)
-#define EU (2.7182818284590452353602874713527)
+#define PI    (3.1415926535897932384626433832795)
+#define EU    (2.7182818284590452353602874713527)
+#define SQRT2 (1.4142135623730950488016887242097)
 
 // light structure
 struct coreLight
@@ -90,6 +111,27 @@ struct coreLight
     vec4 v4Direction;
     vec4 v4Value;
 };
+
+// evaluate shader per sample
+#if defined(GL_ARB_sample_shading)
+    #define CORE_SAMPLE_SHADING {gl_SampleID;}
+#else
+    #define CORE_SAMPLE_SHADING
+#endif
+
+// trinary min and max
+#if defined(GL_AMD_shader_trinary_minmax)
+    #define coreMin3(a,b,c) (min3(a, b, c))
+    #define coreMax3(a,b,c) (max3(a, b, c))
+    #define coreMed3(a,b,c) (mid3(a, b, c))
+#else
+    #define coreMin3(a,b,c) (min(a, min(b, c)))
+    #define coreMax3(a,b,c) (max(a, max(b, c)))
+    float coreMed3(const in float a, const in float b, const in float c) {return max(min(max(a, b), c), min(a, b));}
+    vec2  coreMed3(const in vec2  a, const in vec2  b, const in vec2  c) {return max(min(max(a, b), c), min(a, b));}
+    vec3  coreMed3(const in vec3  a, const in vec3  b, const in vec3  c) {return max(min(max(a, b), c), min(a, b));}
+    vec4  coreMed3(const in vec4  a, const in vec4  b, const in vec4  c) {return max(min(max(a, b), c), min(a, b));}
+#endif
 
 // condition across group of shader invocations
 #if defined(GL_ARB_shader_group_vote)
@@ -100,27 +142,25 @@ struct coreLight
     #define coreAllInvocations(x) (x)
 #endif
 
-// trinary min and max
-#if defined(GL_AMD_shader_trinary_minmax)
-    #define coreMin3(a,b,c) (min3(a, b, c))
-    #define coreMax3(a,b,c) (max3(a, b, c))
-#else
-    #define coreMin3(a,b,c) (min(a, min(b, c)))
-    #define coreMax3(a,b,c) (max(a, max(b, c)))
-#endif
-
-// modulo operator
-int coreMod(const in int a, const in int b)
-{
-#if (__VERSION__) >= 130
-    return (a % b);
-#else
-    return (a - (a / b) * b);
-#endif
-} 
-
 // color convert
-vec3 coreHSVtoRGB(const in vec3 v3HSV)
+vec3 coreRgbToHsv(const in vec3 v3RGB)
+{
+    float R = v3RGB.r;
+    float G = v3RGB.g;
+    float B = v3RGB.b;
+
+    float v = coreMax3(R, G, B);
+    float d = v - coreMin3(R, G, B);
+
+    if(d == 0.0) return vec3(0.0, 0.0, v);
+
+    float s = d / v;
+
+    if(R == v) return vec3((0.0 + (G - B) / d) / 6.0, s, v);
+    if(G == v) return vec3((2.0 + (B - R) / d) / 6.0, s, v);
+               return vec3((4.0 + (R - G) / d) / 6.0, s, v);
+}
+vec3 coreHsvToRgb(const in vec3 v3HSV)
 {
     float H = v3HSV.x * 6.0;
     float S = v3HSV.y;
@@ -139,22 +179,45 @@ vec3 coreHSVtoRGB(const in vec3 v3HSV)
     if(h == 5.0) return vec3(V,     p,     V - t);
                  return vec3(V,     p + t, p);
 }
-vec3 coreRGBtoHSV(const in vec3 v3RGB)
+vec3 coreRgbToYiq(const in vec3 v3RGB)
 {
-    float R = v3RGB.r;
-    float G = v3RGB.g;
-    float B = v3RGB.b;
-
-    float v = coreMax3(R, G, B);
-    float d = v - coreMin3(R, G, B);
-
-    if(d == 0.0) return vec3(0.0, 0.0, v);
-
-    float s = d / v;
-
-    if(R == v) return vec3((0.0 + (G - B) / d) / 6.0, s, v);
-    if(G == v) return vec3((2.0 + (B - R) / d) / 6.0, s, v);
-               return vec3((4.0 + (R - G) / d) / 6.0, s, v);
+    return mat3(0.299,  0.587,  0.114,
+                0.596, -0.275, -0.321,
+                0.212, -0.523,  0.311) * v3RGB;
+}
+vec3 coreYiqToRgb(const in vec3 v3YIQ)
+{
+    return mat3(1.000,  0.956,  0.620,
+                1.000, -0.272, -0.647,
+                1.000, -1.108,  1.705) * v3YIQ;
+}
+vec3 coreRgbToYuv(const in vec3 v3RGB)
+{
+    return mat3( 0.21260,  0.71520,  0.07220,
+                -0.09991, -0.33609,  0.43600,
+                 0.61500, -0.55861, -0.05639) * v3RGB;
+}
+vec3 coreYuvToRgb(const in vec3 v3YUV)
+{
+    return mat3(1.00000,  0.00000,  1.28033,
+                1.00000, -0.21482, -0.38059,
+                1.00000,  2.12798,  0.00000) * v3YUV;
+}
+vec3 coreRgbToYcbcr(const in vec3 v3RGB)
+{
+    return mat3( 0.299000,  0.587000,  0.114000,
+                -0.168736, -0.331264,  0.500000,
+                 0.500000, -0.418688, -0.081312) * v3RGB + vec3(0.0, 0.5, 0.5);
+}
+vec3 coreYcbcrToRgb(const in vec3 v3YCbCr)
+{
+    return mat3(1.00000,  0.00000,  1.40200,
+                1.00000, -0.34414, -0.71414,
+                1.00000,  1.77200,  0.00000) * (v3YCbCr - vec3(0.0, 0.5, 0.5));
+}
+float coreLuminance(const in vec3 v3RGB)
+{
+    return dot(v3RGB, vec3(0.212671, 0.715160, 0.072169));
 }
 
 // vector square length
@@ -165,8 +228,8 @@ float coreLengthSq(const in vec3 v) {return dot(v, v);}
 vec2 corePackNormalSphere(const in vec3 v)
 {
     float A = inversesqrt(v.z * 8.0 + 8.0);
-    return v.xy * A + 0.5;   
-} 
+    return v.xy * A + 0.5;
+}
 vec3 coreUnpackNormalSphere(const in vec2 v)
 {
     vec2  A = v * 4.0 - 2.0;
@@ -264,13 +327,14 @@ mat4 coreInvert(const in mat4 m)
     #define coreMat4to3(m) mat3(m[0].xyz, m[1].xyz, m[2].xyz)
     #define coreMat3to2(m) mat2(m[0].xy,  m[1].xy)
 #endif
+#define coreMat4to2(m) coreMat3to2(m)
 
 // value pack and unpack
-#if (__VERSION__) >= 130
+#if defined(GL_EXT_gpu_shader4)
 
     uint corePackUnorm4x8(const in vec4 x)
     {
-    #if (__VERSION__) >= 400
+    #if defined(GL_ARB_shading_language_packing)
         return packUnorm4x8(x);
     #else
         return (uint(x.a * 255.0) << 24) +
@@ -282,7 +346,7 @@ mat4 coreInvert(const in mat4 m)
 
     vec4 coreUnpackUnorm4x8(const in uint x)
     {
-    #if (__VERSION__) >= 400
+    #if defined(GL_ARB_shading_language_packing)
         return unpackUnorm4x8(x);
     #else
         return vec4(float( x        & 0xFFu),
@@ -304,18 +368,18 @@ mat4 coreInvert(const in mat4 m)
     // transformation uniforms
     layout(std140) uniform b_Transform
     {
-        mat4 u_m4ViewProj;
-        mat4 u_m4Camera;
-        mat4 u_m4Perspective;
-        mat4 u_m4Ortho;
-        vec4 u_v4Resolution;
-        vec3 u_v3CamPosition;
+        align(16) mat4 u_m4ViewProj;
+        align(16) mat4 u_m4Camera;
+        align(16) mat4 u_m4Perspective;
+        align(16) mat4 u_m4Ortho;
+        align(16) vec4 u_v4Resolution;
+        align(16) vec3 u_v3CamPosition;
     };
 
     // ambient uniforms
     layout(std140) uniform b_Ambient
     {
-        coreLight u_aLight[CORE_NUM_LIGHTS];
+        align(16) coreLight u_aLight[CORE_NUM_LIGHTS];
     };
 
 #else
@@ -372,7 +436,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         // shader output
         out b_Varying
         {
-            vec4 v_v4VarColor;
+            flat vec4 v_v4VarColor;
             vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
             vec4 v_av4LightPos[CORE_NUM_LIGHTS];
             vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -393,7 +457,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         uniform vec3 a_v3DivData;
 
         // shader output
-        varying vec4 v_v4VarColor;
+        flat varying vec4 v_v4VarColor;
         varying vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
         varying vec4 v_av4LightPos[CORE_NUM_LIGHTS];
         varying vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -405,7 +469,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     // low-memory attributes
     vec2 a_v2LowPosition;
     vec2 a_v2LowTexCoord;
-        
+
     // remapped variables
     #if defined(_CORE_OPTION_INSTANCING_)
         #define u_v3Position  (a_v3DivPosition)
@@ -429,9 +493,9 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     #if defined(_CORE_OPTION_INSTANCING_)
         v_v4VarColor = a_v4DivColor;
     #endif
-    
+
         a_v2LowPosition = a_v3RawPosition.xy;
-        a_v2LowTexCoord = vec2(0.5+a_v3RawPosition.x, 0.5-a_v3RawPosition.y);
+        a_v2LowTexCoord = vec2(0.5 + a_v3RawPosition.x, 0.5 - a_v3RawPosition.y);
         VertexMain();
     }
 
@@ -456,7 +520,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     // shader input
     in b_Varying
     {
-        vec4 v_v4VarColor;
+        flat vec4 v_v4VarColor;
         vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
         vec4 v_av4LightPos[CORE_NUM_LIGHTS];
         vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -467,7 +531,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     // shader output
     out b_Varying
     {
-        vec4 v_v4VarColor;
+        flat vec4 v_v4VarColor;
         vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
         vec4 v_av4LightPos[CORE_NUM_LIGHTS];
         vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -493,7 +557,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         // shader input
         in b_Varying
         {
-            vec4 v_v4VarColor;
+            flat vec4 v_v4VarColor;
             vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
             vec4 v_av4LightPos[CORE_NUM_LIGHTS];
             vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -503,11 +567,12 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
         // shader output
         out vec4 o_av4OutColor[CORE_NUM_OUTPUTS];
+        #define gl_FragColor o_av4OutColor[0]
 
     #else
 
         // shader input
-        varying vec4 v_v4VarColor;
+        flat varying vec4 v_v4VarColor;
         varying vec2 v_av2TexCoord[CORE_NUM_TEXTURES_2D];
         varying vec4 v_av4LightPos[CORE_NUM_LIGHTS];
         varying vec4 v_av4LightDir[CORE_NUM_LIGHTS];
@@ -518,7 +583,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // pre-calculated view direction
     vec3 v_v3ViewDir;
-    
+
     // remapped variables
     #if defined(_CORE_OPTION_INSTANCING_)
         #define u_v4Color (v_v4VarColor)
@@ -596,7 +661,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         return coreTranspose(mat3(T, B, N));
     }
     mat3 coreTangentSpaceMatrix() {return coreTangentSpaceMatrix(u_v4Rotation, a_v3RawNormal, a_v4RawTangent);}
-    
+
     // transform lighting properties into tangent-space
     void coreLightingTransform(const in vec3 v3Position)
     {
