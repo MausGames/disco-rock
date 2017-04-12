@@ -358,7 +358,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
     else if(iType == 1u)
     {
         const coreVector3 vToSide = coreVector3(-SIGN(this->GetPosition().x), 0.0f, 0.0f);
-        const coreVector3 vToCam  = (Core::Graphics->GetCamPosition() - this->GetPosition()).Normalize();
+        const coreVector3 vToCam  = (Core::Graphics->GetCamPosition() - this->GetPosition()).Normalized();
 
         // start shock-wave animation
         m_WaveShockTimer.Play(CORE_TIMER_PLAY_RESET);
@@ -366,8 +366,8 @@ void cRock::CreateShockWave(const coreUint8 iType)
 
         // adjust shock-wave object (to the side)
         m_WaveShock.SetPosition   (this->GetPosition());
-        m_WaveShock.SetOrientation(LERP(vToSide, vToCam, 0.3f).Normalize());
-        m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalize());
+        m_WaveShock.SetOrientation(LERP(vToSide, vToCam, 0.3f).Normalized());
+        m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalized());
 
         // play sound-effect
         m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());

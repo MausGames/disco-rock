@@ -364,7 +364,7 @@ template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, c
 #else
 
     // submit score with Game Jolt
-    return m_pGameJolt->InterScore()->GetScoreTable(iTableID)->AddScoreCall(sScore, iSort, sExtraData, sGuestName, GJ_NETWORK_OUTPUT_FW);
+    return m_pGameJolt->InterScore()->GetScoreTable(iTableID)->AddGuestScoreCall(sScore, iSort, sExtraData, sGuestName, GJ_NETWORK_OUTPUT_FW);
 
 #endif
 }
