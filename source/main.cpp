@@ -86,7 +86,7 @@ void CoreApp::Init()
 {
     // set audio listener (for 3d sound)
     const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
-    const coreVector3 vCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalize();
+    const coreVector3 vCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalized();
     const coreVector3 vCamOri = coreVector3(0.0f,  0.0f,  1.0f);
     Core::Audio->SetListener(vCamPos, coreVector3(0.0f,0.0f,0.0f), vCamDir, vCamOri);
 

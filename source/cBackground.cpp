@@ -292,17 +292,17 @@ void cBackground::ModifyColor()
                                         else m_fCurColorHue =   0.0f/360.0f;
 
     // modify default colors
-         if(m_fCurColorHue  < 0.0f) for(coreUintW i = 0u; i < COLOR_NUM; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HSVtoRGB();
+         if(m_fCurColorHue  < 0.0f) for(coreUintW i = 0u; i < COLOR_NUM; ++i) m_avColor[i] = coreVector3(0.0f, 0.0f, 0.2f + g_avColor[i].Min()*1.6f).HsvToRgb();
     else if(m_fCurColorHue == 0.0f) for(coreUintW i = 0u; i < COLOR_NUM; ++i) m_avColor[i] = g_avColor[i];
     else
     {
         for(coreUintW i = 0u; i < COLOR_NUM; ++i)
         {
             // change hue of all default colors
-            coreVector3 vNewColor = g_avColor[i].RGBtoHSV();
+            coreVector3 vNewColor = g_avColor[i].RgbToHsv();
             vNewColor.x  = FRACT(vNewColor.x + m_fCurColorHue);
             vNewColor.z *= 0.95f;
-            m_avColor[i] = vNewColor.HSVtoRGB();
+            m_avColor[i] = vNewColor.HsvToRgb();
         }
     }
 

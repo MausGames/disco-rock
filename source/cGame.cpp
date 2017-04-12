@@ -514,7 +514,7 @@ void cGame::AddPlate(const coreFloat fSpawnY, const coreInt32 iBlockX)
 void cGame::AddRay(const coreFloat fSpawnY)
 {
      // calculate start-position
-    const coreVector2 vAround = coreVector2(Core::Rand->Float(-2.0f, 2.0f), 1.0f).Normalize() * 90.0f;
+    const coreVector2 vAround = coreVector2(Core::Rand->Float(-2.0f, 2.0f), 1.0f).Normalized() * 90.0f;
 
     // create new ray and add to list
     cRay* pRay = new cRay(coreVector3(vAround.x, fSpawnY, vAround.y));

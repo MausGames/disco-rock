@@ -24,7 +24,7 @@ cRay::cRay(const coreVector3& vStart)noexcept
     this->SetPosition   (vStart);
     this->SetSize       (coreVector3(RAY_WIDTH, RAY_WIDTH, RAY_LENGTH));
     this->SetDirection  (coreVector3(0.0f,1.0f,0.0f));
-    this->SetOrientation((vStart * coreVector3(1.0f,0.0f,1.0f)).Normalize());
+    this->SetOrientation((vStart * coreVector3(1.0f,0.0f,1.0f)).Normalized());
 
     // set random plate color
     const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));

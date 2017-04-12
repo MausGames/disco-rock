@@ -132,6 +132,7 @@ LOCAL_SRC_FILES := $(V_SRC_PATH)/main.cpp                                \
 LOCAL_SHARED_LIBRARIES := SDL2 SDL2_ttf SDL2_image OpenAL Ogg Vorbis VorbisFile libcurl
 LOCAL_STATIC_LIBRARIES := libgpg
 LOCAL_LDLIBS           := -ldl -llog -latomic -lz -landroid -lGLESv2 -lEGL
-LOCAL_CPPFLAGS         := -std=c++14 -O3 -fno-exceptions -frtti
+LOCAL_CPPFLAGS         := -O3 -std=c++14 -frtti -fno-exceptions
+LOCAL_CFLAGS           := -O3 -std=c11
 
 include $(BUILD_SHARED_LIBRARY)
