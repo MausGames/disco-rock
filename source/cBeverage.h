@@ -55,9 +55,9 @@ public:
     inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}
 
     // get object properties
-    inline const coreUint32& GetScore   ()const {return m_iScore;}
-    virtual coreUintW        GetSigID   ()const = 0;
-    virtual coreVector3      GetSigColor()const = 0;
+    inline  coreUint32  GetScore   ()const {return m_iScore;}
+    virtual coreUintW   GetSigID   ()const = 0;
+    virtual coreVector3 GetSigColor()const = 0;
 
 
 private:

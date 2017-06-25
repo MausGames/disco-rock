@@ -264,7 +264,8 @@ void cGame::Move()
         else
         {
             // check for collision with beverages
-            if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || Core::Manager::Object->TestCollision(pBeverage, &m_Rock)))
+            coreVector3 vDummy;
+            if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || coreObjectManager::TestCollision(pBeverage, &m_Rock, &vDummy)))
             {
                 const coreUintW iSigID = pBeverage->GetSigID();
 
@@ -279,7 +280,7 @@ void cGame::Move()
                 else if(iSigID <  3u) ++m_iCollectedNoBlue;
 
                 // increase combo
-                ++m_iCombo;
+                m_iCombo += 1;
                 m_fComboDelay = 1.0f;
 
                 const coreFloat fTextAlpha = 1.0f - m_fTime * 0.008f;
@@ -328,7 +329,8 @@ void cGame::Move()
         cTrap* pTrap = (*it);
 
         // check for collision with traps
-        if(pTrap->GetPosition().y < 10.0f && !pTrap->IsStatic() && Core::Manager::Object->TestCollision(pTrap, &m_Rock))
+        coreVector3 vDummy;
+        if(pTrap->GetPosition().y < 10.0f && !pTrap->IsStatic() && coreObjectManager::TestCollision(pTrap, &m_Rock, &vDummy))
         {
             if(m_Rock.Jump(10.0f))
             {

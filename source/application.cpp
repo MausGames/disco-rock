@@ -11,18 +11,18 @@
 // setup all defined resources
 static void SetupResources()
 {
-    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3");
-    Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_cola.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_cola.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_mojito.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_mojito_straw.md5mesh",  CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito_straw.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise.md5mesh",       CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh");
-    Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh");
+    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3", false);
+    Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_cola.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_cola.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito_straw.md5mesh",  CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito_straw.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise.md5mesh",       CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh", false);
 
     Core::Manager::Resource->Load<coreTexture>("background.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.png");
     Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png", false);

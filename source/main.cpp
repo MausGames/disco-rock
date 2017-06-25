@@ -141,7 +141,7 @@ void CoreApp::Init()
     });
 
     // create particle system
-    g_pParticleSystem = new coreParticleSystem(128u);
+    g_pParticleSystem = new coreParticleSystem(64u * ROCK_SPRITE_NUM);
     g_pParticleSystem->DefineTexture(0u, "effect_particle.png");
     g_pParticleSystem->DefineProgram("particle_program");
 

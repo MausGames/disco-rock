@@ -40,7 +40,7 @@
 
 
 // ****************************************************************
-// engine header files
+// engine headers
 #include "Core.h"
 #include <deque>
 
@@ -50,7 +50,7 @@
 
 
 // ****************************************************************
-// global definitions
+// general definitions
 #define FONT_ROCKS       "gomarice_rocks.ttf"
 #define OUTLINE_SIZE     (1u)
 
@@ -103,7 +103,7 @@ static constexpr coreVector3 g_avColor[] =
 
 
 // ****************************************************************
-// game header files
+// game headers
 #include "cOnline.h"
 #include "cBackground.h"
 #include "cMenu.h"

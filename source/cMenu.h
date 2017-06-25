@@ -14,6 +14,7 @@
 // ****************************************************************
 // menu definitions
 #define LEFT_CENTER (0.46f)   // fixed center-value for the left menu
+#define NAME_LEN    (18u)     // max characters to display for score names
 
 // transparency values
 #define MENU_ALPHA_ACTIVE_1 (0.8f)

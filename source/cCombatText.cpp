@@ -177,7 +177,7 @@ void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3& 
     if(vColor.a <= 0.0f) return;
 
     // calculate screen position and add text
-    const coreVector2 vScreenPos = (vPosition * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f) + coreVector2::Rand(-0.05f,0.05f);
+    const coreVector2 vScreenPos = (coreVector4(vPosition, 1.0f) * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f) + coreVector2::Rand(-0.05f,0.05f);
     this->AddText(pcText, vScreenPos, vColor);
 }
 
@@ -187,7 +187,7 @@ void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3& 
 void cCombatText::ShowTrophy(const coreChar* pcText, const coreVector3& vPosition)
 {
     // calculate screen position
-    const coreVector2 vScreenPos = (vPosition * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f);
+    const coreVector2 vScreenPos = (coreVector4(vPosition, 1.0f) * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f);
 
     // set trophy and trophy text
     m_Trophy.SetCenter(vScreenPos);
