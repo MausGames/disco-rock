@@ -62,10 +62,9 @@ void cBeverage::Move()
         const coreFloat   T    = Core::System->GetTime() * PI * 5.0f;
         const coreVector2 A    = coreVector2::Direction(T * m_vFlyRotation.y);
         const coreVector2 B    = coreVector2::Direction(T * m_vFlyRotation.x);
-        const coreMatrix4 mRot = coreMatrix4( A.y,  A.x*B.x, -A.x*B.y, 0.0f,
-                                             0.0f,      B.y,      B.x, 0.0f,
-                                              A.x, -A.y*B.x,  A.y*B.y, 0.0f,
-                                             0.0f,     0.0f,     0.0f, 1.0f);
+        const coreMatrix3 mRot = coreMatrix3( A.y,  A.x*B.x, -A.x*B.y,
+                                             0.0f,      B.y,      B.x,
+                                              A.x, -A.y*B.x,  A.y*B.y);
 
         // rotate the object
         this->SetDirection  (this->GetDirection()   * mRot);

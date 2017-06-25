@@ -1589,8 +1589,12 @@ void cMenu::Move()
                 {
                     if(m_LoginGuest.GetText()[0])
                     {
+                        // trim possible whitespaces
+                        std::string sTrimmed = m_LoginGuest.GetText();
+                        coreData::StrTrim(&sTrimmed);
+
                         // send guest score
-                        this->SubmitScore(m_LoginGuest.GetText());
+                        this->SubmitScore(sTrimmed.c_str());
 
                         // close login menu
                         this->ChangeSurface(this->GetCurSurface() - 2u, 5.0f);
@@ -1833,12 +1837,16 @@ void cMenu::SubmitScore(const coreChar* pcGuestName)
     if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
 
     // create extra-data string
-    const std::string sExtra = PRINT("%.0f %.3f - %d - %d %d %d %d %d", m_afSubmitValue[0], m_afSubmitValue[1], g_pGame->GetMaxCombo(),
+    const std::string sExtra = PRINT("%.0f %.3f - %d - %d %d %d %d %d", coreFloat(m_afSubmitValue[0]), coreFloat(m_afSubmitValue[1]), g_pGame->GetMaxCombo(),
                                      g_pGame->GetStat(0u), g_pGame->GetStat(1u), g_pGame->GetStat(2u), g_pGame->GetStat(3u), g_pGame->GetStat(4u));
 
     // send score and time values
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
-    g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", FLOOR(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    const coreInt32 iStateA = g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    const coreInt32 iStateB = g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", FLOOR(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+
+    // still show score as submitted
+    if((iStateA == GJ_REQUEST_CANCELED) || (iStateB == GJ_REQUEST_CANCELED))
+        m_bSubmitted = true;
 }
 
 
@@ -1962,14 +1970,18 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
     // loop trough all retrieved leaderboard entries
     for(coreUintW i = 0u; i < SCORE_ENTRIES; ++i)
     {
-        gjScore*       pScore = (i + iScoreStart < apScore.size()) ? apScore[i + iScoreStart] : NULL;
-        const coreBool bOver  = pScore ? (pScore->GetUserName().length() > 16u) : false;
+        const gjScore* pScore = (i + iScoreStart < apScore.size()) ? apScore[i + iScoreStart] : NULL;
+        const coreBool bOver  = pScore ? (pScore->GetUserName().length() > NAME_LEN) : false;
+
+        // trim possible whitespaces
+        std::string sTrimmed = pScore ? (pScore->GetUserName().substr(0u, NAME_LEN) + (bOver ? ">" : "")).c_str() : "-";
+        coreData::StrTrim(&sTrimmed);
 
         if(iTableNum == 0u) // == GJ_LEADERBOARD_01
         {
             // fill score leaderboard
             m_aaScoreEntry[0][i][0].SetText(PRINT("%zu.", i+1u + iScoreStart));
-            m_aaScoreEntry[0][i][1].SetText(pScore ? (pScore->GetUserName().substr(0u, 16u) + (bOver ? ">" : "")).c_str() : "-");
+            m_aaScoreEntry[0][i][1].SetText(sTrimmed.c_str());
             m_aaScoreEntry[0][i][2].SetText(pScore ? PRINT("%06d", pScore->GetSort()) : "-");
 
             // highlight best players
@@ -1979,7 +1991,7 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
         {
             // fill time leaderboard
             m_aaScoreEntry[1][i][0].SetText(PRINT("%zu.", i+1u + iScoreStart));
-            m_aaScoreEntry[1][i][1].SetText(pScore ? (pScore->GetUserName().substr(0u, 16u) + (bOver ? ">" : "")).c_str() : "-");
+            m_aaScoreEntry[1][i][1].SetText(sTrimmed.c_str());
             m_aaScoreEntry[1][i][2].SetText(pScore ? PRINT("%03d.%01d", pScore->GetSort() / 100, ((pScore->GetSort() % 100) / 10)) : "-");
 
             // highlight best players

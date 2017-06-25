@@ -143,9 +143,9 @@ public:
     void AddStreet  (const coreInt32 iBlockX, const coreBool bCenter, const coreUintW iLeft, const coreUintW iRight, coreBool* OUTPUT pbHole);
 
     // get game properties
-    inline const coreDouble& GetScore   ()const                       {return m_dScore;}
-    inline const coreFloat&  GetTime    ()const                       {return m_fTime;}
-    inline const coreUint8&  GetCombo   ()const                       {return m_iCombo;}
+    inline coreDouble        GetScore   ()const                       {return m_dScore;}
+    inline coreFloat         GetTime    ()const                       {return m_fTime;}
+    inline coreUint8         GetCombo   ()const                       {return m_iCombo;}
     inline const coreUint8&  GetMaxCombo()const                       {return m_iMaxCombo;}
     inline const coreUint16& GetStat    (const coreUintW iIndex)const {return m_aiCollected[iIndex];}
     inline const coreUint16& GetTraps   ()const                       {return m_iCollectedTraps;}
