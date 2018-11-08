@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -34,13 +34,13 @@ cGame::cGame(const coreBool bChallenge)noexcept
 , m_bTrapJump        (false)
 , m_bChallenge       (bChallenge)
 , m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1u))
-, m_Message          (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u)
+, m_Message          (FONT_ROCKS, 45u, OUTLINE_SIZE)
 , m_MessageTimer     (coreTimer(1.0f, 0.333f, 1u))
 {
     // add and shuffle all algorithms
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
     for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
-    std::shuffle(m_aiAlgo.begin(), m_aiAlgo.end(), std::default_random_engine(CORE_RAND_TIME));
+    coreData::Shuffle(m_aiAlgo.begin(), m_aiAlgo.end());
 
     // create beginning message
     m_Message.SetPosition(coreVector2(0.0f,0.2f));
@@ -280,7 +280,7 @@ void cGame::Move()
                 else if(iSigID <  3u) ++m_iCollectedNoBlue;
 
                 // increase combo
-                m_iCombo += 1;
+                m_iCombo = MIN(m_iCombo + 1u, 0xFFFFu);
                 m_fComboDelay = 1.0f;
 
                 const coreFloat fTextAlpha = 1.0f - m_fTime * 0.008f;
@@ -288,7 +288,7 @@ void cGame::Move()
                 {
                     // get and modify beverage color
                     coreVector4 vColor = coreVector4(pBeverage->GetSigColor(), 1.0f);
-                    if(iSigID != 4u) vColor.a *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
+                    if(iSigID != 4u) vColor.w *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
 
                     // create floating score text
                     g_pCombatText->AddTextTransformed(fValue ? PRINT("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);

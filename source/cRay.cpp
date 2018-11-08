@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -36,13 +36,6 @@ cRay::cRay(const coreVector3& vStart)noexcept
 
 
 // ****************************************************************
-// destructor
-cRay::~cRay()
-{
-}
-
-
-// ****************************************************************
 // move the ray
 void cRay::Move()
 {
@@ -65,5 +58,5 @@ void cRay::Move()
     this->SetAlpha(fAlpha*0.4f);
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }

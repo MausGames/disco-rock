@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 #if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
@@ -21,11 +21,11 @@ cFirst::cFirst()noexcept
     m_Interface.ChangeControlType(0u);
 
     // create control configuration objects
-    m_ControlText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
+    m_ControlText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_ControlText.SetPosition(coreVector2(0.0f,0.27f));
     m_ControlText.SetText    ("CONTROLS");
 
-    m_ControlType.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE, 16u);
+    m_ControlType.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE);
     m_ControlType.SetPosition(coreVector2(0.0f, m_ControlText.GetPosition().y - 0.08f));
     m_ControlType.SetSize    (coreVector2(0.49f,0.075f));
     m_ControlType.GetCaption()->SetColor3(coreVector3(0.75f,0.75f,0.75f));
@@ -37,7 +37,7 @@ cFirst::cFirst()noexcept
     {
         coreButton* pArrow = m_ControlType.GetArrow(i);
 
-        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45u, OUTLINE_SIZE, 2u);
+        pArrow->Construct       (NULL, NULL, FONT_ROCKS, 45u, OUTLINE_SIZE);
         pArrow->DefineProgram   ("2d_border_program");
         pArrow->SetColor3       (coreVector3(0.05f,0.05f,0.05f));
         pArrow->SetTexSize      (coreVector2(0.62f,0.62f) / m_ControlType.GetSize().y * 0.0165f);
@@ -46,7 +46,7 @@ cFirst::cFirst()noexcept
     }
 
     // create start button
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE, 0u);
+    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(0.0f,0.0f));
     m_Start.SetSize      (coreVector2(0.49f,0.1f));
@@ -73,13 +73,6 @@ cFirst::cFirst()noexcept
 
 
 // ****************************************************************
-// destructor
-cFirst::~cFirst()
-{
-}
-
-
-// ****************************************************************
 // render the first-time menu
 void cFirst::Render()
 {
@@ -97,7 +90,7 @@ void cFirst::Render()
     m_Interface.RenderTouch();
 
     // render the menu
-    coreMenu::Render();
+    this->coreMenu::Render();
 }
 
 
@@ -106,7 +99,7 @@ void cFirst::Render()
 void cFirst::Move()
 {
     // move the menu
-    coreMenu::Move();
+    this->coreMenu::Move();
     m_iStatus = 0;
 
     // move touch objects
@@ -137,7 +130,7 @@ void cFirst::Move()
     }
 
     // control current surface
-    if(!this->GetCurSurface())  this->ChangeSurface(1u, 1.0f);
+    if(!this->GetCurSurface()) {this->ChangeSurface(1u, 1.0f);}
     if(m_Start.IsClicked())    {this->ChangeSurface(2u, 1.0f); g_pMenu->PlayHappySound();}
 
     // finish the first-time menu

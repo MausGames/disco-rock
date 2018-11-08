@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -36,7 +36,7 @@ cCombatText::cCombatText()noexcept
     for(coreUintW i = 0u; i < COMBAT_TEXT_NUM; ++i)
     {
         // create labels and reset all missing properties
-        m_aText  [i].Construct(FONT_ROCKS, 37u, OUTLINE_SIZE, 32u);
+        m_aText  [i].Construct(FONT_ROCKS, 37u, OUTLINE_SIZE);
         m_aFloat [i].Set(1.0f, 1.0f, 1);
         m_afAlpha[i] = 0.0f;
     }
@@ -48,7 +48,7 @@ cCombatText::cCombatText()noexcept
     m_Trophy.SetColor3    (COLOR_YELLOW_F);
 
     // create trophy label
-    m_TrophyLabel.Construct(FONT_ROCKS, 37u, OUTLINE_SIZE, 32u);
+    m_TrophyLabel.Construct(FONT_ROCKS, 37u, OUTLINE_SIZE);
 }
 
 
@@ -105,7 +105,7 @@ void cCombatText::Move()
             pText->SetColor4   (oData.vColor);
 
             // save alpha value
-            m_afAlpha[m_iCurText] = oData.vColor.a;
+            m_afAlpha[m_iCurText] = oData.vColor.w;
 
             // start timers
             m_aFloat[m_iCurText].Play(CORE_TIMER_PLAY_RESET);
@@ -174,7 +174,7 @@ void cCombatText::Reset()
 // add new transformed combat text entry
 void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3& vPosition, const coreVector4& vColor)
 {
-    if(vColor.a <= 0.0f) return;
+    if(vColor.w <= 0.0f) return;
 
     // calculate screen position and add text
     const coreVector2 vScreenPos = (coreVector4(vPosition, 1.0f) * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f) + coreVector2::Rand(-0.05f,0.05f);

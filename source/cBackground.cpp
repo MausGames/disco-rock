@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -50,7 +50,7 @@ cBackground::~cBackground()
     Core::Manager::Resource->Free(&m_pModel);
 
     // delete height data
-    SAFE_DELETE_ARRAY(m_pfHeight)
+    ALIGNED_DELETE(m_pfHeight)
 }
 
 
@@ -135,7 +135,7 @@ void cBackground::Move()
     m_Fill.Move();
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }
 
 
@@ -147,17 +147,17 @@ void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
     constexpr coreUintW iSize = iNum * sizeof(coreFloat);
 
     // map required area
-    coreFloat* pfData = m_pModel->GetVertexBuffer(1u)->Map<coreFloat>(iLine*iSize, iSize, CORE_DATABUFFER_MAP_INVALIDATE_RANGE);
-    ASSERT((iLine+1u) * iSize < BACK_TOTAL_INDICES * sizeof(float));
+    coreByte* pData = m_pModel->GetVertexBuffer(1u)->Map(iLine*iSize, iSize, CORE_DATABUFFER_MAP_UNSYNCHRONIZED);
+    ASSERT((iLine+1u) * iSize < BACK_TOTAL_INDICES * sizeof(coreFloat));
 
     // set height values of the selected line
     for(coreUintW i = 0u; i < iNum; ++i)
     {
-        pfData[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : 0.0f;
+        r_cast<coreFloat*>(pData)[i] = m_pfHeight[i + iLine*iNum] = pbIndex[i/BACK_PER_VERTICES] ? 100.0f : 0.0f;
     }
 
     // unmap area
-    m_pModel->GetVertexBuffer(1u)->Unmap(pfData);
+    m_pModel->GetVertexBuffer(1u)->Unmap(pData);
 
     // reset current model object
     coreModel::Disable(false);
@@ -187,7 +187,7 @@ void cBackground::LoadGeometry()
 
     // delete old data
     m_pModel->Unload();
-    SAFE_DELETE_ARRAY(m_pfHeight)
+    ALIGNED_DELETE(m_pfHeight)
 
     // create base geometry
     sVertex aBaseVertex[BACK_WIDTH * BACK_HEIGHT];
@@ -202,7 +202,7 @@ void cBackground::LoadGeometry()
     }
 
     // create persistent array with mutable height data (the holes are just out of screen)
-    m_pfHeight = new coreFloat[BACK_TOTAL_VERTICES];
+    m_pfHeight = ALIGNED_NEW(coreFloat, BACK_TOTAL_VERTICES, ALIGNMENT_CACHE);
     for(coreUintW i = 0u; i < BACK_TOTAL_VERTICES; ++i) m_pfHeight[i] = 0.0f;
 
     // define color values
@@ -219,7 +219,7 @@ void cBackground::LoadGeometry()
         avColor.emplace_back(m_avColor[iCurColor], 1.0f);
 
         // add additional random parameter for the shader
-        avColor.back().a = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
+        avColor.back().w = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
     }
 
     // sync beginning and ending colors to create an infinite looking grid when resetting the position

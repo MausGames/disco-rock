@@ -4,12 +4,24 @@
 //| Direct modifications may be overwritten |//
 //*-----------------------------------------*//
 ///////////////////////////////////////////////
-#include "Core.h"
+#include "main.h"
 
 
 // ****************************************************************
-// setup all defined resources
-static void SetupResources()
+// project settings
+const coreChar* const CoreApp::Settings::Name                       = "Disco Rock";
+const coreChar* const CoreApp::Settings::IconPath                   = "data/textures/game_icon.png";
+const coreChar* const CoreApp::Settings::CursorPath                 = "data/textures/default_cursor.png";
+const coreUint8       CoreApp::Settings::RenderBuffer::DepthSize    = 24u;
+const coreUint8       CoreApp::Settings::RenderBuffer::StencilSize  = 0u;
+const coreBool        CoreApp::Settings::RenderBuffer::AlphaChannel = false;
+const coreBool        CoreApp::Settings::RenderBuffer::DoubleBuffer = true;
+const coreBool        CoreApp::Settings::RenderBuffer::StereoRender = false;
+
+
+// ****************************************************************
+// setup the application
+void CoreApp::Setup()
 {
     Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3", false);
     Core::Manager::Resource->Load<coreModel>  ("default_square.md5mesh",      CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_square.md5mesh", false);
@@ -108,7 +120,7 @@ static void SetupResources()
 
     Core::Manager::Resource->Load<coreFont>   ("gomarice_rocks.ttf",          CORE_RESOURCE_UPDATE_AUTO,   "data/fonts/gomarice_rocks.ttf");
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("floor_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("floor_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("floor.vert")
         ->AttachShader("floor.frag")
         ->BindAttribute("a_v2Position", 0u)
@@ -116,115 +128,83 @@ static void SetupResources()
         ->BindAttribute("a_v1Height",   3u)
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("fill_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("fill_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("fill.vert")
         ->AttachShader("fill.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("drink_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("drink_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("drink.vert")
         ->AttachShader("drink.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("shadow_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("shadow_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("shadow.vert")
         ->AttachShader("shadow.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("glass_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("glass_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("glass.vert")
         ->AttachShader("glass.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("glass_cola_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("glass_cola_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("glass.vert")
         ->AttachShader("glass_cola.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_simple_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("2d_simple_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("simple_2d.vert")
         ->AttachShader("default_2d.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("2d_color_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("simple_2d.vert")
         ->AttachShader("color.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_border_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("2d_border_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("simple_2d.vert")
         ->AttachShader("border.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_icon_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("2d_color_icon_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("simple_2d.vert")
         ->AttachShader("color_icon.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("2d_color_bar_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("2d_color_bar_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("simple_2d.vert")
         ->AttachShader("color_bar.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("floor_plate_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("floor_plate_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("floor_plate.vert")
         ->AttachShader("floor_plate.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("ray_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("ray_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("ray.vert")
         ->AttachShader("ray.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("rock_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("rock_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("rock.vert")
         ->AttachShader("rock.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("wave_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("wave_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("wave.vert")
         ->AttachShader("wave.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("trap_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("trap_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("trap.vert")
         ->AttachShader("trap.frag")
         ->Finish();
 
-    ((coreProgram*)Core::Manager::Resource->Load<coreProgram>("particle_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetResource())
+    d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("particle_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("default_particle.vert")
         ->AttachShader("default_particle.frag")
         ->Finish();
-}
-
-
-// ****************************************************************
-// setup all defined designs
-static void SetupDesigns()
-{
-
-}
-
-
-// ****************************************************************
-// setup the application
-void CoreApp::Setup()
-{
-    // set window title and icon
-    Core::System->SetWindowTitle("Disco Rock");
-    Core::System->SetWindowIcon("data/textures/game_icon.png");
-
-    // set view frustum
-    Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
-
-    // set cursor
-#if defined(_CORE_LINUX_)
-    Core::Input->DefineCursor("data/textures/default_cursor_low.png");
-#else
-    Core::Input->DefineCursor("data/textures/default_cursor.png");
-#endif
-
-    // setup resources and designs
-    SetupResources();
-    SetupDesigns();
 }

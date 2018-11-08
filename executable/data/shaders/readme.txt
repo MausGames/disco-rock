@@ -3,7 +3,7 @@
 # Shader Interface #
 
 *varying* and *attribute* instead of *in* and *out* in vertex and fragment shader for max compatibility
-qualifiers *highp*, *mediump*, *lowp*, *flat*, *noperspective* and *smooth* are safe to use
+qualifiers *highp*, *mediump*, *lowp*, *flat*, *noperspective*, *smooth*, *centroid*, *sample*, *precise* and *invariant* are safe to use
 shader main functions are named *VertexMain()* and *FragmentMain()*
 
 
@@ -115,6 +115,7 @@ T     coreMax3                (in T, in T, in T)   // trinary maximum
 T     coreMed3                (in T, in T, in T)   // trinary median
 bool  coreAnyInvocation       (in bool)            // condition across group of shader invocations
 bool  coreAllInvocations      (in bool)
+T     coreLinearStep          (in T, in T, in T)   // linear interpolation between 0.0 and 1.0
 vec3  coreRgbToHsv            (in vec3)            // RGB to HSV conversion
 vec3  coreHsvToRgb            (in vec3)            // HSV to RGB conversion
 vec3  coreRgbToYiq            (in vec3)            // RGB to YIQ conversion   (BT.601, NTSC)
@@ -131,7 +132,8 @@ vec3  coreUnpackNormalSphere  (in vec2)            // vector normal unpack (with
 vec3  coreUnpackNormalMap     (in vec2)            // vector normal unpack (with z-reconstruction)
 vec3  coreUnpackNormalMapDeriv(in vec2)            // vector normal unpack (with partial-derivative)
 vec3  coreQuatApply           (in vec4, in vec3)   // quaternion transformation
-mat3  coreTranspose           (in mat3)            // matrix transpose
+mat2  coreTranspose           (in mat2)            // matrix transpose
+mat3  coreTranspose           (in mat3)
 mat4  coreTranspose           (in mat4)
 mat3  coreInvert              (in mat3)            // matrix invert
 mat4  coreInvert              (in mat4)
@@ -142,6 +144,7 @@ uint  corePackUnorm4x8        (in vec4)            // value pack   (4x 8bit floa
 vec4  coreUnpackUnorm4x8      (in uint)            // value unpack (1x 32bit uint -> 4x 8bit float)
 
 vec4  coreTexture2D    (in int v1Unit, in vec2 v2TexCoord)    // normal texture lookup
+vec4  coreTextureProj  (in int v1Unit, in vec4 v4ProjCoord)   // normal texture lookup (with projection)
 float coreTextureShadow(in int v1Unit, in vec4 v4ProjCoord)   // PCF depth-compare for shadow textures
 
 half, hvec2, hvec3, hvec4     // 16-bit floating point types (32-bit, if not supported)
@@ -150,6 +153,7 @@ half, hvec2, hvec3, hvec4     // 16-bit floating point types (32-bit, if not sup
 
 #define PI    (3.1415926535897932384626433832795)
 #define EU    (2.7182818284590452353602874713527)
+#define GA    (2.3999632297286533222315555066336)
 #define SQRT2 (1.4142135623730950488016887242097)
 
 ## In ##

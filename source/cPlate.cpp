@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -19,7 +19,7 @@ cPlate::cPlate(const coreFloat fStartY, const coreVector2& vTexOffset)noexcept
     m_Animation.SetTimeID(0);
 
     // load object resources
-    this->DefineModel  (Core::Manager::Object->GetLowModel());
+    this->DefineModel  (Core::Manager::Object->GetLowQuad());
     this->DefineTexture(0u, "background.png");
     this->DefineTexture(1u, "background_norm.png");
     this->DefineProgram("floor_plate_program");
@@ -31,12 +31,6 @@ cPlate::cPlate(const coreFloat fStartY, const coreVector2& vTexOffset)noexcept
     // set random plate color
     const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));
     this->SetColor4(coreVector4(vColor, Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS));
-}
-
-// ****************************************************************
-// destructor
-cPlate::~cPlate()
-{
 }
 
 
@@ -66,5 +60,5 @@ void cPlate::Move()
     this->SetTexOffset(g_pBackground->GetTexOffset() + m_vTexOffset);
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }
