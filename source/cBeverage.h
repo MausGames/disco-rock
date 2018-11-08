@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #pragma once
 #ifndef _DR_GUARD_BEVERAGE_H_
 #define _DR_GUARD_BEVERAGE_H_
@@ -45,8 +45,8 @@ public:
     // render different parts of the object separately for batched rendering
     inline void RenderShadow() {m_Shadow.Render();}
     inline void RenderStraw()  {if(m_pStraw) m_pStraw->Render();}
-    inline void RenderDrink()  {coreObject3D::Render();}
-    inline void RenderGlass()  {if(m_pGlass) m_pGlass->Render(); else coreObject3D::Render(m_pGlasProgram);}
+    inline void RenderDrink()  {this->coreObject3D::Render();}
+    inline void RenderGlass()  {if(m_pGlass) m_pGlass->Render(); else this->coreObject3D::Render(m_pGlasProgram);}
 
     // destroy the object (send it flying)
     inline void Destroy(const coreVector3& vFlyImpact) {m_pDestroy.Play(CORE_TIMER_PLAY_RESET); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
@@ -72,7 +72,6 @@ class cSunrise final : public cBeverage
 {
 public:
     cSunrise()noexcept;
-    ~cSunrise()final;
 
     DISABLE_COPY(cSunrise)
 
@@ -88,7 +87,6 @@ class cMojito final : public cBeverage
 {
 public:
     cMojito()noexcept;
-    ~cMojito()final;
 
     DISABLE_COPY(cMojito)
 
@@ -104,7 +102,6 @@ class cBlue final : public cBeverage
 {
 public:
     cBlue()noexcept;
-    ~cBlue()final;
 
     DISABLE_COPY(cBlue)
 
@@ -120,7 +117,6 @@ class cCoola final : public cBeverage
 {
 public:
     cCoola()noexcept;
-    ~cCoola()final;
 
     DISABLE_COPY(cCoola)
 
@@ -136,7 +132,6 @@ class cFranka final : public cBeverage
 {
 public:
     cFranka()noexcept;
-    ~cFranka()final;
 
     DISABLE_COPY(cFranka)
 

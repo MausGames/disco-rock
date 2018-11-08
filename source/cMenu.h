@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #pragma once
 #ifndef _DR_GUARD_MENU_H_
 #define _DR_GUARD_MENU_H_
@@ -126,8 +126,8 @@ private:
     coreObject2D m_LoginConfigLogo;
     coreButton   m_LoginConfigStart;
 
-    coreLabel                m_ControlText;
-    coreSwitchBox<coreUint8> m_ControlType;
+    coreLabel       m_ControlText;
+    coreSwitchBoxU8 m_ControlType;
 
     coreObject2D m_LoginBlack;
     coreObject2D m_LoginPopup;

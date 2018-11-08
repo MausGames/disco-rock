@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -27,7 +27,7 @@ cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const cor
 
     // create shadow
     m_Shadow.DefineTexture(0u, "effect_ground.png");
-    m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
+    m_Shadow.DefineModel  (Core::Manager::Object->GetLowQuad());
     m_Shadow.DefineProgram("shadow_program");
 
     // load glass shader
@@ -107,7 +107,7 @@ void cBeverage::Move()
     }
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }
 
 
@@ -135,13 +135,6 @@ cSunrise::cSunrise()noexcept
 
 
 // ****************************************************************
-// destructor
-cSunrise::~cSunrise()
-{
-}
-
-
-// ****************************************************************
 // constructor
 cMojito::cMojito()noexcept
 : cBeverage (10u, -0.2f, 0.4f, 1.2f)
@@ -162,13 +155,6 @@ cMojito::cMojito()noexcept
     m_pStraw->DefineModel  ("drink_mojito_straw.md5mesh");
     m_pStraw->DefineTexture(0u, "default_black.png");
     m_pStraw->DefineProgram("drink_program");
-}
-
-
-// ****************************************************************
-// destructor
-cMojito::~cMojito()
-{
 }
 
 
@@ -202,13 +188,6 @@ cBlue::cBlue()noexcept
 
 
 // ****************************************************************
-// destructor
-cBlue::~cBlue()
-{
-}
-
-
-// ****************************************************************
 // constructor
 cCoola::cCoola()noexcept
 : cBeverage (200u, -3.0f, 0.5f, 0.9f)
@@ -232,13 +211,6 @@ cCoola::cCoola()noexcept
 
 
 // ****************************************************************
-// destructor
-cCoola::~cCoola()
-{
-}
-
-
-// ****************************************************************
 // constructor
 cFranka::cFranka()noexcept
 : cBeverage (0u, -2.6f, 1.0f, 1.2f)
@@ -258,11 +230,4 @@ cFranka::cFranka()noexcept
 
     // override sound
     m_pClink = Core::Manager::Resource->Get<coreSound>("bump.wav");
-}
-
-
-// ****************************************************************
-// destructor
-cFranka::~cFranka()
-{
 }

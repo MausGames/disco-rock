@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -26,13 +26,6 @@ cTrap::cTrap()noexcept
 
     // attach sparkles to object
     m_Effect.SetOrigin(this);
-}
-
-
-// ****************************************************************
-// destructor
-cTrap::~cTrap()
-{
 }
 
 
@@ -73,5 +66,5 @@ void cTrap::Move()
     if(this->GetPosition().y <= BACK_REMOVE_Y) m_iStatus = 1;
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }

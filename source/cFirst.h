@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #pragma once
 #ifndef _DR_GUARD_FIRST_H_
 #define _DR_GUARD_FIRST_H_
@@ -18,16 +18,15 @@
 class cFirst final : public coreMenu
 {
 private:
-    coreLabel          m_ControlText;   // control header
-    coreSwitchBox<int> m_ControlType;   // control setting selection
-    coreButton         m_Start;         // start into main menu
+    coreLabel       m_ControlText;   // control header
+    coreSwitchBoxU8 m_ControlType;   // control setting selection
+    coreButton      m_Start;         // start into main menu
 
-    cInterface m_Interface;             // interface instance to display current control settings
+    cInterface m_Interface;          // interface instance to display current control settings
 
 
 public:
     cFirst()noexcept;
-    ~cFirst()final;
 
     DISABLE_COPY(cFirst)
 

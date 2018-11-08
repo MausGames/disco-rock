@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 cBackground*        g_pBackground     = NULL;
@@ -33,50 +33,62 @@ static coreObject3D* m_apSave[8];   // pre-allocation of required resources
 
 // ****************************************************************
 // intro message container
-const std::string g_asIntro[] = {"SHOW US WHAT YOU'VE GOT",
-                                 "GIVE THE KID SOME ROOM",
-                                 "KEEP ON JUMPIN'",
-                                 "FOLLOW THE BEAT",
-                                 "SOUND FLY THROUGH THE NIGHT",
-                                 "GET READY TO DISCO",
-                                 "YOU SHOULD BE DANCING"};
+const coreChar* const g_asIntro[] =
+{
+    "SHOW US WHAT YOU'VE GOT",
+    "GIVE THE KID SOME ROOM",
+    "KEEP ON JUMPIN'",
+    "FOLLOW THE BEAT",
+    "SOUND FLY THROUGH THE NIGHT",
+    "GET READY TO DISCO",
+    "YOU SHOULD BE DANCING"
+};
 sMsgList g_MsgIntro(g_asIntro, ARRAY_SIZE(g_asIntro));
 
 
 // ****************************************************************
 // end message container
-const std::string g_asFallen[] = {"SEE ME FALLING",
-                                  "NOOOOO!",
-                                  "COME ON",
-                                  "AVENGE ME",
-                                  "WHAT WAS THAT?",
-                                  "OPEN YOUR EYES",
-                                  "REALLY?"};
+const coreChar* const g_asFallen[] =
+{
+    "SEE ME FALLING",
+    "NOOOOO!",
+    "COME ON",
+    "AVENGE ME",
+    "WHAT WAS THAT?",
+    "OPEN YOUR EYES",
+    "REALLY?"
+};
 sMsgList g_MsgFallen(g_asFallen, ARRAY_SIZE(g_asFallen));
 
 
 // ****************************************************************
 // trap jump message container
-const std::string g_asTrap[] = {"TO THE SKY",
-                                "WEEEEE!",
-                                "MAKE SOME NOISE",
-                                "YEAH BABY YEAH",
-                                "SHAKE YOUR GROOVE THING",
-                                "THEY SEE ME ROLLIN'",
-                                "ROCK 'N ROLL",
-                                "SHOW ME THE LIGHT",
-                                "BOY, YOU TURN ME"};
+const coreChar* const g_asTrap[] =
+{
+    "TO THE SKY",
+    "WEEEEE!",
+    "MAKE SOME NOISE",
+    "YEAH BABY YEAH",
+    "SHAKE YOUR GROOVE THING",
+    "THEY SEE ME ROLLIN'",
+    "ROCK 'N ROLL",
+    "SHOW ME THE LIGHT",
+    "BOY, YOU TURN ME"
+};
 sMsgList g_MsgTrap(g_asTrap, ARRAY_SIZE(g_asTrap));
 
 
 // ****************************************************************
 // first jump message container
-const std::string g_asBegin[] = {"LET'S GO",
-                                 "BREAK IT",
-                                 "SO IT BEGINS",
-                                 "SHOW THEM",
-                                 "TAKE THAT",
-                                 "RIDE ON"};
+const coreChar* const g_asBegin[] =
+{
+    "LET'S GO",
+    "BREAK IT",
+    "SO IT BEGINS",
+    "SHOW THEM",
+    "TAKE THAT",
+    "RIDE ON"
+};
 sMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
 
 
@@ -84,6 +96,9 @@ sMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
 // init the application
 void CoreApp::Init()
 {
+    // set view frustum
+    Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
+
     // set audio listener (for 3d sound)
     const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
     const coreVector3 vCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalized();
@@ -92,7 +107,7 @@ void CoreApp::Init()
 
     // override sound and music volume
     coreFloat fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
-    if(coreMath::InRange(fSoundVolume, 1.0f, CORE_MATH_PRECISION))
+    if(coreMath::IsNear(fSoundVolume, 1.0f))
     {
         fSoundVolume = 7.0f;
         Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fSoundVolume);
@@ -107,10 +122,6 @@ void CoreApp::Init()
         // also create and show first-time menu
         if(DEFINED(_CORE_ANDROID_)) g_pFirst = new cFirst();
     }
-
-    // override context settings
-    Core::Config->SetInt (CORE_CONFIG_GRAPHICS_STENCILSIZE,  0);
-    Core::Config->SetBool(CORE_CONFIG_GRAPHICS_ALPHACHANNEL, false);
 
     // create main components
     g_pBackground = new cBackground();

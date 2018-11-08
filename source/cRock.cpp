@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -38,29 +38,29 @@ cRock::cRock()noexcept
     this->SetPosition         (coreVector3(0.0f,0.0f,0.0f));
     this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*5.0f);
     this->SetDirection        (coreVector3(1.0f,0.0f,0.0f));
-    this->SetCollisionModifier(coreVector3(1.0f,1.0f,1.0f)*ROCK_RANGE_OBJ);
+    this->SetCollisionModifier(coreVector3(1.0f,1.0f,1.0f) * ROCK_RANGE_OBJ);
 
     // create shadow
-    m_Shadow.DefineModel  (Core::Manager::Object->GetLowModel());
+    m_Shadow.DefineModel  (Core::Manager::Object->GetLowQuad());
     m_Shadow.DefineTexture(0u, "effect_ground.png");
     m_Shadow.DefineProgram("shadow_program");
 
     // create big wave
-    m_Wave.DefineModel   (Core::Manager::Object->GetLowModel());
+    m_Wave.DefineModel   (Core::Manager::Object->GetLowQuad());
     m_Wave.DefineTexture (0u, "effect_ground.png");
     m_Wave.DefineProgram ("wave_program");
     m_Wave.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_Wave.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create small wave
-    m_WaveSmall.DefineModel   (Core::Manager::Object->GetLowModel());
+    m_WaveSmall.DefineModel   (Core::Manager::Object->GetLowQuad());
     m_WaveSmall.DefineTexture (0u, "effect_ground.png");
     m_WaveSmall.DefineProgram ("wave_program");
     m_WaveSmall.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_WaveSmall.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create shock-wave
-    m_WaveShock.DefineModel  (Core::Manager::Object->GetLowModel());
+    m_WaveShock.DefineModel  (Core::Manager::Object->GetLowQuad());
     m_WaveShock.DefineTexture(0u, "effect_ground.png");
     m_WaveShock.DefineProgram("wave_program");
 
@@ -68,12 +68,6 @@ cRock::cRock()noexcept
     m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.wav");
     m_pDown  = Core::Manager::Resource->Get<coreSound>("bump.wav");
     m_pWoosh = Core::Manager::Resource->Get<coreSound>("woosh.wav");
-}
-
-// ****************************************************************
-// destructor
-cRock::~cRock()
-{
 }
 
 
@@ -297,7 +291,7 @@ void cRock::Move()
     }
 
     // move the object
-    coreObject3D::Move();
+    this->coreObject3D::Move();
 }
 
 

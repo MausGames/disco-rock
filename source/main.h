@@ -10,7 +10,7 @@
 //*-------------------------------------------------------------------------------*//
 /////////////////////////////////////////////////////////////////////////////////////
 //*-------------------------------------------------------------------------------*//
-//| Disco Rock v1.3 (http://www.maus-games.at)                                    |//
+//| Disco Rock v1.3 (https://www.maus-games.at)                                   |//
 //*-------------------------------------------------------------------------------*//
 //| Copyright (c) 2013-2015 Martin Mauersics                                      |//
 //|                                                                               |//
@@ -145,25 +145,25 @@ extern coreBool            g_bCamUpsideDown;    // upside-down camera status
 // message container structure
 struct sMsgList final
 {
-    std::vector<const std::string*> m_apsMsg;   // shuffled messages
-    coreUintW m_iCur;                           // current message index
+    std::vector<const coreChar*> m_apcMsg;   // shuffled messages
+    coreUintW m_iCur;                        // current message index
 
-    inline sMsgList(const std::string* psMsg, const coreUintW iSize)noexcept
+    inline sMsgList(const coreChar* const* ppcMsg, const coreUintW iSize)noexcept
     : m_iCur (0u)
     {
         // add messages
-        m_apsMsg.reserve(iSize);
-        for(coreUintW i = 0u; i < iSize; ++i) m_apsMsg.push_back(&psMsg[i]);
+        m_apcMsg.reserve(iSize);
+        for(coreUintW i = 0u; i < iSize; ++i) m_apcMsg.push_back(ppcMsg[i]);
 
         // shuffle them
-        std::shuffle(m_apsMsg.begin(), m_apsMsg.end(), std::default_random_engine(CORE_RAND_TIME));
+        coreData::Shuffle(m_apcMsg.begin(), m_apcMsg.end());
     }
 
     inline const coreChar* Get()
     {
         // get next message
-        if(++m_iCur >= m_apsMsg.size()) m_iCur = 0u;
-        return m_apsMsg[m_iCur]->c_str();
+        if(++m_iCur >= m_apcMsg.size()) m_iCur = 0u;
+        return m_apcMsg[m_iCur];
     }
 };
 

@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #include "main.h"
 
 
@@ -831,9 +831,8 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
             g_pCombatText->AddTextTransformed("+BOOST", m_Rock.GetPosition(), coreVector4(COLOR_RED_F, 1.0f));
 
             // shuffle everything again (don't let the last stage come twice, put at least two others in-between)
-            auto oEngine = std::default_random_engine(CORE_RAND_TIME);
-            std::shuffle(    m_aiAlgo.begin(), --m_aiAlgo.end(), oEngine);
-            std::shuffle(++++m_aiAlgo.begin(),   m_aiAlgo.end(), oEngine);
+            coreData::Shuffle(    m_aiAlgo.begin(), --m_aiAlgo.end());
+            coreData::Shuffle(++++m_aiAlgo.begin(),   m_aiAlgo.end());
 
             // achieve speed-trophy
             if(!this->GetStatus()) this->AchieveTrophy(GJ_TROPHY_13, 12u);

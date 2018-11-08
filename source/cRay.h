@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #pragma once
 #ifndef _DR_GUARD_RAY_H_
 #define _DR_GUARD_RAY_H_
@@ -30,7 +30,6 @@ private:
 
 public:
     cRay(const coreVector3& vStart)noexcept;
-    ~cRay()final;
 
     DISABLE_COPY(cRay)
 

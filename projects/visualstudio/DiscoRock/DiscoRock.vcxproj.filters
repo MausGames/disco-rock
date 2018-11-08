@@ -135,6 +135,12 @@
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjDataItem.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeBefore.h">
+      <Filter>additional\GameJoltAPI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeAfter.h">
+      <Filter>additional\GameJoltAPI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="interface">

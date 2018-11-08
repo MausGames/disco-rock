@@ -11,13 +11,13 @@ Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - t
 #
 
 **Windows and Linux Version:**  
-<http://gamejolt.com/games/arcade/disco-rock/18996/>
+<https://gamejolt.com/games/arcade/disco-rock/18996/>
 
 **Android Version:**  
 <https://play.google.com/store/apps/details?id=at.mausgames.dr>
 
 **Music:**  
-by Kevin MacLeod (<http://incompetech.com/music/royalty-free/index.html?genre=Disco>)  
-Licensed under CC BY (<http://creativecommons.org/licenses/by/3.0/>)
+by Kevin MacLeod (<https://incompetech.com/music/royalty-free/index.html?genre=Disco>)  
+Licensed under CC BY (<https://creativecommons.org/licenses/by/3.0/>)
 
-[1]: http://gamejolt.com/
+[1]: https://gamejolt.com/

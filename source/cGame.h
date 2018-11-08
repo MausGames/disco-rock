@@ -1,11 +1,11 @@
-/////////////////////////////////////////////////////
-//*-----------------------------------------------*//
-//| Part of Disco Rock (http://www.maus-games.at) |//
-//*-----------------------------------------------*//
-//| Released under the zlib License               |//
-//| More information available in the readme file |//
-//*-----------------------------------------------*//
-/////////////////////////////////////////////////////
+//////////////////////////////////////////////////////
+//*------------------------------------------------*//
+//| Part of Disco Rock (https://www.maus-games.at) |//
+//*------------------------------------------------*//
+//| Released under the zlib License                |//
+//| More information available in the readme file  |//
+//*------------------------------------------------*//
+//////////////////////////////////////////////////////
 #pragma once
 #ifndef _DR_GUARD_GAME_H_
 #define _DR_GUARD_GAME_H_
@@ -85,11 +85,11 @@ private:
 
     coreProtect<coreDouble> m_dScore;         // score value
     coreProtect<coreFlow>   m_fTime;          // time value
-    coreProtect<coreUint8>  m_iCombo;         // current combo value (number of hit objects)
+    coreProtect<coreUint16> m_iCombo;         // current combo value (number of hit objects)
 
-    coreUint8 m_iMaxCombo;                    // best combo value
-    coreFlow  m_fComboTime;                   // time with max combo multiplier
-    coreFloat m_fComboDelay;                  // remaining time to the combo-reset
+    coreUint16 m_iMaxCombo;                   // best combo value
+    coreFlow   m_fComboTime;                  // time with max combo multiplier
+    coreFloat  m_fComboDelay;                 // remaining time to the combo-reset
 
     coreUint16 m_aiCollected[6];              // beverage statistic values (0 = all | 1-4 single | 5 = Franka)
     coreUint16 m_iCollectedTraps;             // trap statistic value
@@ -145,8 +145,8 @@ public:
     // get game properties
     inline coreDouble        GetScore   ()const                       {return m_dScore;}
     inline coreFloat         GetTime    ()const                       {return m_fTime;}
-    inline coreUint8         GetCombo   ()const                       {return m_iCombo;}
-    inline const coreUint8&  GetMaxCombo()const                       {return m_iMaxCombo;}
+    inline coreUint16        GetCombo   ()const                       {return m_iCombo;}
+    inline const coreUint16& GetMaxCombo()const                       {return m_iMaxCombo;}
     inline const coreUint16& GetStat    (const coreUintW iIndex)const {return m_aiCollected[iIndex];}
     inline const coreUint16& GetTraps   ()const                       {return m_iCollectedTraps;}
 

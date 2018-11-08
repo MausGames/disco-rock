@@ -1,11 +1,11 @@
-//////////////////////////////////////////////////////////
-//*----------------------------------------------------*//
-//| Part of the Core Engine (http://www.maus-games.at) |//
-//*----------------------------------------------------*//
-//| Released under the zlib License                    |//
-//| More information available in the readme file      |//
-//*----------------------------------------------------*//
-//////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////
+//*-----------------------------------------------------*//
+//| Part of the Core Engine (https://www.maus-games.at) |//
+//*-----------------------------------------------------*//
+//| Released under the zlib License                     |//
+//| More information available in the readme file       |//
+//*-----------------------------------------------------*//
+///////////////////////////////////////////////////////////
 
 
 // ****************************************************************
@@ -20,23 +20,23 @@
 
 // compiler configuration
 #if defined(GL_ES)
+    #extension GL_EXT_conservative_depth       : enable
     #extension GL_EXT_shadow_samplers          : enable
 #else
+    #extension GL_AMD_conservative_depth       : enable
     #extension GL_AMD_gpu_shader_half_float    : enable
     #extension GL_AMD_shader_trinary_minmax    : enable
     #extension GL_ARB_conservative_depth       : enable
     #extension GL_ARB_enhanced_layouts         : enable
+    #extension GL_ARB_gpu_shader5              : enable
     #extension GL_ARB_sample_shading           : enable
     #extension GL_ARB_shader_group_vote        : enable
     #extension GL_ARB_shader_image_load_store  : enable
     #extension GL_ARB_shading_language_packing : enable
     #extension GL_ARB_uniform_buffer_object    : enable
     #extension GL_EXT_gpu_shader4              : enable
+    #extension GL_EXT_shader_image_load_store  : enable
     #extension GL_NV_gpu_shader5               : enable
-#endif
-#if (__VERSION__) < 130
-    #undef GL_ARB_conservative_depth
-    #undef GL_ARB_shader_image_load_store
 #endif
 #pragma optimize(on)
 #pragma debug(off)
@@ -56,11 +56,11 @@
 #endif
 
 // layout qualifiers
-#if defined(_CORE_FRAGMENT_SHADER_) && !defined(_CORE_OPTION_NO_EARLY_DEPTH_)
-    #if defined(GL_ARB_conservative_depth)
+#if defined(_CORE_FRAGMENT_SHADER_) && !defined(_CORE_OPTION_NO_EARLY_DEPTH_) && (__VERSION__) >= 130
+    #if defined(GL_AMD_conservative_depth) || defined(GL_ARB_conservative_depth) || defined(GL_EXT_conservative_depth)
         layout(depth_unchanged) out float gl_FragDepth;
     #endif
-    #if defined(GL_ARB_shader_image_load_store) || (defined(GL_ES) && (__VERSION__) >= 310)
+    #if defined(GL_ARB_shader_image_load_store) || defined(GL_EXT_shader_image_load_store) || (defined(GL_ES) && (__VERSION__) >= 310)
         layout(early_fragment_tests) in;
     #endif
 #endif
@@ -88,11 +88,24 @@
         #define varying in
     #endif
 #else
-    #undef  _CORE_OPTION_INSTANCING_
+    #undef _CORE_OPTION_INSTANCING_
+#endif
+#if !defined(GL_EXT_gpu_shader4)
     #define flat
     #define noperspective
     #define smooth
+    #define centroid
 #endif
+#if !defined(GL_ARB_gpu_shader5)
+    #define sample
+    #define precise
+    #define fma(a,b,c) ((a) * (b) + (c))
+#endif
+#if !defined(GL_ES) && (__VERSION__) < 120
+    #define invariant
+#endif
+
+// type definitions
 #if !defined(GL_EXT_gpu_shader4)
     #define uint  int
     #define uvec2 ivec2
@@ -115,6 +128,7 @@
 // ****************************************************************
 #define PI    (3.1415926535897932384626433832795)
 #define EU    (2.7182818284590452353602874713527)
+#define GA    (2.3999632297286533222315555066336)
 #define SQRT2 (1.4142135623730950488016887242097)
 
 // light structure
@@ -140,10 +154,12 @@ struct coreLight
 #else
     #define coreMin3(a,b,c) (min(a, min(b, c)))
     #define coreMax3(a,b,c) (max(a, max(b, c)))
-    float   coreMed3(const in float a, const in float b, const in float c) {return max(min(max(a, b), c), min(a, b));}
-    vec2    coreMed3(const in vec2  a, const in vec2  b, const in vec2  c) {return max(min(max(a, b), c), min(a, b));}
-    vec3    coreMed3(const in vec3  a, const in vec3  b, const in vec3  c) {return max(min(max(a, b), c), min(a, b));}
-    vec4    coreMed3(const in vec4  a, const in vec4  b, const in vec4  c) {return max(min(max(a, b), c), min(a, b));}
+    #define _CORE_MED3(t) t coreMed3(const in t a, const in t b, const in t c) {return max(min(max(a, b), c), min(a, b));}
+        _CORE_MED3(float)
+        _CORE_MED3(vec2)
+        _CORE_MED3(vec3)
+        _CORE_MED3(vec4)
+    #undef _CORE_MED3
 #endif
 
 // condition across group of shader invocations
@@ -155,12 +171,20 @@ struct coreLight
     #define coreAllInvocations(x) (x)
 #endif
 
+// linear interpolation between 0.0 and 1.0
+#define _CORE_LINEAR_STEP(t) t coreLinearStep(const in float e0, const in float e1, const in t x) {return clamp((x - e0) / (e1 - e0), 0.0, 1.0);}
+    _CORE_LINEAR_STEP(float)
+    _CORE_LINEAR_STEP(vec2)
+    _CORE_LINEAR_STEP(vec3)
+    _CORE_LINEAR_STEP(vec4)
+#undef _CORE_LINEAR_STEP
+
 // color convert
-vec3 coreRgbToHsv(const in vec3 v3RGB)
+vec3 coreRgbToHsv(const in vec3 v3Rgb)
 {
-    float R = v3RGB.r;
-    float G = v3RGB.g;
-    float B = v3RGB.b;
+    float R = v3Rgb.r;
+    float G = v3Rgb.g;
+    float B = v3Rgb.b;
 
     float v = coreMax3(R, G, B);
     float d = v - coreMin3(R, G, B);
@@ -173,11 +197,11 @@ vec3 coreRgbToHsv(const in vec3 v3RGB)
     if(G == v) return vec3((2.0 + (B - R) / d) / 6.0, s, v);
                return vec3((4.0 + (R - G) / d) / 6.0, s, v);
 }
-vec3 coreHsvToRgb(const in vec3 v3HSV)
+vec3 coreHsvToRgb(const in vec3 v3Hsv)
 {
-    float H = v3HSV.x * 6.0;
-    float S = v3HSV.y;
-    float V = v3HSV.z;
+    float H = v3Hsv.x * 6.0;
+    float S = v3Hsv.y;
+    float V = v3Hsv.z;
 
     float h = floor(H);
 
@@ -192,45 +216,45 @@ vec3 coreHsvToRgb(const in vec3 v3HSV)
     if(h == 5.0) return vec3(V,     p,     V - t);
                  return vec3(V,     p + t, p);
 }
-vec3 coreRgbToYiq(const in vec3 v3RGB)
+vec3 coreRgbToYiq(const in vec3 v3Rgb)
 {
     return mat3(0.299,  0.587,  0.114,
                 0.596, -0.275, -0.321,
-                0.212, -0.523,  0.311) * v3RGB;
+                0.212, -0.523,  0.311) * v3Rgb;
 }
-vec3 coreYiqToRgb(const in vec3 v3YIQ)
+vec3 coreYiqToRgb(const in vec3 v3Yiq)
 {
     return mat3(1.000,  0.956,  0.620,
                 1.000, -0.272, -0.647,
-                1.000, -1.108,  1.705) * v3YIQ;
+                1.000, -1.108,  1.705) * v3Yiq;
 }
-vec3 coreRgbToYuv(const in vec3 v3RGB)
+vec3 coreRgbToYuv(const in vec3 v3Rgb)
 {
     return mat3( 0.21260,  0.71520,  0.07220,
                 -0.09991, -0.33609,  0.43600,
-                 0.61500, -0.55861, -0.05639) * v3RGB;
+                 0.61500, -0.55861, -0.05639) * v3Rgb;
 }
-vec3 coreYuvToRgb(const in vec3 v3YUV)
+vec3 coreYuvToRgb(const in vec3 v3Yuv)
 {
     return mat3(1.00000,  0.00000,  1.28033,
                 1.00000, -0.21482, -0.38059,
-                1.00000,  2.12798,  0.00000) * v3YUV;
+                1.00000,  2.12798,  0.00000) * v3Yuv;
 }
-vec3 coreRgbToYcbcr(const in vec3 v3RGB)
+vec3 coreRgbToYcbcr(const in vec3 v3Rgb)
 {
     return mat3( 0.299000,  0.587000,  0.114000,
                 -0.168736, -0.331264,  0.500000,
-                 0.500000, -0.418688, -0.081312) * v3RGB + vec3(0.0, 0.5, 0.5);
+                 0.500000, -0.418688, -0.081312) * v3Rgb + vec3(0.0, 0.5, 0.5);
 }
-vec3 coreYcbcrToRgb(const in vec3 v3YCbCr)
+vec3 coreYcbcrToRgb(const in vec3 v3Ycbcr)
 {
     return mat3(1.00000,  0.00000,  1.40200,
                 1.00000, -0.34414, -0.71414,
-                1.00000,  1.77200,  0.00000) * (v3YCbCr - vec3(0.0, 0.5, 0.5));
+                1.00000,  1.77200,  0.00000) * (v3Ycbcr - vec3(0.0, 0.5, 0.5));
 }
-float coreLuminance(const in vec3 v3RGB)
+float coreLuminance(const in vec3 v3Rgb)
 {
-    return dot(v3RGB, vec3(0.212671, 0.715160, 0.072169));
+    return dot(v3Rgb, vec3(0.212671, 0.715160, 0.072169));
 }
 
 // vector square length
@@ -268,6 +292,15 @@ vec3 coreQuatApply(const in vec4 q, const in vec3 v)
 }
 
 // matrix transpose
+mat2 coreTranspose(const in mat2 m)
+{
+#if (__VERSION__) >= 120
+    return transpose(m);
+#else
+    return mat2(m[0][0], m[1][0],
+                m[0][1], m[1][1]);
+#endif
+}
 mat3 coreTranspose(const in mat3 m)
 {
 #if (__VERSION__) >= 120
@@ -369,9 +402,6 @@ mat4 coreInvert(const in mat4 m)
     #endif
     }
 
-#else
-    #define corePackUnorm4x8(x)   (x)
-    #define coreUnpackUnorm4x8(x) (x)
 #endif
 
 
@@ -692,11 +722,13 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
 // recommended texture lookup
 #if (__VERSION__) >= 130
-    #define coreTexture2D(u,c)     (texture    (u_as2Texture2D    [u], c))
-    #define coreTextureShadow(u,c) (textureProj(u_as2TextureShadow[u], c))
+    #define coreTexture2D(u,c)     (texture      (u_as2Texture2D    [u], c))
+    #define coreTextureProj(u,c)   (textureProj  (u_as2Texture2D    [u], c))
+    #define coreTextureShadow(u,c) (textureProj  (u_as2TextureShadow[u], c))
 #else
-    #define coreTexture2D(u,c)     (texture2D   (u_as2Texture2D    [u], c))
-    #define coreTextureShadow(u,c) (shadow2DProj(u_as2TextureShadow[u], c).r)
+    #define coreTexture2D(u,c)     (texture2D    (u_as2Texture2D    [u], c))
+    #define coreTextureProj(u,c)   (texture2DProj(u_as2Texture2D    [u], c))
+    #define coreTextureShadow(u,c) (shadow2DProj (u_as2TextureShadow[u], c).r)
 #endif
 
 
