@@ -23,8 +23,8 @@ Licensed under CC BY (<https://creativecommons.org/licenses/by/3.0/>)
 #
 
 [![screenshot](material/dr_youtube.jpg?raw=true)](https://www.youtube.com/watch?v=mwvx5O8c-mQ)
-[![screenshot](material/screenshots/dr_screen_android_006t.jpg?raw=true)](material/screenshots/dr_screen_android_006.jpg?raw=true)
-[![screenshot](material/screenshots/dr_screen_android_007t.jpg?raw=true)](material/screenshots/dr_screen_android_007.jpg?raw=true)
-[![screenshot](material/screenshots/dr_screen_android_008t.jpg?raw=true)](material/screenshots/dr_screen_android_008.jpg?raw=true)
-[![screenshot](material/screenshots/dr_screen_android_009t.jpg?raw=true)](material/screenshots/dr_screen_android_009.jpg?raw=true)
-[![screenshot](material/screenshots/dr_screen_android_010t.jpg?raw=true)](material/screenshots/dr_screen_android_010.jpg?raw=true)
+[![screenshot](material/screenshots/dr_screen_new_006t.jpg?raw=true)](material/screenshots/dr_screen_new_006.jpg?raw=true)
+[![screenshot](material/screenshots/dr_screen_new_007t.jpg?raw=true)](material/screenshots/dr_screen_new_007.jpg?raw=true)
+[![screenshot](material/screenshots/dr_screen_new_008t.jpg?raw=true)](material/screenshots/dr_screen_new_008.jpg?raw=true)
+[![screenshot](material/screenshots/dr_screen_new_009t.jpg?raw=true)](material/screenshots/dr_screen_new_009.jpg?raw=true)
+[![screenshot](material/screenshots/dr_screen_new_010t.jpg?raw=true)](material/screenshots/dr_screen_new_010.jpg?raw=true)
