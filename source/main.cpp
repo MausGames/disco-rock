@@ -311,7 +311,7 @@ void CoreApp::Move()
         if(g_pMusicPlayer->Update())
         {
             // update music volume
-            g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f));
+            g_pMusicPlayer->Control()->SetVolume((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
     }
     Core::Debug->MeasureEnd("Move");

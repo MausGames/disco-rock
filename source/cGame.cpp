@@ -338,7 +338,7 @@ void cGame::Move()
                 ++m_iCollectedTraps;
 
                 // play trap sound effect and show message
-                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f, 0.05f, false, m_Rock.GetPosition());
+                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, m_Rock.GetPosition());
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
 
                 // reset combo timer (a little bit more than a beverage)

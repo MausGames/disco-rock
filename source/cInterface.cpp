@@ -369,8 +369,8 @@ void cInterface::InteractControl()
     // forward overlay interaction (increased button range)
     m_aOverlay[0].Interact();
     m_aOverlay[1].Interact();
-    m_MoveLeft .SetFocus(m_MoveLeft .IsFocused() || m_aOverlay[0].IsFocused());
-    m_MoveRight.SetFocus(m_MoveRight.IsFocused() || m_aOverlay[1].IsFocused());
+    m_MoveLeft .SetFocused(m_MoveLeft .IsFocused() || m_aOverlay[0].IsFocused());
+    m_MoveRight.SetFocused(m_MoveRight.IsFocused() || m_aOverlay[1].IsFocused());
 }
 
 
