@@ -151,7 +151,7 @@ void cRock::Move()
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
-        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f), 0.05f, false, this->GetPosition());
+        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
 
         if(m_fForce < -8.0f)
         {
@@ -211,13 +211,13 @@ void cRock::Move()
 
          if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0u).x < 0.0f                          ||
-            Core::Input->GetJoystickRelative(1u).x < 0.0f) fNewPos -= fMove;
+            Core::Input->GetJoystickRelativeL(0u).x < 0.0f                         ||
+            Core::Input->GetJoystickRelativeL(1u).x < 0.0f) fNewPos -= fMove;
 
     else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(D),     CORE_INPUT_HOLD) ||
             Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelative(0u).x > 0.0f                          ||
-            Core::Input->GetJoystickRelative(1u).x > 0.0f) fNewPos += fMove;
+            Core::Input->GetJoystickRelativeL(0u).x > 0.0f                         ||
+            Core::Input->GetJoystickRelativeL(1u).x > 0.0f) fNewPos += fMove;
 
 #endif
 
@@ -311,7 +311,7 @@ coreBool cRock::Jump(const coreFloat fForce)
     if(g_pBackground->GetHeight(this->GetPosition().xy()) > 0.0f) ++m_iNumAirJumps;
 
     // play jump sound-effect and start big wave animation
-    m_pUp->PlayPosition(NULL, 0.4f, 1.8f, 0.05f, false, this->GetPosition());
+    m_pUp->PlayPosition(NULL, 0.4f, 1.8f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
     m_WaveTimer.Play(CORE_TIMER_PLAY_RESET);
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 
@@ -335,7 +335,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition());
 
         // throw up some dust
         m_Effect.CreateParticle(14u, [this](coreParticle* pParticle)
@@ -364,7 +364,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalized());
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, 0.0f, false, this->GetPosition());
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition());
 
         // define smoke color
         const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
@@ -382,7 +382,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
     else
     {
         // play sound-effect
-        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, 0.0f, false, this->GetPosition());
+        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, 0u, this->GetPosition());
 
         // throw up some dust
         m_Effect.CreateParticle(22u, [this](coreParticle* pParticle)

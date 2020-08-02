@@ -65,9 +65,9 @@
     #endif
 #endif
 #if defined(GL_ARB_enhanced_layouts)
-    #define align(x) layout(align = x)
+    #define layoutEx(x) layout(x)
 #else
-    #define align(x)
+    #define layoutEx(x)
 #endif
 
 // compatibility adjustments
@@ -128,6 +128,7 @@
 // ****************************************************************
 #define PI    (3.1415926535897932384626433832795)
 #define EU    (2.7182818284590452353602874713527)
+#define GR    (1.6180339887498948482045868343656)
 #define GA    (2.3999632297286533222315555066336)
 #define SQRT2 (1.4142135623730950488016887242097)
 
@@ -166,6 +167,9 @@ struct coreLight
 #if defined(GL_ARB_shader_group_vote)
     #define coreAnyInvocation(x)  (anyInvocationARB (x))
     #define coreAllInvocations(x) (allInvocationsARB(x))
+#elif defined(GL_NV_gpu_shader5)
+    #define coreAnyInvocation(x)  (anyThreadNV (x))
+    #define coreAllInvocations(x) (allThreadsNV(x))
 #else
     #define coreAnyInvocation(x)  (x)
     #define coreAllInvocations(x) (x)
@@ -411,18 +415,18 @@ mat4 coreInvert(const in mat4 m)
     // transformation uniforms
     layout(std140) uniform b_Transform
     {
-        align(16) mat4 u_m4ViewProj;
-        align(16) mat4 u_m4Camera;
-        align(16) mat4 u_m4Perspective;
-        align(16) mat4 u_m4Ortho;
-        align(16) vec4 u_v4Resolution;
-        align(16) vec3 u_v3CamPosition;
+        layoutEx(align = 16) mat4 u_m4ViewProj;
+        layoutEx(align = 16) mat4 u_m4Camera;
+        layoutEx(align = 16) mat4 u_m4Perspective;
+        layoutEx(align = 16) mat4 u_m4Ortho;
+        layoutEx(align = 16) vec4 u_v4Resolution;
+        layoutEx(align = 16) vec3 u_v3CamPosition;
     };
 
     // ambient uniforms
     layout(std140) uniform b_Ambient
     {
-        align(16) coreLight u_aLight[CORE_NUM_LIGHTS];
+        layoutEx(align = 16) coreLight u_aLight[CORE_NUM_LIGHTS];
     };
 
 #else
@@ -719,6 +723,19 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
     }
 
 #endif // _CORE_VERTEX_SHADER_
+
+#if defined(_CORE_FRAGMENT_SHADER_)
+
+    // GGX specular function
+    float coreGGX(const in float v1Dot, const in float v1Rough)
+    {
+        float v1DotSq   = v1Dot   * v1Dot;
+        float v1RoughSq = v1Rough * v1Rough;
+        float v1Value   = 1.0 + v1DotSq * (v1RoughSq - 1.0);
+        return v1RoughSq / (PI * v1Value * v1Value);
+    }
+
+#endif // _CORE_FRAGMENT_SHADER_
 
 // recommended texture lookup
 #if (__VERSION__) >= 130

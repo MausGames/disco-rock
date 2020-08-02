@@ -52,7 +52,7 @@ public:
     inline void Destroy(const coreVector3& vFlyImpact) {m_pDestroy.Play(CORE_TIMER_PLAY_RESET); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
 
     // play a completely shitty glass clinking sound effect
-    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch, 0.05f, false, this->GetPosition());}
+    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());}
 
     // get object properties
     inline  coreUint32  GetScore   ()const {return m_iScore;}

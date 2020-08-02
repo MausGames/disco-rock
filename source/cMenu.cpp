@@ -1006,7 +1006,7 @@ void cMenu::Move()
         {
             // enter pause menu
             g_bPause = true;
-            g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 0.5f);
+            g_pMusicPlayer->Control()->SetVolume(0.5f);
             this->ChangeSurface(11u, 0.0f);
             m_ScoreMenu.ChangeSurface(4, 0.0f);
             Core::Input->ShowCursor(true);
@@ -1021,7 +1021,7 @@ void cMenu::Move()
                     if(g_pGame->GetChallenge() || (g_pGame->GetTime() < 10.0f)) this->End();
                     else
                     {
-                        g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 0.5f);
+                        g_pMusicPlayer->Control()->SetVolume(0.5f);
 
                         // reduce speed
                         g_fTargetSpeed = GAME_SPEED_SLOW;
@@ -1126,7 +1126,7 @@ void cMenu::Move()
     else if(this->GetCurSurface() == 7u)
     {
         // check for exit question
-        m_Exit.SetFocus(true);
+        m_Exit.SetFocused(true);
         if(m_Yes.IsClicked())
         {
             // exit the application
@@ -1153,7 +1153,7 @@ void cMenu::Move()
         {
             // resume current game
             g_bPause = false;
-            g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 1.0f);
+            g_pMusicPlayer->Control()->SetVolume(1.0f);
             this->ChangeSurface(10u, 0.0f);
             Core::Input->ClearMouseButton(1u);
             Core::Input->ShowCursor(false);
@@ -1170,7 +1170,7 @@ void cMenu::Move()
     else if(this->GetCurSurface() == 12u)
     {
         // check for abort question
-        m_Abort.SetFocus(true);
+        m_Abort.SetFocused(true);
         if(m_Yes.IsClicked())
         {
             // exit the current game
@@ -1206,8 +1206,8 @@ void cMenu::Move()
                     // open login window
                     this->ChangeSurface(this->GetCurSurface() + 2u, 5.0f);
                     m_LoginMenu  .ChangeSurface(1u, 0.0f);
-                    m_LoginOK    .SetFocus(false);
-                    m_LoginCancel.SetFocus(false);
+                    m_LoginOK    .SetFocused(false);
+                    m_LoginCancel.SetFocused(false);
                     m_LoginError .SetText(LOGIN_START);
                     if(!m_LoginGuest.GetText()[0]) m_LoginGuest.SetInput(true);
 
@@ -1236,7 +1236,7 @@ void cMenu::Move()
     else if(this->GetCurSurface() == 15u)
     {
         // check for finish question
-        m_Finish.SetFocus(true);
+        m_Finish.SetFocused(true);
         if(m_Yes.IsClicked())
         {
             // finish the game
@@ -1463,7 +1463,7 @@ void cMenu::Move()
             // set volume
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fVolume * 10.0f);
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fVolume * 0.7f);
-            g_pMusicPlayer->Control()->SetVolume(fVolume * ((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.35f : 0.7f));
+            g_pMusicPlayer->Control()->SetVolume((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
 
         if(m_LoginConfigStart.IsClicked())
@@ -1484,8 +1484,8 @@ void cMenu::Move()
                 // open login window
                 this->ChangeSurface(this->GetCurSurface() + 2u, 5.0f);
                 m_LoginMenu  .ChangeSurface(0u, 0.0f);
-                m_LoginOK    .SetFocus(false);
-                m_LoginCancel.SetFocus(false);
+                m_LoginOK    .SetFocused(false);
+                m_LoginCancel.SetFocused(false);
                 m_LoginError .SetText(LOGIN_START);
                      if(!m_LoginName.GetText ()[0]) m_LoginName.SetInput(true);
                 else if(!m_LoginToken.GetText()[0]) m_LoginToken.SetInput(true);
@@ -1717,7 +1717,7 @@ void cMenu::End()
     // reset pause and menu status
     g_bPause  = false;
     m_iStatus = 2;
-    g_pMusicPlayer->Control()->SetVolume(Core::Config->GetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME) * 1.0f);
+    g_pMusicPlayer->Control()->SetVolume(1.0f);
     Core::Input->ShowCursor(true);
 
     // reset record notification
@@ -1729,7 +1729,7 @@ void cMenu::End()
     m_ScoreMenu.ChangeSurface(0u, 0.0f);
     m_White .SetAlpha(1.0f);
     m_Black .SetAlpha(0.0f);
-    m_Finish.SetFocus(false);
+    m_Finish.SetFocused(false);
 
     // play sound-effect
     this->PlayFlashSound();
