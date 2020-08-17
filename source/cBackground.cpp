@@ -37,8 +37,9 @@ cBackground::cBackground()noexcept
     // create filling background
     m_Fill.DefineTexture(0u, "background.png");
     m_Fill.DefineProgram("fill_program");
-    m_Fill.FitToScreen();
-    m_Fill.SetTexSize(m_Fill.GetSize()*7.2f);
+
+    // reset filling background
+    this->ResetResolution();
 }
 
 
@@ -136,6 +137,16 @@ void cBackground::Move()
 
     // move the object
     this->coreObject3D::Move();
+}
+
+
+// ****************************************************************
+// reset fullscreen-objects after resolution changes
+void cBackground::ResetResolution()
+{
+    // reset filling background
+    m_Fill.FitToScreen();
+    m_Fill.SetTexSize(m_Fill.GetSize() * 7.2f);
 }
 
 
