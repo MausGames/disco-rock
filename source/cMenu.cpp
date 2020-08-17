@@ -53,11 +53,8 @@ cMenu::cMenu()noexcept
     // create background objects
     m_Black.DefineProgram("2d_color_program");
     m_Black.SetColor3    (coreVector3(0.0f,0.0f,0.0f));
-    m_Black.FitToScreen();
 
     m_White.DefineProgram("2d_color_program");
-    m_White.FitToScreen();
-    m_White.Move();
 
     m_BackgroundLeft.DefineProgram("2d_border_program");
     m_BackgroundLeft.SetPosition  (coreVector2(0.15f,0.0f));
@@ -281,27 +278,22 @@ cMenu::cMenu()noexcept
     // create question objects
     m_QuestionBlack.DefineProgram("2d_color_program");
     m_QuestionBlack.SetColor3    (coreVector3(0.0f,0.0f,0.0f));
-    m_QuestionBlack.FitToScreen();
-    m_QuestionBlack.Move();
 
     m_Question.Construct  (FONT_ROCKS, bBitTooSmall ? 35u : 45u, OUTLINE_SIZE);
     m_Question.SetPosition(coreVector2(0.0f,0.08f));
     m_Question.SetText    ("Do you want to go out with me?");
-    m_Question.Move();
 
     m_Yes.Construct       ("button_ok.png", "button_ok.png");
     m_Yes.SetPosition     (coreVector2(-0.2f,-0.08f));
     m_Yes.SetSize         (coreVector2(0.075f,0.075f));
     m_Yes.SetColor3       (LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.25f));
     m_Yes.SetFocusModifier(coreVector2(1.2f,1.2f));
-    m_Yes.Move();
 
     m_No.Construct       ("button_cancel.png", "button_cancel.png");
     m_No.SetPosition     (coreVector2(0.2f,-0.08f));
     m_No.SetSize         (m_Yes.GetSize());
     m_No.SetColor3       (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.25f));
     m_No.SetFocusModifier(coreVector2(1.2f,1.2f));
-    m_No.Move();
 
     // create video configuration objects
     m_VideoText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE);
@@ -450,8 +442,6 @@ cMenu::cMenu()noexcept
     // create login objects
     m_LoginBlack.DefineProgram("2d_color_program");
     m_LoginBlack.SetColor3    (coreVector3(0.0f,0.0f,0.0f));
-    m_LoginBlack.FitToScreen();
-    m_LoginBlack.Move();
 
     m_LoginPopup.DefineProgram("2d_border_program");
     m_LoginPopup.SetPosition  (coreVector2(0.0f,0.25f));
@@ -737,6 +727,9 @@ cMenu::cMenu()noexcept
 
 #endif
 
+    // reset fullscreen-objects
+    this->ResetResolution();
+
     // main menu
     // 0  black
     // 1  intro logos
@@ -791,12 +784,16 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_ButtonTime);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopBatteryBolt);
         this->BindObject(i, &m_TopBatteryValue);
+#endif
         this->BindObject(i, &m_TopFPSTacho);
         this->BindObject(i, &m_TopFPSSec);
         this->BindObject(i, &m_TopFPSMil);
+#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
+#endif
         this->BindObject(i, &m_BottomInfo);
         this->BindObject(i, &m_BottomCredit);
         this->BindObject(i, &m_BottomLoginJolt);
@@ -826,12 +823,16 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_Short);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopBatteryBolt);
         this->BindObject(i, &m_TopBatteryValue);
+#endif
         this->BindObject(i, &m_TopFPSTacho);
         this->BindObject(i, &m_TopFPSSec);
         this->BindObject(i, &m_TopFPSMil);
+#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
+#endif
         this->BindObject(i, &m_BottomLoginJolt);
         this->BindObject(i, &m_BottomLoginName);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
@@ -866,12 +867,16 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_ButtonTime);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
+#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopBatteryBolt);
         this->BindObject(i, &m_TopBatteryValue);
+#endif
         this->BindObject(i, &m_TopFPSTacho);
         this->BindObject(i, &m_TopFPSSec);
         this->BindObject(i, &m_TopFPSMil);
+#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
+#endif
         this->BindObject(i, &m_BottomLoginJolt);
         this->BindObject(i, &m_BottomLoginName);
 #if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
@@ -900,12 +905,16 @@ cMenu::cMenu()noexcept
         m_ScoreMenu.BindObject(i, &m_aScoreBest     [i]);
         m_ScoreMenu.BindObject(i, &m_aScoreBestValue[i]);
         m_ScoreMenu.BindObject(i, &m_aScoreRecord   [i]);
+#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
         m_ScoreMenu.BindObject(i, &m_aScoreRank     [i]);
+#endif
 
         for(coreUintW j = 0u; j < 3u; ++j)
             m_ScoreMenu.BindObject(i, &m_aConnectionError[j]);
+#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
         m_ScoreMenu.BindObject(i, &m_AuthLogo);
         m_ScoreMenu.BindObject(i, &m_AuthButton);
+#endif
         m_ScoreMenu.BindObject(i, &m_Loading);
         m_ScoreMenu.BindObject(i, &m_PageChange);
     }
@@ -1279,11 +1288,11 @@ void cMenu::Move()
     m_BackgroundLeft .SetAlpha(m_BackgroundLeft .GetAlpha() * MENU_ALPHA_ACTIVE_1);
     m_BackgroundRight.SetAlpha(m_BackgroundRight.GetAlpha() * MENU_ALPHA_ACTIVE_1);
     if(this->GetCurSurface() >= 10u && this->GetCurSurface() <= 16u) m_Black        .SetAlpha(m_Black        .GetAlpha() * 0.5f);
-    if(this->GetCurSurface() >= 6u  && this->GetCurSurface() <= 15u) m_QuestionBlack.SetAlpha(m_QuestionBlack.GetAlpha() * 0.75f);
+    if(this->GetCurSurface() >= 6u  && this->GetCurSurface() <= 15u) m_QuestionBlack.SetAlpha(m_QuestionBlack.GetAlpha() * 0.9f);
     if(this->GetCurSurface() >= 6u  && this->GetCurSurface() <= 16u)
     {
         m_LoginPopup.SetAlpha(m_LoginPopup.GetAlpha() * MENU_ALPHA_ACTIVE_1);
-        m_LoginBlack.SetAlpha(m_LoginBlack.GetAlpha() * 0.75f);
+        m_LoginBlack.SetAlpha(m_LoginBlack.GetAlpha() * 0.9f);
     }
 
     // set transparency of main menu buttons
@@ -1760,6 +1769,18 @@ void cMenu::ResetShaders()
     // force immediate resource update
     glFinish();
     Core::Manager::Resource->UpdateResources();
+}
+
+
+// ****************************************************************
+// reset fullscreen-objects after resolution changes
+void cMenu::ResetResolution()
+{
+    // reset fullscreen-objects
+    m_Black        .FitToScreen();
+    m_White        .FitToScreen();
+    m_QuestionBlack.FitToScreen();
+    m_LoginBlack   .FitToScreen();
 }
 
 

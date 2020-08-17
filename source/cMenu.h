@@ -210,6 +210,9 @@ public:
     // reset all relevant shaders after quality changes
     void ResetShaders();
 
+    // reset fullscreen-objects after resolution changes
+    void ResetResolution();
+
     // control notification for new record
     void NewRecord(const coreUintW iIndex);
     void ResetRecord();

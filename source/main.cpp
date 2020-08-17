@@ -229,6 +229,14 @@ void CoreApp::Render()
 // move the application
 void CoreApp::Move()
 {
+    if(Core::System->GetWinSizeChanged())
+    {
+        // resize game after resolution changes
+        g_pBackground->ResetResolution();
+        g_pMenu      ->ResetResolution();
+        Core::Reshape();
+    }
+
     if(g_pFirst)
     {
         // move first-time menu

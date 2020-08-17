@@ -80,6 +80,9 @@ public:
     void Render()final;
     void Move  ()final;
 
+    // reset fullscreen-objects after resolution changes
+    void ResetResolution();
+
     // make or remove holes, get current horizon line, do other fancy stuff
     void UpdateHoles(const coreUintW iLine, const coreBool* pbIndex);
     inline coreInt32 GetCurLine()const                          {return F_TO_SI(m_fPositionTime);}
