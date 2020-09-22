@@ -233,7 +233,7 @@ cMenu::cMenu()noexcept
     m_BottomInfo.SetPosition (coreVector2(0.01333f,0.00933f));
     m_BottomInfo.SetCenter   (coreVector2(-0.5f,-0.5f));
     m_BottomInfo.SetAlignment(coreVector2(1.0f,1.0f));
-    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.3 - %s %.5s", __DATE__, __TIME__)));
+    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.3.0 - %s %.5s", __DATE__, __TIME__)));
 
     m_BottomCredit.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_BottomCredit.SetPosition (coreVector2(-0.01333f,0.00933f));
