@@ -222,7 +222,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(SolutionDir)manifest.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
@@ -252,7 +252,7 @@
       <TreatLinkerWarningAsErrors>true</TreatLinkerWarningAsErrors>
     </Link>
     <Manifest>
-      <AdditionalManifestFiles>$(SolutionDir)manifest.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
@@ -294,7 +294,7 @@
       <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
-      <AdditionalManifestFiles>$(SolutionDir)manifest.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
@@ -335,7 +335,7 @@
       <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
-      <AdditionalManifestFiles>$(SolutionDir)manifest.xml</AdditionalManifestFiles>
+      <AdditionalManifestFiles>manifest.xml</AdditionalManifestFiles>
     </Manifest>
     <ProjectReference>
       <UseLibraryDependencyInputs>true</UseLibraryDependencyInputs>
