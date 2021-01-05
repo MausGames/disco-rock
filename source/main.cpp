@@ -120,7 +120,7 @@ void CoreApp::Init()
         Core::Config->SetInt("Graphics", "Quality", 2);
 
         // also create and show first-time menu
-        if(DEFINED(_CORE_ANDROID_)) g_pFirst = new cFirst();
+        if(DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_)) g_pFirst = new cFirst();
     }
 
     // create main components

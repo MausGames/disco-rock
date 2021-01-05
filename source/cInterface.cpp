@@ -69,7 +69,7 @@ cInterface::cInterface()noexcept
     m_ComboBar.SetAlignment (coreVector2(0.0f, 1.0f));
     m_ComboBar.SetColor3    (COLOR_BLUE_F);
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // create touch controls
     m_MoveLeft.Construct       ("button_move.png", "button_move.png");
@@ -108,6 +108,7 @@ cInterface::cInterface()noexcept
         m_aOverlay[i].SetSize     (coreVector2(i ? 0.2f  :  0.145f,  0.3f));
         m_aOverlay[i].SetCenter   (coreVector2(-0.5f, 0.5f));
         m_aOverlay[i].SetAlignment(coreVector2( 1.0f,-1.0f));
+        m_aOverlay[i].SetFocusable(true);
         m_aOverlay[i].Move();
     }
 
@@ -142,7 +143,7 @@ void cInterface::Render()
         m_ComboBar  .Render();
     }
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // render touch objects separately
     this->RenderTouch();
@@ -184,7 +185,7 @@ void cInterface::Move()
     m_ComboBar.SetAlpha(fAlpha);
     m_ComboBar.Move();
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // display jump status
     m_Jump.SetColor3(g_pGame->GetRock()->GetJumped() ? LERP(COLOR_BLUE_F, COLOR_WHITE_F, 0.25f) : COLOR_WHITE_F);
@@ -254,7 +255,7 @@ void cInterface::Update(const coreFloat fScore, const coreFloat fTime, const cor
 }
 
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************

@@ -19,7 +19,7 @@
 #define GAME_SPEED_SLOW      (1.5f)     // initial speed after starting a new game
 #define GAME_SPEED_FAST_REAL (2.2f)     // speed after the first shock-wave (baseline)
 
-#if defined(_CORE_ANDROID_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
     #define GAME_SPEED_FAST  (1.9f)     // speed after the first shock-wave (real value)
     #define GAME_SCORE_TIME  (12.5f)    // modifier for score over time
     #define GAME_COOLA_RATE  (95u)      // number of lines between 2 successive Coola bottles (smaller = more often)

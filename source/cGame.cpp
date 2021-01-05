@@ -407,7 +407,7 @@ void cGame::Move()
 
         // check for achievements/trophies/whatever
         if(m_iFirstJump == 1u && m_Rock.GetJumped())                       {this->AchieveTrophy(GJ_TROPHY_01,  0);}
-        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5u && !DEFINED(_CORE_ANDROID_)) coreData::OpenURL(Core::Rand->Int(1) ? "https://images.search.yahoo.com/search/images?p=facepalm" : "https://www.google.com/search?q=facepalm&tbm=isch");}
+        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5u && !DEFINED(_CORE_MOBILE_)) coreData::OpenURL("https://duckduckgo.com/?q=facepalm");}
         if(m_Rock.GetFallen() && m_bTrapJump)                              {this->AchieveTrophy(GJ_TROPHY_03,  2);}
         if(m_Rock.GetFallen() && m_PowerUpTimer.GetStatus())               {this->AchieveTrophy(GJ_TROPHY_04,  3);}
         if(m_fComboTime >= 20.0f)                                          {this->AchieveTrophy(GJ_TROPHY_06,  5);}
@@ -572,7 +572,7 @@ void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 
             // show achievement title and play sound
             g_pCombatText->ShowTrophy(coreData::StrUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
-            m_pTrophySound->PlayRelative(NULL, 0.09f, 1.0f, 0.0f, false);
+            m_pTrophySound->PlayRelative(NULL, 0.09f, 1.0f, false, 0u);
 
             // set and save current trophy status
             g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | BIT(iNum));

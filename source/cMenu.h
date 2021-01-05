@@ -23,9 +23,9 @@
 #define MENU_ALPHA_IDLE_2   (0.95f)
 
 // values for menu object adjustments
-#define ADJUST_LEFT(x)   {x.SetCenter(coreVector2(-0.5f,0.0f)); x.SetAlignment(coreVector2( 1.0f,0.0f));}
-#define ADJUST_RIGHT(x)  {x.SetCenter(coreVector2( 0.5f,0.0f)); x.SetAlignment(coreVector2(-1.0f,0.0f));}
-#define ADJUST_BORDER(x) {x.SetTexSize(coreVector2(0.62f,0.62f) / x.GetSize() * 0.0165f);}
+#define ADJUST_LEFT(x)   {(x).SetCenter(coreVector2(-0.5f,0.0f)); (x).SetAlignment(coreVector2( 1.0f,0.0f));}
+#define ADJUST_RIGHT(x)  {(x).SetCenter(coreVector2( 0.5f,0.0f)); (x).SetAlignment(coreVector2(-1.0f,0.0f));}
+#define ADJUST_BORDER(x) {(x).SetTexSize(coreVector2(0.62f,0.62f) / (x).GetSize() * 0.0165f);}
 
 // macro function for changing object transparency
 #define ALPHA_BUTTON_TEXT(b)                                                                                                   \
@@ -91,19 +91,12 @@ private:
     coreButton m_ButtonTrophy;
     coreButton m_ButtonConfig;
 
-    coreObject2D m_TopBatteryBolt;
-    coreLabel    m_TopBatteryValue;
-    coreObject2D m_TopFPSTacho;
-    coreLabel    m_TopFPSSec;
-    coreLabel    m_TopFPSMil;
+    coreLabel m_TopUpdating;
 
     coreLabel    m_BottomInfo;
     coreLabel    m_BottomCredit;
     coreLabel    m_BottomLoginName;
     coreObject2D m_BottomLoginJolt;
-
-    coreButton m_GoogleFullTrophy;
-    coreButton m_GoogleFullScore;
 
     coreObject2D m_QuestionBlack;
     coreLabel    m_Question;
@@ -146,7 +139,6 @@ private:
     coreButton   m_LoginJoltStart;
 
     coreObject2D m_Successful;
-    coreLabel    m_TopUpdating;
 
     coreLabel  m_aScoreTable    [SCORE_TABLES];
     coreLabel  m_aaScoreEntry   [SCORE_TABLES][SCORE_ENTRIES][3];
@@ -167,9 +159,6 @@ private:
     coreLabel    m_TrophyName;
     coreLabel    m_aTrophyDesc[2];
 
-    coreLabel    m_aConnectionError[3];
-    coreObject2D m_AuthLogo;
-    coreButton   m_AuthButton;
     coreObject2D m_Loading;
 
     coreMenu m_ScoreMenu;
@@ -192,8 +181,7 @@ private:
     coreUint32 m_iTrophyStatus;                             // achieve-status of all trophies (per bit)
     coreInt8   m_iTrophyCurrent;                            // current selected trophy
 
-    coreInt32 m_aiPower[2];                                 // current battery status
-    coreBool  m_bFromGuest;                                 // login-menu has to go back to guest-login on cancel
+    coreBool m_bFromGuest;                                  // login-menu has to go back to guest-login on cancel
 
 
 public:
@@ -217,17 +205,14 @@ public:
     void NewRecord(const coreUintW iIndex);
     void ResetRecord();
 
-    // control connection error notification
-    void SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3);
-
     // update current control type
     inline void UpdateControl() {m_ControlType.SelectIndex(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
 
     // play sound-effects
-    inline void PlayClickSound()  {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, 0.0f, false);}
-    inline void PlayHappySound()  {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, 0.0f, false);}
-    inline void PlayRecordSound() {m_pRecordSound->PlayRelative(NULL, 0.15f, 1.0f, 0.0f, false);}
-    inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, 0.0f, false);}
+    inline void PlayClickSound()  {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
+    inline void PlayHappySound()  {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
+    inline void PlayRecordSound() {m_pRecordSound->PlayRelative(NULL, 0.15f, 1.0f, false, 0u);}
+    inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, false, 0u);}
 
     // invoke score table update
     inline void InvokeScoreUpdate(const coreUintW iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}

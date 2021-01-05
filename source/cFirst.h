@@ -10,7 +10,7 @@
 #ifndef _DR_GUARD_FIRST_H_
 #define _DR_GUARD_FIRST_H_
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************
@@ -43,6 +43,6 @@ public:
 typedef coreObject2D cFirst;
 
 
-#endif // _CORE_ANDROID_ || _CORE_DEBUG_ || _DR_EMULATE_MOBILE_
+#endif // _CORE_MOBILE_ || _DR_EMULATE_MOBILE_
 
 #endif // _DR_GUARD_FIRST_H_

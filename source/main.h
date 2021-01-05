@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////////
 //*----------------------------------------------------------------------------*//
-//| Disco Rock v1.3.0 (https://www.maus-games.at)                              |//
+//| Disco Rock v1.5.0 (https://www.maus-games.at)                              |//
 //*----------------------------------------------------------------------------*//
 //| Copyright (c) 2013 Martin Mauersics                                        |//
 //|                                                                            |//
@@ -31,13 +31,16 @@
 // ****************************************************************
 // engine headers
 #include "Core.h"
-#include <deque>
+
+#if defined(_CORE_DEBUG_)
+    //#define _DR_EMULATE_MOBILE_
+#endif
+#if !defined(_CORE_MOBILE_) && !defined(_DR_EMULATE_MOBILE_)
+    #define _DR_API_GAMEJOLT_
+#endif
 
 #if defined(_CORE_MSVC_)
     #pragma warning(disable : 4127)   // constant conditional expression
-#endif
-#if !defined(_CORE_ANDROID_)
-     //#define _DR_EMULATE_MOBILE_ (1)
 #endif
 
 
@@ -67,31 +70,37 @@ static constexpr coreVector3 g_avColor[] =
 };
 #define COLOR_NUM ARRAY_SIZE(g_avColor)
 
-#define CONTROL_CLASSIC    (0u)
-#define CONTROL_MOTION     (1u)
-#define CONTROL_FULLSCREEN (2u)
+enum eControl : coreUint8
+{
+    CONTROL_CLASSIC = 0u,
+    CONTROL_MOTION,
+    CONTROL_FULLSCREEN
+};
 
-#define STAGE_DIAMOND      (0u)
-#define STAGE_QUAD         (1u)
-#define STAGE_ZIGZAG       (2u)
-#define STAGE_CONCAVE      (3u)
-#define STAGE_NET          (4u)
-#define STAGE_JUMP         (5u)
-#define STAGE_CHOICE       (6u)
-#define STAGE_SHADING      (7u)
-#define STAGE_SIDE         (8u)
-#define STAGE_TRAP         (9u)
-#define STAGE_PREVENT      (10u)
-#define STAGE_BONUS        (11u)
-#define STAGE_MIDDLE       (12u)
-#define STAGE_LINES        (13u)
-#define STAGE_GATEWAY      (14u)
-#define STAGE_CHEESE       (15u)
-#define STAGE_CANYON       (16u)
-#define STAGE_DOUBLE       (17u)
-#define STAGE_RAILS        (18u)
-#define STAGE_SLALOM       (19u)
-#define STAGE_TOTAL_NUM    (20u)   // total number of game stages
+enum eStage : coreUint8
+{
+    STAGE_DIAMOND = 0u,
+    STAGE_QUAD,
+    STAGE_ZIGZAG,
+    STAGE_CONCAVE,
+    STAGE_NET,
+    STAGE_JUMP,
+    STAGE_CHOICE,
+    STAGE_SHADING,
+    STAGE_SIDE,
+    STAGE_TRAP,
+    STAGE_PREVENT,
+    STAGE_BONUS,
+    STAGE_MIDDLE,
+    STAGE_LINES,
+    STAGE_GATEWAY,
+    STAGE_CHEESE,
+    STAGE_CANYON,
+    STAGE_DOUBLE,
+    STAGE_RAILS,
+    STAGE_SLALOM,
+    STAGE_TOTAL_NUM   // total number of game stages
+};
 
 
 // ****************************************************************
