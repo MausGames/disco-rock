@@ -64,10 +64,7 @@
 class cMenu final : public coreMenu
 {
 private:
-    coreLabel    m_Made;
-    coreLabel    m_For;
-    coreObject2D m_Maus;
-    coreObject2D m_GameJolt;
+    coreObject2D m_MausLogo;
     coreObject2D m_BigLogo;
 
     coreObject2D m_Black;

@@ -27,23 +27,10 @@ cMenu::cMenu()noexcept
     STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS)
 
     // create intro objects
-    m_Made.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE);
-    m_Made.SetPosition(coreVector2(0.0f,0.176f));
-    m_Made.SetText    ("MADE BY");
-
-    m_For.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE);
-    m_For.SetPosition(coreVector2(0.0f,-0.06667f));
-    m_For.SetText    ("FOR");
-
-    m_Maus.DefineTexture(0u, "maus_logo.png");
-    m_Maus.DefineProgram("2d_simple_program");
-    m_Maus.SetPosition  (coreVector2(0.0f,0.13333f));
-    m_Maus.SetSize      (coreVector2(0.512f,0.256f) * 0.93333f);
-
-    m_GameJolt.DefineTexture(0u, "gamejolt_logo.png");
-    m_GameJolt.DefineProgram("2d_simple_program");
-    m_GameJolt.SetPosition  (coreVector2(0.0f,-0.13333f));
-    m_GameJolt.SetSize      (coreVector2(0.512f,0.064f) * 1.33333f);
+    m_MausLogo.DefineTexture(0u, "maus_logo.png");
+    m_MausLogo.DefineProgram("2d_simple_program");
+    m_MausLogo.SetPosition  (coreVector2(0.0f,0.0f));
+    m_MausLogo.SetSize      (coreVector2(0.512f,0.256f) * 0.95f);
 
     m_BigLogo.DefineTexture(0u, "game_logo.png");
     m_BigLogo.DefineProgram("2d_simple_program");
@@ -444,7 +431,7 @@ cMenu::cMenu()noexcept
 
     // create successful submit object
     m_Successful.DefineTexture   (1u, "icon_success.png");
-    m_Successful.DefineProgram   (m_Made.GetProgram());
+    m_Successful.DefineProgram   (m_Pause.GetProgram());
     m_Successful.SetPosition     (m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
     m_Successful.SetSize         (coreVector2(0.06f,0.06f));
     m_Successful.SetFocusModifier(coreVector2(0.0f,0.0f));
@@ -555,7 +542,7 @@ cMenu::cMenu()noexcept
         m_aTrophyImage[i].SetFocusable (true);
 
         m_aTrophyCheck[i].DefineTexture   (1u, "icon_success.png");
-        m_aTrophyCheck[i].DefineProgram   (m_TrophyText.GetProgram());
+        m_aTrophyCheck[i].DefineProgram   (m_Pause.GetProgram());
         m_aTrophyCheck[i].SetPosition     (coreVector2(LEFT_CENTER + I_TO_F((i%5u)-2u)*0.105f, -0.075f - I_TO_F((i/5u)-2u)*0.105f));
         m_aTrophyCheck[i].SetSize         (coreVector2(0.06f,0.06f));
         m_aTrophyCheck[i].SetCenter       (coreVector2(-0.5f,0.0f));
@@ -639,10 +626,7 @@ cMenu::cMenu()noexcept
     this->BindObject(0u, &m_Black);
 
     this->BindObject(1u, &m_Black);
-    this->BindObject(1u, &m_Made);
-    this->BindObject(1u, &m_For);
-    this->BindObject(1u, &m_Maus);
-    this->BindObject(1u, &m_GameJolt);
+    this->BindObject(1u, &m_MausLogo);
 
     this->BindObject(3u, &m_BigLogo);
 
