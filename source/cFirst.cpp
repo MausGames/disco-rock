@@ -8,7 +8,7 @@
 //////////////////////////////////////////////////////
 #include "main.h"
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
 
 // ****************************************************************
@@ -115,8 +115,8 @@ void cFirst::Move()
     m_ControlType.GetArrow(0u)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0u) ? 0.5f : 1.0f));
     m_ControlType.GetArrow(1u)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 2u) ? 0.5f : 1.0f));
     m_ControlType.GetCaption()->SetAlpha(m_ControlType.GetAlpha());
-    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0u));
-    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1u));
+    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0u))
+    ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1u))
 
     // apply and save control changes
     if(m_ControlType.IsClicked())
@@ -142,4 +142,4 @@ void cFirst::Move()
 }
 
 
-#endif // _CORE_ANDROID_ || _CORE_DEBUG_ || _DR_EMULATE_MOBILE_
+#endif // _CORE_MOBILE_ || _DR_EMULATE_MOBILE_

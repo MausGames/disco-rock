@@ -32,7 +32,7 @@ private:
     coreLabel    m_ComboValue;    // combo value text
     coreObject2D m_ComboBar;      // simple bar to display the current combo delay
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     coreButton m_MoveLeft;        // touch move left button
     coreButton m_MoveRight;       // touch move right button
@@ -66,7 +66,7 @@ public:
     // smoothly fade out the interface
     inline void Hide() {if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) == 0.0f) m_Hide.Play(CORE_TIMER_PLAY_CURRENT);}
 
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_) || defined(_DR_EMULATE_MOBILE_)
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // render touch objects separately
     void RenderTouch();

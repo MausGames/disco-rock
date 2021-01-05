@@ -159,7 +159,7 @@ void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 
     // map required area
     coreByte* pData = m_pModel->GetVertexBuffer(1u)->Map(iLine*iSize, iSize, CORE_DATABUFFER_MAP_UNSYNCHRONIZED);
-    ASSERT((iLine+1u) * iSize < BACK_TOTAL_INDICES * sizeof(coreFloat));
+    ASSERT((iLine+1u) * iSize < BACK_TOTAL_INDICES * sizeof(coreFloat))
 
     // set height values of the selected line
     for(coreUintW i = 0u; i < iNum; ++i)

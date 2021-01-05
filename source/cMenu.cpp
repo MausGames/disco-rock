@@ -22,10 +22,9 @@ cMenu::cMenu()noexcept
 , m_iTableUpdate   (0u)
 , m_iTrophyStatus  (0u)
 , m_iTrophyCurrent (-1)
-, m_aiPower        {}
 , m_bFromGuest     (false)
 {
-    STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS);
+    STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS)
 
     // create intro objects
     m_Made.Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE);
@@ -104,8 +103,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Exit)
     ADJUST_BORDER(m_Exit)
 
-    const coreBool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
-    const coreBool bTooSmall    = Core::System->GetResolution().AspectRatio() < 1.3f;
+    const coreBool bTooSmall = (Core::System->GetResolution().AspectRatio() < 1.3f);
 
     m_Resume.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Resume.DefineProgram("2d_border_program"); // override
@@ -148,20 +146,11 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Finish)
 
     // create graphical buttons
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
-
     m_Short.Construct       ("button_play.png", "button_play.png");
-    m_Short.SetPosition     (coreVector2(-0.06f,0.2425f));
+    m_Short.SetPosition     (coreVector2(-0.06f,0.2425f) * (DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_) ? 1.0f : 1000.0f));
     m_Short.SetSize         (coreVector2(0.075f,0.075f));
     m_Short.SetFocusModifier(coreVector2(1.2f,1.2f));
     ADJUST_RIGHT(m_Short)
-
-#else
-
-    m_Short.Construct  ("default_black.png", "default_black.png");
-    m_Short.SetPosition(coreVector2(1000.0f,1000.0f));
-
-#endif
 
     m_ButtonScore.Construct  ("button_score.png", "button_score.png");
     m_ButtonScore.SetPosition(coreVector2(0.03f,0.24f));
@@ -184,56 +173,17 @@ cMenu::cMenu()noexcept
     ADJUST_LEFT(m_ButtonConfig)
 
     // create objects on the upper screen
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
-
-    m_TopBatteryBolt.DefineTexture(0u, "icon_power.png");
-    m_TopBatteryBolt.DefineProgram("2d_color_icon_program");
-    m_TopBatteryBolt.SetPosition  (coreVector2(0.00333f,-0.00933f));
-    m_TopBatteryBolt.SetSize      (coreVector2(0.05f,0.05f));
-    m_TopBatteryBolt.SetCenter    (coreVector2(-0.5f,0.5f));
-    m_TopBatteryBolt.SetAlignment (coreVector2(1.0f,-1.0f));
-    m_TopBatteryBolt.SetColor3    (COLOR_BLUE_F);
-
-    m_TopBatteryValue.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE);
-    m_TopBatteryValue.SetPosition (coreVector2(0.048f,-0.015f));
-    m_TopBatteryValue.SetCenter   (coreVector2(-0.5f,0.5f));
-    m_TopBatteryValue.SetAlignment(coreVector2(1.0f,-1.0f));
-    m_TopBatteryValue.SetColor3   (COLOR_BLUE_F);
-
-#endif
-
-    m_TopFPSTacho.DefineTexture(0u, "icon_speed.png");
-    m_TopFPSTacho.DefineProgram("2d_color_icon_program");
-    m_TopFPSTacho.SetPosition  (coreVector2(-0.01633f,-0.007f));
-    m_TopFPSTacho.SetSize      (coreVector2(0.05f,0.05f));
-    m_TopFPSTacho.SetCenter    (coreVector2(0.5f,0.5f));
-    m_TopFPSTacho.SetAlignment (coreVector2(-1.0f,-1.0f));
-
-    m_TopFPSSec.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE);
-    m_TopFPSSec.SetPosition (coreVector2(-0.075f - 0.0187f,-0.015f));
-    m_TopFPSSec.SetCenter   (coreVector2(0.5f,0.5f));
-    m_TopFPSSec.SetAlignment(coreVector2(-1.0f,-1.0f));
-
-    m_TopFPSMil.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE);
-    m_TopFPSMil.SetPosition (coreVector2(-0.075f,-0.015f));
-    m_TopFPSMil.SetCenter   (coreVector2(0.5f,0.5f));
-    m_TopFPSMil.SetAlignment(coreVector2(-1.0f,-1.0f));
-
-#if defined(_CORE_DEBUG_)
-
     m_TopUpdating.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_TopUpdating.SetPosition (coreVector2(0.0f,-0.015f));
     m_TopUpdating.SetCenter   (coreVector2(0.0f,0.5f));
     m_TopUpdating.SetAlignment(coreVector2(0.0f,-1.0f));
-
-#endif
 
     // create objects on the lower screen
     m_BottomInfo.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_BottomInfo.SetPosition (coreVector2(0.01333f,0.00933f));
     m_BottomInfo.SetCenter   (coreVector2(-0.5f,-0.5f));
     m_BottomInfo.SetAlignment(coreVector2(1.0f,1.0f));
-    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.3.0 - %s %.5s", __DATE__, __TIME__)));
+    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.5.0 - %s %.5s", __DATE__, __TIME__)));
 
     m_BottomCredit.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_BottomCredit.SetPosition (coreVector2(-0.01333f,0.00933f));
@@ -246,53 +196,30 @@ cMenu::cMenu()noexcept
     m_BottomLoginName.SetCenter   (coreVector2(0.5f,-0.5f));
     m_BottomLoginName.SetAlignment(coreVector2(-1.0f,1.0f));
 
-#if defined(_API_GOOGLE_PLAY_)
-    m_BottomLoginJolt.DefineTexture(0u, "google_controller.png");
-    m_BottomLoginJolt.SetPosition(coreVector2(-0.025f,0.045f));
-    m_BottomLoginJolt.SetSize    (coreVector2(0.036f,0.036f)*2.5f);
-#else
     m_BottomLoginJolt.DefineTexture(0u, "gamejolt_jolt.png");
-    m_BottomLoginJolt.SetPosition(coreVector2(-0.02f,0.016f));
-    m_BottomLoginJolt.SetSize    (coreVector2(0.036f,0.036f)*2.0f);
-#endif
     m_BottomLoginJolt.DefineProgram("2d_simple_program");
-    m_BottomLoginJolt.SetCenter   (coreVector2(0.5f,-0.5f));
-    m_BottomLoginJolt.SetAlignment(coreVector2(-1.0f,1.0f));
-
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-
-    m_GoogleFullTrophy.Construct   ("button_full_trophy.png", "button_full_trophy.png");
-    m_GoogleFullTrophy.SetPosition (coreVector2(-0.017f - 0.23f, 0.06f));
-    m_GoogleFullTrophy.SetSize     (coreVector2(0.075f,0.075f));
-    m_GoogleFullTrophy.SetCenter   (coreVector2(0.5f,-0.5f));
-    m_GoogleFullTrophy.SetAlignment(coreVector2(-1.0f,1.0f));
-
-    m_GoogleFullScore.Construct   ("button_full_score.png", "button_full_score.png");
-    m_GoogleFullScore.SetPosition (coreVector2(-0.017f - 0.335f, m_GoogleFullTrophy.GetPosition().y));
-    m_GoogleFullScore.SetSize     (coreVector2(0.075f,0.075f));
-    m_GoogleFullScore.SetCenter   (coreVector2(0.5f,-0.5f));
-    m_GoogleFullScore.SetAlignment(coreVector2(-1.0f,1.0f));
-
-#endif
+    m_BottomLoginJolt.SetPosition  (coreVector2(-0.02f,0.016f));
+    m_BottomLoginJolt.SetSize      (coreVector2(0.036f,0.036f)*2.0f);
+    m_BottomLoginJolt.SetCenter    (coreVector2(0.5f,-0.5f));
+    m_BottomLoginJolt.SetAlignment (coreVector2(-1.0f,1.0f));
 
     // create question objects
     m_QuestionBlack.DefineProgram("2d_color_program");
     m_QuestionBlack.SetColor3    (coreVector3(0.0f,0.0f,0.0f));
+    m_QuestionBlack.SetFocusable (true);
 
-    m_Question.Construct  (FONT_ROCKS, bBitTooSmall ? 35u : 45u, OUTLINE_SIZE);
+    m_Question.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Question.SetPosition(coreVector2(0.0f,0.08f));
     m_Question.SetText    ("Do you want to go out with me?");
 
     m_Yes.Construct       ("button_ok.png", "button_ok.png");
     m_Yes.SetPosition     (coreVector2(-0.2f,-0.08f));
     m_Yes.SetSize         (coreVector2(0.075f,0.075f));
-    m_Yes.SetColor3       (LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.25f));
     m_Yes.SetFocusModifier(coreVector2(1.2f,1.2f));
 
     m_No.Construct       ("button_cancel.png", "button_cancel.png");
     m_No.SetPosition     (coreVector2(0.2f,-0.08f));
     m_No.SetSize         (m_Yes.GetSize());
-    m_No.SetColor3       (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.25f));
     m_No.SetFocusModifier(coreVector2(1.2f,1.2f));
 
     // create video configuration objects
@@ -375,9 +302,9 @@ cMenu::cMenu()noexcept
     m_AudioIconLow.SetCenter       (coreVector2(-0.5f,0.0f));
     m_AudioIconLow.SetFocusModifier(coreVector2(0.0f,0.0f));
 
-    // create login configuration objects
-#if !defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
 
+    // create login configuration objects
     m_LoginConfigOr.Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_LoginConfigOr.SetPosition(coreVector2(LEFT_CENTER - 0.047f, -0.195f));
     m_LoginConfigOr.SetCenter  (coreVector2(-0.5f,0.0f));
@@ -390,23 +317,13 @@ cMenu::cMenu()noexcept
     m_LoginConfigLogo.SetCenter    (coreVector2(-0.5f,0.0f));
 
     m_LoginConfigStart.Construct  ("button_login.png", "button_login.png");
-    m_LoginConfigStart.SetPosition(coreVector2(LEFT_CENTER + 0.17f, DEFINED(_CORE_DEBUG_) ? -0.33f : -0.221f));
+    m_LoginConfigStart.SetPosition(coreVector2(LEFT_CENTER + 0.17f, -0.221f));
     m_LoginConfigStart.SetSize    (coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_LoginConfigStart)
 
-#else
-
-    m_LoginConfigStart.Construct   ("button_login.png", "button_login.png");
-    m_LoginConfigStart.SetPosition (coreVector2(-0.017f - 0.125f, m_GoogleFullTrophy.GetPosition().y));
-    m_LoginConfigStart.SetSize     (coreVector2(0.075f,0.075f));
-    m_LoginConfigStart.SetCenter   (coreVector2(0.5f,-0.5f));
-    m_LoginConfigStart.SetAlignment(coreVector2(-1.0f,1.0f));
-
-#endif
+#elif defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // create control configuration objects
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-
     m_ControlText.Construct  (FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_ControlText.SetPosition(coreVector2(LEFT_CENTER,-0.141f));
     m_ControlText.SetCenter  (coreVector2(-0.5f,0.0f));
@@ -437,14 +354,15 @@ cMenu::cMenu()noexcept
 
 #endif
 
-#if !defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
 
     // create login objects
     m_LoginBlack.DefineProgram("2d_color_program");
     m_LoginBlack.SetColor3    (coreVector3(0.0f,0.0f,0.0f));
+    m_LoginBlack.SetFocusable (true);
 
     m_LoginPopup.DefineProgram("2d_border_program");
-    m_LoginPopup.SetPosition  (coreVector2(0.0f,0.25f));
+    m_LoginPopup.SetPosition  (coreVector2(0.0f,0.0f));
     m_LoginPopup.SetSize      (coreVector2(0.62f,0.37f));
     m_LoginPopup.SetColor3    (coreVector3(0.05f,0.05f,0.05f));
     ADJUST_BORDER(m_LoginPopup)
@@ -499,12 +417,10 @@ cMenu::cMenu()noexcept
     m_LoginOK.Construct  ("button_ok.png", "button_ok.png");
     m_LoginOK.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, m_LoginPopup.GetSize().y * 0.5f - 0.0575f));
     m_LoginOK.SetSize    (coreVector2(0.075f,0.075f));
-    m_LoginOK.SetColor3  (LERP(COLOR_GREEN_F, COLOR_WHITE_F, 0.25f));
 
     m_LoginCancel.Construct  ("button_cancel.png", "button_cancel.png");
     m_LoginCancel.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, -m_LoginPopup.GetSize().y * 0.5f + 0.0575f));
     m_LoginCancel.SetSize    (coreVector2(0.075f,0.075f));
-    m_LoginCancel.SetColor3  (LERP(COLOR_RED_F, COLOR_WHITE_F, 0.25f));
 
     m_LoginError.Construct  (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_LoginError.SetPosition(m_LoginPopup.GetPosition() + coreVector2(0.0f,-0.122f));
@@ -558,7 +474,7 @@ cMenu::cMenu()noexcept
             m_aaScoreEntry[i][j][1].SetPosition (coreVector2(vPos.x - 0.19466f, m_aaScoreEntry[i][j][0].GetPosition().y));
             m_aaScoreEntry[i][j][1].SetCenter   (vCen);
             m_aaScoreEntry[i][j][1].SetAlignment(coreVector2(1.0f,0.0f));
-            m_aaScoreEntry[i][j][1].SetColor3   (LERP(COLOR_YELLOW_F, COLOR_WHITE_F, I_TO_F(MIN(j, 3u) / 3u)));
+            m_aaScoreEntry[i][j][1].SetColor3   ((j < 3u) ? COLOR_YELLOW_F : COLOR_WHITE_F);
             m_aaScoreEntry[i][j][1].SetText     ("-");
 
             m_aaScoreEntry[i][j][2].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE);
@@ -585,18 +501,11 @@ cMenu::cMenu()noexcept
         m_aScoreRecord[i].SetCenter  (vCen);
         m_aScoreRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
 
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-
         m_aScoreRank[i].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE);
         m_aScoreRank[i].SetPosition (coreVector2(vPos.x - 0.228f, m_aScoreBestValue[i].GetPosition().y));
         m_aScoreRank[i].SetCenter   (vCen);
         m_aScoreRank[i].SetAlignment(coreVector2(1.0f,0.0f));
         m_aScoreRank[i].SetColor3   (coreVector3(0.75f,0.75f,0.75f));
-    #if defined(_CORE_DEBUG_)
-        m_aScoreRank[i].SetText("123.");
-    #endif
-
-#endif
     }
 
     m_PageChange.Construct  ("button_scroll.png", "button_scroll.png");
@@ -643,6 +552,7 @@ cMenu::cMenu()noexcept
         m_aTrophyImage[i].SetSize      (coreVector2(0.09f,0.09f));
         m_aTrophyImage[i].SetCenter    (coreVector2(-0.5f,0.0f));
         m_aTrophyImage[i].SetColor3    ((i % (COLOR_NUM+1u)) ? g_avColor[(i-(1u+i/7u))%COLOR_NUM] : (COLOR_WHITE_F*0.9f));
+        m_aTrophyImage[i].SetFocusable (true);
 
         m_aTrophyCheck[i].DefineTexture   (1u, "icon_success.png");
         m_aTrophyCheck[i].DefineProgram   (m_TrophyText.GetProgram());
@@ -676,33 +586,6 @@ cMenu::cMenu()noexcept
         m_aTrophyDesc[i].SetText    ("-");
     }
 
-    // create connection objects
-    for(coreUintW i = 0u; i < 3u; ++i)
-    {
-        m_aConnectionError[i].Construct  (FONT_ROCKS, 29u, OUTLINE_SIZE);
-        m_aConnectionError[i].SetPosition(coreVector2(LEFT_CENTER, 0.095f - I_TO_F(i)*0.05f));
-        m_aConnectionError[i].SetCenter  (coreVector2(-0.5f,0.0f));
-    }
-
-#if defined(_CORE_DEBUG_)
-    this->SetErrorMessage(COLOR_ORANGE_F, "DEBUG ERROR", "MORE DEBUG ERROR", "");
-#endif
-
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-
-    m_AuthLogo.DefineTexture(0u, "google_controller.png");
-    m_AuthLogo.DefineProgram("2d_simple_program");
-    m_AuthLogo.SetPosition  (coreVector2(LEFT_CENTER - 0.07f,-0.045f));
-    m_AuthLogo.SetSize      (coreVector2(0.036f,0.036f) * 3.0f);
-    m_AuthLogo.SetCenter    (coreVector2(-0.5f,0.0f));
-
-    m_AuthButton.Construct  ("button_login.png", "button_login.png");
-    m_AuthButton.SetPosition(coreVector2(LEFT_CENTER + 0.03f,-0.045f));
-    m_AuthButton.SetSize    (coreVector2(0.075f,0.075f));
-    ADJUST_LEFT(m_AuthButton)
-
-#endif
-
     // create loading objects
     m_Loading.DefineTexture(0u, "icon_load.png");
     m_Loading.DefineProgram("2d_color_icon_program");
@@ -719,13 +602,6 @@ cMenu::cMenu()noexcept
     m_pHappySound  = Core::Manager::Resource->Get<coreSound>("achieve.wav");
     m_pRecordSound = Core::Manager::Resource->Get<coreSound>("record.wav");
     m_pFlashSound  = Core::Manager::Resource->Get<coreSound>("flash.wav");
-
-#if defined(_CORE_ANDROID_)
-
-    // init current battery status
-    SDL_GetPowerInfo(&m_aiPower[0], &m_aiPower[1]);
-
-#endif
 
     // reset fullscreen-objects
     this->ResetResolution();
@@ -784,25 +660,11 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_ButtonTime);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_TopBatteryBolt);
-        this->BindObject(i, &m_TopBatteryValue);
-#endif
-        this->BindObject(i, &m_TopFPSTacho);
-        this->BindObject(i, &m_TopFPSSec);
-        this->BindObject(i, &m_TopFPSMil);
-#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
-#endif
         this->BindObject(i, &m_BottomInfo);
         this->BindObject(i, &m_BottomCredit);
         this->BindObject(i, &m_BottomLoginJolt);
         this->BindObject(i, &m_BottomLoginName);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_GoogleFullTrophy);
-        this->BindObject(i, &m_GoogleFullScore);
-        this->BindObject(i, &m_LoginConfigStart);
-#endif
         this->BindObject(i, &m_ScoreMenu);
     }
     this->BindObject(7u, &m_QuestionBlack);
@@ -823,23 +685,9 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_Short);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_TopBatteryBolt);
-        this->BindObject(i, &m_TopBatteryValue);
-#endif
-        this->BindObject(i, &m_TopFPSTacho);
-        this->BindObject(i, &m_TopFPSSec);
-        this->BindObject(i, &m_TopFPSMil);
-#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
-#endif
         this->BindObject(i, &m_BottomLoginJolt);
         this->BindObject(i, &m_BottomLoginName);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_GoogleFullTrophy);
-        this->BindObject(i, &m_GoogleFullScore);
-        this->BindObject(i, &m_LoginConfigStart);
-#endif
         this->BindObject(i, &m_ScoreMenu);
     }
     this->BindObject(12u, &m_QuestionBlack);
@@ -867,23 +715,9 @@ cMenu::cMenu()noexcept
         this->BindObject(i, &m_ButtonTime);
         this->BindObject(i, &m_ButtonTrophy);
         this->BindObject(i, &m_ButtonConfig);
-#if defined(_CORE_ANDROID_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_TopBatteryBolt);
-        this->BindObject(i, &m_TopBatteryValue);
-#endif
-        this->BindObject(i, &m_TopFPSTacho);
-        this->BindObject(i, &m_TopFPSSec);
-        this->BindObject(i, &m_TopFPSMil);
-#if defined(_CORE_DEBUG_)
         this->BindObject(i, &m_TopUpdating);
-#endif
         this->BindObject(i, &m_BottomLoginJolt);
         this->BindObject(i, &m_BottomLoginName);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        this->BindObject(i, &m_GoogleFullTrophy);
-        this->BindObject(i, &m_GoogleFullScore);
-        this->BindObject(i, &m_LoginConfigStart);
-#endif
         this->BindObject(i, &m_Successful);
         this->BindObject(i, &m_ScoreMenu);
     }
@@ -905,16 +739,8 @@ cMenu::cMenu()noexcept
         m_ScoreMenu.BindObject(i, &m_aScoreBest     [i]);
         m_ScoreMenu.BindObject(i, &m_aScoreBestValue[i]);
         m_ScoreMenu.BindObject(i, &m_aScoreRecord   [i]);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
         m_ScoreMenu.BindObject(i, &m_aScoreRank     [i]);
-#endif
 
-        for(coreUintW j = 0u; j < 3u; ++j)
-            m_ScoreMenu.BindObject(i, &m_aConnectionError[j]);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-        m_ScoreMenu.BindObject(i, &m_AuthLogo);
-        m_ScoreMenu.BindObject(i, &m_AuthButton);
-#endif
         m_ScoreMenu.BindObject(i, &m_Loading);
         m_ScoreMenu.BindObject(i, &m_PageChange);
     }
@@ -941,18 +767,17 @@ cMenu::cMenu()noexcept
     m_ScoreMenu.BindObject(5u, &m_AudioIconHigh);
     m_ScoreMenu.BindObject(5u, &m_AudioIconLow);
     m_ScoreMenu.BindObject(5u, &m_AudioDrag);
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
-    m_ScoreMenu.BindObject(5u, &m_ControlText);
-    m_ScoreMenu.BindObject(5u, &m_ControlType);
-#endif
-#if !defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
     m_ScoreMenu.BindObject(5u, &m_LoginConfigLogo);
     m_ScoreMenu.BindObject(5u, &m_LoginConfigStart);
     m_ScoreMenu.BindObject(5u, &m_LoginConfigOr);
+#elif defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
+    m_ScoreMenu.BindObject(5u, &m_ControlText);
+    m_ScoreMenu.BindObject(5u, &m_ControlType);
 #endif
     m_ScoreMenu.BindObject(5u, &m_Loading);
 
-#if !defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
 
     m_LoginMenu.BindObject(0u, &m_LoginPopup);
     m_LoginMenu.BindObject(0u, &m_aLoginText[0]);
@@ -986,7 +811,7 @@ void cMenu::Move()
     this->coreMenu::Move();
     m_iStatus = 0;
 
-#if !defined(_CORE_ANDROID_)
+#if !defined(_CORE_MOBILE_)
 
     // control mouse with joystick
     for(coreUintW i = 0u, ie = Core::Input->GetJoystickNum(); i < ie; ++i)
@@ -994,16 +819,13 @@ void cMenu::Move()
 
 #endif
 
-    // check for back button (especially important on Android)
+    // check for back button (especially important on mobile)
     const coreBool bBackButton = Core::Input->GetKeyboardButton(CORE_INPUT_KEY(AC_BACK), CORE_INPUT_PRESS);
-
-    // associate banner transparency with menu background
-    SetBannerAlpha(m_BackgroundLeft.GetAlpha());
 
     // control the menu
     if((this->GetCurSurface() == 10u) && !this->GetTransition().GetStatus())
     {
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_MOBILE_)
         g_pGame->GetInterface()->InteractPause();
         const coreBool bPauseButton = g_pGame->GetInterface()->GetTouchPause()->IsClicked();
 #else
@@ -1206,12 +1028,8 @@ void cMenu::Move()
                 if(g_pOnline->IsUserConnected()) this->SubmitScore(NULL); // re-send (should only be able on connection problems)
                 else
                 {
-#if defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
 
-                    // login with Google Play Games
-                    this->Login("", "");
-
-#else
                     // open login window
                     this->ChangeSurface(this->GetCurSurface() + 2u, 5.0f);
                     m_LoginMenu  .ChangeSurface(1u, 0.0f);
@@ -1296,22 +1114,22 @@ void cMenu::Move()
     }
 
     // set transparency of main menu buttons
-    ALPHA_BUTTON_TEXT  (m_Start);
-    ALPHA_BUTTON_TEXT  (m_Exit);
-    ALPHA_BUTTON_TEXT  (m_Resume);
-    ALPHA_BUTTON_TEXT  (m_Abort);
-    ALPHA_BUTTON_TEXT  (m_Finish);
-    ALPHA_BUTTON_SCORE (m_ButtonScore,  0u);
-    ALPHA_BUTTON_SCORE (m_ButtonTime,   1u);
-    ALPHA_BUTTON_SCORE (m_ButtonTrophy, 4u);
-    ALPHA_BUTTON_SCORE (m_ButtonConfig, 5u);
-    ALPHA_BUTTON_INSIDE(m_PageChange);
-    ALPHA_BUTTON_INSIDE(m_LoginConfigStart);
-    ALPHA_BUTTON_INSIDE(m_Short);
-    ALPHA_BUTTON_INSIDE(m_Yes);
-    ALPHA_BUTTON_INSIDE(m_No);
+    ALPHA_BUTTON_TEXT  (m_Start)
+    ALPHA_BUTTON_TEXT  (m_Exit)
+    ALPHA_BUTTON_TEXT  (m_Resume)
+    ALPHA_BUTTON_TEXT  (m_Abort)
+    ALPHA_BUTTON_TEXT  (m_Finish)
+    ALPHA_BUTTON_SCORE (m_ButtonScore,  0u)
+    ALPHA_BUTTON_SCORE (m_ButtonTime,   1u)
+    ALPHA_BUTTON_SCORE (m_ButtonTrophy, 4u)
+    ALPHA_BUTTON_SCORE (m_ButtonConfig, 5u)
+    ALPHA_BUTTON_INSIDE(m_PageChange)
+    ALPHA_BUTTON_INSIDE(m_LoginConfigStart)
+    ALPHA_BUTTON_INSIDE(m_Short)
+    ALPHA_BUTTON_INSIDE(m_Yes)
+    ALPHA_BUTTON_INSIDE(m_No)
 
-#if defined(_API_GOOGLE_PLAY_) || defined(_CORE_DEBUG_)
+#if !defined(_DR_API_GAMEJOLT_) && (defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_))
 
     // set transparency of control buttons
     m_ControlType.GetArrow(0u)->SetAlpha(m_ControlType.GetAlpha() * ((m_ControlType.GetCurIndex() == 0u) ? 0.5f : 1.0f));
@@ -1320,41 +1138,11 @@ void cMenu::Move()
     ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(0u));
     ALPHA_BUTTON_INSIDE(*m_ControlType.GetArrow(1u));
 
-    // set transparency of Google Play Games buttons
-    if(g_pOnline->IsUserConnected())
-    {
-        ALPHA_BUTTON_INSIDE(m_GoogleFullScore);
-        ALPHA_BUTTON_INSIDE(m_GoogleFullTrophy);
-    }
-    else
-    {
-        if(!DEFINED(_CORE_DEBUG_)) m_LoginConfigStart.SetAlpha(0.0f);
-        m_GoogleFullScore .SetAlpha(0.0f);
-        m_GoogleFullTrophy.SetAlpha(0.0f);
-    }
-    if(m_aConnectionError[0].GetText()[0] && !m_aConnectionError[2].GetText()[0])
-    {
-        ALPHA_BUTTON_INSIDE(m_AuthButton);
-        if(!DEFINED(_CORE_DEBUG_)) m_PageChange.SetAlpha(0.0f);
-
-        if(m_AuthButton.IsClicked())
-        {
-            // quick-login with Google Play Games
-            if(!g_pOnline->IsUserConnected()) this->Login("", "");
-            this->PlayClickSound();
-        }
-    }
-    else
-    {
-        m_AuthLogo  .SetAlpha(0.0f);
-        m_AuthButton.SetAlpha(0.0f);
-    }
-
 #endif
 
     // set transparency of highscore related objects
     if(m_bSubmitted) m_Submit.SetAlpha(m_Submit.GetAlpha() * MENU_ALPHA_ACTIVE_2 * 0.5f);
-    else ALPHA_BUTTON_TEXT(m_Submit);
+    else ALPHA_BUTTON_TEXT(m_Submit)
 
     if(!m_bSubmitted || (m_afSubmitValue[1] < 10.0f))
         m_Successful.SetAlpha(0.0f);
@@ -1397,10 +1185,10 @@ void cMenu::Move()
     else if(((m_ScoreMenu.GetCurSurface() == 5u) || m_LoginConfigStart.IsClicked()) && bInNormalMenu)
     {
         // set transparency of configuration buttons
-        ALPHA_BUTTON_TEXT(m_VideoLow);
-        ALPHA_BUTTON_TEXT(m_VideoMedium);
-        ALPHA_BUTTON_TEXT(m_VideoHigh);
-        ALPHA_BUTTON_TEXT(m_AudioDrag);
+        ALPHA_BUTTON_TEXT(m_VideoLow)
+        ALPHA_BUTTON_TEXT(m_VideoMedium)
+        ALPHA_BUTTON_TEXT(m_VideoHigh)
+        ALPHA_BUTTON_TEXT(m_AudioDrag)
 
         // toggle video quality
         coreInt8 iNewQuality = -1;
@@ -1437,7 +1225,7 @@ void cMenu::Move()
 
         if(bDragStatus)
         {
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_MOBILE_)
 
             // control volume with last finger position
             coreFloat fMove = 0.0f;
@@ -1484,12 +1272,8 @@ void cMenu::Move()
             }
             else
             {
-#if defined(_API_GOOGLE_PLAY_)
+#if defined(_DR_API_GAMEJOLT_)
 
-                // login with Google Play Games
-                this->Login("", "");
-
-#else
                 // open login window
                 this->ChangeSurface(this->GetCurSurface() + 2u, 5.0f);
                 m_LoginMenu  .ChangeSurface(0u, 0.0f);
@@ -1504,7 +1288,7 @@ void cMenu::Move()
             this->PlayClickSound();
         }
 
-#if defined(_API_GOOGLE_PLAY_)
+#if !defined(_DR_API_GAMEJOLT_) && (defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_))
 
         // apply and save control changes
         if(m_ControlType.IsClicked())
@@ -1537,9 +1321,9 @@ void cMenu::Move()
     if((this->GetCurSurface() == 8u) || (this->GetCurSurface() == 13u) || (this->GetCurSurface() == 16u))
     {
         // set transparency of login buttons
-        ALPHA_BUTTON_INSIDE(m_LoginOK);
-        ALPHA_BUTTON_INSIDE(m_LoginCancel);
-        ALPHA_BUTTON_INSIDE(m_LoginJoltStart);
+        ALPHA_BUTTON_INSIDE(m_LoginOK)
+        ALPHA_BUTTON_INSIDE(m_LoginCancel)
+        ALPHA_BUTTON_INSIDE(m_LoginJoltStart)
 
         // set color of text boxes
         m_LoginName .SetColor3(m_LoginName .IsFocused() ? coreVector3(0.5f,0.5f,0.5f) : coreVector3(0.25f,0.25f,0.25f));
@@ -1628,48 +1412,6 @@ void cMenu::Move()
         }
     }
 
-#if defined(_API_GOOGLE_PLAY_)
-
-    // open Google Play Games screens
-    if(m_GoogleFullTrophy.IsClicked()) {g_pOnline->OpenTrophy(); this->PlayClickSound();}
-    if(m_GoogleFullScore .IsClicked()) {g_pOnline->OpenScore();  this->PlayClickSound();}
-
-#endif
-
-#if defined(_CORE_ANDROID_)
-
-    if(m_aiPower[0] >= 0)
-    {
-        // show remaining time if available
-        const coreInt32 iHour =  m_aiPower[0] / 3600;
-        const coreInt32 iMin  = (m_aiPower[0] % 3600) / 60;
-        m_TopBatteryValue.SetText(PRINT("%d:%02d", iHour, iMin));
-    }
-    else if(m_aiPower[1] >= 0)
-    {
-        // show remaining percent
-        m_TopBatteryValue.SetText(PRINT("%d%%", m_aiPower[1]));
-    }
-
-#elif defined(_CORE_DEBUG_)
-
-    m_TopBatteryValue.SetText("50%");
-
-#endif
-
-    // calculate and display current FPS (# static)
-    static coreFloat fFPSValue = 0.0f;
-    if(Core::System->GetTime()) fFPSValue = fFPSValue * 0.95f + RCP(Core::System->GetTime()) * 0.05f;
-    m_TopFPSSec.SetText(PRINT("%.0f.", FLOOR(fFPSValue)));
-    m_TopFPSMil.SetText(PRINT("%01d",  F_TO_SI(fFPSValue * 10.0f) % 10));
-
-    // adjust color in relation to the FPS
-    const coreFloat   fFPSLerp  = MIN(fFPSValue * 0.01666667f, 1.0f);
-    const coreVector3 vFPSColor = LERP(COLOR_RED_F, LERP(COLOR_YELLOW_F, COLOR_GREEN_F, MAX((fFPSLerp-0.5f) * 2.0f, 0.0f)), MIN(fFPSLerp * 2.0f, 1.0f));
-    m_TopFPSTacho.SetColor3(vFPSColor);
-    m_TopFPSSec  .SetColor3(vFPSColor);
-    m_TopFPSMil  .SetColor3(vFPSColor);
-
 #if defined(_CORE_DEBUG_)
 
     // show full network load
@@ -1747,13 +1489,6 @@ void cMenu::End()
     m_bSubmitted = true;
     if(!g_pGame->GetStatus() && (g_pGame->GetTime() >= 10.0f))
         this->RetrieveScores();
-
-#if defined(_CORE_ANDROID_)
-
-    // update current battery status
-    SDL_GetPowerInfo(&m_aiPower[0], &m_aiPower[1]);
-
-#endif
 }
 
 
@@ -1788,7 +1523,7 @@ void cMenu::ResetResolution()
 // activate notification for new record
 void cMenu::NewRecord(const coreUintW iIndex)
 {
-    ASSERT(iIndex < SCORE_TABLES);
+    ASSERT(iIndex < SCORE_TABLES)
 
     const coreBool bBitTooSmall = Core::System->GetResolution().AspectRatio() < 1.4f;
 
@@ -1820,34 +1555,10 @@ void cMenu::ResetRecord()
 
 
 // ****************************************************************
-// display connection error
-void cMenu::SetErrorMessage(const coreVector3& vColor, const coreChar* pcMessage1, const coreChar* pcMessage2, const coreChar* pcMessage3)
-{
-    if(pcMessage1 && pcMessage2 && pcMessage3)
-    {
-        // show error message (currently only for Android to reduce panic, empty text has no overhead)
-        m_aConnectionError[0].SetText(pcMessage1);
-        m_aConnectionError[1].SetText(pcMessage2);
-        m_aConnectionError[2].SetText(pcMessage3);
-
-        // set message color
-        for(coreUintW i = 0u; i < 3u; ++i) m_aConnectionError[i].SetColor3(vColor);
-    }
-    else
-    {
-        // hide error message
-        m_aConnectionError[0].SetText("");
-        m_aConnectionError[1].SetText("");
-        m_aConnectionError[2].SetText("");
-    }
-}
-
-
-// ****************************************************************
 // submit score
 void cMenu::SubmitScore(const coreChar* pcGuestName)
 {
-    ASSERT(g_pGame);
+    ASSERT(g_pGame)
     if(m_bSubmitted) return;
 
     // convert values
@@ -1966,13 +1677,14 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
         else // == GJ_LEADERBOARD_02
             SHOW_BEST_TIME (apScore[0]->GetSort())
 
-#if defined(_API_GOOGLE_PLAY_)
-
         // show player rank
         if(g_pOnline->IsUserConnected())
-            m_aScoreRank[iTableNum].SetText(apScore[0]->GetExtraData().c_str());
-
-#endif
+        {
+            // TODO: implement   
+            //coreInt32 iTest = 0;
+            //apScore[0]->GetRankNow(&iTest);
+            //m_aScoreRank[iTableNum].SetText(coreData::ToChars(iTest));
+        }
     }
 }
 
@@ -1981,8 +1693,8 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 // callback for score retrieval (update leaderboards)
 void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
 {
-    ASSERT(iTableNum  < SCORE_TABLES);
-    ASSERT(m_iCurPage < SCORE_PAGES);
+    ASSERT(iTableNum  < SCORE_TABLES)
+    ASSERT(m_iCurPage < SCORE_PAGES)
 
     // set table and page
     const gjScoreList& apScore     = m_aapCurScores[iTableNum];
@@ -2080,8 +1792,6 @@ coreInt32 cMenu::QuickPlay()
     // check for quickplay
     coreInt32 iStatus = g_pOnline->Login("", "", this, &cMenu::LoginCallback, I_TO_P(0));
 
-#if !defined(_API_GOOGLE_PLAY_)
-
     if(iStatus != GJ_OK)
     {
         // check for saved credentials
@@ -2090,8 +1800,6 @@ coreInt32 cMenu::QuickPlay()
         // fetch leaderboards early on failure
         if(iStatus != GJ_OK) g_pMenu->RetrieveScores();
     }
-
-#endif
 
     return iStatus;
 }
@@ -2133,12 +1841,8 @@ void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
         m_LoginConfigOr.SetText("LOG OUT OF");
         m_LoginConfigStart.Construct("button_logout.png", "button_logout.png");
 
-#if !defined(_API_GOOGLE_PLAY_)
-
         // close login menu
         if(pData) this->ChangeSurface(this->GetCurSurface() - 2u, 5.0f);
-
-#endif
     }
     else
     {
@@ -2170,26 +1874,7 @@ void cMenu::Logout()
     m_LoginConfigOr.SetText("LOG INTO");
     m_LoginConfigStart.Construct("button_login.png", "button_login.png");
 
-#if defined(_API_GOOGLE_PLAY_)
-
+    // reset player rank
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
-    {
-        // reset player rank
         m_aScoreRank[i].SetText("");
-
-        // remove all scores from the leaderboards
-        m_aapCurScores[i].clear();
-        for(coreUintW j = 0u; j < SCORE_ENTRIES; ++j)
-        {
-            m_aaScoreEntry[i][j][1].SetText("-");
-            m_aaScoreEntry[i][j][2].SetText("-");
-        }
-    }
-
-    // reset score paging
-    m_iCurPage = 0u;
-    for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
-        this->InvokeScoreUpdate(i);
-
-#endif
 }

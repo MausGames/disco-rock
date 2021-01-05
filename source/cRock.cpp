@@ -82,7 +82,7 @@ void cRock::Move()
     // get minimum Z position above the ground
     const coreFloat fGround = GAME_HEIGHT + m_pModel->GetBoundingRadius() * this->GetSize().x;
 
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_MOBILE_)
 
     coreBool bJump = false;
 
@@ -123,12 +123,11 @@ void cRock::Move()
        Core::Input->GetJoystickButton(1u, 0u,                CORE_INPUT_PRESS))
 
 #endif
+
     {
         // just jump
         this->Jump(6.0f);
     }
-
-#if !defined(_CORE_DEBUG_) || 0
 
     if(g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2(-ROCK_RANGE_BACK, 0.0f)) > 0.0f &&
        g_pBackground->GetHeight(this->GetPosition().xy() + coreVector2( ROCK_RANGE_BACK, 0.0f)) > 0.0f &&
@@ -140,8 +139,6 @@ void cRock::Move()
         m_bFallen = true;
         g_pCombatText->AddTextTransformed(g_MsgFallen.Get(), this->GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
     }
-
-#endif
 
     // reset reflected status
     m_bReflected = false;
@@ -177,7 +174,7 @@ void cRock::Move()
     // init new X position
     coreFloat fNewPos = this->GetPosition().x;
 
-#if defined(_CORE_ANDROID_)
+#if defined(_CORE_MOBILE_)
 
     const coreFloat fMove = 100.0f * Core::System->GetTime(1);
 
@@ -190,10 +187,12 @@ void cRock::Move()
 
     // move with device motion
     else if(g_pGame->GetInterface()->GetControlType() == CONTROL_MOTION)
+    {
         fNewPos += fMove * Core::Input->GetJoystickRelative(0u).x * 1.1f;
+    }
 
     // move with screen space
-    else // == CONTROL_FULLSCREEN)
+    else // == CONTROL_FULLSCREEN
     {
         Core::Input->ForEachFinger(CORE_INPUT_HOLD, [&fNewPos, &fMove](const coreUintW i)
         {
@@ -224,8 +223,8 @@ void cRock::Move()
 #if defined(_DR_EMULATE_MOBILE_)
 
     // emulate key presses
-    g_pGame->GetInterface()->GetOverlayLeft ()->SetFocus(fNewPos < this->GetPosition().x);
-    g_pGame->GetInterface()->GetOverlayRight()->SetFocus(fNewPos > this->GetPosition().x);
+    g_pGame->GetInterface()->GetTouchMoveLeft ()->SetFocused(fNewPos < this->GetPosition().x);
+    g_pGame->GetInterface()->GetTouchMoveRight()->SetFocused(fNewPos > this->GetPosition().x);
 
 #endif
 
