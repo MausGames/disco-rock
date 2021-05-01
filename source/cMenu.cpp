@@ -1367,7 +1367,7 @@ void cMenu::Move()
                     if(m_LoginGuest.GetText()[0])
                     {
                         // trim possible whitespaces
-                        std::string sTrimmed = m_LoginGuest.GetText();
+                        coreString sTrimmed = m_LoginGuest.GetText();
                         coreData::StrTrim(&sTrimmed);
 
                         // send guest score
@@ -1553,8 +1553,8 @@ void cMenu::SubmitScore(const coreChar* pcGuestName)
     if(pcGuestName) Core::Config->SetString("Game", "Guest", pcGuestName);
 
     // create extra-data string
-    const std::string sExtra = PRINT("%.0f %.3f - %d - %d %d %d %d %d", coreFloat(m_afSubmitValue[0]), coreFloat(m_afSubmitValue[1]), g_pGame->GetMaxCombo(),
-                                     g_pGame->GetStat(0u), g_pGame->GetStat(1u), g_pGame->GetStat(2u), g_pGame->GetStat(3u), g_pGame->GetStat(4u));
+    const coreString sExtra = PRINT("%.0f %.3f - %d - %d %d %d %d %d", coreFloat(m_afSubmitValue[0]), coreFloat(m_afSubmitValue[1]), g_pGame->GetMaxCombo(),
+                                    g_pGame->GetStat(0u), g_pGame->GetStat(1u), g_pGame->GetStat(2u), g_pGame->GetStat(3u), g_pGame->GetStat(4u));
 
     // send score and time values
     const coreInt32 iStateA = g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
@@ -1691,7 +1691,7 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
         const coreBool bOver  = pScore ? (pScore->GetUserName().length() > NAME_LEN) : false;
 
         // trim possible whitespaces
-        std::string sTrimmed = pScore ? (pScore->GetUserName().substr(0u, NAME_LEN) + (bOver ? ">" : "")).c_str() : "-";
+        coreString sTrimmed = pScore ? (pScore->GetUserName().substr(0u, NAME_LEN) + (bOver ? ">" : "")).c_str() : "-";
         coreData::StrTrim(&sTrimmed);
 
         if(iTableNum == 0u) // == GJ_LEADERBOARD_01

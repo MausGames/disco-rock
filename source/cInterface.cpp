@@ -194,7 +194,7 @@ void cInterface::Move()
     if(m_iControlType != CONTROL_CLASSIC)
     {
         // fade out fullscreen objects
-        if(m_fFadeOut) m_fFadeOut = MAX(m_fFadeOut - Core::System->GetTime() * ((g_pGame->GetTime() > 10.0f) ? 1.0f : 0.25f), 0.0f);
+        if(m_fFadeOut) m_fFadeOut = MAX(m_fFadeOut - TIME * ((g_pGame->GetTime() > 10.0f) ? 1.0f : 0.25f), 0.0f);
         const coreFloat fFadeAlpha1 = (0.20f + 0.80f*m_fFadeOut) * fAlpha;
         const coreFloat fFadeAlpha2 = (0.35f + 0.65f*m_fFadeOut) * fAlpha;
 

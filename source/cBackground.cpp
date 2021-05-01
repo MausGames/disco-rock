@@ -70,7 +70,7 @@ void cBackground::Render()
             else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2u)) fSpeed = 1.95f;
 
             // update light time
-            m_fLightTime += Core::System->GetTime() * fSpeed * g_fMusicSpeed;
+            m_fLightTime += TIME * fSpeed * g_fMusicSpeed;
 
             // check for new tick
             const coreUintW iNewTick = F_TO_UI(m_fLightTime);
@@ -82,7 +82,7 @@ void cBackground::Render()
             }
 
             // reduce light strength (flash) over time
-            m_fLightStrength = MAX(m_fLightStrength * (1.0f - Core::System->GetTime() * 4.0f), 0.0f);
+            m_fLightStrength = MAX(m_fLightStrength * (1.0f - TIME * 4.0f), 0.0f);
 
             if(!g_bPause)
             {
@@ -192,9 +192,9 @@ coreFloat cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBa
 // load dance floor geometry
 void cBackground::LoadGeometry()
 {
-    std::vector<coreVector4> avColor;     avColor.reserve    (BACK_BLOCKS);
-    std::vector<sVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
-    std::vector<coreUint16>  pIndexData;  pIndexData.reserve (BACK_TOTAL_INDICES);
+    coreList<coreVector4> avColor;     avColor.reserve    (BACK_BLOCKS);
+    coreList<sVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
+    coreList<coreUint16>  pIndexData;  pIndexData.reserve (BACK_TOTAL_INDICES);
 
     // delete old data
     m_pModel->Unload();

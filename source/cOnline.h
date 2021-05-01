@@ -73,7 +73,7 @@ public:
     // layered request functions to support multiple APIs
     template <typename T> coreInt32 AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
     template <typename T> coreInt32 FetchTrophies    (GJ_NETWORK_OUTPUT(gjTrophyList));
-    template <typename T> coreInt32 SubmitScore      (const coreUintW iTableID, const std::string& sScore, const coreUintW iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
+    template <typename T> coreInt32 SubmitScore      (const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const coreString& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr));
     template <typename T> coreInt32 FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap));
     template <typename T> coreInt32 FetchScores      (const coreUintW iTableID, const coreBool bOnlyUser, const coreUintW iLimit, GJ_NETWORK_OUTPUT(gjScoreList));
     template <typename T> coreInt32 Login            (const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32));
@@ -134,7 +134,7 @@ template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTroph
 
 // ****************************************************************
 // submit score
-template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const std::string& sScore, const coreUintW iSort, const std::string& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
+template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const scoreString& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
     return m_GameJolt.InterScore()->GetScoreTable(iTableID)->AddGuestScoreCall(sScore, iSort, sExtraData, sGuestName, GJ_NETWORK_OUTPUT_FW);
 }
