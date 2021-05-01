@@ -59,7 +59,7 @@ void cBeverage::Move()
             m_iStatus = 1;   // mark as finished
 
         // calculate rotation matrix
-        const coreFloat   T    = Core::System->GetTime() * PI * 5.0f;
+        const coreFloat   T    = TIME * PI * 5.0f;
         const coreVector2 A    = coreVector2::Direction(T * m_vFlyRotation.y);
         const coreVector2 B    = coreVector2::Direction(T * m_vFlyRotation.x);
         const coreMatrix3 mRot = coreMatrix3( A.y,  A.x*B.x, -A.x*B.y,
@@ -71,7 +71,7 @@ void cBeverage::Move()
         this->SetOrientation(this->GetOrientation() * mRot);
 
         // calculate horizontal position
-        fSideSet = Core::System->GetTime() * CLAMP(m_vFlyImpact.x, -3.5f, 3.5f) * 30.0f;
+        fSideSet = TIME * CLAMP(m_vFlyImpact.x, -3.5f, 3.5f) * 30.0f;
     }
 
     // calculate vertical position above the ground

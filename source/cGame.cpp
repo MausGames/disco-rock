@@ -184,7 +184,7 @@ void cGame::Move()
 
     // calculate movement values
     const coreFloat fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;   // speed-modified
-    const coreFloat fMove30 = Core::System->GetTime()  * 3.0f * BACK_DETAIL_Y;   // normal
+    const coreFloat fMove30 = TIME                     * 3.0f * BACK_DETAIL_Y;   // normal
 
     // check for the next line on the horizon
     const coreInt32 iNewCurLine = g_pBackground->GetCurLine();
@@ -349,10 +349,10 @@ void cGame::Move()
     if(!m_Rock.GetJumped()) m_bTrapJump = false;
 
     // increase score over time
-    m_dScore += coreDouble(Core::System->GetTime() * GAME_SCORE_TIME * (1.0f + m_fTime*0.023f));
+    m_dScore += coreDouble(TIME * GAME_SCORE_TIME * (1.0f + m_fTime*0.023f));
 
     // update combo
-    m_fComboDelay -= Core::System->GetTime() * (GAME_SPEED_FAST/GAME_SPEED_FAST_REAL);
+    m_fComboDelay -= TIME * (GAME_SPEED_FAST/GAME_SPEED_FAST_REAL);
     if(m_fComboDelay <= 0.0f && m_iCombo)
     {
         // reset combo

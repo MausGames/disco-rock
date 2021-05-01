@@ -77,7 +77,7 @@ private:
 
     coreInt32 m_iCurLine;                     // current processing line/row
 
-    std::vector<coreUint8> m_aiAlgo;          // shuffled container with all algorithm identifiers
+    coreList<coreUint8> m_aiAlgo;             // shuffled container with all algorithm identifiers
     coreUintW m_iAlgoCurIndex;                // current index to the algorithm in the container
     coreInt32 m_iAlgoCurCount;                // current number of lines into the current algorithm
     coreBool  m_bAlgoEmptyLines;              // algorithm has empty lines at the beginning and end of his stage (to prevent double-empty-lines)

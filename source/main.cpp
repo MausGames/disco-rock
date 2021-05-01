@@ -287,7 +287,7 @@ void CoreApp::Move()
         }
 
         // smoothly update the real game speed
-        if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 5.0f;
+        if(!g_bPause) g_fCurSpeed += CLAMP(g_fTargetSpeed - g_fCurSpeed, -1.0f, 1.0f) * TIME * 5.0f;
         Core::System->SetTimeSpeed(0u, g_bPause ? 0.0f :     g_fCurSpeed);                                            // general game speed
         Core::System->SetTimeSpeed(1u, g_bPause ? 0.0f : MAX(g_fCurSpeed, GAME_SPEED_FAST) / GAME_SPEED_FAST_REAL);   // rock movement speed
 
@@ -314,7 +314,7 @@ void CoreApp::Move()
         g_pOnline->Update();
 
         // adjust music speed/pitch and update music streaming
-        g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * Core::System->GetTime() * 0.8f;
+        g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * TIME * 0.8f;
         g_pMusicPlayer->Control()->SetPitch(g_fMusicSpeed);
         if(g_pMusicPlayer->Update())
         {

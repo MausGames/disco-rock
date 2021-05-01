@@ -24,7 +24,7 @@ private:
     // text data structure
     struct sData final
     {
-        std::string sText;       // actual text to display
+        coreString sText;        // actual text to display
         coreVector2 vPosition;   // screen position
         coreVector4 vColor;      // RGBA color-value
 
