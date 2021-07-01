@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cCombatText::sData::sData(const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept
+cCombatText::sData::sData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept
 : sText     (pcText)
 , vPosition (vPosition)
 , vColor    (vColor)
@@ -172,7 +172,7 @@ void cCombatText::Reset()
 
 // ****************************************************************
 // add new transformed combat text entry
-void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3& vPosition, const coreVector4& vColor)
+void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3 vPosition, const coreVector4 vColor)
 {
     if(vColor.w <= 0.0f) return;
 
@@ -184,7 +184,7 @@ void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3& 
 
 // ****************************************************************
 // show trophy animation
-void cCombatText::ShowTrophy(const coreChar* pcText, const coreVector3& vPosition)
+void cCombatText::ShowTrophy(const coreChar* pcText, const coreVector3 vPosition)
 {
     // calculate screen position
     const coreVector2 vScreenPos = (coreVector4(vPosition, 1.0f) * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f);

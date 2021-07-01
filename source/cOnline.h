@@ -134,7 +134,7 @@ template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTroph
 
 // ****************************************************************
 // submit score
-template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const scoreString& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
+template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const coreString& sExtraData, const std::string& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
     return m_GameJolt.InterScore()->GetScoreTable(iTableID)->AddGuestScoreCall(sScore, iSort, sExtraData, sGuestName, GJ_NETWORK_OUTPUT_FW);
 }

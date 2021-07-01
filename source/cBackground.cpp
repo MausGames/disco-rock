@@ -177,7 +177,7 @@ void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 
 // ****************************************************************
 // get height value at specific position
-coreFloat cBackground::GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const
+coreFloat cBackground::GetHeight(const coreVector2 vPos, const coreVector2 vBackPos)const
 {
     // convert real position to block position
     const coreFloat fX = (vPos.x-vBackPos.x) / BACK_DETAIL_X + I_TO_F(BACK_BLOCKS_X)/2.0f;

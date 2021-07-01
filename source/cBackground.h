@@ -89,8 +89,8 @@ public:
     inline coreFloat GetFlash  (const coreFloat fStrength)const {return 1.0f + (fStrength * (this->GetAlpha() - 1.0f));}
 
     // get height value at specific position
-    coreFloat        GetHeight(const coreVector2& vPos, const coreVector2& vBackPos)const;
-    inline coreFloat GetHeight(const coreVector2& vPos)const {return this->GetHeight(vPos, this->GetPosition().xy());}
+    coreFloat        GetHeight(const coreVector2 vPos, const coreVector2 vBackPos)const;
+    inline coreFloat GetHeight(const coreVector2 vPos)const {return this->GetHeight(vPos, this->GetPosition().xy());}
 
     // load dance floor geometry
     void LoadGeometry();

@@ -253,7 +253,7 @@ void cGame::Move()
     FOR_EACH_DYN(it, m_apBeverage)
     {
         cBeverage* pBeverage = (*it);
-        const coreVector3& vPos = pBeverage->GetPosition();
+        const coreVector3 vPos = pBeverage->GetPosition();
 
         if(vPos.y <= BACK_REMOVE_Y)
         {
@@ -265,7 +265,7 @@ void cGame::Move()
         {
             // check for collision with beverages
             coreVector3 vDummy;
-            if((pBeverage->GetPosition().y < 10.0f) && (m_PowerUpTimer.GetStatus() || coreObjectManager::TestCollision(pBeverage, &m_Rock, &vDummy)))
+            if((vPos.y < 10.0f) && (m_PowerUpTimer.GetStatus() || coreObjectManager::TestCollision(pBeverage, &m_Rock, &vDummy)))
             {
                 const coreUintW iSigID = pBeverage->GetSigID();
 
@@ -306,7 +306,7 @@ void cGame::Move()
                 }
 
                 // send beverage into the air, try not to spill it
-                pBeverage->Destroy(pBeverage->GetPosition() - m_Rock.GetPosition());
+                pBeverage->Destroy(vPos - m_Rock.GetPosition());
                 pBeverage->PlaySound();
 
                 // move beverage from active to inactive list
