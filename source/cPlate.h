@@ -23,7 +23,7 @@ private:
 
 
 public:
-    cPlate(const coreFloat fStartY, const coreVector2& vTexOffset)noexcept;
+    cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept;
 
     DISABLE_COPY(cPlate)
 

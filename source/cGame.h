@@ -48,7 +48,7 @@
         }                                                     \
         else                                                  \
         {                                                     \
-            const coreVector3& p = o->GetPosition();          \
+            const coreVector3 p = o->GetPosition();           \
             o->SetPosition(coreVector3(p.x, p.y - (m), p.z)); \
             o->Move();                                        \
             DYN_KEEP(it)                                      \

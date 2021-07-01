@@ -28,7 +28,7 @@ private:
         coreVector2 vPosition;   // screen position
         coreVector4 vColor;      // RGBA color-value
 
-        sData(const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor)noexcept;
+        sData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept;
         sData(sData&& m)noexcept;
     };
 
@@ -62,11 +62,11 @@ public:
     void Reset();
 
     // add new combat text data
-    inline void AddText           (const coreChar* pcText, const coreVector2& vPosition, const coreVector4& vColor) {m_aData.emplace_back(pcText, vPosition, vColor);}
-    void        AddTextTransformed(const coreChar* pcText, const coreVector3& vPosition, const coreVector4& vColor);
+    inline void AddText           (const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor) {m_aData.emplace_back(pcText, vPosition, vColor);}
+    void        AddTextTransformed(const coreChar* pcText, const coreVector3 vPosition, const coreVector4 vColor);
 
     // show trophy animation
-    void ShowTrophy(const coreChar* pcText, const coreVector3& vPosition);
+    void ShowTrophy(const coreChar* pcText, const coreVector3 vPosition);
 };
 
 

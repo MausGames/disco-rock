@@ -29,7 +29,7 @@ private:
 
 
 public:
-    cRay(const coreVector3& vStart)noexcept;
+    cRay(const coreVector3 vStart)noexcept;
 
     DISABLE_COPY(cRay)
 

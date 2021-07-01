@@ -111,7 +111,7 @@
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.hpp">
+    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.impl.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjScore.h">
@@ -158,5 +158,8 @@
     <Filter Include="additional\GameJoltAPI">
       <UniqueIdentifier>{c91c5612-a6a2-4ca3-b65a-f6804360117d}</UniqueIdentifier>
     </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="version.rc" />
   </ItemGroup>
 </Project>

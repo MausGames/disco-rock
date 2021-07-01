@@ -17,6 +17,7 @@ const coreUint8       CoreApp::Settings::RenderBuffer::StencilSize  = 0u;
 const coreBool        CoreApp::Settings::RenderBuffer::AlphaChannel = false;
 const coreBool        CoreApp::Settings::RenderBuffer::DoubleBuffer = true;
 const coreBool        CoreApp::Settings::RenderBuffer::StereoRender = false;
+const coreUint32      CoreApp::Settings::Platform::SteamAppID       = 0u;
 
 
 // ****************************************************************
