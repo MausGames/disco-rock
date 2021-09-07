@@ -67,10 +67,10 @@ private:
     coreObject2D m_MausLogo;
     coreObject2D m_BigLogo;
 
-    coreObject2D m_Black;
-    coreObject2D m_White;
-    coreObject2D m_BackgroundLeft;
-    coreObject2D m_BackgroundRight;
+    coreFullscreen m_Black;
+    coreFullscreen m_White;
+    coreObject2D   m_BackgroundLeft;
+    coreObject2D   m_BackgroundRight;
 
     coreObject2D m_Logo;
     coreLabel    m_Pause;
@@ -95,10 +95,10 @@ private:
     coreLabel    m_BottomLoginName;
     coreObject2D m_BottomLoginJolt;
 
-    coreObject2D m_QuestionBlack;
-    coreLabel    m_Question;
-    coreButton   m_Yes;
-    coreButton   m_No;
+    coreFullscreen m_QuestionBlack;
+    coreLabel      m_Question;
+    coreButton     m_Yes;
+    coreButton     m_No;
 
     coreLabel  m_VideoText;
     coreButton m_VideoLow;
@@ -119,21 +119,21 @@ private:
     coreLabel       m_ControlText;
     coreSwitchBoxU8 m_ControlType;
 
-    coreObject2D m_LoginBlack;
-    coreObject2D m_LoginPopup;
-    coreLabel    m_aLoginText[2];
-    coreLabel    m_LoginEnterName;
-    coreLabel    m_LoginEnterToken;
-    coreLabel    m_LoginEnterGuest;
-    coreTextBox  m_LoginName;
-    coreTextBox  m_LoginToken;
-    coreTextBox  m_LoginGuest;
-    coreButton   m_LoginOK;
-    coreButton   m_LoginCancel;
-    coreLabel    m_LoginError;
-    coreLabel    m_LoginJoltOr;
-    coreObject2D m_LoginJoltLogo;
-    coreButton   m_LoginJoltStart;
+    coreFullscreen m_LoginBlack;
+    coreObject2D   m_LoginPopup;
+    coreLabel      m_aLoginText[2];
+    coreLabel      m_LoginEnterName;
+    coreLabel      m_LoginEnterToken;
+    coreLabel      m_LoginEnterGuest;
+    coreTextBox    m_LoginName;
+    coreTextBox    m_LoginToken;
+    coreTextBox    m_LoginGuest;
+    coreButton     m_LoginOK;
+    coreButton     m_LoginCancel;
+    coreLabel      m_LoginError;
+    coreLabel      m_LoginJoltOr;
+    coreObject2D   m_LoginJoltLogo;
+    coreButton     m_LoginJoltStart;
 
     coreObject2D m_Successful;
 
