@@ -28,7 +28,7 @@ coreUint16          g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3u : 0u;
 coreUint16          g_iNumFails       = 0u;
 coreBool            g_bCamUpsideDown  = false;
 
-static coreObject3D* m_apSave[8];   // pre-allocation of required resources
+static coreObject3D* s_apSave[8];   // pre-allocation of required resources
 
 
 // ****************************************************************
@@ -99,12 +99,6 @@ void CoreApp::Init()
     // set view frustum
     Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
 
-    // set audio listener (for 3d sound)
-    const coreVector3 vCamPos = coreVector3(0.0f,-20.0f,-20.0f);
-    const coreVector3 vCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalized();
-    const coreVector3 vCamOri = coreVector3(0.0f,  0.0f,  1.0f);
-    Core::Audio->SetListener(vCamPos, coreVector3(0.0f,0.0f,0.0f), vCamDir, vCamOri);
-
     // override sound and music volume
     coreFloat fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);
     if(coreMath::IsNear(fSoundVolume, 1.0f))
@@ -157,14 +151,14 @@ void CoreApp::Init()
     g_pParticleSystem->DefineProgram("particle_program");
 
     // pre-allocate all required resources
-    m_apSave[0] = new cSunrise();
-    m_apSave[1] = new cMojito ();
-    m_apSave[2] = new cBlue   ();
-    m_apSave[3] = new cCoola  ();
-    m_apSave[4] = new cRock   ();
-    m_apSave[5] = new cPlate  (0.0f, coreVector2(1.0f,1.0f));
-    m_apSave[6] = new cRay    (coreVector3(1.0f,1.0f,1.0f));
-    m_apSave[7] = new cTrap   ();
+    s_apSave[0] = new cSunrise();
+    s_apSave[1] = new cMojito ();
+    s_apSave[2] = new cBlue   ();
+    s_apSave[3] = new cCoola  ();
+    s_apSave[4] = new cRock   ();
+    s_apSave[5] = new cPlate  (0.0f, coreVector2(1.0f,1.0f));
+    s_apSave[6] = new cRay    (coreVector3(1.0f,1.0f,1.0f));
+    s_apSave[7] = new cTrap   ();
 }
 
 
@@ -173,8 +167,8 @@ void CoreApp::Init()
 void CoreApp::Exit()
 {
     // delete all pre-allocated objects
-    for(coreUintW i = 0u; i < ARRAY_SIZE(m_apSave); ++i)
-        SAFE_DELETE(m_apSave[i])
+    for(coreUintW i = 0u; i < ARRAY_SIZE(s_apSave); ++i)
+        SAFE_DELETE(s_apSave[i])
 
     // delete network access
     SAFE_DELETE(g_pOnline)
@@ -296,6 +290,11 @@ void CoreApp::Move()
         const coreVector3 vCamDir = -vCamPos.Normalized();
         const coreVector3 vCamOri =  coreVector3(0.0f, 0.0f, g_bCamUpsideDown ? -1.0f : 1.0f);
         Core::Graphics->SetCamera(vCamPos, vCamDir, vCamOri);
+
+        // set audio listener (for 3d sound)
+        const coreVector3 vAudioCamPos = coreVector3(0.0f,-20.0f,-20.0f);
+        const coreVector3 vAudioCamDir = coreVector3(0.0f, 70.0f,-51.0f).Normalized();
+        Core::Audio->SetListener(vAudioCamPos, coreVector3(0.0f,0.0f,0.0f), vAudioCamDir, vCamOri);
 
         if(!g_bPause)
         {

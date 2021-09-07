@@ -9,35 +9,35 @@
 
 // ****************************************************************
 // project settings
-const coreChar* const CoreApp::Settings::Name                       = "Disco Rock";
-const coreChar* const CoreApp::Settings::IconPath                   = "data/textures/game_icon.png";
-const coreChar* const CoreApp::Settings::CursorPath                 = "data/textures/default_cursor.png";
-const coreUint8       CoreApp::Settings::RenderBuffer::DepthSize    = 24u;
-const coreUint8       CoreApp::Settings::RenderBuffer::StencilSize  = 0u;
-const coreBool        CoreApp::Settings::RenderBuffer::AlphaChannel = false;
-const coreBool        CoreApp::Settings::RenderBuffer::DoubleBuffer = true;
-const coreBool        CoreApp::Settings::RenderBuffer::StereoRender = false;
-const coreUint32      CoreApp::Settings::Platform::SteamAppID       = 0u;
+const coreChar* const CoreApp::Settings::Name                   = "Disco Rock";
+const coreChar* const CoreApp::Settings::IconPath               = "data/textures/game_icon.png";
+const coreChar* const CoreApp::Settings::CursorPath             = "data/textures/default_cursor.png";
+const coreUint8       CoreApp::Settings::Graphics::DepthSize    = 24u;
+const coreUint8       CoreApp::Settings::Graphics::StencilSize  = 0u;
+const coreBool        CoreApp::Settings::Graphics::AlphaChannel = false;
+const coreBool        CoreApp::Settings::Graphics::DoubleBuffer = true;
+const coreBool        CoreApp::Settings::Graphics::StereoRender = false;
+const coreUint32      CoreApp::Settings::Platform::SteamAppID   = 0u;
 
 
 // ****************************************************************
 // setup the application
 void CoreApp::Setup()
 {
-    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_cola.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_cola.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_mojito.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_mojito_straw.md5mesh",  CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito_straw.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise.md5mesh",       CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh", false);
-    Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh", false);
+    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3",            CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5mesh",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_cola.md5mesh",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_cola.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito.md5mesh",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_mojito_straw.md5mesh",  CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_mojito_straw.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise.md5mesh",       CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("drink_sunrise_straw.md5mesh", CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_sunrise_straw.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("ray.md5mesh",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("rock.md5mesh",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5mesh", CORE_MODEL_LOAD_NO_CLUSTERS);
 
     Core::Manager::Resource->Load<coreTexture>("background.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.png");
-    Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png", false);
+    Core::Manager::Resource->Load<coreTexture>("background_norm.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.png", CORE_TEXTURE_LOAD_NO_COMPRESS);
     Core::Manager::Resource->Load<coreTexture>("button_ok.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_ok.png");
     Core::Manager::Resource->Load<coreTexture>("button_cancel.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_cancel.png");
     Core::Manager::Resource->Load<coreTexture>("button_login.png",            CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_login.png");
@@ -58,8 +58,8 @@ void CoreApp::Setup()
     Core::Manager::Resource->Load<coreTexture>("drink_blue.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_blue.png");
     Core::Manager::Resource->Load<coreTexture>("drink_cola.png",              CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola.png");
     Core::Manager::Resource->Load<coreTexture>("drink_cola_glass.png",        CORE_RESOURCE_UPDATE_AUTO,   "data/textures/drink_cola_glass.png");
-    Core::Manager::Resource->Load<coreTexture>("effect_ground.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_ground.png", false);
-    Core::Manager::Resource->Load<coreTexture>("effect_particle.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_particle.png", false);
+    Core::Manager::Resource->Load<coreTexture>("effect_ground.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_ground.png", CORE_TEXTURE_LOAD_NO_COMPRESS);
+    Core::Manager::Resource->Load<coreTexture>("effect_particle.png",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/effect_particle.png", CORE_TEXTURE_LOAD_NO_COMPRESS);
     Core::Manager::Resource->Load<coreTexture>("game_logo.png",               CORE_RESOURCE_UPDATE_AUTO,   "data/textures/game_logo.png");
     Core::Manager::Resource->Load<coreTexture>("gamejolt_logo.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_logo.png");
     Core::Manager::Resource->Load<coreTexture>("gamejolt_jolt.png",           CORE_RESOURCE_UPDATE_AUTO,   "data/textures/gamejolt_jolt.png");

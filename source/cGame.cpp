@@ -283,16 +283,8 @@ void cGame::Move()
                 m_iCombo = MIN(m_iCombo + 1u, 0xFFFFu);
                 m_fComboDelay = 1.0f;
 
-                const coreFloat fTextAlpha = 1.0f - m_fTime * 0.008f;
-                if((iSigID == 4u) || (fTextAlpha > 0.2f))
-                {
-                    // get and modify beverage color
-                    coreVector4 vColor = coreVector4(pBeverage->GetSigColor(), 1.0f);
-                    if(iSigID != 4u) vColor.w *= CLAMP(fTextAlpha + 0.2f, 0.0f, 1.0f);
-
-                    // create floating score text
-                    g_pCombatText->AddTextTransformed(fValue ? PRINT("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), vColor);
-                }
+                // create floating score text
+                g_pCombatText->AddTextTransformed(fValue ? PRINT("%.0f", fValue) : "RAMPAGE", m_Rock.GetPosition(), coreVector4(pBeverage->GetSigColor(), 1.0f));
 
                 // create max combo text (after score text)
                 if(m_iCombo == 18u) g_pCombatText->AddTextTransformed("+MAXIMUM", m_Rock.GetPosition(), coreVector4(COLOR_ORANGE_F, 1.0f));

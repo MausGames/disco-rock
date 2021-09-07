@@ -1368,7 +1368,7 @@ void cMenu::Move()
                     {
                         // trim possible whitespaces
                         coreString sTrimmed = m_LoginGuest.GetText();
-                        coreData::StrTrim(&sTrimmed);
+                        sTrimmed.trim();
 
                         // send guest score
                         this->SubmitScore(sTrimmed.c_str());
@@ -1692,7 +1692,7 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
 
         // trim possible whitespaces
         coreString sTrimmed = pScore ? (pScore->GetUserName().substr(0u, NAME_LEN) + (bOver ? ">" : "")).c_str() : "-";
-        coreData::StrTrim(&sTrimmed);
+        sTrimmed.trim();
 
         if(iTableNum == 0u) // == GJ_LEADERBOARD_01
         {

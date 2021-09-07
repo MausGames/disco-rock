@@ -22,7 +22,7 @@ void FragmentMain()
     float v1Alpha = dot(v_v3ViewNorm, c_v3CamDir);
     v1Alpha *= v1Alpha;   // 2
     v1Alpha *= v1Alpha;   // 4
-    
+
     // draw smooth intensity-modified color
     gl_FragColor = vec4(u_v4Color.rgb, u_v4Color.a * v1Alpha * v_v1Intensity);
 }

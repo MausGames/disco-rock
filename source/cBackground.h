@@ -52,7 +52,7 @@ private:
 
 
 private:
-    coreObject2D m_Fill;                // filling background with funky disco lights
+    coreFullscreen m_Fill;              // filling background with funky disco lights
 
     coreFlow m_fPositionTime;           // timer for the current dance floor position
     coreFlow m_fFloorTime;              // timer for the light animation on the dance floor
