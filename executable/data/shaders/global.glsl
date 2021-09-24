@@ -142,14 +142,6 @@
 #define SQRT2 (1.4142135623730950488016887242097)
 #define SQRT3 (1.7320508075688772935274463415059)
 
-// light structure
-struct coreLight
-{
-    vec4 v4Position;
-    vec4 v4Direction;
-    vec4 v4Value;
-};
-
 // evaluate shader per sample
 #if defined(GL_ARB_sample_shading)
     #define CORE_SAMPLE_SHADING {gl_SampleID;}
@@ -165,12 +157,10 @@ struct coreLight
 #else
     #define coreMin3(a,b,c) (min(a, min(b, c)))
     #define coreMax3(a,b,c) (max(a, max(b, c)))
-    #define _CORE_MED3(t) t coreMed3(const in t a, const in t b, const in t c) {return max(min(max(a, b), c), min(a, b));}
-        _CORE_MED3(float)
-        _CORE_MED3(vec2)
-        _CORE_MED3(vec3)
-        _CORE_MED3(vec4)
-    #undef _CORE_MED3
+    float coreMed3(const in float a, const in float b, const in float c) {return max(min(max(a, b), c), min(a, b));}
+    vec2  coreMed3(const in vec2  a, const in vec2  b, const in vec2  c) {return max(min(max(a, b), c), min(a, b));}
+    vec3  coreMed3(const in vec3  a, const in vec3  b, const in vec3  c) {return max(min(max(a, b), c), min(a, b));}
+    vec4  coreMed3(const in vec4  a, const in vec4  b, const in vec4  c) {return max(min(max(a, b), c), min(a, b));}
 #endif
 
 // condition across group of shader invocations
@@ -185,13 +175,26 @@ struct coreLight
     #define coreAllInvocations(x) (x)
 #endif
 
+// clamp values between 0.0 and 1.0
+#define coreSaturate(x) (clamp(x, 0.0, 1.0))
+
 // linear interpolation between 0.0 and 1.0
-#define _CORE_LINEAR_STEP(t) t coreLinearStep(const in float e0, const in float e1, const in t x) {return clamp((x - e0) / (e1 - e0), 0.0, 1.0);}
-    _CORE_LINEAR_STEP(float)
-    _CORE_LINEAR_STEP(vec2)
-    _CORE_LINEAR_STEP(vec3)
-    _CORE_LINEAR_STEP(vec4)
-#undef _CORE_LINEAR_STEP
+float coreLinearStep(const in float e0, const in float e1, const in float v) {return coreSaturate((v - e0) / (e1 - e0));}
+vec2  coreLinearStep(const in float e0, const in float e1, const in vec2  v) {return coreSaturate((v - e0) / (e1 - e0));}
+vec3  coreLinearStep(const in float e0, const in float e1, const in vec3  v) {return coreSaturate((v - e0) / (e1 - e0));}
+vec4  coreLinearStep(const in float e0, const in float e1, const in vec4  v) {return coreSaturate((v - e0) / (e1 - e0));}
+
+// extract the sign without returning 0.0
+float coreSign(const in float v) {return (v >= 0.0) ? 1.0 : -1.0;}
+#if (__VERSION__) >= 130
+    vec2 coreSign(const in vec2 v) {return mix(vec2(-1.0), vec2(1.0), greaterThanEqual(v, vec2(0.0)));}
+    vec3 coreSign(const in vec3 v) {return mix(vec3(-1.0), vec3(1.0), greaterThanEqual(v, vec3(0.0)));}
+    vec4 coreSign(const in vec4 v) {return mix(vec4(-1.0), vec4(1.0), greaterThanEqual(v, vec4(0.0)));}
+#else
+    vec2 coreSign(const in vec2 v) {return vec2(coreSign(v.x), coreSign(v.y));}
+    vec3 coreSign(const in vec3 v) {return vec3(coreSign(v.x), coreSign(v.y), coreSign(v.z));}
+    vec4 coreSign(const in vec4 v) {return vec4(coreSign(v.x), coreSign(v.y), coreSign(v.z), coreSign(v.w));}
+#endif
 
 // color convert
 vec3 coreRgbToHsv(const in vec3 v3Rgb)
@@ -268,7 +271,7 @@ vec3 coreYcbcrToRgb(const in vec3 v3Ycbcr)
 }
 float coreLuminance(const in vec3 v3Rgb)
 {
-    return dot(v3Rgb, vec3(0.212671, 0.715160, 0.072169));
+    return dot(v3Rgb, vec3(0.2126, 0.7152, 0.0722));
 }
 
 // vector square length
@@ -297,6 +300,18 @@ vec3 coreUnpackNormalMapDeriv(const in vec2 v)
 {
     vec2 A = v * 2.0 - 1.0;
     return normalize(vec3(A, 1.0));
+}
+vec2 corePackNormalOcta(const in vec3 v)
+{
+    vec2 A = v.xy / (abs(v.x) + abs(v.y) + abs(v.z));
+    A = (v.z >= 0.0) ? A : ((vec2(1.0) - abs(A.yx)) * coreSign(A));
+    return A;
+}
+vec3 coreUnpackNormalOcta(const in vec2 v)
+{
+    vec3 A = vec3(v, 1.0 - abs(v.x) - abs(v.y));
+    A.xy += coreSign(A.xy) * -coreSaturate(-A.z);
+    return normalize(A);
 }
 
 // quaternion transformation
@@ -425,42 +440,46 @@ mat4 coreInvert(const in mat4 m)
     // transformation uniforms
     layout(std140) uniform b_Transform
     {
-        layoutEx(align = 16) mat4 u_m4ViewProj;
-        layoutEx(align = 16) mat4 u_m4Camera;
-        layoutEx(align = 16) mat4 u_m4Perspective;
-        layoutEx(align = 16) mat4 u_m4Ortho;
-        layoutEx(align = 16) vec4 u_v4Resolution;
-        layoutEx(align = 16) vec3 u_v3CamPosition;
+        layoutEx(align = 16) highp   mat4 u_m4ViewProj;
+        layoutEx(align = 16) highp   mat4 u_m4Camera;
+        layoutEx(align = 16) highp   mat4 u_m4Perspective;
+        layoutEx(align = 16) highp   mat4 u_m4Ortho;
+        layoutEx(align = 16) highp   vec4 u_v4Resolution;
+        layoutEx(align = 16) highp   vec3 u_v3CamPosition;
     };
 
     // ambient uniforms
     layout(std140) uniform b_Ambient
     {
-        layoutEx(align = 16) coreLight u_aLight[CORE_NUM_LIGHTS];
+        layoutEx(align = 16) highp   vec4 u_av4LightPos  [CORE_NUM_LIGHTS];
+        layoutEx(align = 16) mediump vec4 u_av4LightDir  [CORE_NUM_LIGHTS];
+        layoutEx(align = 16) mediump vec4 u_av4LightValue[CORE_NUM_LIGHTS];
     };
 
 #else
 
     // transformation uniforms
-    uniform mat4 u_m4ViewProj;
-    uniform mat4 u_m4Camera;
-    uniform mat4 u_m4Perspective;
-    uniform mat4 u_m4Ortho;
-    uniform vec4 u_v4Resolution;
-    uniform vec3 u_v3CamPosition;
+    uniform highp   mat4 u_m4ViewProj;
+    uniform highp   mat4 u_m4Camera;
+    uniform highp   mat4 u_m4Perspective;
+    uniform highp   mat4 u_m4Ortho;
+    uniform highp   vec4 u_v4Resolution;
+    uniform highp   vec3 u_v3CamPosition;
 
     // ambient uniforms
-    uniform coreLight u_aLight[CORE_NUM_LIGHTS];
+    uniform highp   vec4 u_av4LightPos  [CORE_NUM_LIGHTS];
+    uniform mediump vec4 u_av4LightDir  [CORE_NUM_LIGHTS];
+    uniform mediump vec4 u_av4LightValue[CORE_NUM_LIGHTS];
 
 #endif
 
 // 3d-object uniforms
-uniform vec3 u_v3Position;
-uniform vec3 u_v3Size;
-uniform vec4 u_v4Rotation;
+uniform highp   vec3 u_v3Position;
+uniform mediump vec3 u_v3Size;
+uniform mediump vec4 u_v4Rotation;
 
 // 2d-object uniforms
-uniform mat3 u_m3ScreenView;
+uniform highp   mat3 u_m3ScreenView;
 
 // default object uniforms
 uniform lowp    vec4 u_v4Color;
@@ -510,8 +529,8 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         attribute vec4 a_v4RawTangent;
 
         // instancing uniforms
-        uniform vec3 a_v3DivPosition;
-        uniform vec3 a_v3DivData;
+        uniform highp   vec3 a_v3DivPosition;
+        uniform mediump vec3 a_v3DivData;
 
         // shader output
         flat varying vec4 v_v4VarColor;
@@ -545,7 +564,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void VertexMain();
-    void main()
+    void ShaderMain()
     {
     #if defined(_CORE_OPTION_INSTANCING_)
         v_v4VarColor = a_v4DivColor;
@@ -564,7 +583,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void TessControlMain();
-    void main()
+    void ShaderMain()
     {
         TessControlMain();
     }
@@ -577,7 +596,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void TessEvaluationMain();
-    void main()
+    void ShaderMain()
     {
         TessEvaluationMain();
     }
@@ -612,7 +631,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void GeometryMain();
-    void main()
+    void ShaderMain()
     {
         GeometryMain();
     }
@@ -664,7 +683,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void FragmentMain();
-    void main()
+    void ShaderMain()
     {
         v_v3ViewDir = v_v3TangentCam - v_v3TangentPos;
         FragmentMain();
@@ -678,7 +697,7 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
 
     // main function
     void ComputeMain();
-    void main()
+    void ShaderMain()
     {
         ComputeMain();
     }
@@ -746,8 +765,8 @@ uniform sampler2DShadow u_as2TextureShadow[CORE_NUM_TEXTURES_SHADOW];
         mat3 TBN = coreTangentSpaceMatrix();
         for(int i = 0; i < CORE_NUM_LIGHTS; ++i)
         {
-            v_av4LightPos[i] = vec4(TBN *  u_aLight[i].v4Position .xyz, u_aLight[i].v4Position .w);
-            v_av4LightDir[i] = vec4(TBN * -u_aLight[i].v4Direction.xyz, u_aLight[i].v4Direction.w);
+            v_av4LightPos[i] = vec4(TBN *  u_av4LightPos[i].xyz, u_av4LightPos[i].w);
+            v_av4LightDir[i] = vec4(TBN * -u_av4LightDir[i].xyz, u_av4LightDir[i].w);
         }
         v_v3TangentPos = TBN * v3Position;
         v_v3TangentCam = TBN * u_v3CamPosition;
