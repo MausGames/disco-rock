@@ -40,7 +40,7 @@ public:
 
 
 // just define as empty object
-typedef coreObject2D cFirst;
+using cFirst = coreObject2D;
 
 
 #endif // _CORE_MOBILE_ || _DR_EMULATE_MOBILE_

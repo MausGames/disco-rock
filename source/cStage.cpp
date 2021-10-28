@@ -280,7 +280,7 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
             this->AddStreet(2, true, 0, 1, pbHole);
             if((iAlt == 2) && (m_iAlgoCurCount != iMaxCount-1))
             {
-                m_aiAlgoStatus[0] = Core::Rand->Int(1) ? 6 : 1;
+                m_aiAlgoStatus[0] = Core::Rand->Bool() ? 6 : 1;
 
                 this->AddTrap(fSpawnY, 2, pbHole);
                 this->AddTrap(fSpawnY, 3, pbHole);
@@ -603,14 +603,14 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
                 this->AddStreet(1, true, 0, 0, pbHole);
                 this->AddStreet(3, true, 0, 0, pbHole);
             }
-            else m_aiAlgoStatus[0] = CLAMP(m_aiAlgoStatus[0] + (Core::Rand->Int(1) ? -1 : 1), 2, 4);
+            else m_aiAlgoStatus[0] = CLAMP(m_aiAlgoStatus[0] + (Core::Rand->Bool() ? -1 : 1), 2, 4);
 
             if((m_iAlgoCurCount + 2) % 4)
             {
                 this->AddStreet(2, true, 0, 0, pbHole);
                 this->AddStreet(4, true, 0, 0, pbHole);
             }
-            else m_aiAlgoStatus[0] = CLAMP(m_aiAlgoStatus[0] + (Core::Rand->Int(1) ? -1 : 1), 1, 3);
+            else m_aiAlgoStatus[0] = CLAMP(m_aiAlgoStatus[0] + (Core::Rand->Bool() ? -1 : 1), 1, 3);
 
             if(m_iAlgoCurCount <= 2) m_aiAlgoStatus[0] = 3;
             this->AddBeverage(fSpawnY, m_aiAlgoStatus[0], pbHole);
@@ -775,7 +775,7 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
             if(!iFill)
             {
                 m_aiAlgoStatus[0] = (m_aiAlgoStatus[0] + Core::Rand->Int(1, (m_iAlgoCurCount <= 1) ? 2 : 3)) % 4;
-                m_aiAlgoStatus[1] = Core::Rand->Int(1)*2;
+                m_aiAlgoStatus[1] = Core::Rand->Int(1) * 2;
             }
 
             if(iFill % 3) this->AddBeverage(fSpawnY, m_aiAlgoStatus[0] + 1, pbHole);

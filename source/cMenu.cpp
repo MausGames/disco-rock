@@ -1664,7 +1664,7 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
         // show player rank
         if(g_pOnline->IsUserConnected())
         {
-            // TODO: implement   
+            // TODO 3: implement   
             //coreInt32 iTest = 0;
             //apScore[0]->GetRankNow(&iTest);
             //m_aScoreRank[iTableNum].SetText(coreData::ToChars(iTest));

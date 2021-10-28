@@ -237,7 +237,7 @@ void cRock::Move()
     if(g_pGame->GetTime() >= GAME_SHOCK_TIME)
     {
         // define smoke color
-        const coreVector4 vSmokeColor = (m_bColored && Core::Rand->Int(3)) ? coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 0.9f) : coreVector4(COLOR_WHITE_F, 0.6f);
+        const coreVector4 vSmokeColor = (m_bColored && Core::Rand->Bool(0.75f)) ? coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 0.9f) : coreVector4(COLOR_WHITE_F, 0.6f);
 
         // create smoke trail
         m_Effect.CreateParticle(ROCK_SPRITE_NUM, 60.0f, [this, &vSmokeColor](coreParticle* pParticle)

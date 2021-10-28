@@ -172,8 +172,8 @@ private:
     coreBool m_bInLeaderboard;                              // current values would be in the visible leaderboard (ask to submit before leaving)
 
     gjScoreList m_aapCurScores[SCORE_TABLES];               // saved score pointers for better leaderboard paging
-    coreUint8 m_iCurPage;                                   // current page in the leaderboards
-    coreUint8 m_iTableUpdate;                               // status to update the current score table display synchronous
+    coreUint8   m_iCurPage;                                 // current page in the leaderboards
+    coreUint8   m_iTableUpdate;                             // status to update the current score table display synchronous
 
     coreUint32 m_iTrophyStatus;                             // achieve-status of all trophies (per bit)
     coreInt8   m_iTrophyCurrent;                            // current selected trophy
