@@ -12,8 +12,6 @@ set_target_properties(
     C_STANDARD 11
     CXX_STANDARD 20
     DEBUG_POSTFIX _debug
-    SUFFIX .elf
-    RUNTIME_OUTPUT_DIRECTORY ${BASE_DIRECTORY}/executable/bin/linux_x86_64/
 )
 
 
@@ -61,5 +59,34 @@ target_precompile_headers(
 
 target_link_libraries(
     DiscoRock PRIVATE
-    CoreEngine -l:libcurl.so.4
+    CoreEngine
 )
+
+
+if(EMSCRIPTEN)
+
+
+    set_target_properties(
+        DiscoRock PROPERTIES
+        SUFFIX .html
+        RUNTIME_OUTPUT_DIRECTORY ${BASE_DIRECTORY}/executable/bin/emscripten/
+    )
+
+
+else()
+
+
+    set_target_properties(
+        DiscoRock PROPERTIES
+        SUFFIX .elf
+        RUNTIME_OUTPUT_DIRECTORY ${BASE_DIRECTORY}/executable/bin/linux_x86_64/
+    )
+
+
+    target_link_libraries(
+        DiscoRock PRIVATE
+        -l:libcurl.so.4
+    )
+
+
+endif()
