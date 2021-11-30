@@ -23,6 +23,7 @@ cGame::cGame(const coreBool bChallenge)noexcept
 , m_iMaxCombo        (0u)
 , m_fComboTime       (0.0f)
 , m_fComboDelay      (0.0f)
+, m_aiCollected      {}
 , m_iCollectedTraps  (0u)
 , m_iCollectedNoBlue (0u)
 , m_iCoolaCounter    (0u)
@@ -36,7 +37,10 @@ cGame::cGame(const coreBool bChallenge)noexcept
 , m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1u))
 , m_Message          (FONT_ROCKS, 45u, OUTLINE_SIZE)
 , m_MessageTimer     (coreTimer(1.0f, 0.333f, 1u))
+, m_bTrophyHelper    {}
 {
+    ++g_iNumGames;
+
     // add and shuffle all algorithms
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
     for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
@@ -47,11 +51,6 @@ cGame::cGame(const coreBool bChallenge)noexcept
     m_Message.SetText    (g_MsgIntro.Get());
     m_MessageTimer.Play    (CORE_TIMER_PLAY_CURRENT);
     m_MessageTimer.SetValue(-0.333f);
-
-    // reset statistics and trophy cache
-    for(coreUintW i = 0u; i < ARRAY_SIZE(m_aiCollected); ++i) m_aiCollected  [i] = 0u;
-    for(coreUintW i = 0u; i < TROPHY_ITEMS;              ++i) m_bTrophyHelper[i] = false;
-    ++g_iNumGames;
 
     // load sound-effects
     m_pTrapSound   = Core::Manager::Resource->Get<coreSound>("trap.wav");
