@@ -1277,7 +1277,7 @@ void cMenu::Move()
         // apply and save control changes
         if(m_ControlType.IsClicked())
         {
-            if(Core::Config->GetInt("Game", "Control", 0) != m_ControlType.GetCurIndex())
+            if(coreUintW(Core::Config->GetInt("Game", "Control", 0)) != m_ControlType.GetCurIndex())
             {
                 Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
 
