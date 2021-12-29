@@ -16,6 +16,7 @@ cMenu::cMenu()noexcept
 , m_ScoreMenu      (8u,  0u)
 , m_LoginMenu      (4u,  0u)
 , m_Intro          (coreTimer(10.0f, 1.0f, 1u))
+, m_afSubmitValue  {}
 , m_bSubmitted     (true)
 , m_bInLeaderboard (false)
 , m_iCurPage       (0u)
@@ -521,8 +522,6 @@ cMenu::cMenu()noexcept
         m_aAfterRecord[i].SetPosition(coreVector2(vPos.x - m_BackgroundRight.GetSize().x*0.5f + 0.13f, m_aAfterBestValue[i].GetPosition().y));
         m_aAfterRecord[i].SetCenter  (vCen);
         m_aAfterRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
-
-        m_afSubmitValue[i] = 0.0f;
     }
 
     // create trophy objects
