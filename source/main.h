@@ -121,25 +121,25 @@ enum eStage : coreUint8
 
 // ****************************************************************
 // global variables
-extern cBackground*        g_pBackground;       // background with dance floor
-extern cMenu*              g_pMenu;             // global menu object
-extern cCombatText*        g_pCombatText;       // global "combat" text object
-extern cGame*              g_pGame;             // global game object
-extern cFirst*             g_pFirst;            // special menu displayed at the first time
+extern cBackground*        const g_pBackground;       // background with dance floor
+extern cMenu*              const g_pMenu;             // global menu object
+extern cCombatText*        const g_pCombatText;       // global "combat" text object
+extern cGame*              const g_pGame;             // global game object
+extern cFirst*             const g_pFirst;            // special menu displayed at the first time
 
-extern coreMusicPlayer*    g_pMusicPlayer;      // primary music player
-extern coreParticleSystem* g_pParticleSystem;   // primary particle system
+extern coreMusicPlayer*    const g_pMusicPlayer;      // primary music player
+extern coreParticleSystem* const g_pParticleSystem;   // primary particle system
 
-extern cOnline*            g_pOnline;           // network access object for leaderboards and achievements
+extern cOnline*            const g_pOnline;           // network access object for leaderboards and achievements
 
-extern coreFloat           g_fTargetSpeed;      // new target speed
-extern coreFloat           g_fCurSpeed;         // current speed
-extern coreFloat           g_fMusicSpeed;       // dedicated music speed
-extern coreBool            g_bPause;            // pause status
+extern coreFloat           g_fTargetSpeed;            // new target speed
+extern coreFloat           g_fCurSpeed;               // current speed
+extern coreFloat           g_fMusicSpeed;             // dedicated music speed
+extern coreBool            g_bPause;                  // pause status
 
-extern coreUint16          g_iNumGames;         // number of started games
-extern coreUint16          g_iNumFails;         // number of deaths below 10 seconds
-extern coreBool            g_bCamUpsideDown;    // upside-down camera status
+extern coreUint16          g_iNumGames;               // number of started games
+extern coreUint16          g_iNumFails;               // number of deaths below 10 seconds
+extern coreBool            g_bCamUpsideDown;          // upside-down camera status
 
 
 // ****************************************************************

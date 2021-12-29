@@ -8,25 +8,25 @@
 //////////////////////////////////////////////////////
 #include "main.h"
 
-cBackground*        g_pBackground     = NULL;
-cMenu*              g_pMenu           = NULL;
-cCombatText*        g_pCombatText     = NULL;
-cGame*              g_pGame           = NULL;
-cFirst*             g_pFirst          = NULL;
+STATIC_MEMORY(cBackground,        g_pBackground)
+STATIC_MEMORY(cMenu,              g_pMenu)
+STATIC_MEMORY(cCombatText,        g_pCombatText)
+STATIC_MEMORY(cGame,              g_pGame)
+STATIC_MEMORY(cFirst,             g_pFirst)
 
-coreMusicPlayer*    g_pMusicPlayer    = NULL;
-coreParticleSystem* g_pParticleSystem = NULL;
+STATIC_MEMORY(coreMusicPlayer,    g_pMusicPlayer)
+STATIC_MEMORY(coreParticleSystem, g_pParticleSystem)
 
-cOnline*            g_pOnline         = NULL;
+STATIC_MEMORY(cOnline,            g_pOnline)
 
-coreFloat           g_fTargetSpeed    = 1.0f;
-coreFloat           g_fCurSpeed       = 1.0f;
-coreFloat           g_fMusicSpeed     = 1.0f;
-coreBool            g_bPause          = false;
+coreFloat  g_fTargetSpeed   = 1.0f;
+coreFloat  g_fCurSpeed      = 1.0f;
+coreFloat  g_fMusicSpeed    = 1.0f;
+coreBool   g_bPause         = false;
 
-coreUint16          g_iNumGames       = DEFINED(_CORE_DEBUG_) ? 3u : 0u;
-coreUint16          g_iNumFails       = 0u;
-coreBool            g_bCamUpsideDown  = false;
+coreUint16 g_iNumGames      = DEFINED(_CORE_DEBUG_) ? 3u : 0u;
+coreUint16 g_iNumFails      = 0u;
+coreBool   g_bCamUpsideDown = false;
 
 static coreObject3D* s_apSave[8];   // pre-allocation of required resources
 
@@ -114,20 +114,20 @@ void CoreApp::Init()
         Core::Config->SetInt("Graphics", "Quality", 2);
 
         // also create and show first-time menu
-        if(DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_)) g_pFirst = new cFirst();
+        if(DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_)) STATIC_NEW(g_pFirst)
     }
 
     // create main components
-    g_pBackground = new cBackground();
-    g_pMenu       = new cMenu();
-    g_pCombatText = new cCombatText();
+    STATIC_NEW(g_pBackground)
+    STATIC_NEW(g_pMenu)
+    STATIC_NEW(g_pCombatText)
 
     // create network access
-    g_pOnline = new cOnline();
-    if(!g_pFirst) g_pMenu->QuickPlay();
+    STATIC_NEW(g_pOnline)
+    if(!STATIC_ISVALID(g_pFirst)) g_pMenu->QuickPlay();
 
     // create music player and load music files (loading-order is important, hardcoded music speed in background class)
-    g_pMusicPlayer = new coreMusicPlayer();
+    STATIC_NEW(g_pMusicPlayer);
     g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
@@ -137,7 +137,7 @@ void CoreApp::Init()
     // start music delayed
     Core::Manager::Resource->AttachFunction([]()
     {
-        if((Core::System->GetTotalTime() > 0.5) && !g_pMusicPlayer->Control()->IsPlaying() && !g_pFirst)
+        if((Core::System->GetTotalTime() > 0.5) && !g_pMusicPlayer->Control()->IsPlaying() && !STATIC_ISVALID(g_pFirst))
         {
             g_pMusicPlayer->Control()->Play();
             return CORE_OK;
@@ -146,7 +146,7 @@ void CoreApp::Init()
     });
 
     // create particle system
-    g_pParticleSystem = new coreParticleSystem(64u * ROCK_SPRITE_NUM);
+    STATIC_NEW(g_pParticleSystem, 64u * ROCK_SPRITE_NUM)
     g_pParticleSystem->DefineTexture(0u, "effect_particle.png");
     g_pParticleSystem->DefineProgram("particle_program");
 
@@ -171,18 +171,18 @@ void CoreApp::Exit()
         SAFE_DELETE(s_apSave[i])
 
     // delete network access
-    SAFE_DELETE(g_pOnline)
+    STATIC_DELETE(g_pOnline)
 
     // delete all main components
-    SAFE_DELETE(g_pFirst)
-    SAFE_DELETE(g_pCombatText)
-    SAFE_DELETE(g_pGame)
-    SAFE_DELETE(g_pMenu)
-    SAFE_DELETE(g_pBackground)
+    STATIC_DELETE(g_pFirst)
+    STATIC_DELETE(g_pCombatText)
+    STATIC_DELETE(g_pGame)
+    STATIC_DELETE(g_pMenu)
+    STATIC_DELETE(g_pBackground)
 
     // delete all sub components
-    SAFE_DELETE(g_pParticleSystem)
-    SAFE_DELETE(g_pMusicPlayer)
+    STATIC_DELETE(g_pParticleSystem)
+    STATIC_DELETE(g_pMusicPlayer)
 }
 
 
@@ -190,7 +190,7 @@ void CoreApp::Exit()
 // render the application
 void CoreApp::Render()
 {
-    if(g_pFirst)
+    if(STATIC_ISVALID(g_pFirst))
     {
         // render first-time menu
         g_pFirst->Render();
@@ -200,9 +200,9 @@ void CoreApp::Render()
     Core::Debug->MeasureStart("Game");
     {
         // render background and game
-        if(g_pGame) g_pGame->RenderPre();
+        if(STATIC_ISVALID(g_pGame)) g_pGame->RenderPre();
         g_pBackground->Render();
-        if(g_pGame) g_pGame->Render();
+        if(STATIC_ISVALID(g_pGame)) g_pGame->Render();
     }
     Core::Debug->MeasureEnd("Game");
     Core::Debug->MeasureStart("Menu");
@@ -231,13 +231,13 @@ void CoreApp::Move()
         Core::Reshape();
     }
 
-    if(g_pFirst)
+    if(STATIC_ISVALID(g_pFirst))
     {
         // move first-time menu
         g_pFirst->Move();
         if(g_pFirst->GetStatus())
         {
-            SAFE_DELETE(g_pFirst)
+            STATIC_DELETE(g_pFirst)
             g_pMenu->QuickPlay();
         }
         return;
@@ -262,13 +262,13 @@ void CoreApp::Move()
             bChallenge |= (Core::Input->GetKeyboardButton(CORE_INPUT_KEY(C), CORE_INPUT_HOLD)) ? true : false;
 
             // create/start a new game
-            SAFE_DELETE(g_pGame)
-            g_pGame = new cGame(bChallenge);
+            STATIC_DELETE(g_pGame)
+            STATIC_NEW(g_pGame, bChallenge)
         }
         else if(g_pMenu->GetStatus() == 2)
         {
             // delete/exit the current game
-            SAFE_DELETE(g_pGame)
+            STATIC_DELETE(g_pGame)
 
             // reset game speed and camera
             g_fTargetSpeed   = 1.0f;
@@ -300,7 +300,7 @@ void CoreApp::Move()
         {
             // move background and game
             g_pBackground->Move();
-            if(g_pGame) g_pGame->Move();
+            if(STATIC_ISVALID(g_pGame)) g_pGame->Move();
 
             // move particle system (render is in the game object)
             g_pParticleSystem->Move();
@@ -318,7 +318,7 @@ void CoreApp::Move()
         if(g_pMusicPlayer->Update())
         {
             // update music volume
-            g_pMusicPlayer->Control()->SetVolume((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
+            g_pMusicPlayer->Control()->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
     }
     Core::Debug->MeasureEnd("Move");

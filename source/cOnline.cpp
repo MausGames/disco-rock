@@ -31,6 +31,6 @@ cOnline::cOnline()noexcept
 void cOnline::Update()
 {
     // update Game Jolt API object
-    m_GameJolt.SetSessionActive(g_pGame != NULL);
+    m_GameJolt.SetSessionActive(STATIC_ISVALID(g_pGame));
     m_GameJolt.Update();
 }
