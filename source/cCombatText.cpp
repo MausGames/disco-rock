@@ -31,14 +31,15 @@ cCombatText::sData::sData(sData&& m)noexcept
 cCombatText::cCombatText()noexcept
 : m_iCurText    (0u)
 , m_Delay       (coreTimer(0.01f, 1.0f, 1))
+, m_afAlpha     {}
 , m_TrophyTimer (coreTimer(1.5f,  1.0f, 1))
 {
     for(coreUintW i = 0u; i < COMBAT_TEXT_NUM; ++i)
     {
         // create labels and reset all missing properties
-        m_aText  [i].Construct(FONT_ROCKS, 37u, OUTLINE_SIZE);
-        m_aFloat [i].Set(1.0f, 1.0f, 1);
-        m_afAlpha[i] = 0.0f;
+        m_aText [i].Construct (FONT_ROCKS, 37u, OUTLINE_SIZE);
+        m_aText [i].SetRectify(false);
+        m_aFloat[i].Set(1.0f, 1.0f, 1);
     }
 
     // create trophy symbol
@@ -49,6 +50,7 @@ cCombatText::cCombatText()noexcept
 
     // create trophy label
     m_TrophyLabel.Construct(FONT_ROCKS, 37u, OUTLINE_SIZE);
+    m_TrophyLabel.SetRectify(false);
 }
 
 

@@ -21,6 +21,7 @@ cInterface::cInterface()noexcept
     m_ScoreValue.SetCenter   (coreVector2(-0.5f, 0.5f));
     m_ScoreValue.SetAlignment(coreVector2( 1.0f,-1.0f));
     m_ScoreValue.SetText     ("000000");
+    m_ScoreValue.SetRectify  (false);
 
     m_Score.Construct   (FONT_ROCKS, 53u, OUTLINE_SIZE);
     m_Score.SetPosition (m_ScoreValue.GetPosition() + coreVector2(0.0f,-0.08f));
@@ -28,6 +29,7 @@ cInterface::cInterface()noexcept
     m_Score.SetAlignment(m_ScoreValue.GetAlignment());
     m_Score.SetText     ("SCORE");
     m_Score.SetColor3   (coreVector3(0.75f,0.75f,0.75));
+    m_Score.SetRectify  (false);
 
     // create time labels
     m_TimeValueMil.Construct   (FONT_ROCKS, 67u, OUTLINE_SIZE);
@@ -35,12 +37,14 @@ cInterface::cInterface()noexcept
     m_TimeValueMil.SetCenter   (coreVector2( 0.5f, 0.5f));
     m_TimeValueMil.SetAlignment(coreVector2(-1.0f,-1.0f));
     m_TimeValueMil.SetText     ("0");
+    m_TimeValueMil.SetRectify  (false);
 
     m_TimeValueSec.Construct   (FONT_ROCKS, 67u, OUTLINE_SIZE);
     m_TimeValueSec.SetPosition (coreVector2(-0.064f,-0.01333f));
     m_TimeValueSec.SetCenter   (coreVector2( 0.5f, 0.5f));
     m_TimeValueSec.SetAlignment(coreVector2(-1.0f,-1.0f));
     m_TimeValueSec.SetText     ("000.");
+    m_TimeValueSec.SetRectify  (false);
 
     m_Time.Construct   (FONT_ROCKS, 53u, OUTLINE_SIZE);
     m_Time.SetPosition (m_TimeValueMil.GetPosition() + coreVector2(0.0f,-0.08f));
@@ -48,6 +52,7 @@ cInterface::cInterface()noexcept
     m_Time.SetAlignment(m_TimeValueMil.GetAlignment());
     m_Time.SetColor3   (coreVector3(0.75f,0.75f,0.75));
     m_Time.SetText     ("TIME");
+    m_Time.SetRectify  (false);
 
     // create combo labels
     m_ComboValue.Construct   (FONT_ROCKS, 67u, OUTLINE_SIZE);
@@ -55,6 +60,7 @@ cInterface::cInterface()noexcept
     m_ComboValue.SetCenter   (coreVector2( 0.0f,-0.5f));
     m_ComboValue.SetAlignment(coreVector2(-1.0f, 1.0f));
     m_ComboValue.SetText     ("");
+    m_ComboValue.SetRectify  (false);
 
     m_Combo.Construct   (FONT_ROCKS, 53u, OUTLINE_SIZE);
     m_Combo.SetPosition (coreVector2(-0.24f,0.01333f));
@@ -62,6 +68,7 @@ cInterface::cInterface()noexcept
     m_Combo.SetAlignment(coreVector2(1.0f, 1.0f));
     m_Combo.SetColor3   (coreVector3(0.75f,0.75f,0.75));
     m_Combo.SetText     ("");
+    m_Combo.SetRectify  (false);
 
     // create combo bar
     m_ComboBar.DefineProgram("2d_color_program");

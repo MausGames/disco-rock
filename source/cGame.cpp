@@ -49,6 +49,7 @@ cGame::cGame(const coreBool bChallenge)noexcept
     // create beginning message
     m_Message.SetPosition(coreVector2(0.0f,0.2f));
     m_Message.SetText    (g_MsgIntro.Get());
+    m_Message.SetRectify (false);
     m_MessageTimer.Play    (CORE_TIMER_PLAY_CURRENT);
     m_MessageTimer.SetValue(-0.333f);
 
