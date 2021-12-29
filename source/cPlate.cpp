@@ -29,7 +29,7 @@ cPlate::cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
     this->SetTexSize(m_vTexOffset);
 
     // set random plate color
-    const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));
+    const coreVector3& vColor = g_pBackground->GetColor(Core::Rand->Uint(COLOR_NUM-1u));
     this->SetColor4(coreVector4(vColor, Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS));
 }
 

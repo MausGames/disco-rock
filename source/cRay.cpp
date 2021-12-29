@@ -27,7 +27,7 @@ cRay::cRay(const coreVector3 vStart)noexcept
     this->SetOrientation((vStart * coreVector3(1.0f,0.0f,1.0f)).Normalized());
 
     // set random plate color
-    const coreVector3 vColor = g_pBackground->GetColor(Core::Rand->Int(0, COLOR_NUM-1));
+    const coreVector3 vColor = g_pBackground->GetColor(Core::Rand->Uint(COLOR_NUM-1u));
     this->SetColor4(coreVector4(vColor, 0.4f));
 
     // rotate ray to the dance floor
