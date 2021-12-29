@@ -827,7 +827,7 @@ void cMenu::Move()
         }
         else
         {
-            if(g_pGame)
+            if(STATIC_ISVALID(g_pGame))
             {
                 // check for game over
                 if(g_pGame->GetStatus() == 1)
@@ -1243,7 +1243,7 @@ void cMenu::Move()
             // set volume
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fVolume * 10.0f);
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fVolume * 0.7f);
-            g_pMusicPlayer->Control()->SetVolume((g_bPause || (g_pGame ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
+            g_pMusicPlayer->Control()->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
 
         if(m_LoginConfigStart.IsClicked())
@@ -1281,7 +1281,7 @@ void cMenu::Move()
                 Core::Config->SetInt("Game", "Control", m_ControlType.GetCurIndex());
 
                 // also change on running game
-                if(g_pGame) g_pGame->GetInterface()->ChangeControlType(m_ControlType.GetCurIndex());
+                if(STATIC_ISVALID(g_pGame)) g_pGame->GetInterface()->ChangeControlType(m_ControlType.GetCurIndex());
             }
             this->PlayClickSound();
         }
@@ -1446,7 +1446,7 @@ void cMenu::Move()
 // end current game and return to main menu
 void cMenu::End()
 {
-    if(!g_pGame) return;
+    if(!STATIC_ISVALID(g_pGame)) return;
 
     // reset pause and menu status
     g_bPause  = false;
@@ -1541,7 +1541,7 @@ void cMenu::ResetRecord()
 // submit score
 void cMenu::SubmitScore(const coreChar* pcGuestName)
 {
-    ASSERT(g_pGame)
+    ASSERT(STATIC_ISVALID(g_pGame))
     if(m_bSubmitted) return;
 
     // convert values
@@ -1575,7 +1575,7 @@ void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
     m_bSubmitted     = true;
     m_bInLeaderboard = false;
 
-    if(g_pGame)
+    if(STATIC_ISVALID(g_pGame))
     {
         // achieve submit-trophy
         g_pGame->AchieveTrophy(GJ_TROPHY_05, 4u);
@@ -1635,7 +1635,7 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
         // update leaderboard
         this->RetrieveScoresCallback3(iTableNum);
 
-        if(g_pGame)
+        if(STATIC_ISVALID(g_pGame))
         {
             // mark values which would make it into the visual leaderboard
             if(iTableID == GJ_LEADERBOARD_01)
