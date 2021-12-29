@@ -458,7 +458,7 @@ void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBo
     else
     {
         // define the next thing to spawn
-        const coreUintW iSelection = Core::Rand->Int(10);
+        const coreUintW iSelection = Core::Rand->Uint(10u);
 
         // create new beverage
              if(                     iSelection <=  5u) pBeverage = new cSunrise();

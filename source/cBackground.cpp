@@ -223,7 +223,7 @@ void cBackground::LoadGeometry()
         // get random color, but not the same twice (minor error on the border and with separate plates)
         do
         {
-            iCurColor = (iCurColor + Core::Rand->Int(1, COLOR_NUM-1)) % COLOR_NUM;
+            iCurColor = (iCurColor + Core::Rand->Uint(1u, COLOR_NUM-1u)) % COLOR_NUM;
         }
         while(i >= BACK_BLOCKS_X && (m_avColor[iCurColor] == avColor[i-BACK_BLOCKS_X].xyz() ||
                                      m_avColor[iCurColor] == avColor[i-1u]           .xyz()));
