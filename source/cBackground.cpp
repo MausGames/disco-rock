@@ -63,7 +63,7 @@ void cBackground::Render()
     {
         // light flash (in render-function to animate even in pause-mode)
         {
-            // get music speed (yes this is currently hardcoded, needs to be improved)
+            // get music speed (this is currently hardcoded, and can be improved)
             coreFloat fSpeed = 0.0f;
                  if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0u)) fSpeed = 1.9166667f;
             else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1u)) fSpeed = 2.00f;
