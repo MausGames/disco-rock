@@ -15,26 +15,26 @@ People
 Resources
 
 Music
-- Kevin MacLeod : Aurea Carmina (CC BY)
-- Kevin MacLeod : Ether Disco (CC BY)
-- Kevin MacLeod : Stringed Disco (CC BY)
+- Kevin MacLeod : Aurea Carmina : music/Aurea Carmina.ogg (CC BY)
+- Kevin MacLeod : Ether Disco : music/Ether Disco.ogg (CC BY)
+- Kevin MacLeod : Stringed Disco : music/Stringed Disco.ogg (CC BY)
 
 Sounds
-- antwash : Glass Clinking 2 - Amplified (CC0)
-- BMacZero : typewriter (CC0)
-- chipfork : Laser03.2rev (CC BY)
-- grunz : success (CC BY)
-- jobro : tada1 (CC BY)
-- Nikolino : Knall9_1zu4 (CC BY)
-- smcameron : missile_explosion (CC BY)
-- sonoplastico : sl50_photo_capture_with_flash (CC BY)
-- themfish : bamf (CC BY)
+- antwash : Glass Clinking 2 - Amplified : sounds/clink.wav (CC0)
+- BMacZero : typewriter : sounds/menu.wav (CC0)
+- chipfork : Laser03.2rev : sounds/trap.wav (CC BY)
+- grunz : success : sounds/achieve.wav (CC BY)
+- jobro : tada1 : sounds/record.wav (CC BY)
+- Nikolino : Knall9_1zu4 : sounds/bump.wav (CC BY)
+- smcameron : missile_explosion : sounds/woosh.wav (CC BY)
+- sonoplastico : sl50_photo_capture_with_flash : sounds/flash.wav (CC BY)
+- themfish : bamf : sounds/dust.wav (CC BY)
 
 Fonts
 - Dale Harris : Loki Cola (public domain)
 - Font Awesome Team : Font Awesome (OFL)
-- Goma Shin : Rocks (public domain)
-- Google : Noto Sans (OFL)
+- Goma Shin : Rocks : fonts/gomarice_rocks.ttf (public domain)
+- Google : Noto Sans : fonts/default.ttf (OFL)
 
 
 -------------------------------------------------------------------
@@ -759,7 +759,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 -------------------------------------------------------------------
 zstd (BSD-3)
 
-Copyright (c) 2016, Facebook, Inc.
+Copyright (c) 2016, Yann Collet, Facebook, Inc.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without

@@ -132,7 +132,7 @@ void CoreApp::Init()
     g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
     g_pMusicPlayer->Shuffle();
-    g_pMusicPlayer->SetRepeat(CORE_MUSIC_ALL_REPEAT);
+    g_pMusicPlayer->SetRepeat(CORE_MUSIC_SINGLE_REPEAT);
 
     // start music delayed
     Core::Manager::Resource->AttachFunction([]()

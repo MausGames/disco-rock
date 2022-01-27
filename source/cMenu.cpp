@@ -1468,6 +1468,9 @@ void cMenu::End()
     // play sound-effect
     this->PlayFlashSound();
 
+    // play next music file
+    g_pMusicPlayer->Next();
+
     // update leaderboards
     m_bSubmitted = true;
     if(!g_pGame->GetStatus() && (g_pGame->GetTime() >= 10.0f))

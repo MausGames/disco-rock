@@ -18,7 +18,7 @@ Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - t
 <https://gamejolt.com/games/arcade/disco-rock/18996/>
 
 **Music:**  
-by Kevin MacLeod (<https://incompetech.com/music/royalty-free/index.html?genre=Disco>)  
+by Kevin MacLeod (<https://incompetech.com>)  
 Licensed under CC BY (<https://creativecommons.org/licenses/by/3.0/>)
 
 #
