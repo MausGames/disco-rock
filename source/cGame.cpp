@@ -399,7 +399,7 @@ void cGame::Move()
 
         // check for achievements/trophies/whatever
         if(m_iFirstJump == 1u && m_Rock.GetJumped())                       {this->AchieveTrophy(GJ_TROPHY_01,  0);}
-        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5u && !DEFINED(_CORE_MOBILE_)) coreData::OpenURL("https://duckduckgo.com/?q=facepalm");}
+        if(m_Rock.GetFallen() && m_fTime < 10.0f && !m_bTrophyHelper[1])   {this->AchieveTrophy(GJ_TROPHY_02,  1); if(++g_iNumFails == 5u && !DEFINED(_CORE_MOBILE_)) SDL_OpenURL("https://duckduckgo.com/?q=facepalm");}
         if(m_Rock.GetFallen() && m_bTrapJump)                              {this->AchieveTrophy(GJ_TROPHY_03,  2);}
         if(m_Rock.GetFallen() && m_PowerUpTimer.GetStatus())               {this->AchieveTrophy(GJ_TROPHY_04,  3);}
         if(m_fComboTime >= 20.0f)                                          {this->AchieveTrophy(GJ_TROPHY_06,  5);}

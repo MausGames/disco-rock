@@ -168,7 +168,7 @@ void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
     }
 
     // unmap area
-    m_pModel->GetVertexBuffer(1u)->Unmap(pData);
+    m_pModel->GetVertexBuffer(1u)->Unmap();
 
     // reset current model object
     coreModel::Disable(false);
