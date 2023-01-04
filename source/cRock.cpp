@@ -148,7 +148,7 @@ void cRock::Move()
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
-        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX(3.0f - ABS(m_fForce), 0.0f) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
+        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX0(3.0f - ABS(m_fForce)) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
 
         if(m_fForce < -8.0f)
         {
@@ -162,7 +162,7 @@ void cRock::Move()
             // start small wave animation
             m_WaveSmallTimer.Play(CORE_TIMER_PLAY_RESET);
             m_WaveSmall.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-            m_fWaveSmallStrength = CLAMP(-m_fForce*0.2f, 0.0f, 1.0f);
+            m_fWaveSmallStrength = CLAMP01(-m_fForce*0.2f);
         }
 
         // reverse and reduce force, re-enable jumping
@@ -254,8 +254,8 @@ void cRock::Move()
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-    m_Shadow.SetSize    (this->GetSize() * 2.344f * MAX(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight)), 0.0f));
-    m_Shadow.SetAlpha   (m_bFallen ? MIN(1.0f + m_fHeight*0.1f, 1.0f) : 1.0f);
+    m_Shadow.SetSize    (this->GetSize() * 2.344f * MAX0(1.0f - 0.018f*(GAME_HEIGHT + ABS(GAME_HEIGHT-m_fHeight))));
+    m_Shadow.SetAlpha   (m_bFallen ? MIN1(1.0f + m_fHeight*0.1f) : 1.0f);
     m_Shadow.Move();
 
     // calculate wave movement

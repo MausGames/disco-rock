@@ -12,6 +12,7 @@
 const coreChar* const CoreApp::Settings::Name                   = "Disco Rock";
 const coreChar* const CoreApp::Settings::IconPath               = "data/textures/game_icon.png";
 const coreChar* const CoreApp::Settings::CursorPath             = "data/textures/default_cursor.png";
+const coreBool        CoreApp::Settings::UserManagement         = false;
 const coreUint8       CoreApp::Settings::Graphics::DepthSize    = 24u;
 const coreUint8       CoreApp::Settings::Graphics::StencilSize  = 0u;
 const coreBool        CoreApp::Settings::Graphics::AlphaChannel = false;

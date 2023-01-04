@@ -83,7 +83,7 @@ void cBeverage::Move()
 
     // update shadow
     m_Shadow.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
-    m_Shadow.SetSize(this->GetSize() * 2.344f * MAX(1.0f - 0.018f*fGround, 0.0f));
+    m_Shadow.SetSize(this->GetSize() * 2.344f * MAX0(1.0f - 0.018f*fGround));
     m_Shadow.Move();
 
     if(m_pStraw)

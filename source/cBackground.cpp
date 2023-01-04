@@ -65,9 +65,9 @@ void cBackground::Render()
         {
             // get music speed (this is currently hardcoded, and can be improved)
             coreFloat fSpeed = 0.0f;
-                 if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(0u)) fSpeed = 1.9166667f;
-            else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(1u)) fSpeed = 2.00f;
-            else if(g_pMusicPlayer->Control() == g_pMusicPlayer->GetMusic(2u)) fSpeed = 1.95f;
+                 if(g_pMusicPlayer->GetCurIndex() == 0u) fSpeed = 1.9166667f;
+            else if(g_pMusicPlayer->GetCurIndex() == 1u) fSpeed = 2.00f;
+            else if(g_pMusicPlayer->GetCurIndex() == 2u) fSpeed = 1.95f;
 
             // update light time
             m_fLightTime += TIME * fSpeed * g_fMusicSpeed;
@@ -82,7 +82,7 @@ void cBackground::Render()
             }
 
             // reduce light strength (flash) over time
-            m_fLightStrength = MAX(m_fLightStrength * (1.0f - TIME * 4.0f), 0.0f);
+            m_fLightStrength = MAX0(m_fLightStrength * (1.0f - TIME * 4.0f));
 
             if(!g_bPause)
             {
@@ -272,13 +272,13 @@ void cBackground::LoadGeometry()
 
     // create static vertex buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
-    pBuffer->DefineAttribute(0u, 2u, GL_FLOAT,         false, 0u);
-    pBuffer->DefineAttribute(1u, 2u, GL_FLOAT,         false, 2u*sizeof(coreFloat));
-    pBuffer->DefineAttribute(2u, 4u, GL_UNSIGNED_BYTE, false, 4u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(0u, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 0u);
+    pBuffer->DefineAttribute(1u, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 2u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(2u, 4u, GL_UNSIGNED_BYTE, 4u*sizeof(coreUint8), false, 0u, 4u*sizeof(coreFloat));
 
     // create dynamic height data buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(coreFloat), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
-    pBuffer->DefineAttribute(3u, 1u, GL_FLOAT, false, 0u);
+    pBuffer->DefineAttribute(3u, 1u, GL_FLOAT, sizeof(coreFloat), false, 0u, 0u);
 
     // create index buffer
     m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUint16), pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
