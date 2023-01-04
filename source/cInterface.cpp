@@ -201,7 +201,7 @@ void cInterface::Move()
     if(m_iControlType != CONTROL_CLASSIC)
     {
         // fade out fullscreen objects
-        if(m_fFadeOut) m_fFadeOut = MAX(m_fFadeOut - TIME * ((g_pGame->GetTime() > 10.0f) ? 1.0f : 0.25f), 0.0f);
+        if(m_fFadeOut) m_fFadeOut = MAX0(m_fFadeOut - TIME * ((g_pGame->GetTime() > 10.0f) ? 1.0f : 0.25f));
         const coreFloat fFadeAlpha1 = (0.20f + 0.80f*m_fFadeOut) * fAlpha;
         const coreFloat fFadeAlpha2 = (0.35f + 0.65f*m_fFadeOut) * fAlpha;
 
@@ -255,7 +255,7 @@ void cInterface::Update(const coreFloat fScore, const coreFloat fTime, const cor
     m_ComboValue.SetText(bCombo ? PRINT("x%01.1f", fCombo) : "");
 
     // update combo value and bar color
-    const coreVector3 vComboColor = LERP(COLOR_RED_F, LERP(COLOR_YELLOW_F, COLOR_GREEN_F, MAX((fDelay-0.5f) * 2.0f, 0.0f)), MIN(fDelay * 2.0f, 1.0f));
+    const coreVector3 vComboColor = LERP(COLOR_RED_F, LERP(COLOR_YELLOW_F, COLOR_GREEN_F, MAX0((fDelay-0.5f) * 2.0f)), MIN1(fDelay * 2.0f));
     m_ComboValue.SetColor3(vComboColor);
     m_ComboBar  .SetColor3(vComboColor);
     m_ComboBar  .SetSize(coreVector2(COMBO_BAR_LENGTH * fDelay, 0.01f));

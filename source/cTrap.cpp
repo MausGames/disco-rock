@@ -41,7 +41,7 @@ void cTrap::Move()
         // animate object (and fade out)
         const coreFloat fFall = FRACT(m_pGlow * 0.29f);
         this->SetSize (coreVector3(BACK_DETAIL_X*0.9f * fFall, BACK_DETAIL_Y*0.9f * fFall, 10.0f));
-        this->SetAlpha((1.0f - fFall) * CLAMP(this->GetPosition().y * 0.02f, 0.0f, 1.0f));
+        this->SetAlpha((1.0f - fFall) * CLAMP01(this->GetPosition().y * 0.02f));
     }
     else
     {

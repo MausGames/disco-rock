@@ -376,7 +376,7 @@ void cGame::Move()
         // update big message at the beginning
         m_Message.SetDirection(coreVector2::Direction(0.2f * SIN(m_MessageTimer.GetValue(CORE_TIMER_GET_NORMAL) * PI * 4.0f)));
         m_Message.SetScale    (g_pBackground->GetFlash(0.4f));
-        m_Message.SetAlpha    (MIN(2.0f * SIN(m_MessageTimer.GetValue(CORE_TIMER_GET_NORMAL) * PI), 1.0f));
+        m_Message.SetAlpha    (MIN1(2.0f * SIN(m_MessageTimer.GetValue(CORE_TIMER_GET_NORMAL) * PI)));
         m_Message.Move();
     }
 

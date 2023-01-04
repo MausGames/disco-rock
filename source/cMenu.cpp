@@ -820,7 +820,7 @@ void cMenu::Move()
         {
             // enter pause menu
             g_bPause = true;
-            g_pMusicPlayer->Control()->SetVolume(0.5f);
+            g_pMusicPlayer->SetVolume(0.5f);
             this->ChangeSurface(11u, 0.0f);
             m_ScoreMenu.ChangeSurface(4, 0.0f);
             Core::Input->ShowCursor(true);
@@ -835,7 +835,7 @@ void cMenu::Move()
                     if(g_pGame->GetChallenge() || (g_pGame->GetTime() < 10.0f)) this->End();
                     else
                     {
-                        g_pMusicPlayer->Control()->SetVolume(0.5f);
+                        g_pMusicPlayer->SetVolume(0.5f);
 
                         // reduce speed
                         g_fTargetSpeed = GAME_SPEED_SLOW;
@@ -967,7 +967,7 @@ void cMenu::Move()
         {
             // resume current game
             g_bPause = false;
-            g_pMusicPlayer->Control()->SetVolume(1.0f);
+            g_pMusicPlayer->SetVolume(1.0f);
             this->ChangeSurface(10u, 0.0f);
             Core::Input->ClearMouseButton(1u);
             Core::Input->ShowCursor(false);
@@ -1243,7 +1243,7 @@ void cMenu::Move()
             // set volume
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME, fVolume * 10.0f);
             Core::Config->SetFloat(CORE_CONFIG_AUDIO_MUSICVOLUME, fVolume * 0.7f);
-            g_pMusicPlayer->Control()->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
+            g_pMusicPlayer->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
 
         if(m_LoginConfigStart.IsClicked())
@@ -1451,7 +1451,7 @@ void cMenu::End()
     // reset pause and menu status
     g_bPause  = false;
     m_iStatus = 2;
-    g_pMusicPlayer->Control()->SetVolume(1.0f);
+    g_pMusicPlayer->SetVolume(1.0f);
     Core::Input->ShowCursor(true);
 
     // reset record notification

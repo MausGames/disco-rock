@@ -131,15 +131,15 @@ void CoreApp::Init()
     g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
     g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
-    g_pMusicPlayer->Shuffle();
+    g_pMusicPlayer->Select(Core::Rand->Uint(2u));
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_SINGLE_REPEAT);
 
     // start music delayed
     Core::Manager::Resource->AttachFunction([]()
     {
-        if((Core::System->GetTotalTime() > 0.5) && !g_pMusicPlayer->Control()->IsPlaying() && !STATIC_ISVALID(g_pFirst))
+        if((Core::System->GetTotalTime() > 0.5) && !g_pMusicPlayer->IsPlaying() && !STATIC_ISVALID(g_pFirst))
         {
-            g_pMusicPlayer->Control()->Play();
+            g_pMusicPlayer->Play();
             return CORE_OK;
         }
         return CORE_BUSY;
@@ -313,12 +313,12 @@ void CoreApp::Move()
         g_pOnline->Update();
 
         // adjust music speed/pitch and update music streaming
-        g_fMusicSpeed += CLAMP((1.05f + MAX((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f, 0.0f)) - g_fMusicSpeed, -1.0f, 1.0f) * TIME * 0.8f;
-        g_pMusicPlayer->Control()->SetPitch(g_fMusicSpeed);
+        g_fMusicSpeed += CLAMP((1.05f + MAX0((g_fCurSpeed - GAME_SPEED_SLOW) * 0.16667f)) - g_fMusicSpeed, -1.0f, 1.0f) * TIME * 0.8f;
+        g_pMusicPlayer->SetPitch(g_fMusicSpeed);
         if(g_pMusicPlayer->Update())
         {
             // update music volume
-            g_pMusicPlayer->Control()->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
+            g_pMusicPlayer->SetVolume((g_bPause || (STATIC_ISVALID(g_pGame) ? g_pGame->GetStatus() : false)) ? 0.5f : 1.0f);
         }
     }
     Core::Debug->MeasureEnd("Move");
