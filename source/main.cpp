@@ -117,6 +117,9 @@ void CoreApp::Init()
         if(DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_)) STATIC_NEW(g_pFirst)
     }
 
+    // reset random numbers to the same value
+    Core::Rand->SetSeed(0u);
+
     // create main components
     STATIC_NEW(g_pBackground)
     STATIC_NEW(g_pMenu)
@@ -128,9 +131,9 @@ void CoreApp::Init()
 
     // create music player and load music files (loading-order is important, hardcoded music speed in background class)
     STATIC_NEW(g_pMusicPlayer);
-    g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.ogg");
-    g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.ogg");
-    g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.ogg");
+    g_pMusicPlayer->AddMusicFile("data/music/Aurea Carmina.opus");
+    g_pMusicPlayer->AddMusicFile("data/music/Ether Disco.opus");
+    g_pMusicPlayer->AddMusicFile("data/music/Stringed Disco.opus");
     g_pMusicPlayer->Select(Core::Rand->Uint(2u));
     g_pMusicPlayer->SetRepeat(CORE_MUSIC_SINGLE_REPEAT);
 
@@ -147,8 +150,8 @@ void CoreApp::Init()
 
     // create particle system
     STATIC_NEW(g_pParticleSystem, 64u * ROCK_SPRITE_NUM)
-    g_pParticleSystem->DefineTexture(0u, "effect_particle.png");
-    g_pParticleSystem->DefineProgram("particle_program");
+    g_pParticleSystem->DefineTexture(0u, "effect_particle.webp");
+    g_pParticleSystem->DefineProgram("default_particle_program");
 
     // pre-allocate all required resources
     s_apSave[0] = new cSunrise();
@@ -225,6 +228,9 @@ void CoreApp::Move()
 {
     if(Core::System->GetWinSizeChanged())
     {
+        // reset random numbers to the same value
+        Core::Rand->SetSeed(0u);
+
         // resize game after resolution changes
         g_pBackground->ResetResolution();
         g_pMenu      ->ResetResolution();

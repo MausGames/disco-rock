@@ -30,12 +30,12 @@ cBackground::cBackground()noexcept
     this->LoadGeometry();
 
     // load object resources
-    this->DefineTexture(0u, "background.png");
-    this->DefineTexture(1u, "background_norm.png");
+    this->DefineTexture(0u, "background.webp");
+    this->DefineTexture(1u, "background_norm.webp");
     this->DefineProgram("floor_program");
 
     // create filling background
-    m_Fill.DefineTexture(0u, "background.png");
+    m_Fill.DefineTexture(0u, "background.webp");
     m_Fill.DefineProgram("fill_program");
 
     // reset filling background
@@ -145,7 +145,7 @@ void cBackground::Move()
 void cBackground::ResetResolution()
 {
     // reset filling background
-    m_Fill.FitToScreen();
+    m_Fill.SetSize   (Core::System->GetResolution().HighRatio());
     m_Fill.SetTexSize(m_Fill.GetSize() * 7.2f);
 }
 
@@ -272,13 +272,13 @@ void cBackground::LoadGeometry()
 
     // create static vertex buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
-    pBuffer->DefineAttribute(0u, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 0u);
-    pBuffer->DefineAttribute(1u, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 2u*sizeof(coreFloat));
-    pBuffer->DefineAttribute(2u, 4u, GL_UNSIGNED_BYTE, 4u*sizeof(coreUint8), false, 0u, 4u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_POSITION_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 0u);
+    pBuffer->DefineAttribute(CORE_SHADER_ATTRIBUTE_TEXCOORD_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 2u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_COLOR_NUM,    4u, GL_UNSIGNED_BYTE, 4u*sizeof(coreUint8), false, 0u, 4u*sizeof(coreFloat));
 
     // create dynamic height data buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(coreFloat), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
-    pBuffer->DefineAttribute(3u, 1u, GL_FLOAT, sizeof(coreFloat), false, 0u, 0u);
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_HEIGHT_NUM, 1u, GL_FLOAT, sizeof(coreFloat), false, 0u, 0u);
 
     // create index buffer
     m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUint16), pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);

@@ -1,0 +1,31 @@
+#include "winres.h"
+
+IDI_ICON ICON DISCARDABLE "icon.ico"
+
+VS_VERSION_INFO VERSIONINFO
+    PRODUCTVERSION  1,3,0,0
+    FILEVERSION     1,3,0,0
+    FILEFLAGSMASK   0x3F
+    FILEFLAGS       0x00
+    FILEOS          VOS_NT_WINDOWS32
+    FILETYPE        VFT_APP
+    FILESUBTYPE     0x00
+
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904B0"
+        BEGIN
+            VALUE "LegalCopyright",  "Martin Mauersics"
+            VALUE "CompanyName",     "Maus Games (www.maus-games.at)"
+            VALUE "ProductName",     "Disco Rock"
+            VALUE "ProductVersion",  "1.3.0.0"
+            VALUE "FileDescription", "Disco Rock"
+            VALUE "FileVersion",     "1.3.0.0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x09, 1252
+    END
+END

@@ -94,7 +94,7 @@ public:
 
 private:
     // hide default render function
-    inline void Render()final {ASSERT(false)}
+    inline void Render()final {UNREACHABLE}
 };
 
 

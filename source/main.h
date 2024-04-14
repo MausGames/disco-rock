@@ -47,7 +47,7 @@
 // ****************************************************************
 // general definitions
 #define FONT_ROCKS       "gomarice_rocks.ttf"
-#define OUTLINE_SIZE     (1u)
+#define OUTLINE_SIZE     (3u)
 
 #define COLOR_WHITE_F    coreVector3(1.000f, 1.000f, 1.000f)
 #define COLOR_YELLOW_F   coreVector3(1.000f, 0.824f, 0.392f)
@@ -58,6 +58,7 @@
 #define COLOR_GREEN_F    coreVector3(0.118f, 0.745f, 0.353f)
 
 #define COLOR_BRIGHTNESS (0.83f)
+#define SOUND_PROPERTIES (1.0f), (5.0f), (1.0f)
 
 static constexpr coreVector3 g_avColor[] =
 {

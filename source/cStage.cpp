@@ -811,7 +811,7 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
 #endif
 
     default:
-        ASSERT(false)
+        UNREACHABLE
         break;
     }
 

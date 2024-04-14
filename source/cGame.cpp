@@ -54,8 +54,8 @@ cGame::cGame(const coreBool bChallenge)noexcept
     m_MessageTimer.SetValue(-0.333f);
 
     // load sound-effects
-    m_pTrapSound   = Core::Manager::Resource->Get<coreSound>("trap.wav");
-    m_pTrophySound = Core::Manager::Resource->Get<coreSound>("achieve.wav");
+    m_pTrapSound   = Core::Manager::Resource->Get<coreSound>("trap.opus");
+    m_pTrophySound = Core::Manager::Resource->Get<coreSound>("achieve.opus");
 
     // set initial speed
     g_fTargetSpeed = GAME_SPEED_SLOW;
@@ -310,7 +310,7 @@ void cGame::Move()
                 // set position and move beverage
                 pBeverage->SetPosition(coreVector3(vPos.x, vPos.y - fMove10, vPos.z));
                 pBeverage->Move();
-                DYN_KEEP(it)
+                DYN_KEEP(it, m_apBeverage)
             }
         }
     }
@@ -330,7 +330,7 @@ void cGame::Move()
                 ++m_iCollectedTraps;
 
                 // play trap sound effect and show message
-                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, m_Rock.GetPosition());
+                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, m_Rock.GetPosition(), SOUND_PROPERTIES);
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
 
                 // reset combo timer (a little bit more than a beverage)
@@ -375,7 +375,7 @@ void cGame::Move()
 
         // update big message at the beginning
         m_Message.SetDirection(coreVector2::Direction(0.2f * SIN(m_MessageTimer.GetValue(CORE_TIMER_GET_NORMAL) * PI * 4.0f)));
-        m_Message.SetScale    (g_pBackground->GetFlash(0.4f));
+        m_Message.SetScale    (coreVector2(1.0f,1.0f) * g_pBackground->GetFlash(0.4f));
         m_Message.SetAlpha    (MIN1(2.0f * SIN(m_MessageTimer.GetValue(CORE_TIMER_GET_NORMAL) * PI)));
         m_Message.Move();
     }
@@ -554,7 +554,7 @@ void cGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
 // callback for trophy achievements
 void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
-    const coreUintW iNum = P_TO_I(pData);
+    const coreUintW iNum = P_TO_UI(pData);
 
     if(pTrophy)
     {
@@ -563,7 +563,7 @@ void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
             const coreVector3 vPos = this->GetStatus() ? coreVector3(0.0f,0.0f,0.0f) : m_Rock.GetPosition();
 
             // show achievement title and play sound
-            g_pCombatText->ShowTrophy(coreData::StrUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
+            g_pCombatText->ShowTrophy(coreData::StrToUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
             m_pTrophySound->PlayRelative(NULL, 0.09f, 1.0f, false, 0u);
 
             // set and save current trophy status

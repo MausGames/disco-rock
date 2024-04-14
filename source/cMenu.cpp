@@ -28,12 +28,12 @@ cMenu::cMenu()noexcept
     STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS)
 
     // create intro objects
-    m_MausLogo.DefineTexture(0u, "maus_logo.png");
+    m_MausLogo.DefineTexture(0u, "maus_logo.webp");
     m_MausLogo.DefineProgram("2d_simple_program");
     m_MausLogo.SetPosition  (coreVector2(0.0f,0.0f));
     m_MausLogo.SetSize      (coreVector2(0.512f,0.256f) * 0.95f);
 
-    m_BigLogo.DefineTexture(0u, "game_logo.png");
+    m_BigLogo.DefineTexture(0u, "game_logo.webp");
     m_BigLogo.DefineProgram("2d_simple_program");
     m_BigLogo.SetPosition  (coreVector2(0.0f,0.05f));
 
@@ -60,7 +60,7 @@ cMenu::cMenu()noexcept
     const coreVector2 vRightCenter = m_BackgroundRight.GetPosition() - 0.5f*m_BackgroundRight.GetSize();
 
     // create header objects
-    m_Logo.DefineTexture(0u, "game_logo.png");
+    m_Logo.DefineTexture(0u, "game_logo.webp");
     m_Logo.DefineProgram("2d_simple_program");
     m_Logo.SetPosition  (coreVector2(vRightCenter.x, 0.129f));
     m_Logo.SetCenter    (coreVector2(0.5f,0.0f));
@@ -71,7 +71,7 @@ cMenu::cMenu()noexcept
     m_Pause.SetText    ("PAUSE");
 
     // create labeled buttons
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Start.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(-0.06f,-0.092f));
     m_Start.SetSize      (coreVector2(m_BackgroundRight.GetSize().x - 0.06f,0.1f));
@@ -81,7 +81,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Start)
     ADJUST_BORDER(m_Start)
 
-    m_Exit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Exit.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Exit.DefineProgram("2d_border_program"); // override
     m_Exit.SetPosition  (coreVector2(-0.06f,-0.222f));
     m_Exit.SetSize      (m_Start.GetSize());
@@ -93,7 +93,7 @@ cMenu::cMenu()noexcept
 
     const coreBool bTooSmall = (Core::System->GetResolution().AspectRatio() < 1.3f);
 
-    m_Resume.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Resume.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Resume.DefineProgram("2d_border_program"); // override
     m_Resume.SetPosition  (m_Start.GetPosition());
     m_Resume.SetSize      (m_Start.GetSize());
@@ -103,7 +103,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Resume)
     ADJUST_BORDER(m_Resume)
 
-    m_Abort.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Abort.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Abort.DefineProgram("2d_border_program"); // override
     m_Abort.SetPosition  (m_Exit.GetPosition());
     m_Abort.SetSize      (m_Start.GetSize());
@@ -113,7 +113,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Abort)
     ADJUST_BORDER(m_Abort)
 
-    m_Submit.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Submit.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Submit.DefineProgram("2d_border_program"); // override
     m_Submit.SetPosition  (m_Start.GetPosition());
     m_Submit.SetSize      (m_Start.GetSize());
@@ -123,7 +123,7 @@ cMenu::cMenu()noexcept
     ADJUST_RIGHT (m_Submit)
     ADJUST_BORDER(m_Submit)
 
-    m_Finish.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Finish.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Finish.DefineProgram("2d_border_program"); // override
     m_Finish.SetPosition  (m_Exit.GetPosition());
     m_Finish.SetSize      (m_Start.GetSize());
@@ -134,28 +134,28 @@ cMenu::cMenu()noexcept
     ADJUST_BORDER(m_Finish)
 
     // create graphical buttons
-    m_Short.Construct       ("button_play.png", "button_play.png");
+    m_Short.Construct       ("button_play.webp", "button_play.webp");
     m_Short.SetPosition     (coreVector2(-0.06f,0.2425f) * (DEFINED(_CORE_MOBILE_) || DEFINED(_DR_EMULATE_MOBILE_) ? 1.0f : 1000.0f));
     m_Short.SetSize         (coreVector2(0.075f,0.075f));
     m_Short.SetFocusModifier(coreVector2(1.2f,1.2f));
     ADJUST_RIGHT(m_Short)
 
-    m_ButtonScore.Construct  ("button_score.png", "button_score.png");
+    m_ButtonScore.Construct  ("button_score.webp", "button_score.webp");
     m_ButtonScore.SetPosition(coreVector2(0.03f,0.24f));
     m_ButtonScore.SetSize    (coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonScore)
 
-    m_ButtonTime.Construct  ("button_time.png", "button_time.png");
+    m_ButtonTime.Construct  ("button_time.webp", "button_time.webp");
     m_ButtonTime.SetPosition(coreVector2(0.03f,0.12f));
     m_ButtonTime.SetSize    (coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonTime)
 
-    m_ButtonTrophy.Construct  ("button_trophy.png", "button_trophy.png");
+    m_ButtonTrophy.Construct  ("button_trophy.webp", "button_trophy.webp");
     m_ButtonTrophy.SetPosition(coreVector2(0.03f,-0.12f));
     m_ButtonTrophy.SetSize    (coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonTrophy)
 
-    m_ButtonConfig.Construct  ("button_config.png", "button_config.png");
+    m_ButtonConfig.Construct  ("button_config.webp", "button_config.webp");
     m_ButtonConfig.SetPosition(coreVector2(0.03f,-0.24f));
     m_ButtonConfig.SetSize    (coreVector2(0.1f,0.1f));
     ADJUST_LEFT(m_ButtonConfig)
@@ -171,20 +171,20 @@ cMenu::cMenu()noexcept
     m_BottomInfo.SetPosition (coreVector2(0.01333f,0.00933f));
     m_BottomInfo.SetCenter   (coreVector2(-0.5f,-0.5f));
     m_BottomInfo.SetAlignment(coreVector2(1.0f,1.0f));
-    m_BottomInfo.SetText     (coreData::StrUpper(PRINT("(c) 2013 Martin Mauersics - v1.5.0 - %s %.5s", __DATE__, __TIME__)));
+    m_BottomInfo.SetText     (coreData::StrToUpper(PRINT("(c) 2013 Martin Mauersics - v1.5.0 - %s %.5s", __DATE__, __TIME__)));
 
     m_BottomCredit.Construct   (FONT_ROCKS, 21u, OUTLINE_SIZE);
     m_BottomCredit.SetPosition (coreVector2(-0.01333f,0.00933f));
     m_BottomCredit.SetCenter   (coreVector2(0.5f,-0.5f));
     m_BottomCredit.SetAlignment(coreVector2(-1.0f,1.0f));
-    m_BottomCredit.SetText     (coreData::StrUpper("Music by Kevin MacLeod"));
+    m_BottomCredit.SetText     (coreData::StrToUpper("Music by Kevin MacLeod"));
 
     m_BottomLoginName.Construct   (FONT_ROCKS, 29u, OUTLINE_SIZE);
     m_BottomLoginName.SetPosition (coreVector2(-0.01333f,0.00667f));
     m_BottomLoginName.SetCenter   (coreVector2(0.5f,-0.5f));
     m_BottomLoginName.SetAlignment(coreVector2(-1.0f,1.0f));
 
-    m_BottomLoginJolt.DefineTexture(0u, "gamejolt_jolt.png");
+    m_BottomLoginJolt.DefineTexture(0u, "gamejolt_jolt.webp");
     m_BottomLoginJolt.DefineProgram("2d_simple_program");
     m_BottomLoginJolt.SetPosition  (coreVector2(-0.02f,0.016f));
     m_BottomLoginJolt.SetSize      (coreVector2(0.036f,0.036f)*2.0f);
@@ -200,13 +200,13 @@ cMenu::cMenu()noexcept
     m_Question.SetPosition(coreVector2(0.0f,0.08f));
     m_Question.SetText    ("Do you want to go out with me?");
 
-    m_Yes.Construct       ("button_ok.png", "button_ok.png");
-    m_Yes.SetPosition     (coreVector2(-0.2f,-0.08f));
+    m_Yes.Construct       ("button_ok.webp", "button_ok.webp");
+    m_Yes.SetPosition     (coreVector2(-0.15f,-0.08f));
     m_Yes.SetSize         (coreVector2(0.075f,0.075f));
     m_Yes.SetFocusModifier(coreVector2(1.2f,1.2f));
 
-    m_No.Construct       ("button_cancel.png", "button_cancel.png");
-    m_No.SetPosition     (coreVector2(0.2f,-0.08f));
+    m_No.Construct       ("button_cancel.webp", "button_cancel.webp");
+    m_No.SetPosition     (coreVector2(0.15f,-0.08f));
     m_No.SetSize         (m_Yes.GetSize());
     m_No.SetFocusModifier(coreVector2(1.2f,1.2f));
 
@@ -218,7 +218,7 @@ cMenu::cMenu()noexcept
 
     const coreUintW iCurQuality = CLAMP(Core::Config->GetInt(CORE_CONFIG_GRAPHICS_QUALITY), 0, 2);
 
-    m_VideoLow.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE);
+    m_VideoLow.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE);
     m_VideoLow.DefineProgram("2d_border_program"); // override
     m_VideoLow.SetPosition  (coreVector2(LEFT_CENTER - 0.17f,0.15f)); // old Y: 0.13f
     m_VideoLow.SetSize      (coreVector2(0.15f,0.075f));
@@ -228,7 +228,7 @@ cMenu::cMenu()noexcept
     m_VideoLow.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoLow)
 
-    m_VideoMedium.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE);
+    m_VideoMedium.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE);
     m_VideoMedium.DefineProgram("2d_border_program"); // override
     m_VideoMedium.SetPosition  (coreVector2(LEFT_CENTER, m_VideoLow.GetPosition().y));
     m_VideoMedium.SetSize      (m_VideoLow.GetSize());
@@ -238,7 +238,7 @@ cMenu::cMenu()noexcept
     m_VideoMedium.GetCaption()->SetAlpha(0.0f);
     ADJUST_BORDER(m_VideoMedium)
 
-    m_VideoHigh.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE);
+    m_VideoHigh.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE);
     m_VideoHigh.DefineProgram("2d_border_program"); // override
     m_VideoHigh.SetPosition  (coreVector2(LEFT_CENTER + 0.17f, m_VideoLow.GetPosition().y));
     m_VideoHigh.SetSize      (m_VideoLow.GetSize());
@@ -262,7 +262,7 @@ cMenu::cMenu()noexcept
     m_AudioBarBack.SetCenter    (coreVector2(-0.5f,0.0f));
     m_AudioBarBack.SetColor3    (coreVector3(0.5f,0.5f,0.5f));
 
-    m_AudioDrag.Construct    ("default_black.png", "default_black.png");
+    m_AudioDrag.Construct    ("default_black.webp", "default_black.webp");
     m_AudioDrag.DefineProgram("2d_border_program"); // override
     m_AudioDrag.SetSize      (coreVector2(0.035f,0.085f));
     m_AudioDrag.SetPosition  (coreVector2(LEFT_CENTER + (fCurVolume - 0.5f) * (m_AudioBarBack.GetSize().x - m_AudioDrag.GetSize().x), m_AudioBarBack.GetPosition().y));
@@ -276,14 +276,14 @@ cMenu::cMenu()noexcept
     m_AudioBar.SetCenter    (coreVector2(-0.5f,0.0f));
     m_AudioBar.SetColor3    (COLOR_BLUE_F * MENU_ALPHA_IDLE_2);
 
-    m_AudioIconHigh.DefineTexture   (0u, "icon_audio_1.png");
+    m_AudioIconHigh.DefineTexture   (0u, "icon_audio_1.webp");
     m_AudioIconHigh.DefineProgram   ("2d_color_icon_program");
     m_AudioIconHigh.SetPosition     (coreVector2(LEFT_CENTER + 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconHigh.SetSize         (coreVector2(0.05f,0.05f));
     m_AudioIconHigh.SetCenter       (coreVector2(-0.5f,0.0f));
     m_AudioIconHigh.SetFocusModifier(coreVector2(0.0f,0.0f));
 
-    m_AudioIconLow.DefineTexture   (0u, "icon_audio_2.png");
+    m_AudioIconLow.DefineTexture   (0u, "icon_audio_2.webp");
     m_AudioIconLow.DefineProgram   ("2d_color_icon_program");
     m_AudioIconLow.SetPosition     (coreVector2(LEFT_CENTER - 0.22f, m_AudioBarBack.GetPosition().y));
     m_AudioIconLow.SetSize         (coreVector2(0.05f,0.05f));
@@ -298,13 +298,13 @@ cMenu::cMenu()noexcept
     m_LoginConfigOr.SetCenter  (coreVector2(-0.5f,0.0f));
     m_LoginConfigOr.SetText    ("LOG INTO");
 
-    m_LoginConfigLogo.DefineTexture(0u, "gamejolt_logo.png");
+    m_LoginConfigLogo.DefineTexture(0u, "gamejolt_logo.webp");
     m_LoginConfigLogo.DefineProgram("2d_simple_program");
     m_LoginConfigLogo.SetPosition  (coreVector2(LEFT_CENTER - 0.047f,-0.238f));
     m_LoginConfigLogo.SetSize      (coreVector2(0.512f,0.064f) * 1.2f);
     m_LoginConfigLogo.SetCenter    (coreVector2(-0.5f,0.0f));
 
-    m_LoginConfigStart.Construct  ("button_login.png", "button_login.png");
+    m_LoginConfigStart.Construct  ("button_login.webp", "button_login.webp");
     m_LoginConfigStart.SetPosition(coreVector2(LEFT_CENTER + 0.17f, -0.221f));
     m_LoginConfigStart.SetSize    (coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_LoginConfigStart)
@@ -377,7 +377,7 @@ cMenu::cMenu()noexcept
     m_LoginEnterGuest.SetAlignment(coreVector2(1.0f,0.0f));
     m_LoginEnterGuest.SetText     ("NAME");
 
-    m_LoginName.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
+    m_LoginName.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
     m_LoginName.DefineProgram("2d_color_program"); // override
     m_LoginName.SetPosition  (m_LoginEnterName.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginName.SetSize      (coreVector2(0.35f,0.05f));
@@ -385,7 +385,7 @@ cMenu::cMenu()noexcept
     m_LoginName.SetColor3    (coreVector3(0.25f,0.25f,0.25f));
     m_LoginName.SetCursor    ('<');
 
-    m_LoginToken.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 64u);
+    m_LoginToken.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE, 64u);
     m_LoginToken.DefineProgram("2d_color_program"); // override
     m_LoginToken.SetPosition  (m_LoginEnterToken.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginToken.SetSize      (m_LoginName.GetSize());
@@ -394,7 +394,7 @@ cMenu::cMenu()noexcept
     m_LoginToken.SetCursor    ('<');
     m_LoginToken.SetReplace   ('*');
 
-    m_LoginGuest.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
+    m_LoginGuest.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 29u, OUTLINE_SIZE, 32u);
     m_LoginGuest.DefineProgram("2d_color_program"); // override
     m_LoginGuest.SetPosition  (m_LoginEnterGuest.GetPosition() + coreVector2(0.54f,0.0f));
     m_LoginGuest.SetSize      (m_LoginName.GetSize() + coreVector2(0.085f,0.0f));
@@ -402,11 +402,11 @@ cMenu::cMenu()noexcept
     m_LoginGuest.SetColor3    (coreVector3(0.25f,0.25f,0.25f));
     m_LoginGuest.SetCursor    ('<');
 
-    m_LoginOK.Construct  ("button_ok.png", "button_ok.png");
+    m_LoginOK.Construct  ("button_ok.webp", "button_ok.webp");
     m_LoginOK.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, m_LoginPopup.GetSize().y * 0.5f - 0.0575f));
     m_LoginOK.SetSize    (coreVector2(0.075f,0.075f));
 
-    m_LoginCancel.Construct  ("button_cancel.png", "button_cancel.png");
+    m_LoginCancel.Construct  ("button_cancel.webp", "button_cancel.webp");
     m_LoginCancel.SetPosition(m_LoginPopup.GetPosition() + coreVector2(m_LoginPopup.GetSize().x * 0.5f + 0.0575f, -m_LoginPopup.GetSize().y * 0.5f + 0.0575f));
     m_LoginCancel.SetSize    (coreVector2(0.075f,0.075f));
 
@@ -418,12 +418,12 @@ cMenu::cMenu()noexcept
     m_LoginJoltOr.SetPosition(m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.067f));
     m_LoginJoltOr.SetText    ("OR LOG INTO");
 
-    m_LoginJoltLogo.DefineTexture(0u, "gamejolt_logo.png");
+    m_LoginJoltLogo.DefineTexture(0u, "gamejolt_logo.webp");
     m_LoginJoltLogo.DefineProgram("2d_simple_program");
     m_LoginJoltLogo.SetPosition  (m_LoginPopup.GetPosition() + coreVector2(-0.047f,-0.11f));
     m_LoginJoltLogo.SetSize      (coreVector2(0.512f,0.064f) * 1.2f);
 
-    m_LoginJoltStart.Construct   ("button_login.png", "button_login.png");
+    m_LoginJoltStart.Construct   ("button_login.webp", "button_login.webp");
     m_LoginJoltStart.SetPosition (m_LoginPopup.GetPosition() + coreVector2(0.17f,-0.093f));
     m_LoginJoltStart.SetSize     (coreVector2(0.075f,0.075f));
     m_LoginJoltStart.SetAlignment(coreVector2(1.0f,0.0f));
@@ -431,7 +431,7 @@ cMenu::cMenu()noexcept
 #endif
 
     // create successful submit object
-    m_Successful.DefineTexture   (1u, "icon_success.png");
+    m_Successful.DefineTexture   (1u, "icon_success.webp");
     m_Successful.DefineProgram   (m_Pause.GetProgram());
     m_Successful.SetPosition     (m_Submit.GetPosition() + coreVector2(-0.03f,0.0f));
     m_Successful.SetSize         (coreVector2(0.06f,0.06f));
@@ -488,6 +488,7 @@ cMenu::cMenu()noexcept
         m_aScoreRecord[i].SetPosition(coreVector2(vPos.x - 0.18f, m_aScoreBestValue[i].GetPosition().y));
         m_aScoreRecord[i].SetCenter  (vCen);
         m_aScoreRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
+        m_aScoreRecord[i].SetRectify (false);
 
         m_aScoreRank[i].Construct   (FONT_ROCKS, 23u, OUTLINE_SIZE);
         m_aScoreRank[i].SetPosition (coreVector2(vPos.x - 0.228f, m_aScoreBestValue[i].GetPosition().y));
@@ -496,7 +497,7 @@ cMenu::cMenu()noexcept
         m_aScoreRank[i].SetColor3   (coreVector3(0.75f,0.75f,0.75f));
     }
 
-    m_PageChange.Construct  ("button_scroll.png", "button_scroll.png");
+    m_PageChange.Construct  ("button_scroll.webp", "button_scroll.webp");
     m_PageChange.SetPosition(coreVector2(LEFT_CENTER + 0.17f,-0.221f));
     m_PageChange.SetSize    (coreVector2(0.075f,0.075f));
     ADJUST_LEFT(m_PageChange)
@@ -522,6 +523,7 @@ cMenu::cMenu()noexcept
         m_aAfterRecord[i].SetPosition(coreVector2(vPos.x - m_BackgroundRight.GetSize().x*0.5f + 0.13f, m_aAfterBestValue[i].GetPosition().y));
         m_aAfterRecord[i].SetCenter  (vCen);
         m_aAfterRecord[i].SetColor3  (coreVector3(0.75f,0.75f,0.75f));
+        m_aAfterRecord[i].SetRectify (false);
     }
 
     // create trophy objects
@@ -532,7 +534,7 @@ cMenu::cMenu()noexcept
 
     for(coreUintW i = 0u; i < TROPHY_ITEMS; ++i)
     {
-        m_aTrophyImage[i].DefineTexture(0u, PRINT("trophy_%d.png", (i == TROPHY_ITEMS-1u) ? 2 : 1));
+        m_aTrophyImage[i].DefineTexture(0u, PRINT("trophy_%d.webp", (i == TROPHY_ITEMS-1u) ? 2 : 1));
         m_aTrophyImage[i].DefineProgram("2d_simple_program");
         m_aTrophyImage[i].SetPosition  (coreVector2(LEFT_CENTER + I_TO_F((i%5u)-2u)*0.105f, -0.075f - I_TO_F((i/5u)-2u)*0.105f));
         m_aTrophyImage[i].SetSize      (coreVector2(0.09f,0.09f));
@@ -573,7 +575,7 @@ cMenu::cMenu()noexcept
     }
 
     // create loading objects
-    m_Loading.DefineTexture(0u, "icon_load.png");
+    m_Loading.DefineTexture(0u, "icon_load.webp");
     m_Loading.DefineProgram("2d_color_icon_program");
     m_Loading.SetPosition  (coreVector2(LEFT_CENTER - 0.05f, -0.05f) + m_BackgroundLeft.GetSize()*0.5f);
     m_Loading.SetSize      (coreVector2(0.05f,0.05f));
@@ -584,10 +586,9 @@ cMenu::cMenu()noexcept
     m_Intro.Play(CORE_TIMER_PLAY_RESET);
 
     // load sound-effects
-    m_pClickSound  = Core::Manager::Resource->Get<coreSound>("menu.wav");
-    m_pHappySound  = Core::Manager::Resource->Get<coreSound>("achieve.wav");
-    m_pRecordSound = Core::Manager::Resource->Get<coreSound>("record.wav");
-    m_pFlashSound  = Core::Manager::Resource->Get<coreSound>("flash.wav");
+    m_pClickSound = Core::Manager::Resource->Get<coreSound>("menu.opus");
+    m_pHappySound = Core::Manager::Resource->Get<coreSound>("achieve.opus");
+    m_pFlashSound = Core::Manager::Resource->Get<coreSound>("flash.opus");
 
     // reset fullscreen-objects
     this->ResetResolution();
@@ -822,7 +823,7 @@ void cMenu::Move()
             g_bPause = true;
             g_pMusicPlayer->SetVolume(0.5f);
             this->ChangeSurface(11u, 0.0f);
-            m_ScoreMenu.ChangeSurface(4, 0.0f);
+            m_ScoreMenu.ChangeSurface(4u, 0.0f);
             Core::Input->ShowCursor(true);
         }
         else
@@ -889,11 +890,11 @@ void cMenu::Move()
                         if(m_aScoreRecord[0].GetText()[0] || m_aScoreRecord[1].GetText()[0])
                         {
                             const coreDouble dCurTime = Core::System->GetTotalTime() + 0.9;
-                            Core::Manager::Resource->AttachFunction([this, dCurTime]()
+                            Core::Manager::Resource->AttachFunction([dCurTime]()
                             {
                                 if(Core::System->GetTotalTime() > dCurTime)
                                 {
-                                    this->PlayRecordSound();
+                                    //this->PlayRecordSound();
                                     return CORE_OK;
                                 }
                                 return CORE_BUSY;
@@ -1065,13 +1066,13 @@ void cMenu::Move()
 
     // animate game logos (and record signs)
     const coreVector2 vLogoSize = coreVector2(0.512f,0.256f) * g_pBackground->GetFlash(0.3f);
-    const coreFloat   fTextSize = 1.953f * vLogoSize.x;
+    const coreVector2 vTextSize = coreVector2(1.0f,1.0f) * 1.953f * vLogoSize.x;
     m_BigLogo.SetSize(vLogoSize * 1.40f);
     m_Logo   .SetSize(vLogoSize * 0.87f);
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
-        m_aScoreRecord[i].SetScale(fTextSize);
-        m_aAfterRecord[i].SetScale(fTextSize);
+        m_aScoreRecord[i].SetScale(vTextSize);
+        m_aAfterRecord[i].SetScale(vTextSize);
     }
 
     // show either current user or credits
@@ -1405,7 +1406,7 @@ void cMenu::Move()
     // show light network load
     if(g_pOnline->GetNumConnections())
     {
-        m_Loading.SetDirection(coreVector2::Direction(coreFloat(Core::System->GetTotalTime()) * 4.0f));
+        m_Loading.SetDirection(coreVector2::Direction(Core::System->GetTotalTimeFloat(2.0f*PI) * 4.0f));
         m_Loading.Move();
     }
     else m_Loading.SetAlpha(0.0f);
@@ -1498,10 +1499,10 @@ void cMenu::ResetShaders()
 void cMenu::ResetResolution()
 {
     // reset fullscreen-objects
-    m_Black        .FitToScreen();
-    m_White        .FitToScreen();
-    m_QuestionBlack.FitToScreen();
-    m_LoginBlack   .FitToScreen();
+    m_Black        .SetSize(Core::System->GetResolution().HighRatio());
+    m_White        .SetSize(Core::System->GetResolution().HighRatio());
+    m_QuestionBlack.SetSize(Core::System->GetResolution().HighRatio());
+    m_LoginBlack   .SetSize(Core::System->GetResolution().HighRatio());
 }
 
 
@@ -1733,7 +1734,7 @@ void cMenu::FetchTrophies()
 // callback for trophy fetch (description)
 void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 {
-    const coreUintW iNum = P_TO_I(pData);
+    const coreUintW iNum = P_TO_UI(pData);
     if(iNum >= apTrophy.size()) return;
 
     // set trophy title
@@ -1809,7 +1810,7 @@ void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
         // login successful
         m_LoginName .SetText(g_pOnline->GetUserName());
         m_LoginToken.SetText(g_pOnline->GetUserToken());
-        m_BottomLoginName.SetText(PRINT("LOGGED IN AS %s", coreData::StrUpper(g_pOnline->GetUserName())));
+        m_BottomLoginName.SetText(PRINT("LOGGED IN AS %s", coreData::StrToUpper(g_pOnline->GetUserName())));
 
         // save credentials
         Core::Config->SetString("Game", "Name",  g_pOnline->GetUserName());
@@ -1825,7 +1826,7 @@ void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
 
         // change login button
         m_LoginConfigOr.SetText("LOG OUT OF");
-        m_LoginConfigStart.Construct("button_logout.png", "button_logout.png");
+        m_LoginConfigStart.Construct("button_logout.webp", "button_logout.webp");
 
         // close login menu
         if(pData) this->ChangeSurface(this->GetCurSurface() - 2u, 5.0f);
@@ -1858,7 +1859,7 @@ void cMenu::Logout()
 
     // change login button
     m_LoginConfigOr.SetText("LOG INTO");
-    m_LoginConfigStart.Construct("button_login.png", "button_login.png");
+    m_LoginConfigStart.Construct("button_login.webp", "button_login.webp");
 
     // reset player rank
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)

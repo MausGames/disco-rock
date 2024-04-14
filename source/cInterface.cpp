@@ -79,23 +79,23 @@ cInterface::cInterface()noexcept
 #if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
 
     // create touch controls
-    m_MoveLeft.Construct       ("button_move.png", "button_move.png");
+    m_MoveLeft.Construct       ("button_move.webp", "button_move.webp");
     m_MoveLeft.DefineProgram   ("2d_simple_program"); // override
     m_MoveLeft.SetSize         (coreVector2(0.1f,0.15f));
     m_MoveLeft.SetFocusModifier(coreVector2(1.3f,1.3f));
 
-    m_MoveRight.Construct       ("button_move.png", "button_move.png");
+    m_MoveRight.Construct       ("button_move.webp", "button_move.webp");
     m_MoveRight.DefineProgram   ("2d_simple_program"); // override
     m_MoveRight.SetSize         (coreVector2(0.1f, 0.15f));
     m_MoveRight.SetDirection    (coreVector2(0.0f,-1.0f));
     m_MoveRight.SetFocusModifier(coreVector2(1.3f, 1.3f));
 
-    m_Jump.Construct       ("button_jump.png", "button_jump.png");
+    m_Jump.Construct       ("button_jump.webp", "button_jump.webp");
     m_Jump.DefineProgram   ("2d_simple_program"); // override
     m_Jump.SetSize         (coreVector2(0.15f,0.15f));
     m_Jump.SetFocusModifier(coreVector2(2.0f, 2.0f));
 
-    m_Pause.Construct    ("button_pause.png", "button_pause.png");
+    m_Pause.Construct    ("button_pause.webp", "button_pause.webp");
     m_Pause.DefineProgram("2d_simple_program"); // override
     m_Pause.SetSize      (coreVector2(0.075f,0.075f));
 
@@ -177,7 +177,7 @@ void cInterface::Move()
     auto nMoveFunc = [&fAlpha, &fScale](coreLabel* pLabel)
     {
         pLabel->SetAlpha(fAlpha);
-        pLabel->SetScale(fScale);
+        pLabel->SetScale(coreVector2(1.0f,1.0f) * fScale);
         pLabel->Move();
     };
     nMoveFunc(&m_Score);

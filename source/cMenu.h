@@ -164,7 +164,6 @@ private:
     coreTimer    m_Intro;                                   // intro timer
     coreSoundPtr m_pClickSound;                             // click sound-effect for buttons
     coreSoundPtr m_pHappySound;                             // happy sound-effect for special events
-    coreSoundPtr m_pRecordSound;                            // sound-effect for highlighting a new record
     coreSoundPtr m_pFlashSound;                             // sound-effect when flashing the screen
 
     coreProtect<coreFloat> m_afSubmitValue[SCORE_TABLES];   // fetched values after loosing the game
@@ -206,10 +205,9 @@ public:
     inline void UpdateControl() {m_ControlType.SelectIndex(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
 
     // play sound-effects
-    inline void PlayClickSound()  {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
-    inline void PlayHappySound()  {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
-    inline void PlayRecordSound() {m_pRecordSound->PlayRelative(NULL, 0.15f, 1.0f, false, 0u);}
-    inline void PlayFlashSound()  {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, false, 0u);}
+    inline void PlayClickSound() {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
+    inline void PlayHappySound() {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
+    inline void PlayFlashSound() {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, false, 0u);}
 
     // invoke score table update
     inline void InvokeScoreUpdate(const coreUintW iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}

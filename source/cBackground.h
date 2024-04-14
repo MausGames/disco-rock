@@ -37,6 +37,10 @@
 #define BACK_SPAWN_Y      (BACK_DETAIL_Y * (BACK_VIEW - BACK_OFFSET_Y + 0.5f))                 // Y position at where to spawn objects on the horizon
 #define BACK_REMOVE_Y     (-52.0f)                                                             // Y position at where to remove objects
 
+#define BACK_SHADER_ATTRIBUTE_POSITION_NUM (CORE_SHADER_ATTRIBUTE_USER_NUM + 0u)
+#define BACK_SHADER_ATTRIBUTE_COLOR_NUM    (CORE_SHADER_ATTRIBUTE_USER_NUM + 1u)
+#define BACK_SHADER_ATTRIBUTE_HEIGHT_NUM   (CORE_SHADER_ATTRIBUTE_USER_NUM + 2u)
+
 
 // ****************************************************************
 // background class

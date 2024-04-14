@@ -26,7 +26,7 @@ cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const cor
     this->DefineProgram("drink_program");
 
     // create shadow
-    m_Shadow.DefineTexture(0u, "effect_ground.png");
+    m_Shadow.DefineTexture(0u, "effect_ground.webp");
     m_Shadow.DefineModel  (Core::Manager::Object->GetLowQuad());
     m_Shadow.DefineProgram("shadow_program");
 
@@ -34,7 +34,7 @@ cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const cor
     m_pGlasProgram = Core::Manager::Resource->Get<coreProgram>("glass_program");
 
     // load sound-effects
-    m_pClink = Core::Manager::Resource->Get<coreSound>("clink.wav");
+    m_pClink = Core::Manager::Resource->Get<coreSound>("clink.opus");
 }
 
 
@@ -118,7 +118,7 @@ cSunrise::cSunrise()noexcept
 {
     // load object resources
     this->DefineModel  ("drink_sunrise.md5mesh");
-    this->DefineTexture(0, "drink_sunrise.png");
+    this->DefineTexture(0, "drink_sunrise.webp");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.0f);
@@ -129,7 +129,7 @@ cSunrise::cSunrise()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_sunrise_straw.md5mesh");
-    m_pStraw->DefineTexture(0u, "default_black.png");
+    m_pStraw->DefineTexture(0u, "default_black.webp");
     m_pStraw->DefineProgram("drink_program");
 }
 
@@ -141,7 +141,7 @@ cMojito::cMojito()noexcept
 {
     // load object resources
     this->DefineModel  ("drink_mojito.md5mesh");
-    this->DefineTexture(0u, "drink_mojito.png");
+    this->DefineTexture(0u, "drink_mojito.webp");
 
     // set object properties
     this->SetSize             (coreVector3(1.0f,1.0f,1.0f)*3.0f);
@@ -153,7 +153,7 @@ cMojito::cMojito()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_mojito_straw.md5mesh");
-    m_pStraw->DefineTexture(0u, "default_black.png");
+    m_pStraw->DefineTexture(0u, "default_black.webp");
     m_pStraw->DefineProgram("drink_program");
 }
 
@@ -165,7 +165,7 @@ cBlue::cBlue()noexcept
 {
     // load object resources
     this->DefineModel  ("drink_blue.md5mesh");
-    this->DefineTexture(0u, "drink_blue.png");
+    this->DefineTexture(0u, "drink_blue.webp");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -176,13 +176,13 @@ cBlue::cBlue()noexcept
     // create straw
     m_pStraw = new coreObject3D();
     m_pStraw->DefineModel  ("drink_blue_straw.md5mesh");
-    m_pStraw->DefineTexture(0u, "drink_citrus.png");
+    m_pStraw->DefineTexture(0u, "drink_citrus.webp");
     m_pStraw->DefineProgram("drink_program");
 
     // create glass
     m_pGlass = new coreObject3D();
     m_pGlass->DefineModel  ("drink_blue_glass.md5mesh");
-    m_pGlass->DefineTexture(0u, "drink_blue.png");
+    m_pGlass->DefineTexture(0u, "drink_blue.webp");
     m_pGlass->DefineProgram("glass_program");
 }
 
@@ -194,7 +194,7 @@ cCoola::cCoola()noexcept
 {
     // load object resources
     this->DefineModel  ("drink_cola.md5mesh");
-    this->DefineTexture(0u, "drink_cola.png");
+    this->DefineTexture(0u, "drink_cola.webp");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*3.5f);
@@ -205,7 +205,7 @@ cCoola::cCoola()noexcept
     // create glass
     m_pGlass = new coreObject3D();
     m_pGlass->DefineModel  ("drink_cola.md5mesh");
-    m_pGlass->DefineTexture(0u, "drink_cola_glass.png");
+    m_pGlass->DefineTexture(0u, "drink_cola_glass.webp");
     m_pGlass->DefineProgram("glass_cola_program");
 }
 
@@ -217,7 +217,7 @@ cFranka::cFranka()noexcept
 {
     // load object resources
     this->DefineModel  ("bear.md5mesh");
-    this->DefineTexture(0u, "bear.png");
+    this->DefineTexture(0u, "bear.webp");
 
     // set object properties
     this->SetSize       (coreVector3(1.0f,1.0f,1.0f)*2.25f);
@@ -229,5 +229,5 @@ cFranka::cFranka()noexcept
     m_pGlass = new coreObject3D();
 
     // override sound
-    m_pClink = Core::Manager::Resource->Get<coreSound>("bump.wav");
+    m_pClink = Core::Manager::Resource->Get<coreSound>("bump.opus");
 }

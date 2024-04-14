@@ -46,7 +46,7 @@ cFirst::cFirst()noexcept
     }
 
     // create start button
-    m_Start.Construct    ("default_black.png", "default_black.png", FONT_ROCKS, 45u, OUTLINE_SIZE);
+    m_Start.Construct    ("default_black.webp", "default_black.webp", FONT_ROCKS, 45u, OUTLINE_SIZE);
     m_Start.DefineProgram("2d_border_program"); // override
     m_Start.SetPosition  (coreVector2(0.0f,0.0f));
     m_Start.SetSize      (coreVector2(0.49f,0.1f));
@@ -76,7 +76,7 @@ cFirst::cFirst()noexcept
 // render the first-time menu
 void cFirst::Render()
 {
-    const coreFloat fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(coreFloat(Core::System->GetTotalTime()) * 12.0f));
+    const coreFloat fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(Core::System->GetTotalTimeFloat(2.0f*PI) * 12.0f));
 
     // forward menu alpha value
     m_Interface.GetTouchMoveLeft ()->SetAlpha(fTouchAlpha);

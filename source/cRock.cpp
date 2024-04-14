@@ -31,7 +31,7 @@ cRock::cRock()noexcept
 {
     // load object resources
     this->DefineModel  ("rock.md5mesh");
-    this->DefineTexture(0u, "rock.png");
+    this->DefineTexture(0u, "rock.webp");
     this->DefineProgram("rock_program");
 
     // set object properties
@@ -42,32 +42,32 @@ cRock::cRock()noexcept
 
     // create shadow
     m_Shadow.DefineModel  (Core::Manager::Object->GetLowQuad());
-    m_Shadow.DefineTexture(0u, "effect_ground.png");
+    m_Shadow.DefineTexture(0u, "effect_ground.webp");
     m_Shadow.DefineProgram("shadow_program");
 
     // create big wave
     m_Wave.DefineModel   (Core::Manager::Object->GetLowQuad());
-    m_Wave.DefineTexture (0u, "effect_ground.png");
+    m_Wave.DefineTexture (0u, "effect_ground.webp");
     m_Wave.DefineProgram ("wave_program");
     m_Wave.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_Wave.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create small wave
     m_WaveSmall.DefineModel   (Core::Manager::Object->GetLowQuad());
-    m_WaveSmall.DefineTexture (0u, "effect_ground.png");
+    m_WaveSmall.DefineTexture (0u, "effect_ground.webp");
     m_WaveSmall.DefineProgram ("wave_program");
     m_WaveSmall.SetDirection  (coreVector3(0.0f,1.0f,0.0f));
     m_WaveSmall.SetOrientation(coreVector3(0.0f,0.0f,1.0f));
 
     // create shock-wave
     m_WaveShock.DefineModel  (Core::Manager::Object->GetLowQuad());
-    m_WaveShock.DefineTexture(0u, "effect_ground.png");
+    m_WaveShock.DefineTexture(0u, "effect_ground.webp");
     m_WaveShock.DefineProgram("wave_program");
 
     // load sound-effects
-    m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.wav");
-    m_pDown  = Core::Manager::Resource->Get<coreSound>("bump.wav");
-    m_pWoosh = Core::Manager::Resource->Get<coreSound>("woosh.wav");
+    m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.opus");
+    m_pDown  = Core::Manager::Resource->Get<coreSound>("bump.opus");
+    m_pWoosh = Core::Manager::Resource->Get<coreSound>("woosh.opus");
 }
 
 
@@ -148,7 +148,7 @@ void cRock::Move()
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
-        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX0(3.0f - ABS(m_fForce)) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
+        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX0(3.0f - ABS(m_fForce)) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition(), SOUND_PROPERTIES);
 
         if(m_fForce < -8.0f)
         {
@@ -181,8 +181,8 @@ void cRock::Move()
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
     {
-             if(g_pGame->GetInterface()->GetOverlayLeft ()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos -= fMove;
-        else if(g_pGame->GetInterface()->GetOverlayRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
+        if(g_pGame->GetInterface()->GetOverlayLeft ()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos -= fMove;
+        if(g_pGame->GetInterface()->GetOverlayRight()->IsClicked(CORE_INPUT_LEFT, CORE_INPUT_HOLD)) fNewPos += fMove;
     }
 
     // move with device motion
@@ -198,8 +198,8 @@ void cRock::Move()
         {
             const coreFloat& fX = Core::Input->GetTouchPosition(i).x;
 
-                                 if(fX < -0.25f) fNewPos -= fMove;
-            else if(-0.25f <= fX && fX <=  0.0f) fNewPos += fMove;
+                            if(fX < -0.25f) fNewPos -= fMove;
+            if(-0.25f <= fX && fX <=  0.0f) fNewPos += fMove;
         });
     }
 
@@ -208,15 +208,13 @@ void cRock::Move()
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
     const coreFloat fMove = 100.0f * Core::System->GetTime(1);
 
-         if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelativeL(0u).x < 0.0f                         ||
-            Core::Input->GetJoystickRelativeL(1u).x < 0.0f) fNewPos -= fMove;
+    if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
+       Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
+       Core::Input->GetJoystickStickL(CORE_INPUT_JOYSTICK_ANY).x < 0.0f) fNewPos -= fMove;
 
-    else if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(D),     CORE_INPUT_HOLD) ||
-            Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
-            Core::Input->GetJoystickRelativeL(0u).x > 0.0f                         ||
-            Core::Input->GetJoystickRelativeL(1u).x > 0.0f) fNewPos += fMove;
+    if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(D),     CORE_INPUT_HOLD) ||
+       Core::Input->GetKeyboardButton(CORE_INPUT_KEY(RIGHT), CORE_INPUT_HOLD) ||
+       Core::Input->GetJoystickStickL(CORE_INPUT_JOYSTICK_ANY).x > 0.0f) fNewPos += fMove;
 
 #endif
 
@@ -310,7 +308,7 @@ coreBool cRock::Jump(const coreFloat fForce)
     if(g_pBackground->GetHeight(this->GetPosition().xy()) > 0.0f) ++m_iNumAirJumps;
 
     // play jump sound-effect and start big wave animation
-    m_pUp->PlayPosition(NULL, 0.4f, 1.8f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition());
+    m_pUp->PlayPosition(NULL, 0.4f, 1.8f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition(), SOUND_PROPERTIES);
     m_WaveTimer.Play(CORE_TIMER_PLAY_RESET);
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 
@@ -334,7 +332,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition());
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
         m_Effect.CreateParticle(14u, [this](coreParticle* pParticle)
@@ -363,7 +361,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalized());
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition());
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
 
         // define smoke color
         const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
@@ -381,7 +379,7 @@ void cRock::CreateShockWave(const coreUint8 iType)
     else
     {
         // play sound-effect
-        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, 0u, this->GetPosition());
+        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
         m_Effect.CreateParticle(22u, [this](coreParticle* pParticle)

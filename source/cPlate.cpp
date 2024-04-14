@@ -20,8 +20,8 @@ cPlate::cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
 
     // load object resources
     this->DefineModel  (Core::Manager::Object->GetLowQuad());
-    this->DefineTexture(0u, "background.png");
-    this->DefineTexture(1u, "background_norm.png");
+    this->DefineTexture(0u, "background.webp");
+    this->DefineTexture(1u, "background_norm.webp");
     this->DefineProgram("floor_plate_program");
 
     // set object properties

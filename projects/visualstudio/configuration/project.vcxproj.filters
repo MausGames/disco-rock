@@ -160,6 +160,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="version.rc" />
+    <ResourceCompile Include="windows\version.rc" />
   </ItemGroup>
 </Project>

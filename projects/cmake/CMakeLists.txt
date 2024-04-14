@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.22)
-set(BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+cmake_minimum_required(VERSION 3.25)
 
+set(BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../..)
+set(ENGINE_DIRECTORY ${BASE_DIRECTORY}/../CoreEngine)
 
 project(DiscoRock VERSION 1.3.0)
-add_subdirectory(${BASE_DIRECTORY}/../CoreEngine/projects/cmake CoreEngine)
+add_subdirectory(${ENGINE_DIRECTORY}/projects/cmake CoreEngine)
 add_executable(DiscoRock)
-
 
 set_target_properties(
     DiscoRock PROPERTIES
@@ -15,7 +15,6 @@ set_target_properties(
     BUILD_WITH_INSTALL_RPATH TRUE
     INSTALL_RPATH $ORIGIN
 )
-
 
 target_sources(
     DiscoRock PRIVATE
@@ -44,7 +43,6 @@ target_sources(
     ${BASE_DIRECTORY}/source/main.cpp
 )
 
-
 target_include_directories(
     DiscoRock PRIVATE
     ${BASE_DIRECTORY}/source
@@ -52,21 +50,17 @@ target_include_directories(
     ${BASE_DIRECTORY}/../GameJoltAPI/libraries/include
 )
 
-
 target_precompile_headers(
    DiscoRock PRIVATE
    $<$<COMPILE_LANGUAGE:CXX>: ${BASE_DIRECTORY}/source/main.h>
 )
-
 
 target_link_libraries(
     DiscoRock PRIVATE
     CoreEngine
 )
 
-
-if(EMSCRIPTEN)
-
+if(CORE_EMSCRIPTEN)
 
     set_target_properties(
         DiscoRock PROPERTIES
@@ -74,9 +68,7 @@ if(EMSCRIPTEN)
         RUNTIME_OUTPUT_DIRECTORY ${BASE_DIRECTORY}/executable/bin/emscripten/
     )
 
-
 else()
-
 
     set_target_properties(
         DiscoRock PROPERTIES
@@ -84,11 +76,18 @@ else()
         RUNTIME_OUTPUT_DIRECTORY ${BASE_DIRECTORY}/executable/bin/linux_x86_64/
     )
 
-
     target_link_libraries(
         DiscoRock PRIVATE
         -l:libcurl.so.4
     )
 
+    if(NOT CORE_DEBUG)
+
+        add_custom_command(
+            TARGET DiscoRock POST_BUILD
+            COMMAND ${ENGINE_DIRECTORY}/tools/scripts/extract_symbols.sh $<TARGET_FILE:DiscoRock>
+        )
+
+    endif()
 
 endif()

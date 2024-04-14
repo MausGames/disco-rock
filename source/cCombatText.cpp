@@ -43,7 +43,7 @@ cCombatText::cCombatText()noexcept
     }
 
     // create trophy symbol
-    m_Trophy.DefineTexture(1u, "icon_trophy.png");
+    m_Trophy.DefineTexture(1u, "icon_trophy.webp");
     m_Trophy.DefineProgram(m_aText[0].GetProgram());
     m_Trophy.SetSize      (coreVector2(0.12f,0.12f));
     m_Trophy.SetColor3    (COLOR_YELLOW_F);
@@ -129,7 +129,7 @@ void cCombatText::Move()
             {
                 // update the combat text
                 m_aText[i].SetPosition(coreVector2(m_aText[i].GetCenter().x*1.5f, -1.0f) * -0.13333f * m_aFloat[i].GetValue(CORE_TIMER_GET_NORMAL));
-                m_aText[i].SetScale   (fFlash);
+                m_aText[i].SetScale   (coreVector2(1.0f,1.0f) * fFlash);
                 m_aText[i].SetAlpha   (m_aFloat[i].GetValue(CORE_TIMER_GET_REVERSED) * m_afAlpha[i]);
                 m_aText[i].Move();
             }
@@ -150,7 +150,7 @@ void cCombatText::Move()
 
             // update the trophy label
             m_TrophyLabel.SetPosition(coreVector2(0.0f, 0.04f + 0.2f * m_TrophyTimer.GetValue(CORE_TIMER_GET_NORMAL)));
-            m_TrophyLabel.SetScale   (fFlash);
+            m_TrophyLabel.SetScale   (coreVector2(1.0f,1.0f) * fFlash);
             m_TrophyLabel.SetAlpha   (m_TrophyTimer.GetValue(CORE_TIMER_GET_REVERSED) * 1.5f);
             m_TrophyLabel.Move();
         }
