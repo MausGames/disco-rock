@@ -30,7 +30,7 @@ cRock::cRock()noexcept
 , m_Effect             (g_pParticleSystem)
 {
     // load object resources
-    this->DefineModel  ("rock.md5mesh");
+    this->DefineModel  ("rock.md5z");
     this->DefineTexture(0u, "rock.webp");
     this->DefineProgram("rock_program");
 

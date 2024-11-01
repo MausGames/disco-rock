@@ -68,7 +68,7 @@ public:
     inline const coreChar* GetUserName      ()const;
     inline const coreChar* GetUserToken     ()const;
     inline coreInt32       GetNumConnections()const;
-    inline const coreBool& IsUserConnected  ()const;
+    inline coreBool        IsUserConnected  ()const;
 
     // layered request functions to support multiple APIs
     template <typename T> coreInt32 AchieveTrophy    (gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr));
@@ -110,7 +110,7 @@ inline coreInt32 cOnline::GetNumConnections()const
 
 // ****************************************************************
 // check for connected user
-inline const coreBool& cOnline::IsUserConnected()const
+inline coreBool cOnline::IsUserConnected()const
 {
     return m_GameJolt.IsUserConnected();
 }

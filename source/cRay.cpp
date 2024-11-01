@@ -17,7 +17,7 @@ cRay::cRay(const coreVector3 vStart)noexcept
 , m_fAnimation (Core::Rand->Float(0.0f, 2.0f*PI))
 {
     // load object resources
-    this->DefineModel  ("ray.md5mesh");
+    this->DefineModel  ("ray.md5z");
     this->DefineProgram("ray_program");
 
     // set object properties

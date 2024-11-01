@@ -117,7 +117,7 @@ cSunrise::cSunrise()noexcept
 : cBeverage (5u, 0.5f, 0.2f, 1.0f)
 {
     // load object resources
-    this->DefineModel  ("drink_sunrise.md5mesh");
+    this->DefineModel  ("drink_sunrise.md5z");
     this->DefineTexture(0, "drink_sunrise.webp");
 
     // set object properties
@@ -128,7 +128,7 @@ cSunrise::cSunrise()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel  ("drink_sunrise_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_sunrise_straw.md5z");
     m_pStraw->DefineTexture(0u, "default_black.webp");
     m_pStraw->DefineProgram("drink_program");
 }
@@ -140,7 +140,7 @@ cMojito::cMojito()noexcept
 : cBeverage (10u, -0.2f, 0.4f, 1.2f)
 {
     // load object resources
-    this->DefineModel  ("drink_mojito.md5mesh");
+    this->DefineModel  ("drink_mojito.md5z");
     this->DefineTexture(0u, "drink_mojito.webp");
 
     // set object properties
@@ -152,7 +152,7 @@ cMojito::cMojito()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel  ("drink_mojito_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_mojito_straw.md5z");
     m_pStraw->DefineTexture(0u, "default_black.webp");
     m_pStraw->DefineProgram("drink_program");
 }
@@ -164,7 +164,7 @@ cBlue::cBlue()noexcept
 : cBeverage (30u, 5.8f, 0.6f, 1.6f)
 {
     // load object resources
-    this->DefineModel  ("drink_blue.md5mesh");
+    this->DefineModel  ("drink_blue.md5z");
     this->DefineTexture(0u, "drink_blue.webp");
 
     // set object properties
@@ -175,13 +175,13 @@ cBlue::cBlue()noexcept
 
     // create straw
     m_pStraw = new coreObject3D();
-    m_pStraw->DefineModel  ("drink_blue_straw.md5mesh");
+    m_pStraw->DefineModel  ("drink_blue_straw.md5z");
     m_pStraw->DefineTexture(0u, "drink_citrus.webp");
     m_pStraw->DefineProgram("drink_program");
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModel  ("drink_blue_glass.md5mesh");
+    m_pGlass->DefineModel  ("drink_blue_glass.md5z");
     m_pGlass->DefineTexture(0u, "drink_blue.webp");
     m_pGlass->DefineProgram("glass_program");
 }
@@ -193,7 +193,7 @@ cCoola::cCoola()noexcept
 : cBeverage (200u, -3.0f, 0.5f, 0.9f)
 {
     // load object resources
-    this->DefineModel  ("drink_cola.md5mesh");
+    this->DefineModel  ("drink_cola.md5z");
     this->DefineTexture(0u, "drink_cola.webp");
 
     // set object properties
@@ -204,7 +204,7 @@ cCoola::cCoola()noexcept
 
     // create glass
     m_pGlass = new coreObject3D();
-    m_pGlass->DefineModel  ("drink_cola.md5mesh");
+    m_pGlass->DefineModel  ("drink_cola.md5z");
     m_pGlass->DefineTexture(0u, "drink_cola_glass.webp");
     m_pGlass->DefineProgram("glass_cola_program");
 }
@@ -216,7 +216,7 @@ cFranka::cFranka()noexcept
 : cBeverage (0u, -2.6f, 1.0f, 1.2f)
 {
     // load object resources
-    this->DefineModel  ("bear.md5mesh");
+    this->DefineModel  ("bear.md5z");
     this->DefineTexture(0u, "bear.webp");
 
     // set object properties
