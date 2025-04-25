@@ -97,7 +97,7 @@ sMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
 void CoreApp::Init()
 {
     // set view frustum
-    Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f);
+    Core::Graphics->SetView(Core::System->GetResolution(), DEG_TO_RAD(55.0f), 0.1f, 700.0f, 0.0f);
 
     // override sound and music volume
     coreFloat fSoundVolume = Core::Config->GetFloat(CORE_CONFIG_AUDIO_SOUNDVOLUME);

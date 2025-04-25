@@ -30,6 +30,7 @@ const coreChar* const CoreApp::Settings::Platform::EpicSandboxID   [3] = {NULL, 
 const coreChar* const CoreApp::Settings::Platform::EpicDeploymentID[3] = {NULL, NULL, NULL};
 const coreChar* const CoreApp::Settings::Platform::EpicClientID        = NULL;
 const coreChar* const CoreApp::Settings::Platform::EpicClientSecret    = NULL;
+const coreUint64      CoreApp::Settings::Platform::DiscordClientID     = 0u;
 
 coreBool CoreApp::Settings::IsDemo() {return false;}
 
@@ -122,7 +123,7 @@ void CoreApp::Setup()
     Core::Manager::Resource->Load<coreSound>  ("trap.opus",                CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/trap.opus");
     Core::Manager::Resource->Load<coreSound>  ("woosh.opus",               CORE_RESOURCE_UPDATE_AUTO,   "data/sounds/woosh.opus", CORE_SOUND_LOAD_MULAW);
 
-    Core::Manager::Resource->Load<coreFont>   ("gomarice_rocks.ttf",       CORE_RESOURCE_UPDATE_AUTO,   "data/fonts/gomarice_rocks.ttf");
+    Core::Manager::Resource->Load<coreFont>   ("gomarice_rocks.ttf",       CORE_RESOURCE_UPDATE_AUTO,   "data/fonts/gomarice_rocks.ttf", TTF_HINTING_LIGHT_SUBPIXEL);
 
     d_cast<coreProgram*>(Core::Manager::Resource->Load<coreProgram>("floor_program", CORE_RESOURCE_UPDATE_AUTO, NULL)->GetRawResource())
         ->AttachShader("floor.vert")

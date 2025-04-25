@@ -1264,7 +1264,7 @@ void cMenu::Move()
                 m_LoginOK    .SetFocused(false);
                 m_LoginCancel.SetFocused(false);
                 m_LoginError .SetText(LOGIN_START);
-                     if(!m_LoginName.GetText ()[0]) m_LoginName.SetInput(true);
+                     if(!m_LoginName .GetText()[0]) m_LoginName .SetInput(true);
                 else if(!m_LoginToken.GetText()[0]) m_LoginToken.SetInput(true);
 
 #endif
