@@ -35,28 +35,28 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\Base64.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\Base64.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjAPI.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjAPI.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjDataItem.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjDataItem.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjNetwork.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjScore.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjScore.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjTrophy.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjTrophy.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjUser.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjUser.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\MD5.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\MD5.cpp">
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\source\application.cpp" />
@@ -78,18 +78,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\Base64.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjAPI.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeAfter.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeBefore.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjDataItem.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjLookup.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.impl.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjScore.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjTrophy.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjUser.h" />
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\MD5.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\Base64.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjAPI.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjCodeAfter.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjCodeBefore.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjDataItem.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjLookup.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.impl.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjScore.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjTrophy.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjUser.h" />
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\MD5.h" />
     <ClInclude Include="..\..\..\source\cBackground.h" />
     <ClInclude Include="..\..\..\source\cBeverage.h" />
     <ClInclude Include="..\..\..\source\cCombatText.h" />
@@ -199,57 +199,57 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_32\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_angle|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_32\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_angle_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_64\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_angle|x64'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_64\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_angle_debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_32\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_angle|Win32'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_32;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x86;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_32\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_angle</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_64\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_angle|x64'">
-    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\source;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\source;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
-    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\CoreEngine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\GameJoltAPI\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\source;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\include\angle;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\source;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\include;$(MSBuildProjectDirectory)\..\..\..\source;$(IncludePath)</IncludePath>
+    <LibraryPath>$(MSBuildProjectDirectory)\..\..\..\..\core-engine\libraries\bin\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\core-engine\output\windows_x86_64;$(MSBuildProjectDirectory)\..\..\..\..\game-jolt-api-cpp-library\libraries\bin\windows\x64;$(LibraryPath)</LibraryPath>
     <OutDir>..\..\..\executable\bin\windows_x86_64\</OutDir>
     <IntDir>..\.tmp\$(Platform)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_angle</TargetName>
@@ -423,7 +423,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
+      <Command>..\..\..\..\core-engine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>windows/manifest.xml</AdditionalManifestFiles>
@@ -469,7 +469,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
+      <Command>..\..\..\..\core-engine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>windows/manifest.xml</AdditionalManifestFiles>
@@ -515,7 +515,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
+      <Command>..\..\..\..\core-engine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>windows/manifest.xml</AdditionalManifestFiles>
@@ -561,7 +561,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
     </Link>
     <PostBuildEvent>
-      <Command>..\..\..\..\CoreEngine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
+      <Command>..\..\..\..\core-engine\tools\scripts\sign_application.bat $(OutDir)$(TargetFileName)</Command>
     </PostBuildEvent>
     <Manifest>
       <AdditionalManifestFiles>windows/manifest.xml</AdditionalManifestFiles>

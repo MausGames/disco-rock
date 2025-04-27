@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.25)
 
 set(BASE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/../..)
-set(ENGINE_DIRECTORY ${BASE_DIRECTORY}/../CoreEngine)
+set(ENGINE_DIRECTORY ${BASE_DIRECTORY}/../core-engine)
 
 project(DiscoRock VERSION 1.3.0)
 add_subdirectory(${ENGINE_DIRECTORY}/projects/cmake CoreEngine)
@@ -18,14 +18,14 @@ set_target_properties(
 
 target_sources(
     DiscoRock PRIVATE
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/Base64.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/MD5.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjAPI.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjDataItem.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjNetwork.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjScore.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjTrophy.cpp
-    ${BASE_DIRECTORY}/../GameJoltAPI/source/gjUser.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/Base64.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/MD5.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjAPI.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjDataItem.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjNetwork.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjScore.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjTrophy.cpp
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjUser.cpp
     ${BASE_DIRECTORY}/source/cBackground.cpp
     ${BASE_DIRECTORY}/source/cBeverage.cpp
     ${BASE_DIRECTORY}/source/cCombatText.cpp
@@ -46,8 +46,8 @@ target_sources(
 target_include_directories(
     DiscoRock PRIVATE
     ${BASE_DIRECTORY}/source
-    ${BASE_DIRECTORY}/../GameJoltAPI/source
-    ${BASE_DIRECTORY}/../GameJoltAPI/libraries/include
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source
+    ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/libraries/include
 )
 
 target_precompile_headers(

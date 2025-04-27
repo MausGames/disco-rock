@@ -42,28 +42,28 @@
     <ClCompile Include="..\..\..\source\cOnline.cpp">
       <Filter>additional</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjNetwork.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjScore.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjScore.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjTrophy.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjTrophy.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjUser.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjUser.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\MD5.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\MD5.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\Base64.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\Base64.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjAPI.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjAPI.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\GameJoltAPI\source\gjDataItem.cpp">
+    <ClCompile Include="..\..\..\..\game-jolt-api-cpp-library\source\gjDataItem.cpp">
       <Filter>additional\GameJoltAPI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -105,40 +105,40 @@
     <ClInclude Include="..\..\..\source\cOnline.h">
       <Filter>additional</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjLookup.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjLookup.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjNetwork.impl.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjNetwork.impl.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjScore.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjScore.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjTrophy.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjTrophy.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjUser.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjUser.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\MD5.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\MD5.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\Base64.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\Base64.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjAPI.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjAPI.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjDataItem.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjDataItem.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeBefore.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjCodeBefore.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\GameJoltAPI\source\gjCodeAfter.h">
+    <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjCodeAfter.h">
       <Filter>additional\GameJoltAPI</Filter>
     </ClInclude>
   </ItemGroup>
