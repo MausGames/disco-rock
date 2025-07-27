@@ -13,7 +13,7 @@
 const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);   // normalized camera vector
 
 // shader output
-varying float v_v1Intensity;   // lighting intensity (Gouraud shading)
+smoothEx varying float v_v1Intensity;                 // lighting intensity (Gouraud shading)
 
 
 void VertexMain()

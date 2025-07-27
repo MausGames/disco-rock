@@ -831,8 +831,8 @@ void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
             g_pCombatText->AddTextTransformed("+BOOST", m_Rock.GetPosition(), coreVector4(COLOR_RED_F, 1.0f));
 
             // shuffle everything again (don't let the last stage come twice, put at least two others in-between)
-            coreData::Shuffle(    m_aiAlgo.begin(), --m_aiAlgo.end());
-            coreData::Shuffle(++++m_aiAlgo.begin(),   m_aiAlgo.end());
+            coreData::RangeShuffle(    m_aiAlgo.begin(), --m_aiAlgo.end());
+            coreData::RangeShuffle(++++m_aiAlgo.begin(),   m_aiAlgo.end());
 
             // achieve speed-trophy
             if(!this->GetStatus()) this->AchieveTrophy(GJ_TROPHY_13, 12u);

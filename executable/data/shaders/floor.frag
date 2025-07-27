@@ -14,7 +14,7 @@
 const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);   // normalized camera vector
 
 // shader input
-varying vec3 v_v3Relative;   // position relative to the viewer
+smoothEx varying vec3 v_v3Relative;                   // position relative to the viewer
 
 // faster pow(x, 40.0) calculation
 float pow40(in float x)

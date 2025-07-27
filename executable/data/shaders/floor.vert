@@ -18,7 +18,7 @@ attribute float a_v1Height;           // height value
 attribute vec4  a_v4Color;            // per-vertex color
 
 // shader output
-varying vec3 v_v3Relative;            // position relative to the viewer
+smoothEx varying vec3 v_v3Relative;   // position relative to the viewer
 
 
 void VertexMain()

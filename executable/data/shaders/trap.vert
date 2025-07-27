@@ -10,7 +10,7 @@
 
 
 // shader output
-varying vec3 v_v3Strength;   // alpha strength vector
+smoothEx varying vec3 v_v3Strength;   // alpha strength vector
 
 
 void VertexMain()

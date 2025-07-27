@@ -44,7 +44,7 @@ cGame::cGame(const coreBool bChallenge)noexcept
     // add and shuffle all algorithms
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
     for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
-    coreData::Shuffle(m_aiAlgo.begin(), m_aiAlgo.end());
+    coreData::RangeShuffle(m_aiAlgo.begin(), m_aiAlgo.end());
 
     // create beginning message
     m_Message.SetPosition(coreVector2(0.0f,0.2f));

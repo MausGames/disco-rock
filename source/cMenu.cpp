@@ -25,7 +25,7 @@ cMenu::cMenu()noexcept
 , m_iTrophyCurrent (-1)
 , m_bFromGuest     (false)
 {
-    STATIC_ASSERT(sizeof(m_iTrophyStatus)*8u >= TROPHY_ITEMS)
+    STATIC_ASSERT(TROPHY_ITEMS <= BITSOF(m_iTrophyStatus))
 
     // create intro objects
     m_MausLogo.DefineTexture(0u, "maus_logo.webp");
@@ -1230,7 +1230,7 @@ void cMenu::Move()
 
             // calculate new controller position and volume
             const coreFloat fNewPosX = CLAMP((fMove + 0.5f) * Core::System->GetResolution().AspectRatio(), fMaxLeft, fMaxRight);
-            const coreFloat fVolume  = (fNewPosX - fMaxLeft) * RCP(fMaxSide * 2.0f);
+            const coreFloat fVolume  = (fNewPosX - fMaxLeft) / (fMaxSide * 2.0f);
 
             // set controller
             m_AudioDrag.SetPosition(coreVector2(fNewPosX, m_AudioDrag.GetPosition().y));

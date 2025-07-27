@@ -9,7 +9,7 @@
 
 
 // shader input
-varying float v_v1Intensity;   // lighting intensity (Gouraud shading)
+smoothEx varying float v_v1Intensity;   // lighting intensity (Gouraud shading)
 
 
 void FragmentMain()

@@ -158,7 +158,7 @@ struct sMsgList final
         for(coreUintW i = 0u; i < iSize; ++i) m_apcMsg.push_back(ppcMsg[i]);
 
         // shuffle them
-        coreData::Shuffle(m_apcMsg.begin(), m_apcMsg.end());
+        coreData::RangeShuffle(m_apcMsg.begin(), m_apcMsg.end());
     }
 
     inline const coreChar* Get()

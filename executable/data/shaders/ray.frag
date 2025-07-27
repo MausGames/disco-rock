@@ -12,8 +12,8 @@
 const vec3 c_v3CamDir = vec3(0.0, -0.8137, 0.5812);   // normalized camera vector
 
 // shader input
-varying float v_v1Intensity;   // lighting intensity (semi-Gouraud shading)
-varying vec3  v_v3ViewNorm;    // view normal
+smoothEx varying float v_v1Intensity;                 // lighting intensity (semi-Gouraud shading)
+smoothEx varying vec3  v_v3ViewNorm;                  // view normal
 
 
 void FragmentMain()
