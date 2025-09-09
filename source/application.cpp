@@ -39,7 +39,7 @@ coreBool CoreApp::Settings::IsDemo() {return false;}
 // setup the application
 void CoreApp::Setup()
 {
-    Core::Manager::Resource->Load<coreModel>  ("default_cube.md3z",        CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3z", CORE_MODEL_LOAD_NO_CLUSTERS);
+    Core::Manager::Resource->Load<coreModel>  ("default_cube_simple.md3z", CORE_RESOURCE_UPDATE_AUTO,   "data/models/default_cube.md3z", CORE_MODEL_LOAD_NO_CLUSTERS);
     Core::Manager::Resource->Load<coreModel>  ("drink_blue.md5z",          CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue.md5z", CORE_MODEL_LOAD_NO_CLUSTERS);
     Core::Manager::Resource->Load<coreModel>  ("drink_blue_glass.md5z",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_glass.md5z", CORE_MODEL_LOAD_NO_CLUSTERS);
     Core::Manager::Resource->Load<coreModel>  ("drink_blue_straw.md5z",    CORE_RESOURCE_UPDATE_AUTO,   "data/models/drink_blue_straw.md5z", CORE_MODEL_LOAD_NO_CLUSTERS);

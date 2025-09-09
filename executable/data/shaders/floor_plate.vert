@@ -13,7 +13,7 @@
 const float c_v1GameHeight = -20.0;   // logical height of the dance floor
 
 // shader output
-smoothEx varying vec3 v_v3Relative;   // position relative to the viewer
+smooth varying vec3 v_v3Relative;     // position relative to the viewer
 
 
 void VertexMain()

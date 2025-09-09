@@ -17,7 +17,7 @@ cTrap::cTrap()noexcept
 , m_bStatic (false)
 {
     // load object resources
-    this->DefineModel  ("default_cube.md3z");
+    this->DefineModel  ("default_cube_simple.md3z");
     this->DefineProgram("trap_program");
 
     // set object properties
