@@ -1,5 +1,6 @@
 # Disco Rock
 
+[![engine: core](material/readme/badge_engine.svg)](https://github.com/MausGames/core-engine)
 [![software license: zlib](material/readme/badge_license_software.svg)](LICENSE.txt)
 [![content license: CC BY](material/readme/badge_license_content.svg)](https://creativecommons.org/licenses/by/4.0/)
 [![credits.txt](material/readme/badge_credits.svg)](executable/data/credits.txt)
@@ -12,16 +13,15 @@ Disco Rock is a **very simple endless-runner** inspired by the 70s disco era - t
 > - online leaderboards for score and time
 > - many different trophies and challenges
 
-#
+## Links
 
 **Windows and Linux Version:**  
-<https://gamejolt.com/games/arcade/disco-rock/18996/>
+<https://gamejolt.com/games/arcade/disco-rock/18996>
 
 **Music:**  
-by Kevin MacLeod (<https://incompetech.com>)  
-Licensed under CC BY (<https://creativecommons.org/licenses/by/3.0/>)
+by [Kevin MacLeod](https://incompetech.com) licensed under [CC BY](https://creativecommons.org/licenses/by/3.0/)
 
-#
+<br>
 
 <table>
     <tr>
