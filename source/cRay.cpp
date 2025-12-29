@@ -12,7 +12,8 @@
 // ****************************************************************
 // constructor
 CRay::CRay(const coreVector3 vStart)noexcept
-: m_vStart     (vStart)
+: coreObject3D ()
+, m_vStart     (vStart)
 , m_fAngle     (0.0f)
 , m_fAnimation (Core::Rand->Float(0.0f, 2.0f*PI))
 {

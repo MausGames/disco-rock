@@ -12,13 +12,17 @@
 // ****************************************************************
 // constructor
 IBeverage::IBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept
-: m_pStraw       (NULL)
+: coreObject3D   ()
+, m_Shadow       ()
+, m_pStraw       (NULL)
 , m_pGlass       (NULL)
+, m_pGlasProgram (NULL)
 , m_iScore       (iScore)
 , m_fHeight      (fHeight)
 , m_pDestroy     (coreTimer(30.0f, 20.0f, 1u))
 , m_vFlyRotation (coreVector3(0.0f,0.0f,0.0f))
 , m_vFlyImpact   (coreVector3(0.0f,0.0f,0.0f))
+, m_pClink       (NULL)
 , m_fVolume      (fVolume*0.6f)
 , m_fPitch       (fPitch*0.65f)
 {

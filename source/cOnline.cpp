@@ -12,6 +12,7 @@
 // ****************************************************************
 // constructor
 COnline::COnline()noexcept
+: m_GameJolt ()
 {
     // init Game Jolt API object
     m_GameJolt.Init(18996, GJ_KEY);

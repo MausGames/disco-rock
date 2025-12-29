@@ -12,12 +12,17 @@
 // ****************************************************************
 // constructor
 CRock::CRock()noexcept
-: m_WaveTimer          (coreTimer(1.0f, 4.0f, 1))
+: coreObject3D         ()
+, m_Wave               ()
+, m_WaveTimer          (coreTimer(1.0f, 4.0f, 1))
 , m_fWaveStrength      (60.0f)
+, m_WaveSmall          ()
 , m_WaveSmallTimer     (coreTimer(1.0f, 6.0f, 1))
 , m_fWaveSmallStrength (0.0f)
+, m_WaveShock          ()
 , m_WaveShockTimer     (coreTimer(1.0f, 4.0f, 1))
 , m_fWaveShockSpeed    (1.0f)
+, m_Shadow             ()
 , m_fForce             (0.0f)
 , m_fHeight            (100.0f)
 , m_bColored           (false)
@@ -27,6 +32,9 @@ CRock::CRock()noexcept
 , m_iNumJumps          (0u)
 , m_iNumAirJumps       (0u)
 , m_fRotation          (0.0f)
+, m_pUp                (NULL)
+, m_pDown              (NULL)
+, m_pWoosh             (NULL)
 , m_Effect             (g_pParticleSystem)
 {
     // load object resources

@@ -12,7 +12,14 @@
 // ****************************************************************
 // constructor
 CGame::CGame(const coreBool bChallenge)noexcept
-: m_iCurLine         (g_pBackground->GetCurLine())
+: m_Rock             ()
+, m_apBeverage       {}
+, m_apDestroyed      {}
+, m_apTrap           {}
+, m_apPlate          {}
+, m_apRay            {}
+, m_iCurLine         (g_pBackground->GetCurLine())
+, m_aiAlgo           {}
 , m_iAlgoCurIndex    (0u)
 , m_iAlgoCurCount    (0)
 , m_bAlgoEmptyLines  (true)
@@ -35,8 +42,11 @@ CGame::CGame(const coreBool bChallenge)noexcept
 , m_bTrapJump        (false)
 , m_bChallenge       (bChallenge)
 , m_PowerUpTimer     (coreTimer(GAME_COOLA_TIME, 1.0f, 1u))
+, m_Interface        ()
 , m_Message          (FONT_ROCKS, 45u, OUTLINE_SIZE)
 , m_MessageTimer     (coreTimer(1.0f, 0.333f, 1u))
+, m_pTrapSound       (NULL)
+, m_pTrophySound     (NULL)
 , m_bTrophyHelper    {}
 {
     ++g_iNumGames;

@@ -12,8 +12,26 @@
 // ****************************************************************
 // constructor
 CInterface::CInterface()noexcept
-: m_Show (coreTimer(1.0f, 1.0f, 1u))
-, m_Hide (coreTimer(1.0f, 1.0f, 1u))
+: m_Score        ()
+, m_ScoreValue   ()
+, m_Time         ()
+, m_TimeValueSec ()
+, m_TimeValueMil ()
+, m_Combo        ()
+, m_ComboValue   ()
+, m_ComboBar     ()
+#if defined(_CORE_MOBILE_) || defined(_DR_EMULATE_MOBILE_)
+, m_MoveLeft     ()
+, m_MoveRight    ()
+, m_Jump         ()
+, m_Pause        ()
+, m_aLine        {}
+, m_aOverlay     {}
+, m_iControlType (0u)
+, m_fFadeOut     (0.0f)
+#endif
+, m_Show         (coreTimer(1.0f, 1.0f, 1u))
+, m_Hide         (coreTimer(1.0f, 1.0f, 1u))
 {
     // create score labels
     m_ScoreValue.Construct   (FONT_ROCKS, 67u, OUTLINE_SIZE);

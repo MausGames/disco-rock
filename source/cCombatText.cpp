@@ -29,10 +29,15 @@ CCombatText::SData::SData(SData&& m)noexcept
 // ****************************************************************
 // constructor
 CCombatText::CCombatText()noexcept
-: m_iCurText    (0u)
+: m_aText       {}
+, m_iCurText    (0u)
 , m_Delay       (coreTimer(0.01f, 1.0f, 1))
+, m_aFloat      {}
 , m_afAlpha     {}
+, m_Trophy      ()
+, m_TrophyLabel ()
 , m_TrophyTimer (coreTimer(1.5f,  1.0f, 1))
+, m_aData       {}
 {
     for(coreUintW i = 0u; i < COMBAT_TEXT_NUM; ++i)
     {

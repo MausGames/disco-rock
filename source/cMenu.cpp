@@ -16,9 +16,13 @@ CMenu::CMenu()noexcept
 , m_ScoreMenu      (8u,  0u)
 , m_LoginMenu      (4u,  0u)
 , m_Intro          (coreTimer(10.0f, 1.0f, 1u))
+, m_pClickSound    (NULL)
+, m_pHappySound    (NULL)
+, m_pFlashSound    (NULL)
 , m_afSubmitValue  {}
 , m_bSubmitted     (true)
 , m_bInLeaderboard (false)
+, m_aapCurScores   {}
 , m_iCurPage       (0u)
 , m_iTableUpdate   (0u)
 , m_iTrophyStatus  (0u)

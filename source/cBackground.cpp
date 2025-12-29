@@ -12,17 +12,20 @@
 // ****************************************************************
 // constructor
 CBackground::CBackground()noexcept
-: m_fPositionTime   (0.0f)
-, m_fFloorTime      (0.0f)
-, m_fFillTime       (0.0f)
-, m_pfHeight        (NULL)
-, m_iOffset         (0u)
-, m_fLightStrength  (0.0f)
-, m_iLightTick      (0u)
-, m_fLightTime      (0.0f)
-, m_avColor         {}
-, m_fCurColorHue    (-1.0f)
-, m_fLightDirection (-1.0f)
+: coreObject3D         ()
+, coreResourceRelation ()
+, m_Fill               ()
+, m_fPositionTime      (0.0f)
+, m_fFloorTime         (0.0f)
+, m_fFillTime          (0.0f)
+, m_pfHeight           (NULL)
+, m_iOffset            (0u)
+, m_fLightStrength     (0.0f)
+, m_iLightTick         (0u)
+, m_fLightTime         (0.0f)
+, m_avColor            {}
+, m_fCurColorHue       (-1.0f)
+, m_fLightDirection    (-1.0f)
 {
     // load dance floor geometry
     m_pModel = Core::Manager::Resource->LoadNew<coreModel>();

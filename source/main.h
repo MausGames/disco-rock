@@ -151,7 +151,8 @@ struct SMsgList final
     coreUintW m_iCur;                     // current message index
 
     inline SMsgList(const coreChar* const* ppcMsg, const coreUintW iSize)noexcept
-    : m_iCur (0u)
+    : m_apcMsg {}
+    , m_iCur   (0u)
     {
         // add messages
         m_apcMsg.reserve(iSize);

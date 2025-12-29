@@ -14,7 +14,11 @@
 // ****************************************************************
 // constructor
 CFirst::CFirst()noexcept
-: coreMenu (3u, 0u)
+: coreMenu      (3u, 0u)
+, m_ControlText ()
+, m_ControlType ()
+, m_Start       ()
+, m_Interface   ()
 {
     // reset configuration settings
     Core::Config->GetInt("Game", "Control", 0);

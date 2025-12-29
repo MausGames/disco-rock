@@ -12,9 +12,10 @@
 // ****************************************************************
 // constructor
 CTrap::CTrap()noexcept
-: m_pGlow   (0.0f)
-, m_Effect  (g_pParticleSystem)
-, m_bStatic (false)
+: coreObject3D ()
+, m_pGlow      (0.0f)
+, m_Effect     (g_pParticleSystem)
+, m_bStatic    (false)
 {
     // load object resources
     this->DefineModel  ("default_cube_simple.md3z");
