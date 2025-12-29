@@ -22,15 +22,16 @@ protected:
     coreProgramPtr m_pGlasProgram;      // glass shader-program used with the drink-model when no separate glass object was created
 
     coreProtect<coreUint32> m_iScore;   // score value of the beverage
-    coreFloat  m_fHeight;               // Z position-offset on the dance floor
+
+    coreFloat m_fHeight;                // Z position-offset on the dance floor
 
     coreTimer   m_pDestroy;             // timer for the fly-animation
     coreVector3 m_vFlyRotation;         // rotation-parameter for the fly-animation
     coreVector3 m_vFlyImpact;           // impact-direction to throw the object into a specific direction
 
     coreSoundPtr m_pClink;              // clink sound-effect
-    coreFloat m_fVolume;                // sound-volume parameter
-    coreFloat m_fPitch;                 // sound-pitch parameter
+    coreFloat    m_fVolume;             // sound-volume parameter
+    coreFloat    m_fPitch;              // sound-pitch parameter
 
 
 public:
@@ -52,7 +53,7 @@ public:
     inline void Destroy(const coreVector3 vFlyImpact) {m_pDestroy.Play(CORE_TIMER_PLAY_RESET); m_vFlyRotation = coreVector3(coreVector2::Rand(), 0.0f); m_vFlyImpact = vFlyImpact; m_vFlyImpact.x += Core::Rand->Float(-0.7f, 0.7f);}
 
     // play a completely shitty glass clinking sound effect
-    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition(), SOUND_PROPERTIES);}
+    inline void PlaySound() {m_pClink->PlayPosition(NULL, m_fVolume, m_fPitch + Core::Rand->Float(-0.05f, 0.05f), false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);}
 
     // get object properties
     inline  coreUint32  GetScore   ()const {return m_iScore;}

@@ -84,7 +84,7 @@ CRock::CRock()noexcept
 void CRock::Move()
 {
     // rotate the rock
-    m_fRotation.Update(10.0f, 0);
+    m_fRotation.Update(10.0f, 0u);
     this->SetOrientation(coreVector3(0.0f, coreVector2::Direction(-m_fRotation)));
 
     // get minimum Z position above the ground
@@ -152,11 +152,11 @@ void CRock::Move()
     m_bReflected = false;
 
     if(this->GetPosition().z >= fGround || m_bFallen)
-        m_fForce -= Core::System->GetTime(1)*20.0f;   // fall down
+        m_fForce -= Core::System->GetTime(1u)*20.0f;   // fall down
     else if(m_fForce < 0.0f)
     {
         // play sound-effect for hitting the ground
-        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX0(3.0f - ABS(m_fForce)) + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition(), SOUND_PROPERTIES);
+        if(m_fForce < -1.0f) m_pDown->PlayPosition(NULL, ABS(m_fForce)*0.04f, 0.75f - 0.2f * MAX0(3.0f - ABS(m_fForce)) + Core::Rand->Float(-0.05f, 0.05f), false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         if(m_fForce < -8.0f)
         {
@@ -184,7 +184,7 @@ void CRock::Move()
 
 #if defined(_CORE_MOBILE_)
 
-    const coreFloat fMove = 100.0f * Core::System->GetTime(1);
+    const coreFloat fMove = 100.0f * Core::System->GetTime(1u);
 
     // move with left touch buttons
     if(g_pGame->GetInterface()->GetControlType() == CONTROL_CLASSIC)
@@ -214,7 +214,7 @@ void CRock::Move()
 #else
 
     // move with keyboard (A, D, LEFT, RIGHT) and joystick
-    const coreFloat fMove = 100.0f * Core::System->GetTime(1);
+    const coreFloat fMove = 100.0f * Core::System->GetTime(1u);
 
     if(Core::Input->GetKeyboardButton(CORE_INPUT_KEY(A),     CORE_INPUT_HOLD) ||
        Core::Input->GetKeyboardButton(CORE_INPUT_KEY(LEFT),  CORE_INPUT_HOLD) ||
@@ -235,7 +235,7 @@ void CRock::Move()
 #endif
 
     // control the rock height
-    m_fHeight += m_fForce*Core::System->GetTime(1)*20.0f;
+    m_fHeight += m_fForce*Core::System->GetTime(1u)*20.0f;
 
     // control the rock position
     this->SetPosition(coreVector3(CLAMP(fNewPos, -60.0f, 60.0f), 0.0f, m_fHeight+fGround));
@@ -265,7 +265,7 @@ void CRock::Move()
     m_Shadow.Move();
 
     // calculate wave movement
-    const coreFloat fWaveMove = -Core::System->GetTime(0) * 1.25f * BACK_DETAIL_Y;
+    const coreFloat fWaveMove = -Core::System->GetTime(0u) * 1.25f * BACK_DETAIL_Y;
 
     if(m_WaveTimer.GetStatus())
     {
@@ -316,7 +316,7 @@ coreBool CRock::Jump(const coreFloat fForce)
     if(g_pBackground->GetHeight(this->GetPosition().xy()) > 0.0f) ++m_iNumAirJumps;
 
     // play jump sound-effect and start big wave animation
-    m_pUp->PlayPosition(NULL, 0.4f, 1.8f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, this->GetPosition(), SOUND_PROPERTIES);
+    m_pUp->PlayPosition(NULL, 0.4f, 1.8f + Core::Rand->Float(-0.05f, 0.05f), false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
     m_WaveTimer.Play(CORE_TIMER_PLAY_RESET);
     m_Wave.SetPosition(coreVector3(this->GetPosition().xy(), GAME_HEIGHT));
 
@@ -340,7 +340,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetOrientation(coreVector3(0.0f,-1.0f,0.0f));
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
         m_Effect.CreateParticle(14u, [this](coreParticle* pParticle)
@@ -369,7 +369,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
         m_WaveShock.SetDirection  (coreVector3::Cross(m_WaveShock.GetOrientation(), coreVector3(0.0f,1.0f,0.0f)).Normalized());
 
         // play sound-effect
-        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
+        m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         // define smoke color
         const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
@@ -387,7 +387,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
     else
     {
         // play sound-effect
-        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, 0u, this->GetPosition(), SOUND_PROPERTIES);
+        m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
         m_Effect.CreateParticle(22u, [this](coreParticle* pParticle)

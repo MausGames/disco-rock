@@ -156,7 +156,7 @@ struct SMsgList final
     {
         // add messages
         m_apcMsg.reserve(iSize);
-        for(coreUintW i = 0u; i < iSize; ++i) m_apcMsg.push_back(ppcMsg[i]);
+        for(coreUintW i = 0u; i < iSize; ++i) m_apcMsg.push_back_unsafe(ppcMsg[i]);
 
         // shuffle them
         coreData::RangeShuffle(m_apcMsg.begin(), m_apcMsg.end());

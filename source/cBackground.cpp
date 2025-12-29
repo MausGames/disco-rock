@@ -119,7 +119,7 @@ void CBackground::Render()
 void CBackground::Move()
 {
     // update dance floor position
-    m_fPositionTime.Update(2.5f, 0);
+    m_fPositionTime.Update(2.5f, 0u);
     if(m_fPositionTime < 0.0f)        m_fPositionTime += BACK_REPEAT;
     if(m_fPositionTime > BACK_REPEAT) m_fPositionTime -= BACK_REPEAT;
 
@@ -128,12 +128,12 @@ void CBackground::Move()
     this->SetPosition(coreVector3(0.0f, -m_fPositionTime * BACK_DETAIL_Y, GAME_HEIGHT));
 
     // update dance floor light animation
-    m_fFloorTime.Update(0.5f, 0);
+    m_fFloorTime.Update(0.5f, 0u);
     if(m_fFloorTime >= 20.0f) m_fFloorTime -= 20.0f;
     this->SetTexOffset(coreVector2(m_fLightDirection,-1.0f) * m_fFloorTime);
 
     // update and move the filling background
-    m_fFillTime.Update(0.75f, 0);
+    m_fFillTime.Update(0.75f, 0u);
     if(m_fFillTime >= 5.0f) m_fFillTime -= 5.0f;
     m_Fill.SetTexOffset(coreVector2(-m_fFillTime * m_fLightDirection, 0.0f));
     m_Fill.Move();
@@ -195,9 +195,9 @@ coreFloat CBackground::GetHeight(const coreVector2 vPos, const coreVector2 vBack
 // load dance floor geometry
 void CBackground::LoadGeometry()
 {
-    coreList<coreVector4> avColor;     avColor.reserve    (BACK_BLOCKS);
+    coreList<coreVector4> avColor;     avColor    .reserve(BACK_BLOCKS);
     coreList<SVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
-    coreList<coreUint16>  pIndexData;  pIndexData.reserve (BACK_TOTAL_INDICES);
+    coreList<coreUint16>  pIndexData;  pIndexData .reserve(BACK_TOTAL_INDICES);
 
     // delete old data
     m_pModel->Unload();
@@ -230,7 +230,7 @@ void CBackground::LoadGeometry()
         }
         while(i >= BACK_BLOCKS_X && (m_avColor[iCurColor] == avColor[i-BACK_BLOCKS_X].xyz() ||
                                      m_avColor[iCurColor] == avColor[i-1u]           .xyz()));
-        avColor.emplace_back(m_avColor[iCurColor], 1.0f);
+        avColor.emplace_back_unsafe(m_avColor[iCurColor], 1.0f);
 
         // add additional random parameter for the shader
         avColor.back().w = Core::Rand->Float(0.9f, 1.0f) * COLOR_BRIGHTNESS;
@@ -256,18 +256,18 @@ void CBackground::LoadGeometry()
             const coreUint16 iStartIndex = coreUint16(pVertexData.size());
 
             // copy base vertices to create unique plates and add generated color values
-            pVertexData.push_back(aBaseVertex[j]);               pVertexData.back().iColor = iColor;
-            pVertexData.push_back(aBaseVertex[j+1u]);            pVertexData.back().iColor = iColor;
-            pVertexData.push_back(aBaseVertex[j   +BACK_WIDTH]); pVertexData.back().iColor = iColor;
-            pVertexData.push_back(aBaseVertex[j+1u+BACK_WIDTH]); pVertexData.back().iColor = iColor;
+            pVertexData.push_back_unsafe(aBaseVertex[j]);               pVertexData.back().iColor = iColor;
+            pVertexData.push_back_unsafe(aBaseVertex[j+1u]);            pVertexData.back().iColor = iColor;
+            pVertexData.push_back_unsafe(aBaseVertex[j   +BACK_WIDTH]); pVertexData.back().iColor = iColor;
+            pVertexData.push_back_unsafe(aBaseVertex[j+1u+BACK_WIDTH]); pVertexData.back().iColor = iColor;
 
             // add indices for the new plate
-            pIndexData.push_back(iStartIndex + 0u);
-            pIndexData.push_back(iStartIndex + 1u);
-            pIndexData.push_back(iStartIndex + 2u);
-            pIndexData.push_back(iStartIndex + 1u);
-            pIndexData.push_back(iStartIndex + 3u);
-            pIndexData.push_back(iStartIndex + 2u);
+            pIndexData.push_back_unsafe(iStartIndex + 0u);
+            pIndexData.push_back_unsafe(iStartIndex + 1u);
+            pIndexData.push_back_unsafe(iStartIndex + 2u);
+            pIndexData.push_back_unsafe(iStartIndex + 1u);
+            pIndexData.push_back_unsafe(iStartIndex + 3u);
+            pIndexData.push_back_unsafe(iStartIndex + 2u);
         }
     }
 

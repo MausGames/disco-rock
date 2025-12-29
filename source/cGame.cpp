@@ -53,7 +53,7 @@ CGame::CGame(const coreBool bChallenge)noexcept
 
     // add and shuffle all algorithms
     m_aiAlgo.reserve(STAGE_TOTAL_NUM);
-    for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back(i);
+    for(coreUintW i = 0u; i < STAGE_TOTAL_NUM; ++i) m_aiAlgo.push_back_unsafe(i);
     coreData::RangeShuffle(m_aiAlgo.begin(), m_aiAlgo.end());
 
     // create beginning message
@@ -193,8 +193,8 @@ void CGame::Move()
     m_fTime.Update(1.0f);
 
     // calculate movement values
-    const coreFloat fMove10 = Core::System->GetTime(0) * 2.5f * BACK_DETAIL_Y;   // speed-modified
-    const coreFloat fMove30 = TIME                     * 3.0f * BACK_DETAIL_Y;   // normal
+    const coreFloat fMove10 = Core::System->GetTime(0u) * 2.5f * BACK_DETAIL_Y;   // speed-modified
+    const coreFloat fMove30 = TIME                      * 3.0f * BACK_DETAIL_Y;   // normal
 
     // check for the next line on the horizon
     const coreInt32 iNewCurLine = g_pBackground->GetCurLine();
@@ -340,7 +340,7 @@ void CGame::Move()
                 ++m_iCollectedTraps;
 
                 // play trap sound effect and show message
-                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f + Core::Rand->Float(-0.05f, 0.05f), false, 0u, m_Rock.GetPosition(), SOUND_PROPERTIES);
+                m_pTrapSound->PlayPosition(NULL, 0.3f, 1.1f + Core::Rand->Float(-0.05f, 0.05f), false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, m_Rock.GetPosition(), SOUND_PROPERTIES);
                 g_pCombatText->AddTextTransformed(g_MsgTrap.Get(), m_Rock.GetPosition(), coreVector4(COLOR_WHITE_F, 1.0f));
 
                 // reset combo timer (a little bit more than a beverage)
@@ -574,7 +574,7 @@ void CGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 
             // show achievement title and play sound
             g_pCombatText->ShowTrophy(coreData::StrToUpper(("<< " + pTrophy->GetTitle() + " >>").c_str()), vPos);
-            m_pTrophySound->PlayRelative(NULL, 0.09f, 1.0f, false, 0u);
+            m_pTrophySound->PlayRelative(NULL, 0.09f, 1.0f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE);
 
             // set and save current trophy status
             g_pMenu->SetTrophyStatus(g_pMenu->GetTrophyStatus() | BIT(iNum));

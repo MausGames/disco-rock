@@ -205,9 +205,9 @@ public:
     inline void UpdateControl() {m_ControlType.SelectIndex(CLAMP(Core::Config->GetInt("Game", "Control", 0), 0, 2));}
 
     // play sound-effects
-    inline void PlayClickSound() {m_pClickSound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
-    inline void PlayHappySound() {m_pHappySound ->PlayRelative(NULL, 0.08f, 1.0f, false, 0u);}
-    inline void PlayFlashSound() {m_pFlashSound ->PlayRelative(NULL, 0.11f, 1.0f, false, 0u);}
+    inline void PlayClickSound() {m_pClickSound->PlayRelative(NULL, 0.08f, 1.0f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE);}
+    inline void PlayHappySound() {m_pHappySound->PlayRelative(NULL, 0.08f, 1.0f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE);}
+    inline void PlayFlashSound() {m_pFlashSound->PlayRelative(NULL, 0.11f, 1.0f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE);}
 
     // invoke score table update
     inline void InvokeScoreUpdate(const coreUintW iTableNum) {ADD_BIT(m_iTableUpdate, iTableNum)}

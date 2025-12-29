@@ -17,7 +17,7 @@ CPlate::CPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
 , m_fStartY    (fStartY)
 , m_vTexOffset (vTexOffset)
 {
-    m_Animation.SetTimeID(0);
+    m_Animation.SetTimeID(0u);
 
     // load object resources
     this->DefineModel  (Core::Manager::Object->GetLowQuad());
