@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cInterface::cInterface()noexcept
+CInterface::CInterface()noexcept
 : m_Show (coreTimer(1.0f, 1.0f, 1u))
 , m_Hide (coreTimer(1.0f, 1.0f, 1u))
 {
@@ -131,7 +131,7 @@ cInterface::cInterface()noexcept
 
 // ****************************************************************
 // render the interface
-void cInterface::Render()
+void CInterface::Render()
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
@@ -161,7 +161,7 @@ void cInterface::Render()
 
 // ****************************************************************
 // move the interface
-void cInterface::Move()
+void CInterface::Move()
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
@@ -240,7 +240,7 @@ void cInterface::Move()
 
 // ****************************************************************
 // update all interface values
-void cInterface::Update(const coreFloat fScore, const coreFloat fTime, const coreFloat fCombo, const coreFloat fDelay)
+void CInterface::Update(const coreFloat fScore, const coreFloat fTime, const coreFloat fCombo, const coreFloat fDelay)
 {
     if(m_Hide.GetValue(CORE_TIMER_GET_NORMAL) >= 1.0f) return;
 
@@ -267,7 +267,7 @@ void cInterface::Update(const coreFloat fScore, const coreFloat fTime, const cor
 
 // ****************************************************************
 // render touch objects separately
-void cInterface::RenderTouch()
+void CInterface::RenderTouch()
 {
     // render touch controls
     if(m_iControlType != CONTROL_MOTION)
@@ -289,7 +289,7 @@ void cInterface::RenderTouch()
 
 // ****************************************************************
 // change current control type
-void cInterface::ChangeControlType(const coreUint8 iControlType)
+void CInterface::ChangeControlType(const coreUint8 iControlType)
 {
     // save control type value
     m_iControlType = CLAMP(iControlType, 0u, 2u);
@@ -367,7 +367,7 @@ void cInterface::ChangeControlType(const coreUint8 iControlType)
 
 // ****************************************************************
 // interact with control objects
-void cInterface::InteractControl()
+void CInterface::InteractControl()
 {
     // interact with movement touch buttons
     m_MoveLeft .Interact();
@@ -384,7 +384,7 @@ void cInterface::InteractControl()
 
 // ****************************************************************
 // interact with pause objects
-void cInterface::InteractPause()
+void CInterface::InteractPause()
 {
     // interact with pause touch button
     m_Pause.Interact();

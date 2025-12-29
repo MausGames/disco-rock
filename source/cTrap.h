@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // trap class
-class cTrap final : public coreObject3D
+class CTrap final : public coreObject3D
 {
 private:
     coreFlow           m_pGlow;    // glowing animation timer
@@ -23,9 +23,9 @@ private:
 
 
 public:
-    cTrap()noexcept;
+    CTrap()noexcept;
 
-    DISABLE_COPY(cTrap)
+    DISABLE_COPY(CTrap)
 
     // move the trap
     void Move()final;

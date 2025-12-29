@@ -19,7 +19,7 @@
 
 // ****************************************************************
 // ray class
-class cRay final : public coreObject3D
+class CRay final : public coreObject3D
 {
 private:
     coreVector3 m_vStart;    // starting-position of the ray
@@ -29,9 +29,9 @@ private:
 
 
 public:
-    cRay(const coreVector3 vStart)noexcept;
+    CRay(const coreVector3 vStart)noexcept;
 
-    DISABLE_COPY(cRay)
+    DISABLE_COPY(CRay)
 
     // move the ray
     void Move()final;

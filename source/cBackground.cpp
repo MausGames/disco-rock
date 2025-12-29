@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cBackground::cBackground()noexcept
+CBackground::CBackground()noexcept
 : m_fPositionTime   (0.0f)
 , m_fFloorTime      (0.0f)
 , m_fFillTime       (0.0f)
@@ -45,7 +45,7 @@ cBackground::cBackground()noexcept
 
 // ****************************************************************
 // destructor
-cBackground::~cBackground()
+CBackground::~CBackground()
 {
     // free model
     Core::Manager::Resource->Free(&m_pModel);
@@ -57,7 +57,7 @@ cBackground::~cBackground()
 
 // ****************************************************************
 // render the background
-void cBackground::Render()
+void CBackground::Render()
 {
     glDisable(GL_BLEND);
     {
@@ -113,7 +113,7 @@ void cBackground::Render()
 
 // ****************************************************************
 // move the background
-void cBackground::Move()
+void CBackground::Move()
 {
     // update dance floor position
     m_fPositionTime.Update(2.5f, 0);
@@ -142,7 +142,7 @@ void cBackground::Move()
 
 // ****************************************************************
 // reset fullscreen-objects after resolution changes
-void cBackground::ResetResolution()
+void CBackground::ResetResolution()
 {
     // reset filling background
     m_Fill.SetSize   (Core::System->GetResolution().HighRatio());
@@ -152,7 +152,7 @@ void cBackground::ResetResolution()
 
 // ****************************************************************
 // make or remove holes
-void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
+void CBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 {
     constexpr coreUintW iNum  = BACK_BLOCKS_X * BACK_PER_VERTICES;
     constexpr coreUintW iSize = iNum * sizeof(coreFloat);
@@ -177,7 +177,7 @@ void cBackground::UpdateHoles(const coreUintW iLine, const coreBool* pbIndex)
 
 // ****************************************************************
 // get height value at specific position
-coreFloat cBackground::GetHeight(const coreVector2 vPos, const coreVector2 vBackPos)const
+coreFloat CBackground::GetHeight(const coreVector2 vPos, const coreVector2 vBackPos)const
 {
     // convert real position to block position
     const coreFloat fX = (vPos.x-vBackPos.x) / BACK_DETAIL_X + I_TO_F(BACK_BLOCKS_X)/2.0f;
@@ -190,10 +190,10 @@ coreFloat cBackground::GetHeight(const coreVector2 vPos, const coreVector2 vBack
 
 // ****************************************************************
 // load dance floor geometry
-void cBackground::LoadGeometry()
+void CBackground::LoadGeometry()
 {
     coreList<coreVector4> avColor;     avColor.reserve    (BACK_BLOCKS);
-    coreList<sVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
+    coreList<SVertex>     pVertexData; pVertexData.reserve(BACK_TOTAL_VERTICES);
     coreList<coreUint16>  pIndexData;  pIndexData.reserve (BACK_TOTAL_INDICES);
 
     // delete old data
@@ -201,7 +201,7 @@ void cBackground::LoadGeometry()
     ALIGNED_DELETE(m_pfHeight)
 
     // create base geometry
-    sVertex aBaseVertex[BACK_WIDTH * BACK_HEIGHT];
+    SVertex aBaseVertex[BACK_WIDTH * BACK_HEIGHT];
     for(coreUintW i = 0u; i < BACK_WIDTH * BACK_HEIGHT; ++i)
     {
         const coreInt32 x = i % BACK_WIDTH;
@@ -271,7 +271,7 @@ void cBackground::LoadGeometry()
     coreVertexBuffer* pBuffer;
 
     // create static vertex buffer
-    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(sVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
+    pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(SVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
     pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_POSITION_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 0u);
     pBuffer->DefineAttribute(CORE_SHADER_ATTRIBUTE_TEXCOORD_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 2u*sizeof(coreFloat));
     pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_COLOR_NUM,    4u, GL_UNSIGNED_BYTE, 4u*sizeof(coreUint8), false, 0u, 4u*sizeof(coreFloat));
@@ -295,7 +295,7 @@ void cBackground::LoadGeometry()
 
 // ****************************************************************
 // modify colors used for the dance floor
-void cBackground::ModifyColor()
+void CBackground::ModifyColor()
 {
     // change current hue offset
          if(m_fCurColorHue ==   0.0f/360.0f) m_fCurColorHue = 190.0f/360.0f;
@@ -324,7 +324,7 @@ void cBackground::ModifyColor()
 
 // ****************************************************************
 // reset with the resource manager
-void cBackground::__Reset(const coreResourceReset bInit)
+void CBackground::__Reset(const coreResourceReset bInit)
 {
     if(bInit) this->LoadGeometry();
     else m_pModel->Unload();

@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept
+IBeverage::IBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept
 : m_pStraw       (NULL)
 , m_pGlass       (NULL)
 , m_iScore       (iScore)
@@ -40,7 +40,7 @@ cBeverage::cBeverage(const coreUint32 iScore, const coreFloat fHeight, const cor
 
 // ****************************************************************
 // destructor
-cBeverage::~cBeverage()
+IBeverage::~IBeverage()
 {
     SAFE_DELETE(m_pStraw)
     SAFE_DELETE(m_pGlass)
@@ -49,7 +49,7 @@ cBeverage::~cBeverage()
 
 // ****************************************************************
 // move the beverage
-void cBeverage::Move()
+void IBeverage::Move()
 {
     coreFloat fSideSet = 0.0f;
     if(m_pDestroy.GetStatus())
@@ -113,8 +113,8 @@ void cBeverage::Move()
 
 // ****************************************************************
 // constructor
-cSunrise::cSunrise()noexcept
-: cBeverage (5u, 0.5f, 0.2f, 1.0f)
+CSunrise::CSunrise()noexcept
+: IBeverage (5u, 0.5f, 0.2f, 1.0f)
 {
     // load object resources
     this->DefineModel  ("drink_sunrise.md5z");
@@ -136,8 +136,8 @@ cSunrise::cSunrise()noexcept
 
 // ****************************************************************
 // constructor
-cMojito::cMojito()noexcept
-: cBeverage (10u, -0.2f, 0.4f, 1.2f)
+CMojito::CMojito()noexcept
+: IBeverage (10u, -0.2f, 0.4f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("drink_mojito.md5z");
@@ -160,8 +160,8 @@ cMojito::cMojito()noexcept
 
 // ****************************************************************
 // constructor
-cBlue::cBlue()noexcept
-: cBeverage (30u, 5.8f, 0.6f, 1.6f)
+CBlue::CBlue()noexcept
+: IBeverage (30u, 5.8f, 0.6f, 1.6f)
 {
     // load object resources
     this->DefineModel  ("drink_blue.md5z");
@@ -189,8 +189,8 @@ cBlue::cBlue()noexcept
 
 // ****************************************************************
 // constructor
-cCoola::cCoola()noexcept
-: cBeverage (200u, -3.0f, 0.5f, 0.9f)
+CCoola::CCoola()noexcept
+: IBeverage (200u, -3.0f, 0.5f, 0.9f)
 {
     // load object resources
     this->DefineModel  ("drink_cola.md5z");
@@ -212,8 +212,8 @@ cCoola::cCoola()noexcept
 
 // ****************************************************************
 // constructor
-cFranka::cFranka()noexcept
-: cBeverage (0u, -2.6f, 1.0f, 1.2f)
+CFranka::CFranka()noexcept
+: IBeverage (0u, -2.6f, 1.0f, 1.2f)
 {
     // load object resources
     this->DefineModel  ("bear.md5z");

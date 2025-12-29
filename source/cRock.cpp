@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cRock::cRock()noexcept
+CRock::CRock()noexcept
 : m_WaveTimer          (coreTimer(1.0f, 4.0f, 1))
 , m_fWaveStrength      (60.0f)
 , m_WaveSmallTimer     (coreTimer(1.0f, 6.0f, 1))
@@ -73,7 +73,7 @@ cRock::cRock()noexcept
 
 // ****************************************************************
 // move the rock
-void cRock::Move()
+void CRock::Move()
 {
     // rotate the rock
     m_fRotation.Update(10.0f, 0);
@@ -294,7 +294,7 @@ void cRock::Move()
 
 // ****************************************************************
 // just jump
-coreBool cRock::Jump(const coreFloat fForce)
+coreBool CRock::Jump(const coreFloat fForce)
 {
     if(m_bFallen || m_bJumped) return false;
 
@@ -318,7 +318,7 @@ coreBool cRock::Jump(const coreFloat fForce)
 
 // ****************************************************************
 // create shock-wave
-void cRock::CreateShockWave(const coreUint8 iType)
+void CRock::CreateShockWave(const coreUint8 iType)
 {
     if(iType == 0u)
     {

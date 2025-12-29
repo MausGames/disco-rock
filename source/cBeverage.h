@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // beverage interface
-class INTERFACE cBeverage : public coreObject3D
+class INTERFACE IBeverage : public coreObject3D
 {
 protected:
     coreObject3D   m_Shadow;            // shadow object
@@ -34,10 +34,10 @@ protected:
 
 
 public:
-    cBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept;
-    virtual ~cBeverage()override;
+    IBeverage(const coreUint32 iScore, const coreFloat fHeight, const coreFloat fVolume, const coreFloat fPitch)noexcept;
+    virtual ~IBeverage()override;
 
-    DISABLE_COPY(cBeverage)
+    DISABLE_COPY(IBeverage)
 
     // move the beverage
     void Move()final;
@@ -68,12 +68,12 @@ private:
 
 // ****************************************************************
 // tequila sunrise (orange)
-class cSunrise final : public cBeverage
+class CSunrise final : public IBeverage
 {
 public:
-    cSunrise()noexcept;
+    CSunrise()noexcept;
 
-    DISABLE_COPY(cSunrise)
+    DISABLE_COPY(CSunrise)
 
     // get object properties
     inline coreUintW   GetSigID   ()const final {return 1u;}
@@ -83,12 +83,12 @@ public:
 
 // ****************************************************************
 // mojito! (green)
-class cMojito final : public cBeverage
+class CMojito final : public IBeverage
 {
 public:
-    cMojito()noexcept;
+    CMojito()noexcept;
 
-    DISABLE_COPY(cMojito)
+    DISABLE_COPY(CMojito)
 
     // get object properties
     inline coreUintW   GetSigID   ()const final {return 2u;}
@@ -98,12 +98,12 @@ public:
 
 // ****************************************************************
 // a weird blue drink with a lemon slice (blue)
-class cBlue final : public cBeverage
+class CBlue final : public IBeverage
 {
 public:
-    cBlue()noexcept;
+    CBlue()noexcept;
 
-    DISABLE_COPY(cBlue)
+    DISABLE_COPY(CBlue)
 
     // get object properties
     inline coreUintW   GetSigID   ()const final {return 3u;}
@@ -113,12 +113,12 @@ public:
 
 // ****************************************************************
 // coola (black)
-class cCoola final : public cBeverage
+class CCoola final : public IBeverage
 {
 public:
-    cCoola()noexcept;
+    CCoola()noexcept;
 
-    DISABLE_COPY(cCoola)
+    DISABLE_COPY(CCoola)
 
     // get object properties
     inline coreUintW   GetSigID   ()const final {return 4u;}
@@ -128,12 +128,12 @@ public:
 
 // ****************************************************************
 // franka
-class cFranka final : public cBeverage
+class CFranka final : public IBeverage
 {
 public:
-    cFranka()noexcept;
+    CFranka()noexcept;
 
-    DISABLE_COPY(cFranka)
+    DISABLE_COPY(CFranka)
 
     // get object properties
     inline coreUintW   GetSigID   ()const final {return 5u;}

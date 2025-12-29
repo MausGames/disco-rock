@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cPlate::cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
+CPlate::CPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
 : m_Animation  (coreTimer(1.0f, Core::Rand->Float(0.45f,0.55f), 1u))
 , m_fStartY    (fStartY)
 , m_vTexOffset (vTexOffset)
@@ -36,7 +36,7 @@ cPlate::cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept
 
 // ****************************************************************
 // move the plate
-void cPlate::Move()
+void CPlate::Move()
 {
     // check minimal distance to the front
     if((this->GetPosition().y <= m_fStartY) && (m_fStartY > 0.0f))

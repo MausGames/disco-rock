@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cMenu::cMenu()noexcept
+CMenu::CMenu()noexcept
 : coreMenu         (20u, 0u)
 , m_ScoreMenu      (8u,  0u)
 , m_LoginMenu      (4u,  0u)
@@ -789,7 +789,7 @@ cMenu::cMenu()noexcept
 
 // ****************************************************************
 // move the menu
-void cMenu::Move()
+void CMenu::Move()
 {
     // move the menu
     this->coreMenu::Move();
@@ -1154,7 +1154,7 @@ void cMenu::Move()
             if(((m_aTrophyImage[i].IsFocused() && m_iTrophyCurrent != coreInt8(i)) || m_iTrophyCurrent < 0) && bInNormalMenu)
             {
                 m_iTrophyCurrent = i;
-                g_pOnline->GameJolt()->InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, this, &cMenu::FetchTrophiesCallback1, I_TO_P(i));
+                g_pOnline->GameJolt()->InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, this, &CMenu::FetchTrophiesCallback1, I_TO_P(i));
             }
 
             // set transparency of trophies
@@ -1445,7 +1445,7 @@ void cMenu::Move()
 
 // ****************************************************************
 // end current game and return to main menu
-void cMenu::End()
+void CMenu::End()
 {
     if(!STATIC_ISVALID(g_pGame)) return;
 
@@ -1481,7 +1481,7 @@ void cMenu::End()
 
 // ****************************************************************
 // reset all relevant shaders after quality changes
-void cMenu::ResetShaders()
+void CMenu::ResetShaders()
 {
     // reload shader-programs
     Core::Manager::Resource->Get<coreProgram>("fill_program")       ->Reload();
@@ -1496,7 +1496,7 @@ void cMenu::ResetShaders()
 
 // ****************************************************************
 // reset fullscreen-objects after resolution changes
-void cMenu::ResetResolution()
+void CMenu::ResetResolution()
 {
     // reset fullscreen-objects
     m_Black        .SetSize(Core::System->GetResolution().HighRatio());
@@ -1508,7 +1508,7 @@ void cMenu::ResetResolution()
 
 // ****************************************************************
 // activate notification for new record
-void cMenu::NewRecord(const coreUintW iIndex)
+void CMenu::NewRecord(const coreUintW iIndex)
 {
     ASSERT(iIndex < SCORE_TABLES)
 
@@ -1526,7 +1526,7 @@ void cMenu::NewRecord(const coreUintW iIndex)
 
 // ****************************************************************
 // reset notification for new record
-void cMenu::ResetRecord()
+void CMenu::ResetRecord()
 {
     for(coreUintW i = 0u; i < SCORE_TABLES; ++i)
     {
@@ -1543,7 +1543,7 @@ void cMenu::ResetRecord()
 
 // ****************************************************************
 // submit score
-void cMenu::SubmitScore(const coreChar* pcGuestName)
+void CMenu::SubmitScore(const coreChar* pcGuestName)
 {
     ASSERT(STATIC_ISVALID(g_pGame))
     if(m_bSubmitted) return;
@@ -1560,8 +1560,8 @@ void cMenu::SubmitScore(const coreChar* pcGuestName)
                                     g_pGame->GetStat(0u), g_pGame->GetStat(1u), g_pGame->GetStat(2u), g_pGame->GetStat(3u), g_pGame->GetStat(4u));
 
     // send score and time values
-    const coreInt32 iStateA = g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
-    const coreInt32 iStateB = g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", FLOOR(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &cMenu::SubmitScoreCallback, NULL);
+    const coreInt32 iStateA = g_pOnline->SubmitScore(GJ_LEADERBOARD_01, PRINT("%d Points",    aiValue[0]),                           aiValue[0], sExtra, pcGuestName ? pcGuestName : "", this, &CMenu::SubmitScoreCallback, NULL);
+    const coreInt32 iStateB = g_pOnline->SubmitScore(GJ_LEADERBOARD_02, PRINT("%.1f Seconds", FLOOR(m_afSubmitValue[1]*10.0f)*0.1f), aiValue[1], sExtra, pcGuestName ? pcGuestName : "", this, &CMenu::SubmitScoreCallback, NULL);
 
     // still show score as submitted
     if((iStateA == GJ_REQUEST_CANCELED) || (iStateB == GJ_REQUEST_CANCELED))
@@ -1571,7 +1571,7 @@ void cMenu::SubmitScore(const coreChar* pcGuestName)
 
 // ****************************************************************
 // callback for score submit
-void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
+void CMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
 {
     if(!pScore) return;   // error submitting
 
@@ -1586,16 +1586,16 @@ void cMenu::SubmitScoreCallback(const gjScorePtr& pScore, void* pData)
     }
 
     // fetch all top values
-    g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, I_TO_P(0));
+    g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &CMenu::RetrieveScoresCallback2, I_TO_P(0));
 
     // fetch best values of the current user
-    if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), true, 1u, this, &cMenu::RetrieveScoresCallback2, I_TO_P(1));
+    if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(pScore->GetScoreTable()->GetID(), true, 1u, this, &CMenu::RetrieveScoresCallback2, I_TO_P(1));
 }
 
 
 // ****************************************************************
 // retrieve scores
-void cMenu::RetrieveScores()
+void CMenu::RetrieveScores()
 {
     // reset current score page
     m_iCurPage = 0u;
@@ -1603,28 +1603,28 @@ void cMenu::RetrieveScores()
     this->RetrieveScoresCallback3(1u);
 
     // fetch leaderboards
-    g_pOnline->FetchLeaderboards(this, &cMenu::RetrieveScoresCallback1, NULL);
+    g_pOnline->FetchLeaderboards(this, &CMenu::RetrieveScoresCallback1, NULL);
 }
 
 
 // ****************************************************************
 // callback for score retrieval (tables)
-void cMenu::RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData)
+void CMenu::RetrieveScoresCallback1(const gjScoreTableMap& apTable, void* pData)
 {
     FOR_EACH(it, apTable)
     {
         // fetch all top values
-        g_pOnline->FetchScores(it->second->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &cMenu::RetrieveScoresCallback2, I_TO_P(0));
+        g_pOnline->FetchScores(it->second->GetID(), false, SCORE_ENTRIES * SCORE_PAGES, this, &CMenu::RetrieveScoresCallback2, I_TO_P(0));
 
         // fetch best values of the current user
-        if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(it->second->GetID(), true, 1u, this, &cMenu::RetrieveScoresCallback2, I_TO_P(1));
+        if(g_pOnline->IsUserConnected()) g_pOnline->FetchScores(it->second->GetID(), true, 1u, this, &CMenu::RetrieveScoresCallback2, I_TO_P(1));
     }
 }
 
 
 // ****************************************************************
 // callback for score retrieval (entries)
-void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
+void CMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 {
     if(apScore.empty()) return;
 
@@ -1678,7 +1678,7 @@ void cMenu::RetrieveScoresCallback2(const gjScoreList& apScore, void* pData)
 
 // ****************************************************************
 // callback for score retrieval (update leaderboards)
-void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
+void CMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
 {
     ASSERT(iTableNum  < SCORE_TABLES)
     ASSERT(m_iCurPage < SCORE_PAGES)
@@ -1723,16 +1723,16 @@ void cMenu::RetrieveScoresCallback3(const coreUintW iTableNum)
 
 // ****************************************************************
 // fetch trophies
-void cMenu::FetchTrophies()
+void CMenu::FetchTrophies()
 {
     // fetch trophies
-    g_pOnline->FetchTrophies(this, &cMenu::FetchTrophiesCallback2, NULL);
+    g_pOnline->FetchTrophies(this, &CMenu::FetchTrophiesCallback2, NULL);
 }
 
 
 // ****************************************************************
 // callback for trophy fetch (description)
-void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
+void CMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 {
     const coreUintW iNum = P_TO_UI(pData);
     if(iNum >= apTrophy.size()) return;
@@ -1753,7 +1753,7 @@ void cMenu::FetchTrophiesCallback1(const gjTrophyList& apTrophy, void* pData)
 
 // ****************************************************************
 // callback for trophy fetch (values)
-void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
+void CMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
 {
     // save trophy status
     m_iTrophyStatus = 0u;
@@ -1768,7 +1768,7 @@ void cMenu::FetchTrophiesCallback2(const gjTrophyList& apTrophy, void* pData)
 
 // ****************************************************************
 // invoke quickplay login
-coreInt32 cMenu::QuickPlay()
+coreInt32 CMenu::QuickPlay()
 {
     // load guest name and local values
     m_LoginGuest.SetText(Core::Config->GetString("Game", "Guest", ""));
@@ -1777,12 +1777,12 @@ coreInt32 cMenu::QuickPlay()
     m_iTrophyStatus =    Core::Config->GetInt   ("Game", "Trophy", 0);
 
     // check for quickplay
-    coreInt32 iStatus = g_pOnline->Login("", "", this, &cMenu::LoginCallback, I_TO_P(0));
+    coreInt32 iStatus = g_pOnline->Login("", "", this, &CMenu::LoginCallback, I_TO_P(0));
 
     if(iStatus != GJ_OK)
     {
         // check for saved credentials
-        iStatus = g_pOnline->Login(Core::Config->GetString("Game", "Name", ""), Core::Config->GetString("Game", "Token", ""), this, &cMenu::LoginCallback, I_TO_P(0));
+        iStatus = g_pOnline->Login(Core::Config->GetString("Game", "Name", ""), Core::Config->GetString("Game", "Token", ""), this, &CMenu::LoginCallback, I_TO_P(0));
 
         // fetch leaderboards early on failure
         if(iStatus != GJ_OK) g_pMenu->RetrieveScores();
@@ -1794,16 +1794,16 @@ coreInt32 cMenu::QuickPlay()
 
 // ****************************************************************
 // invoke normal login
-coreInt32 cMenu::Login(const coreChar* pcName, const coreChar* pcToken)
+coreInt32 CMenu::Login(const coreChar* pcName, const coreChar* pcToken)
 {
     // try to login the specific user
-    return g_pOnline->Login(pcName, pcToken, this, &cMenu::LoginCallback, I_TO_P(1));
+    return g_pOnline->Login(pcName, pcToken, this, &CMenu::LoginCallback, I_TO_P(1));
 }
 
 
 // ****************************************************************
 // callback for login attempt
-void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
+void CMenu::LoginCallback(const coreInt32& iStatus, void* pData)
 {
     if(iStatus == GJ_OK)
     {
@@ -1842,7 +1842,7 @@ void cMenu::LoginCallback(const coreInt32& iStatus, void* pData)
 
 // ****************************************************************
 // logout
-void cMenu::Logout()
+void CMenu::Logout()
 {
     // logout
     g_pOnline->Logout();

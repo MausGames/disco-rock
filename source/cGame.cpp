@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cGame::cGame(const coreBool bChallenge)noexcept
+CGame::CGame(const coreBool bChallenge)noexcept
 : m_iCurLine         (g_pBackground->GetCurLine())
 , m_iAlgoCurIndex    (0u)
 , m_iAlgoCurCount    (0)
@@ -75,7 +75,7 @@ cGame::cGame(const coreBool bChallenge)noexcept
 
 // ****************************************************************
 // destructor
-cGame::~cGame()
+CGame::~CGame()
 {
     // delete all remaining objects
     FOR_EACH(it, m_apBeverage)  SAFE_DELETE(*it)
@@ -95,7 +95,7 @@ cGame::~cGame()
 
 // ****************************************************************
 // render specific objects before the background
-void cGame::RenderPre()
+void CGame::RenderPre()
 {
     // render rock
     m_Rock.RenderRock();
@@ -111,7 +111,7 @@ void cGame::RenderPre()
 
 // ****************************************************************
 // render the game
-void cGame::Render()
+void CGame::Render()
 {
     glDepthMask(false);
     {
@@ -177,7 +177,7 @@ void cGame::Render()
 
 // ****************************************************************
 // move the game
-void cGame::Move()
+void CGame::Move()
 {
     // update game time
     m_fTime.Update(1.0f);
@@ -252,7 +252,7 @@ void cGame::Move()
     // update all active beverages
     FOR_EACH_DYN(it, m_apBeverage)
     {
-        cBeverage* pBeverage = (*it);
+        IBeverage* pBeverage = (*it);
         const coreVector3 vPos = pBeverage->GetPosition();
 
         if(vPos.y <= BACK_REMOVE_Y)
@@ -318,7 +318,7 @@ void cGame::Move()
     // test trap collisions
     FOR_EACH(it, m_apTrap)
     {
-        cTrap* pTrap = (*it);
+        CTrap* pTrap = (*it);
 
         // check for collision with traps
         coreVector3 vDummy;
@@ -436,10 +436,10 @@ void cGame::Move()
 
 // ****************************************************************
 // add beverage object
-void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
+void CGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
-    cBeverage* pBeverage = NULL;
+    IBeverage* pBeverage = NULL;
 
     if((m_iCoolaCounter >= GAME_COOLA_RATE) || m_bChallenge)
     {
@@ -447,7 +447,7 @@ void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBo
         m_iCoolaCounter = 0u;
 
         // create Coola bottle
-        pBeverage = new cCoola();
+        pBeverage = new CCoola();
 
         if(!m_bChallenge)
         {
@@ -462,9 +462,9 @@ void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBo
         const coreUintW iSelection = Core::Rand->Uint(10u);
 
         // create new beverage
-             if(                     iSelection <=  5u) pBeverage = new cSunrise();
-        else if( 6u <= iSelection && iSelection <=  9u) pBeverage = new cMojito();
-        else if(10u <= iSelection && iSelection <= 10u) pBeverage = new cBlue();
+             if(                     iSelection <=  5u) pBeverage = new CSunrise();
+        else if( 6u <= iSelection && iSelection <=  9u) pBeverage = new CMojito();
+        else if(10u <= iSelection && iSelection <= 10u) pBeverage = new CBlue();
     }
 
     // prepare beverage and add to list
@@ -478,12 +478,12 @@ void cGame::AddBeverage(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBo
 
 // ****************************************************************
 // add trap object
-void cGame::AddTrap(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
+void CGame::AddTrap(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
     // create new trap and add to list
-    cTrap* pTrap = new cTrap();
+    CTrap* pTrap = new CTrap();
     pTrap->SetPosition(coreVector3(BACK_SPAWN_X(iBlockX, 1.5f), fSpawnY, GAME_HEIGHT + pTrap->GetSize().z*0.51f));
     m_apTrap.push_back(pTrap);
 
@@ -494,10 +494,10 @@ void cGame::AddTrap(const coreFloat fSpawnY, const coreInt32 iBlockX, coreBool* 
 
 // ****************************************************************
 // add plate object
-void cGame::AddPlate(const coreFloat fSpawnY, const coreInt32 iBlockX)
+void CGame::AddPlate(const coreFloat fSpawnY, const coreInt32 iBlockX)
 {
     // create plate and add to list
-    cPlate* pPlate = new cPlate(90.0f + Core::Rand->Float(120.0f), coreVector2(I_TO_F(iBlockX), -FLOOR(g_pBackground->GetPositionTime())));
+    CPlate* pPlate = new CPlate(90.0f + Core::Rand->Float(120.0f), coreVector2(I_TO_F(iBlockX), -FLOOR(g_pBackground->GetPositionTime())));
     pPlate->SetPosition(coreVector3(BACK_SPAWN_X(iBlockX, 0.5f), fSpawnY, GAME_HEIGHT));
     m_apPlate.push_back(pPlate);
 }
@@ -505,20 +505,20 @@ void cGame::AddPlate(const coreFloat fSpawnY, const coreInt32 iBlockX)
 
 // ****************************************************************
 // add ray object
-void cGame::AddRay(const coreFloat fSpawnY)
+void CGame::AddRay(const coreFloat fSpawnY)
 {
      // calculate start-position
     const coreVector2 vAround = coreVector2(Core::Rand->Float(-2.0f, 2.0f), 1.0f).Normalized() * 90.0f;
 
     // create new ray and add to list
-    cRay* pRay = new cRay(coreVector3(vAround.x, fSpawnY, vAround.y));
+    CRay* pRay = new CRay(coreVector3(vAround.x, fSpawnY, vAround.y));
     m_apRay.push_back(pRay);
 }
 
 
 // ****************************************************************
 // prevent holes in the ground
-void cGame::AddStreet(const coreInt32 iBlockX, const coreBool bCenter, const coreUintW iLeft, const coreUintW iRight, coreBool* OUTPUT pbHole)
+void CGame::AddStreet(const coreInt32 iBlockX, const coreBool bCenter, const coreUintW iLeft, const coreUintW iRight, coreBool* OUTPUT pbHole)
 {
     ASSERT((iBlockX+1) < coreInt32(BACK_BLOCKS_X))
 
@@ -533,7 +533,7 @@ void cGame::AddStreet(const coreInt32 iBlockX, const coreBool bCenter, const cor
 
 // ****************************************************************
 // achieve a trophy
-void cGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
+void CGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
 {
     // update helper
     if(m_bTrophyHelper[iNum]) return;
@@ -541,7 +541,7 @@ void cGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
 
     // achieve trophy
     gjTrophy* pTrophy = g_pOnline->GameJolt()->InterTrophy()->GetTrophy(iID);
-    if(g_pOnline->IsUserConnected()) g_pOnline->AchieveTrophy(pTrophy, this, &cGame::AchieveTrophyCallback, I_TO_P(iNum));
+    if(g_pOnline->IsUserConnected()) g_pOnline->AchieveTrophy(pTrophy, this, &CGame::AchieveTrophyCallback, I_TO_P(iNum));
     else
     {
         // handle guest user
@@ -552,7 +552,7 @@ void cGame::AchieveTrophy(const coreUintW iID, const coreUintW iNum)
 
 // ****************************************************************
 // callback for trophy achievements
-void cGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
+void CGame::AchieveTrophyCallback(const gjTrophyPtr& pTrophy, void* pData)
 {
     const coreUintW iNum = P_TO_UI(pData);
 

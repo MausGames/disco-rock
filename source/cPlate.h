@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // plate class
-class cPlate final : public coreObject3D
+class CPlate final : public coreObject3D
 {
 private:
     coreTimer m_Animation;      // timer for the lift-animation
@@ -23,9 +23,9 @@ private:
 
 
 public:
-    cPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept;
+    CPlate(const coreFloat fStartY, const coreVector2 vTexOffset)noexcept;
 
-    DISABLE_COPY(cPlate)
+    DISABLE_COPY(CPlate)
 
     // move the plate
     void Move()final;

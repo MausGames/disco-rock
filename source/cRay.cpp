@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cRay::cRay(const coreVector3 vStart)noexcept
+CRay::CRay(const coreVector3 vStart)noexcept
 : m_vStart     (vStart)
 , m_fAngle     (0.0f)
 , m_fAnimation (Core::Rand->Float(0.0f, 2.0f*PI))
@@ -37,7 +37,7 @@ cRay::cRay(const coreVector3 vStart)noexcept
 
 // ****************************************************************
 // move the ray
-void cRay::Move()
+void CRay::Move()
 {
     // update the move-animation
     // m_fAnimation.Update(1.0f); #deactivated

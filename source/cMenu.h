@@ -61,7 +61,7 @@
 
 // ****************************************************************
 // menu class
-class cMenu final : public coreMenu
+class CMenu final : public coreMenu
 {
 private:
     coreObject2D m_MausLogo;
@@ -181,9 +181,9 @@ private:
 
 
 public:
-    cMenu()noexcept;
+    CMenu()noexcept;
 
-    DISABLE_COPY(cMenu)
+    DISABLE_COPY(CMenu)
 
     // move the menu
     void Move()final;

@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // apply stage algorithms to the game
-void cGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
+void CGame::ProcessStage(const coreFloat fSpawnY, coreBool* OUTPUT pbHole)
 {
 #if defined(_CORE_DEBUG_) && 0
     m_aiAlgo[m_iAlgoCurIndex] = STAGE_TRAP;

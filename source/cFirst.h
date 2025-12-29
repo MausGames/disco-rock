@@ -15,20 +15,20 @@
 
 // ****************************************************************
 // first-time menu class
-class cFirst final : public coreMenu
+class CFirst final : public coreMenu
 {
 private:
     coreLabel       m_ControlText;   // control header
     coreSwitchBoxU8 m_ControlType;   // control setting selection
     coreButton      m_Start;         // start into main menu
 
-    cInterface m_Interface;          // interface instance to display current control settings
+    CInterface m_Interface;          // interface instance to display current control settings
 
 
 public:
-    cFirst()noexcept;
+    CFirst()noexcept;
 
-    DISABLE_COPY(cFirst)
+    DISABLE_COPY(CFirst)
 
     // render and move the first-time menu
     void Render()final;
@@ -40,7 +40,7 @@ public:
 
 
 // just define as empty object
-using cFirst = coreObject2D;
+using CFirst = coreObject2D;
 
 
 #endif // _CORE_MOBILE_ || _DR_EMULATE_MOBILE_

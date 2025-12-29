@@ -44,10 +44,10 @@
 
 // ****************************************************************
 // background class
-class cBackground final : public coreObject3D, public coreResourceRelation
+class CBackground final : public coreObject3D, public coreResourceRelation
 {
 private:
-    struct sVertex final
+    struct SVertex final
     {
         coreVector2 vPosition;   // vertex position
         coreVector2 vTexCoord;   // texture coordinate
@@ -75,10 +75,10 @@ private:
 
 
 public:
-    cBackground()noexcept;
-    ~cBackground()final;
+    CBackground()noexcept;
+    ~CBackground()final;
 
-    DISABLE_COPY(cBackground)
+    DISABLE_COPY(CBackground)
 
     // render and move the background
     void Render()final;

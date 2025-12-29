@@ -26,7 +26,7 @@
 
 // ****************************************************************
 // rock class
-class cRock final : public coreObject3D
+class CRock final : public coreObject3D
 {
 private:
     coreObject3D m_Wave;                 // big wave effect
@@ -63,9 +63,9 @@ private:
 
 
 public:
-    cRock()noexcept;
+    CRock()noexcept;
 
-    DISABLE_COPY(cRock)
+    DISABLE_COPY(CRock)
 
     // move the rock
     void Move()final;

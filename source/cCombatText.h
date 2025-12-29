@@ -18,18 +18,18 @@
 
 // ****************************************************************
 // combat text class
-class cCombatText final   // actually there is no "combat" in the game
+class CCombatText final   // actually there is no "combat" in the game
 {
 private:
     // text data structure
-    struct sData final
+    struct SData final
     {
         coreString  sText;       // actual text to display
         coreVector2 vPosition;   // screen position
         coreVector4 vColor;      // RGBA color-value
 
-        sData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept;
-        sData(sData&& m)noexcept;
+        SData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept;
+        SData(SData&& m)noexcept;
     };
 
 
@@ -45,14 +45,14 @@ private:
     coreLabel    m_TrophyLabel;             // dedicated trophy label
     coreTimer    m_TrophyTimer;             // timer for the flying trophy symbol
 
-    std::deque<sData> m_aData;              // text data deque
+    std::deque<SData> m_aData;              // text data deque
 
 
 public:
-    cCombatText()noexcept;
-    ~cCombatText();
+    CCombatText()noexcept;
+    ~CCombatText();
 
-    DISABLE_COPY(cCombatText)
+    DISABLE_COPY(CCombatText)
 
     // render and move the combat text
     void Render();

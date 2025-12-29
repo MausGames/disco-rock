@@ -62,18 +62,18 @@
 
 // ****************************************************************
 // game class
-class cGame final
+class CGame final
 {
 private:
-    cRock m_Rock;                             // rock object
+    CRock m_Rock;                             // rock object
 
-    std::deque<cBeverage*> m_apBeverage;      // list with active beverages
-    std::deque<cBeverage*> m_apDestroyed;     // list with inactive beverages
+    std::deque<IBeverage*> m_apBeverage;      // list with active beverages
+    std::deque<IBeverage*> m_apDestroyed;     // list with inactive beverages
 
-    std::deque<cTrap*> m_apTrap;              // list with trap plates
+    std::deque<CTrap*> m_apTrap;              // list with trap plates
 
-    std::deque<cPlate*> m_apPlate;            // list with plate objects
-    std::deque<cRay*>   m_apRay;              // list with ray objects
+    std::deque<CPlate*> m_apPlate;            // list with plate objects
+    std::deque<CRay*>   m_apRay;              // list with ray objects
 
     coreInt32 m_iCurLine;                     // current processing line/row
 
@@ -107,7 +107,7 @@ private:
 
     coreTimer m_PowerUpTimer;                 // power-up timer (for Coola power)
 
-    cInterface m_Interface;                   // interface object
+    CInterface m_Interface;                   // interface object
     coreLabel  m_Message;                     // beginning message
     coreTimer  m_MessageTimer;                // timer for the beginning message
 
@@ -118,10 +118,10 @@ private:
 
 
 public:
-    explicit cGame(const coreBool bChallenge)noexcept;
-    ~cGame();
+    explicit CGame(const coreBool bChallenge)noexcept;
+    ~CGame();
 
-    DISABLE_COPY(cGame)
+    DISABLE_COPY(CGame)
 
     // render and move the game
     void RenderPre();
@@ -151,8 +151,8 @@ public:
     inline const coreUint16& GetTraps   ()const                       {return m_iCollectedTraps;}
 
     // access sub objects
-    inline cRock*      GetRock     () {return &m_Rock;}
-    inline cInterface* GetInterface() {return &m_Interface;}
+    inline CRock*      GetRock     () {return &m_Rock;}
+    inline CInterface* GetInterface() {return &m_Interface;}
 
     // achieve a trophy
     void AchieveTrophy        (const coreUintW iID, const coreUintW iNum);

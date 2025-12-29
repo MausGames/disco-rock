@@ -8,16 +8,16 @@
 //////////////////////////////////////////////////////
 #include "main.h"
 
-STATIC_MEMORY(cBackground,        g_pBackground)
-STATIC_MEMORY(cMenu,              g_pMenu)
-STATIC_MEMORY(cCombatText,        g_pCombatText)
-STATIC_MEMORY(cGame,              g_pGame)
-STATIC_MEMORY(cFirst,             g_pFirst)
+STATIC_MEMORY(CBackground,        g_pBackground)
+STATIC_MEMORY(CMenu,              g_pMenu)
+STATIC_MEMORY(CCombatText,        g_pCombatText)
+STATIC_MEMORY(CGame,              g_pGame)
+STATIC_MEMORY(CFirst,             g_pFirst)
 
 STATIC_MEMORY(coreMusicPlayer,    g_pMusicPlayer)
 STATIC_MEMORY(coreParticleSystem, g_pParticleSystem)
 
-STATIC_MEMORY(cOnline,            g_pOnline)
+STATIC_MEMORY(COnline,            g_pOnline)
 
 coreFloat  g_fTargetSpeed   = 1.0f;
 coreFloat  g_fCurSpeed      = 1.0f;
@@ -43,7 +43,7 @@ const coreChar* const g_asIntro[] =
     "GET READY TO DISCO",
     "YOU SHOULD BE DANCING"
 };
-sMsgList g_MsgIntro(g_asIntro, ARRAY_SIZE(g_asIntro));
+SMsgList g_MsgIntro(g_asIntro, ARRAY_SIZE(g_asIntro));
 
 
 // ****************************************************************
@@ -58,7 +58,7 @@ const coreChar* const g_asFallen[] =
     "OPEN YOUR EYES",
     "REALLY?"
 };
-sMsgList g_MsgFallen(g_asFallen, ARRAY_SIZE(g_asFallen));
+SMsgList g_MsgFallen(g_asFallen, ARRAY_SIZE(g_asFallen));
 
 
 // ****************************************************************
@@ -75,7 +75,7 @@ const coreChar* const g_asTrap[] =
     "SHOW ME THE LIGHT",
     "BOY, YOU TURN ME"
 };
-sMsgList g_MsgTrap(g_asTrap, ARRAY_SIZE(g_asTrap));
+SMsgList g_MsgTrap(g_asTrap, ARRAY_SIZE(g_asTrap));
 
 
 // ****************************************************************
@@ -89,7 +89,7 @@ const coreChar* const g_asBegin[] =
     "TAKE THAT",
     "RIDE ON"
 };
-sMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
+SMsgList g_MsgBegin(g_asBegin, ARRAY_SIZE(g_asBegin));
 
 
 // ****************************************************************
@@ -154,14 +154,14 @@ void CoreApp::Init()
     g_pParticleSystem->DefineProgram("default_particle_program");
 
     // pre-allocate all required resources
-    s_apSave[0] = new cSunrise();
-    s_apSave[1] = new cMojito ();
-    s_apSave[2] = new cBlue   ();
-    s_apSave[3] = new cCoola  ();
-    s_apSave[4] = new cRock   ();
-    s_apSave[5] = new cPlate  (0.0f, coreVector2(1.0f,1.0f));
-    s_apSave[6] = new cRay    (coreVector3(1.0f,1.0f,1.0f));
-    s_apSave[7] = new cTrap   ();
+    s_apSave[0] = new CSunrise();
+    s_apSave[1] = new CMojito ();
+    s_apSave[2] = new CBlue   ();
+    s_apSave[3] = new CCoola  ();
+    s_apSave[4] = new CRock   ();
+    s_apSave[5] = new CPlate  (0.0f, coreVector2(1.0f,1.0f));
+    s_apSave[6] = new CRay    (coreVector3(1.0f,1.0f,1.0f));
+    s_apSave[7] = new CTrap   ();
 }
 
 

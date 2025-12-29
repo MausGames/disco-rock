@@ -122,16 +122,16 @@ enum eStage : coreUint8
 
 // ****************************************************************
 // global variables
-extern cBackground*        const g_pBackground;       // background with dance floor
-extern cMenu*              const g_pMenu;             // global menu object
-extern cCombatText*        const g_pCombatText;       // global "combat" text object
-extern cGame*              const g_pGame;             // global game object
-extern cFirst*             const g_pFirst;            // special menu displayed at the first time
+extern CBackground*        const g_pBackground;       // background with dance floor
+extern CMenu*              const g_pMenu;             // global menu object
+extern CCombatText*        const g_pCombatText;       // global "combat" text object
+extern CGame*              const g_pGame;             // global game object
+extern CFirst*             const g_pFirst;            // special menu displayed at the first time
 
 extern coreMusicPlayer*    const g_pMusicPlayer;      // primary music player
 extern coreParticleSystem* const g_pParticleSystem;   // primary particle system
 
-extern cOnline*            const g_pOnline;           // network access object for leaderboards and achievements
+extern COnline*            const g_pOnline;           // network access object for leaderboards and achievements
 
 extern coreFloat           g_fTargetSpeed;            // new target speed
 extern coreFloat           g_fCurSpeed;               // current speed
@@ -145,12 +145,12 @@ extern coreBool            g_bCamUpsideDown;          // upside-down camera stat
 
 // ****************************************************************
 // message container structure
-struct sMsgList final
+struct SMsgList final
 {
     coreList<const coreChar*> m_apcMsg;   // shuffled messages
     coreUintW m_iCur;                     // current message index
 
-    inline sMsgList(const coreChar* const* ppcMsg, const coreUintW iSize)noexcept
+    inline SMsgList(const coreChar* const* ppcMsg, const coreUintW iSize)noexcept
     : m_iCur (0u)
     {
         // add messages
@@ -172,10 +172,10 @@ struct sMsgList final
 
 // ****************************************************************
 // message containers
-extern sMsgList g_MsgIntro;
-extern sMsgList g_MsgFallen;
-extern sMsgList g_MsgTrap;
-extern sMsgList g_MsgBegin;
+extern SMsgList g_MsgIntro;
+extern SMsgList g_MsgFallen;
+extern SMsgList g_MsgTrap;
+extern SMsgList g_MsgBegin;
 
 
 #endif // _DR_GUARD_MAIN_H_

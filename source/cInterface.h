@@ -18,7 +18,7 @@
 
 // ****************************************************************
 // interface class
-class cInterface final
+class CInterface final
 {
 private:
     coreLabel m_Score;            // score name text
@@ -52,9 +52,9 @@ private:
 
 
 public:
-    cInterface()noexcept;
+    CInterface()noexcept;
 
-    DISABLE_COPY(cInterface)
+    DISABLE_COPY(CInterface)
 
     // render and move the interface
     void Render();

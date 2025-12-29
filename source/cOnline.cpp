@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cOnline::cOnline()noexcept
+COnline::COnline()noexcept
 {
     // init Game Jolt API object
     m_GameJolt.Init(18996, GJ_KEY);
@@ -28,7 +28,7 @@ cOnline::cOnline()noexcept
 
 // ****************************************************************
 // update network transfers
-void cOnline::Update()
+void COnline::Update()
 {
     // update Game Jolt API object
     m_GameJolt.SetSessionActive(STATIC_ISVALID(g_pGame));

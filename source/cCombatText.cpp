@@ -11,14 +11,14 @@
 
 // ****************************************************************
 // constructor
-cCombatText::sData::sData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept
+CCombatText::SData::SData(const coreChar* pcText, const coreVector2 vPosition, const coreVector4 vColor)noexcept
 : sText     (pcText)
 , vPosition (vPosition)
 , vColor    (vColor)
 {
 }
 
-cCombatText::sData::sData(sData&& m)noexcept
+CCombatText::SData::SData(SData&& m)noexcept
 : sText     (std::move(m.sText))
 , vPosition (m.vPosition)
 , vColor    (m.vColor)
@@ -28,7 +28,7 @@ cCombatText::sData::sData(sData&& m)noexcept
 
 // ****************************************************************
 // constructor
-cCombatText::cCombatText()noexcept
+CCombatText::CCombatText()noexcept
 : m_iCurText    (0u)
 , m_Delay       (coreTimer(0.01f, 1.0f, 1))
 , m_afAlpha     {}
@@ -56,7 +56,7 @@ cCombatText::cCombatText()noexcept
 
 // ****************************************************************
 // destructor
-cCombatText::~cCombatText()
+CCombatText::~CCombatText()
 {
     // reset all active texts
     this->Reset();
@@ -65,7 +65,7 @@ cCombatText::~cCombatText()
 
 // ****************************************************************
 // render the combat text
-void cCombatText::Render()
+void CCombatText::Render()
 {
     // render trophy symbol
     if(m_TrophyTimer.GetStatus())
@@ -85,7 +85,7 @@ void cCombatText::Render()
 
 // ****************************************************************
 // move the combat text
-void cCombatText::Move()
+void CCombatText::Move()
 {
     // update delay between two texts
     m_Delay.Update(1.0f);
@@ -97,7 +97,7 @@ void cCombatText::Move()
             if(++m_iCurText >= COMBAT_TEXT_NUM) m_iCurText = 0u;
 
             // get next text data
-            const sData& oData = m_aData.front();
+            const SData& oData = m_aData.front();
 
             // init label object
             coreLabel* pText = &m_aText[m_iCurText];
@@ -160,7 +160,7 @@ void cCombatText::Move()
 
 // ****************************************************************
 // reset all combat text entries
-void cCombatText::Reset()
+void CCombatText::Reset()
 {
     // stop all timers
     m_Delay.Stop();
@@ -174,7 +174,7 @@ void cCombatText::Reset()
 
 // ****************************************************************
 // add new transformed combat text entry
-void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3 vPosition, const coreVector4 vColor)
+void CCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3 vPosition, const coreVector4 vColor)
 {
     if(vColor.w <= 0.0f) return;
 
@@ -186,7 +186,7 @@ void cCombatText::AddTextTransformed(const coreChar* pcText, const coreVector3 v
 
 // ****************************************************************
 // show trophy animation
-void cCombatText::ShowTrophy(const coreChar* pcText, const coreVector3 vPosition)
+void CCombatText::ShowTrophy(const coreChar* pcText, const coreVector3 vPosition)
 {
     // calculate screen position
     const coreVector2 vScreenPos = (coreVector4(vPosition, 1.0f) * Core::Graphics->GetCamera() * Core::Graphics->GetPerspective()).xy() / coreVector2(180.0f,135.0f);

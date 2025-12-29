@@ -13,7 +13,7 @@
 
 // ****************************************************************
 // constructor
-cFirst::cFirst()noexcept
+CFirst::CFirst()noexcept
 : coreMenu (3u, 0u)
 {
     // reset configuration settings
@@ -74,7 +74,7 @@ cFirst::cFirst()noexcept
 
 // ****************************************************************
 // render the first-time menu
-void cFirst::Render()
+void CFirst::Render()
 {
     const coreFloat fTouchAlpha = m_ControlText.GetAlpha() * 0.35f * (0.88f + 0.12f * SIN(Core::System->GetTotalTimeFloat(2.0f*PI) * 12.0f));
 
@@ -96,7 +96,7 @@ void cFirst::Render()
 
 // ****************************************************************
 // move the first-time menu
-void cFirst::Move()
+void CFirst::Move()
 {
     // move the menu
     this->coreMenu::Move();

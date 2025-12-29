@@ -11,7 +11,7 @@
 
 // ****************************************************************
 // constructor
-cTrap::cTrap()noexcept
+CTrap::CTrap()noexcept
 : m_pGlow   (0.0f)
 , m_Effect  (g_pParticleSystem)
 , m_bStatic (false)
@@ -31,7 +31,7 @@ cTrap::cTrap()noexcept
 
 // ****************************************************************
 // move the trap
-void cTrap::Move()
+void CTrap::Move()
 {
     // update animation
     m_pGlow.Update(2.5f*PI);

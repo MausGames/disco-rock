@@ -50,16 +50,16 @@ static_assert(GJ_API_OFFCACHE_TROPHY == true, "Don't forget the Offline Cache!")
 
 // ****************************************************************
 // online class
-class cOnline final
+class COnline final
 {
 private:
     gjAPI m_GameJolt;   // Game Jolt API object
 
 
 public:
-    cOnline()noexcept;
+    COnline()noexcept;
 
-    DISABLE_COPY(cOnline)
+    DISABLE_COPY(COnline)
 
     // update network transfers
     void Update();
@@ -86,7 +86,7 @@ public:
 
 // ****************************************************************
 // get user name
-inline const coreChar* cOnline::GetUserName()const
+inline const coreChar* COnline::GetUserName()const
 {
     return m_GameJolt.GetUserName().c_str();
 }
@@ -94,7 +94,7 @@ inline const coreChar* cOnline::GetUserName()const
 
 // ****************************************************************
 // get user token
-inline const coreChar* cOnline::GetUserToken()const
+inline const coreChar* COnline::GetUserToken()const
 {
     return m_GameJolt.GetUserToken().c_str();
 }
@@ -102,7 +102,7 @@ inline const coreChar* cOnline::GetUserToken()const
 
 // ****************************************************************
 // get current network load
-inline coreInt32 cOnline::GetNumConnections()const
+inline coreInt32 COnline::GetNumConnections()const
 {
     return coreInt32(m_GameJolt.AccessNetwork()->GetNumSessions());
 }
@@ -110,7 +110,7 @@ inline coreInt32 cOnline::GetNumConnections()const
 
 // ****************************************************************
 // check for connected user
-inline coreBool cOnline::IsUserConnected()const
+inline coreBool COnline::IsUserConnected()const
 {
     return m_GameJolt.IsUserConnected();
 }
@@ -118,7 +118,7 @@ inline coreBool cOnline::IsUserConnected()const
 
 // ****************************************************************
 // achieve trophy
-template <typename T> coreInt32 cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr))
+template <typename T> coreInt32 COnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_NETWORK_OUTPUT(gjTrophyPtr))
 {
     return pTrophy->AchieveCall(GJ_NETWORK_OUTPUT_FW);
 }
@@ -126,7 +126,7 @@ template <typename T> coreInt32 cOnline::AchieveTrophy(gjTrophyPtr pTrophy, GJ_N
 
 // ****************************************************************
 // fetch trophies
-template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList))
+template <typename T> coreInt32 COnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTrophyList))
 {
     return m_GameJolt.InterTrophy()->FetchTrophiesCall(GJ_TROPHY_ALL, GJ_NETWORK_OUTPUT_FW);
 }
@@ -134,7 +134,7 @@ template <typename T> coreInt32 cOnline::FetchTrophies(GJ_NETWORK_OUTPUT(gjTroph
 
 // ****************************************************************
 // submit score
-template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const coreString& sExtraData, const coreString& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
+template <typename T> coreInt32 COnline::SubmitScore(const coreUintW iTableID, const coreString& sScore, const coreUintW iSort, const coreString& sExtraData, const coreString& sGuestName, GJ_NETWORK_OUTPUT(gjScorePtr))
 {
     return m_GameJolt.InterScore()->GetScoreTable(iTableID)->AddGuestScoreCall(sScore, iSort, sExtraData, sGuestName, GJ_NETWORK_OUTPUT_FW);
 }
@@ -142,7 +142,7 @@ template <typename T> coreInt32 cOnline::SubmitScore(const coreUintW iTableID, c
 
 // ****************************************************************
 // fetch leaderboards
-template <typename T> coreInt32 cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap))
+template <typename T> coreInt32 COnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjScoreTableMap))
 {
     return m_GameJolt.InterScore()->FetchScoreTablesCall(GJ_NETWORK_OUTPUT_FW);
 }
@@ -150,7 +150,7 @@ template <typename T> coreInt32 cOnline::FetchLeaderboards(GJ_NETWORK_OUTPUT(gjS
 
 // ****************************************************************
 // fetch scores
-template <typename T> coreInt32 cOnline::FetchScores(const coreUintW iTableID, const coreBool bOnlyUser, const coreUintW iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
+template <typename T> coreInt32 COnline::FetchScores(const coreUintW iTableID, const coreBool bOnlyUser, const coreUintW iLimit, GJ_NETWORK_OUTPUT(gjScoreList))
 {
     return m_GameJolt.InterScore()->GetScoreTable(iTableID)->FetchScoresCall(bOnlyUser, iLimit, GJ_NETWORK_OUTPUT_FW);
 }
@@ -158,7 +158,7 @@ template <typename T> coreInt32 cOnline::FetchScores(const coreUintW iTableID, c
 
 // ****************************************************************
 // login
-template <typename T> coreInt32 cOnline::Login(const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32))
+template <typename T> coreInt32 COnline::Login(const coreChar* pcName, const coreChar* pcToken, GJ_NETWORK_OUTPUT(coreInt32))
 {
     if((P_TO_I(pOutputData) == 0u) && (pcName[0] == '\0') && (pcToken[0] == '\0'))
          return m_GameJolt.LoginCall(true, "../" GJ_API_CRED, GJ_NETWORK_OUTPUT_FW);   // quickplay
@@ -168,7 +168,7 @@ template <typename T> coreInt32 cOnline::Login(const coreChar* pcName, const cor
 
 // ****************************************************************
 // logout
-inline void cOnline::Logout()
+inline void COnline::Logout()
 {
     m_GameJolt.Logout();
 }
