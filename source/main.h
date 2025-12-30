@@ -106,18 +106,18 @@ enum eStage : coreUint8
 
 // ****************************************************************
 // game headers
-#include "cOnline.h"
-#include "cBackground.h"
-#include "cMenu.h"
-#include "cPlate.h"
-#include "cRay.h"
-#include "cRock.h"
-#include "cBeverage.h"
-#include "cTrap.h"
-#include "cCombatText.h"
-#include "cInterface.h"
-#include "cFirst.h"
-#include "cGame.h"
+#include "Online.h"
+#include "Background.h"
+#include "Menu.h"
+#include "Plate.h"
+#include "Ray.h"
+#include "Rock.h"
+#include "Beverage.h"
+#include "Trap.h"
+#include "CombatText.h"
+#include "Interface.h"
+#include "First.h"
+#include "Game.h"
 
 
 // ****************************************************************

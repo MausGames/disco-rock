@@ -27,19 +27,19 @@ target_sources(
     ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjScore.cpp
     ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjTrophy.cpp
     ${BASE_DIRECTORY}/../game-jolt-api-cpp-library/source/gjUser.cpp
-    ${BASE_DIRECTORY}/source/cBackground.cpp
-    ${BASE_DIRECTORY}/source/cBeverage.cpp
-    ${BASE_DIRECTORY}/source/cCombatText.cpp
-    ${BASE_DIRECTORY}/source/cFirst.cpp
-    ${BASE_DIRECTORY}/source/cGame.cpp
-    ${BASE_DIRECTORY}/source/cInterface.cpp
-    ${BASE_DIRECTORY}/source/cMenu.cpp
-    ${BASE_DIRECTORY}/source/cOnline.cpp
-    ${BASE_DIRECTORY}/source/cPlate.cpp
-    ${BASE_DIRECTORY}/source/cRay.cpp
-    ${BASE_DIRECTORY}/source/cRock.cpp
-    ${BASE_DIRECTORY}/source/cStage.cpp
-    ${BASE_DIRECTORY}/source/cTrap.cpp
+    ${BASE_DIRECTORY}/source/Background.cpp
+    ${BASE_DIRECTORY}/source/Beverage.cpp
+    ${BASE_DIRECTORY}/source/CombatText.cpp
+    ${BASE_DIRECTORY}/source/First.cpp
+    ${BASE_DIRECTORY}/source/Game.cpp
+    ${BASE_DIRECTORY}/source/Interface.cpp
+    ${BASE_DIRECTORY}/source/Menu.cpp
+    ${BASE_DIRECTORY}/source/Online.cpp
+    ${BASE_DIRECTORY}/source/Plate.cpp
+    ${BASE_DIRECTORY}/source/Ray.cpp
+    ${BASE_DIRECTORY}/source/Rock.cpp
+    ${BASE_DIRECTORY}/source/Stage.cpp
+    ${BASE_DIRECTORY}/source/Trap.cpp
     ${BASE_DIRECTORY}/source/application.cpp
     ${BASE_DIRECTORY}/source/main.cpp
 )

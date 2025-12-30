@@ -60,19 +60,19 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="..\..\..\source\application.cpp" />
-    <ClCompile Include="..\..\..\source\cBackground.cpp" />
-    <ClCompile Include="..\..\..\source\cBeverage.cpp" />
-    <ClCompile Include="..\..\..\source\cCombatText.cpp" />
-    <ClCompile Include="..\..\..\source\cFirst.cpp" />
-    <ClCompile Include="..\..\..\source\cGame.cpp" />
-    <ClCompile Include="..\..\..\source\cInterface.cpp" />
-    <ClCompile Include="..\..\..\source\cMenu.cpp" />
-    <ClCompile Include="..\..\..\source\cOnline.cpp" />
-    <ClCompile Include="..\..\..\source\cPlate.cpp" />
-    <ClCompile Include="..\..\..\source\cRay.cpp" />
-    <ClCompile Include="..\..\..\source\cRock.cpp" />
-    <ClCompile Include="..\..\..\source\cStage.cpp" />
-    <ClCompile Include="..\..\..\source\cTrap.cpp" />
+    <ClCompile Include="..\..\..\source\Background.cpp" />
+    <ClCompile Include="..\..\..\source\Beverage.cpp" />
+    <ClCompile Include="..\..\..\source\CombatText.cpp" />
+    <ClCompile Include="..\..\..\source\First.cpp" />
+    <ClCompile Include="..\..\..\source\Game.cpp" />
+    <ClCompile Include="..\..\..\source\Interface.cpp" />
+    <ClCompile Include="..\..\..\source\Menu.cpp" />
+    <ClCompile Include="..\..\..\source\Online.cpp" />
+    <ClCompile Include="..\..\..\source\Plate.cpp" />
+    <ClCompile Include="..\..\..\source\Ray.cpp" />
+    <ClCompile Include="..\..\..\source\Rock.cpp" />
+    <ClCompile Include="..\..\..\source\Stage.cpp" />
+    <ClCompile Include="..\..\..\source\Trap.cpp" />
     <ClCompile Include="..\..\..\source\main.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
@@ -90,18 +90,18 @@
     <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjTrophy.h" />
     <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\gjUser.h" />
     <ClInclude Include="..\..\..\..\game-jolt-api-cpp-library\source\MD5.h" />
-    <ClInclude Include="..\..\..\source\cBackground.h" />
-    <ClInclude Include="..\..\..\source\cBeverage.h" />
-    <ClInclude Include="..\..\..\source\cCombatText.h" />
-    <ClInclude Include="..\..\..\source\cFirst.h" />
-    <ClInclude Include="..\..\..\source\cGame.h" />
-    <ClInclude Include="..\..\..\source\cInterface.h" />
-    <ClInclude Include="..\..\..\source\cMenu.h" />
-    <ClInclude Include="..\..\..\source\cOnline.h" />
-    <ClInclude Include="..\..\..\source\cPlate.h" />
-    <ClInclude Include="..\..\..\source\cRay.h" />
-    <ClInclude Include="..\..\..\source\cRock.h" />
-    <ClInclude Include="..\..\..\source\cTrap.h" />
+    <ClInclude Include="..\..\..\source\Background.h" />
+    <ClInclude Include="..\..\..\source\Beverage.h" />
+    <ClInclude Include="..\..\..\source\CombatText.h" />
+    <ClInclude Include="..\..\..\source\First.h" />
+    <ClInclude Include="..\..\..\source\Game.h" />
+    <ClInclude Include="..\..\..\source\Interface.h" />
+    <ClInclude Include="..\..\..\source\Menu.h" />
+    <ClInclude Include="..\..\..\source\Online.h" />
+    <ClInclude Include="..\..\..\source\Plate.h" />
+    <ClInclude Include="..\..\..\source\Ray.h" />
+    <ClInclude Include="..\..\..\source\Rock.h" />
+    <ClInclude Include="..\..\..\source\Trap.h" />
     <ClInclude Include="..\..\..\source\main.h" />
   </ItemGroup>
   <ItemGroup>
