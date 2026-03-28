@@ -26,12 +26,12 @@ by [Kevin MacLeod](https://incompetech.com) licensed under [CC BY](https://creat
 <table>
     <tr>
         <td><a href="https://www.youtube.com/watch?v=mwvx5O8c-mQ"><img src="material/readme/image_youtube.jpg"></a></td>
-        <td><a href="material/screenshots/dr_screen_new_006.jpg?raw=true"><img src="material/screenshots/dr_screen_new_006t.jpg"></a></td>
-        <td><a href="material/screenshots/dr_screen_new_007.jpg?raw=true"><img src="material/screenshots/dr_screen_new_007t.jpg"></a></td>
+        <td><a href="material/screenshots/dr_screen_new_006.jpg"><img src="material/screenshots/dr_screen_new_006t.jpg"></a></td>
+        <td><a href="material/screenshots/dr_screen_new_007.jpg"><img src="material/screenshots/dr_screen_new_007t.jpg"></a></td>
     </tr>
     <tr>
-        <td><a href="material/screenshots/dr_screen_new_008.jpg?raw=true"><img src="material/screenshots/dr_screen_new_008t.jpg"></a></td>
-        <td><a href="material/screenshots/dr_screen_new_009.jpg?raw=true"><img src="material/screenshots/dr_screen_new_009t.jpg"></a></td>
-        <td><a href="material/screenshots/dr_screen_new_010.jpg?raw=true"><img src="material/screenshots/dr_screen_new_010t.jpg"></a></td>
+        <td><a href="material/screenshots/dr_screen_new_008.jpg"><img src="material/screenshots/dr_screen_new_008t.jpg"></a></td>
+        <td><a href="material/screenshots/dr_screen_new_009.jpg"><img src="material/screenshots/dr_screen_new_009t.jpg"></a></td>
+        <td><a href="material/screenshots/dr_screen_new_010.jpg"><img src="material/screenshots/dr_screen_new_010t.jpg"></a></td>
     </tr>
 </table>
