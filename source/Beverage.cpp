@@ -35,10 +35,10 @@ IBeverage::IBeverage(const coreUint32 iScore, const coreFloat fHeight, const cor
     m_Shadow.DefineProgram("shadow_program");
 
     // load glass shader
-    m_pGlasProgram = Core::Manager::Resource->Get<coreProgram>("glass_program");
+    m_pGlasProgram = Core::Manager::Resource->Get("glass_program");
 
     // load sound-effects
-    m_pClink = Core::Manager::Resource->Get<coreSound>("clink.opus");
+    m_pClink = Core::Manager::Resource->Get("clink.opus");
 }
 
 
@@ -233,5 +233,5 @@ CFranka::CFranka()noexcept
     m_pGlass = new coreObject3D();
 
     // override sound
-    m_pClink = Core::Manager::Resource->Get<coreSound>("bump.opus");
+    m_pClink = Core::Manager::Resource->Get("bump.opus");
 }

@@ -73,9 +73,9 @@ CRock::CRock()noexcept
     m_WaveShock.DefineProgram("wave_program");
 
     // load sound-effects
-    m_pUp    = Core::Manager::Resource->Get<coreSound>("dust.opus");
-    m_pDown  = Core::Manager::Resource->Get<coreSound>("bump.opus");
-    m_pWoosh = Core::Manager::Resource->Get<coreSound>("woosh.opus");
+    m_pUp    = Core::Manager::Resource->Get("dust.opus");
+    m_pDown  = Core::Manager::Resource->Get("bump.opus");
+    m_pWoosh = Core::Manager::Resource->Get("woosh.opus");
 }
 
 

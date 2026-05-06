@@ -590,9 +590,9 @@ CMenu::CMenu()noexcept
     m_Intro.Play(CORE_TIMER_PLAY_RESET);
 
     // load sound-effects
-    m_pClickSound = Core::Manager::Resource->Get<coreSound>("menu.opus");
-    m_pHappySound = Core::Manager::Resource->Get<coreSound>("achieve.opus");
-    m_pFlashSound = Core::Manager::Resource->Get<coreSound>("flash.opus");
+    m_pClickSound = Core::Manager::Resource->Get("menu.opus");
+    m_pHappySound = Core::Manager::Resource->Get("achieve.opus");
+    m_pFlashSound = Core::Manager::Resource->Get("flash.opus");
 
     // reset fullscreen-objects
     this->ResetResolution();
@@ -1488,9 +1488,9 @@ void CMenu::End()
 void CMenu::ResetShaders()
 {
     // reload shader-programs
-    Core::Manager::Resource->Get<coreProgram>("fill_program")       ->Reload();
-    Core::Manager::Resource->Get<coreProgram>("floor_program")      ->Reload();
-    Core::Manager::Resource->Get<coreProgram>("floor_plate_program")->Reload();
+    Core::Manager::Resource->Get("fill_program")       ->Reload();
+    Core::Manager::Resource->Get("floor_program")      ->Reload();
+    Core::Manager::Resource->Get("floor_plate_program")->Reload();
 
     // force immediate resource update
     glFinish();

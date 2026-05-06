@@ -64,8 +64,8 @@ CGame::CGame(const coreBool bChallenge)noexcept
     m_MessageTimer.SetValue(-0.333f);
 
     // load sound-effects
-    m_pTrapSound   = Core::Manager::Resource->Get<coreSound>("trap.opus");
-    m_pTrophySound = Core::Manager::Resource->Get<coreSound>("achieve.opus");
+    m_pTrapSound   = Core::Manager::Resource->Get("trap.opus");
+    m_pTrophySound = Core::Manager::Resource->Get("achieve.opus");
 
     // set initial speed
     g_fTargetSpeed = GAME_SPEED_SLOW;
