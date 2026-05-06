@@ -246,7 +246,7 @@ void CRock::Move()
         const coreVector4 vSmokeColor = (m_bColored && Core::Rand->Bool(0.75f)) ? coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 0.9f) : coreVector4(COLOR_WHITE_F, 0.6f);
 
         // create smoke trail
-        m_Effect.CreateParticle(ROCK_SPRITE_NUM, 60.0f, [this, &vSmokeColor](coreParticle* pParticle)
+        m_Effect.CreateParticle(ROCK_SPRITE_NUM, 60.0f, [this, &vSmokeColor](coreParticle* pParticle, const coreUintW i)
         {
             const coreVector2 vRand = coreVector2::Rand(10.0f);
 
@@ -343,7 +343,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
         m_pWoosh->PlayPosition(NULL, 0.3f, 0.9f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
-        m_Effect.CreateParticle(14u, [this](coreParticle* pParticle)
+        m_Effect.CreateParticle(14u, [this](coreParticle* pParticle, const coreUintW i)
         {
             const coreVector2 vRand = coreVector2::Rand(40.0f);
 
@@ -375,7 +375,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
         const coreVector4 vSmokeColor = coreVector4(g_avColor[F_TO_UI(g_pGame->GetTime()*3.0f) % COLOR_NUM], 1.0f);
 
         // throw up some colored dust
-        m_Effect.CreateParticle(22u, [this, &vSmokeColor](coreParticle* pParticle)
+        m_Effect.CreateParticle(22u, [this, &vSmokeColor](coreParticle* pParticle, const coreUintW i)
         {
             pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
             pParticle->SetScaleStc   (6.2f);
@@ -390,7 +390,7 @@ void CRock::CreateShockWave(const coreUint8 iType)
         m_pUp->PlayPosition(NULL, 0.45f, 0.9f, false, CORE_AUDIO_TYPE_NONE, CORE_AUDIO_EFFECT_NONE, this->GetPosition(), SOUND_PROPERTIES);
 
         // throw up some dust
-        m_Effect.CreateParticle(22u, [this](coreParticle* pParticle)
+        m_Effect.CreateParticle(22u, [this](coreParticle* pParticle, const coreUintW i)
         {
             pParticle->SetPositionRel(this->GetPosition(), coreVector3(Core::Rand->Float(-70.0f, 70.0f), coreVector2::Rand(45.0f)));
             pParticle->SetScaleStc   (6.2f);

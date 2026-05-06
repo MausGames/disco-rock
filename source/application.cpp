@@ -51,8 +51,8 @@ void CoreApp::Setup()
     Core::Manager::Resource->Load<coreModel>  ("ray.md5z",                 CORE_RESOURCE_UPDATE_AUTO,   "data/models/ray.md5z", CORE_MODEL_LOAD_NO_CLUSTERS);
     Core::Manager::Resource->Load<coreModel>  ("rock.md5z",                CORE_RESOURCE_UPDATE_AUTO,   "data/models/rock.md5z", CORE_MODEL_LOAD_NO_CLUSTERS);
 
-    Core::Manager::Resource->Load<coreTexture>("background.webp",          CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.webp", CORE_TEXTURE_LOAD_NO_COMPRESS);
-    Core::Manager::Resource->Load<coreTexture>("background_norm.webp",     CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.webp", CORE_TEXTURE_LOAD_COMPRESS_HIGH);
+    Core::Manager::Resource->Load<coreTexture>("background.webp",          CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background.webp", CORE_TEXTURE_LOAD_NO_COMPRESS | CORE_TEXTURE_LOAD_REPEAT);
+    Core::Manager::Resource->Load<coreTexture>("background_norm.webp",     CORE_RESOURCE_UPDATE_AUTO,   "data/textures/background_norm.webp", CORE_TEXTURE_LOAD_COMPRESS_HIGH | CORE_TEXTURE_LOAD_REPEAT);
     Core::Manager::Resource->Load<coreTexture>("button_cancel.webp",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_cancel.webp", CORE_TEXTURE_LOAD_R);
     Core::Manager::Resource->Load<coreTexture>("button_config.webp",       CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_config.webp", CORE_TEXTURE_LOAD_R);
     Core::Manager::Resource->Load<coreTexture>("button_jump.webp",         CORE_RESOURCE_UPDATE_AUTO,   "data/textures/button_jump.webp", CORE_TEXTURE_LOAD_R);

@@ -275,13 +275,13 @@ void CBackground::LoadGeometry()
 
     // create static vertex buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(SVertex), pVertexData.data(), CORE_DATABUFFER_STORAGE_STATIC);
-    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_POSITION_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 0u);
-    pBuffer->DefineAttribute(CORE_SHADER_ATTRIBUTE_TEXCOORD_NUM, 2u, GL_FLOAT,         2u*sizeof(coreFloat), false, 0u, 2u*sizeof(coreFloat));
-    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_COLOR_NUM,    4u, GL_UNSIGNED_BYTE, 4u*sizeof(coreUint8), false, 0u, 4u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_POSITION_NUM, CORE_VERTEXBUFFER_FORMAT_FLOAT_2X32, 0u, 0u);
+    pBuffer->DefineAttribute(CORE_SHADER_ATTRIBUTE_TEXCOORD_NUM, CORE_VERTEXBUFFER_FORMAT_FLOAT_2X32, 0u, 2u*sizeof(coreFloat));
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_COLOR_NUM,    CORE_VERTEXBUFFER_FORMAT_UNORM_4X8,  0u, 4u*sizeof(coreFloat));
 
     // create dynamic height data buffer
     pBuffer = m_pModel->CreateVertexBuffer(BACK_TOTAL_VERTICES, sizeof(coreFloat), m_pfHeight, CORE_DATABUFFER_STORAGE_DYNAMIC);
-    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_HEIGHT_NUM, 1u, GL_FLOAT, sizeof(coreFloat), false, 0u, 0u);
+    pBuffer->DefineAttribute(BACK_SHADER_ATTRIBUTE_HEIGHT_NUM, CORE_VERTEXBUFFER_FORMAT_FLOAT_1X32, 0u, 0u);
 
     // create index buffer
     m_pModel->CreateIndexBuffer(BACK_TOTAL_INDICES, sizeof(coreUint16), pIndexData.data(), CORE_DATABUFFER_STORAGE_STATIC);

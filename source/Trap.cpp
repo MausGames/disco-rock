@@ -52,7 +52,7 @@ void CTrap::Move()
         // create light sparkles
         if(this->GetPosition().y < 380.0f)
         {
-            m_Effect.CreateParticle(1u, 10.0f, [](coreParticle* pParticle)
+            m_Effect.CreateParticle(1u, 10.0f, [](coreParticle* pParticle, const coreUintW i)
             {
                 pParticle->SetPositionRel(coreVector3(coreVector2::Rand(1.0f, BACK_DETAIL_X*0.37f), -5.0f), coreVector3(0.0f, 0.0f, 25.0f));
                 pParticle->SetScaleStc   (4.0f);
